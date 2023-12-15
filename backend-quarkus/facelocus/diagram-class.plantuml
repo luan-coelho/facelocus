@@ -1,0 +1,98 @@
+@startuml
+class Usuario {
+    - id: Long
+    - nome: String
+    - email: String
+    - cpf: String
+    - senha: String
+}
+
+class Dispositivo {
+    - id: Long
+    - identificadorBluetooth: UUID
+    - imei: String
+    - descricao: String
+}
+
+class FotoRostoUsuario {
+    - id: Long
+    - arquivo: File
+    - dataUpload: Date
+    - caminhoArquivo: String
+}
+
+class Evento {
+    - id: Long
+    - descricao: String
+    - permitirSolicitacoesIngresso: boolean
+}
+
+class SolicitacaoIngresso {
+    - id: Long
+    - codigo: String
+    - dataHoraLimite: LocalDateTime
+}
+
+enum SituacaoSolicitacao {
+    + PENDENTE: int
+    + APROVADA: int
+    + REJEITADA: int
+}
+
+class Localizacao {
+    - id: Long
+    - descricao: String
+    - latitude: Double
+    - longitude: Double
+}
+
+class RegistroPonto {
+    - id: Long
+    - data: LocalDate
+    - emAndamento: boolean
+    - raioPermitidoEmMetros: int
+}
+
+class Ponto {
+    - id: Long
+    - horaInicio: LocalTime
+    - minutosParaValidar: int
+    - validado: boolean
+}
+
+class RegistroPresenca {
+    - id: Long
+    - dataHora: LocalDateTime
+}
+
+enum Fator {
+    + RECONHECIMENTO_FACIAL: int
+    + LOCALIZACAO_INDOOR: int
+}
+
+RegistroPonto "*" --> "1" Evento
+RegistroPonto "1" *-> "*" Ponto
+RegistroPonto "*" o-left-> "*" Fator
+RegistroPonto "*" o-left-> "1" Localizacao
+
+Evento "*" --> "*" Usuario : usuarios
+Evento "*" --> "1" Usuario : usuarioAdministrador
+Evento "1" --> "*" Localizacao
+
+SolicitacaoIngresso "*" --> "1" Evento
+SolicitacaoIngresso "*" --> "1" Usuario
+SolicitacaoIngresso "*" o-> "1" SituacaoSolicitacao
+
+RegistroPresenca "*" o-left-> "1" Usuario
+RegistroPresenca "*" o-> "1" Ponto
+RegistroPresenca "1" o-> "1" FotoRostoUsuario
+
+Usuario "1" o-down-> "*" Dispositivo
+Usuario "1" *-down-> "1" FotoRostoUsuario
+
+'FotoRostoUsuario <|-- FotoRostoUsuarioLocal
+'FotoRostoUsuario <|-- FotoRostoUsuarioS3
+'FotoRostoUsuario <|-- FotoRostoUsuarioAzure
+'FotoRostoUsuario <|-- FotoRostoUsuarioGCloud
+
+@enduml

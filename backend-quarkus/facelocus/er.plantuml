@@ -1,0 +1,100 @@
+@startuml
+
+entity usuario {
+    * id : BIGINT [PK]
+    --
+    * nome : VARCHAR
+    * email : VARCHAR
+    * cpf : VARCHAR
+    * senha : VARCHAR
+}
+
+entity dispositivo {
+    * id : BIGINT [PK]
+    --
+    * identificador_bluetooth : UUID
+    * imei : VARCHAR
+    * descricao : VARCHAR
+    * usuario_id : BIGINT [FK]
+}
+
+entity foto_rosto_usuario {
+    * id : BIGINT [PK]
+    --
+    * tipo_mime : VARCHAR
+    * tamanho_arquivo : BIGINT
+    * nome_arquivo : VARCHAR
+    * data_upload : TIMESTAMP
+    * caminho_arquivo : VARCHAR
+}
+
+entity evento {
+    * id : BIGINT [PK]
+    --
+    * descricao : VARCHAR
+    * permitir_solicitacoes_ingresso : BOOLEAN
+}
+
+entity solicitacao_ingresso {
+    * id : BIGINT [PK]
+    --
+    * codigo : VARCHAR
+    * data_hora_limite : TIMESTAMP
+    * evento_id : BIGINT [FK]
+    * situacao_solicitacao : INTEGER
+    * usuario_id : BIGINT [FK]
+}
+
+entity localizacao {
+    * id : BIGINT [PK]
+    --
+    * descricao : VARCHAR
+    * latitude : DOUBLE PRECISION
+    * longitude : DOUBLE PRECISION
+    * evento_id : BIGINT [FK]
+}
+
+entity registro_ponto {
+    * id : BIGINT [PK]
+    --
+    * data : DATE
+    * em_andamento : BOOLEAN
+    * evento_id : BIGINT [FK]
+    * registro_ponto_configuracao_id : BIGINT [FK]
+}
+
+entity ponto {
+    * id : BIGINT [PK]
+    --
+    * hora_inicio : TIME
+    * minutos_para_validar : INTEGER
+    * validado : BOOLEAN
+    * registro_ponto_id : BIGINT [FK]
+}
+
+entity registro_presenca {
+    * id : BIGINT [PK]
+    --
+    * data_hora : TIMESTAMP
+    * usuario_id : BIGINT [FK]
+    * ponto_id : BIGINT [FK]
+    * foto_rosto_usuario_id : BIGINT [FK]
+}
+
+registro_ponto ||--o{ evento
+registro_ponto ||--|{ ponto
+
+evento ||--|{ localizacao
+evento }|-- usuario
+
+solicitacao_ingresso ||--o| evento
+solicitacao_ingresso ||--o| usuario
+
+registro_presenca ||--o| usuario
+registro_presenca ||--o| ponto
+registro_presenca ||--o| foto_rosto_usuario
+
+usuario ||--o{ dispositivo
+usuario ||--|{ foto_rosto_usuario
+
+@enduml
