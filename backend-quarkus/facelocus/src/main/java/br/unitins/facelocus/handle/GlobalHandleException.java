@@ -36,7 +36,7 @@ public abstract class GlobalHandleException<T extends Exception> implements Exce
     }
 
     public String getTitle() {
-        return "Internal Server Error";
+        return "Erro Interno do Servidor";
     }
 
     public int getStatus() {

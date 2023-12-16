@@ -32,7 +32,7 @@ public class ValidationExceptionMapper extends GlobalHandleException<ValidationE
 
     @Override
     public String getTitle() {
-        return "Constraint Violation";
+        return "Violação de Restrição";
     }
 
     @Override
