@@ -3,10 +3,11 @@ package br.unitins.facelocus.exception;
 import lombok.*;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Setter
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {

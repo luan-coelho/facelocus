@@ -10,9 +10,11 @@ public record UsuarioDTO(
         String nome,
         @NotBlank(message = "Informe o campo sobrenome")
         String sobreNome,
-        @Email(message = "Informe o campo nome")
+        @NotBlank(message = "Informe o campo email")
+        @Email(message = "Informe um email valido")
         String email,
-        @CPF(message = "Informe o campo nome")
+        @NotBlank(message = "Informe o campo cpf")
+        @CPF(message = "Informe um cpf valido")
         String cpf,
         @NotBlank(message = "Informe o campo senha")
         String senha) {
