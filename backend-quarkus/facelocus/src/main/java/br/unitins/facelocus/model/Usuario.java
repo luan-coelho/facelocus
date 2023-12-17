@@ -27,4 +27,8 @@ public class Usuario {
     private FotoRostoUsuario fotoRostoUsuario;
     @OneToMany(mappedBy = "usuario")
     private List<Dispositivo> dispositivos;
+
+    public String getNomeCompleto() {
+        return this.nome.trim() + " " + this.sobreNome.trim();
+    }
 }

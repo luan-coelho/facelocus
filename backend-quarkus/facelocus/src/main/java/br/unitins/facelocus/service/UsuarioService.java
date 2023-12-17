@@ -7,7 +7,6 @@ import br.unitins.facelocus.repository.UsuarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 
 @ApplicationScoped
 public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
@@ -21,11 +20,11 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
 
     @Transactional
     public Usuario criar(Usuario usuario) {
-        if(this.repository.existePeloCpf(usuario.getCpf())){
+        if (this.repository.existePeloCpf(usuario.getCpf())) {
             throw new IllegalArgumentException("Usuário já cadastrado com o CPF informado");
         }
 
-        if(this.repository.existePeloEmail(usuario.getEmail())){
+        if (this.repository.existePeloEmail(usuario.getEmail())) {
             throw new IllegalArgumentException("Usuário já cadastrado com o email informado");
         }
         return super.criar(usuario);

@@ -1,5 +1,6 @@
 package br.unitins.facelocus.handle;
 
+import br.unitins.facelocus.exception.AuthenticationException;
 import br.unitins.facelocus.exception.ErrorResponse;
 import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -13,7 +14,7 @@ import lombok.SneakyThrows;
 
 @SuppressWarnings("unused")
 @Provider
-public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException>, HandleExceptionMapper {
+public class AuthenticationExceptionMapper implements ExceptionMapper<AuthenticationException>, HandleExceptionMapper {
 
     @Context
     HttpServerRequest request;
@@ -23,14 +24,14 @@ public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalAr
 
     @SneakyThrows
     @Override
-    public Response toResponse(IllegalArgumentException exception) {
+    public Response toResponse(AuthenticationException exception) {
         ErrorResponse errorResponse = buildResponse(exception, request);
         return Response.status(errorResponse.getStatus()).entity(errorResponse).build();
     }
 
     @Override
     public String getTitle() {
-        return "Validação Falhou";
+        return "Autenticação falhou";
     }
 
     @Override

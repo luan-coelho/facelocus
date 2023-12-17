@@ -9,11 +9,8 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.SneakyThrows;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 @Provider
-public abstract class GlobalHandleException<T extends Exception> implements ExceptionMapper<T>, HandleExceptionMapper {
+public class GlobalHandleException implements ExceptionMapper<Exception>, HandleExceptionMapper {
 
     @Context
     HttpServerRequest request;
@@ -21,19 +18,10 @@ public abstract class GlobalHandleException<T extends Exception> implements Exce
     @SneakyThrows
     @Override
     public Response toResponse(Exception exception) {
-        ErrorResponse errorResponse = buildResponse(exception);
+        ErrorResponse errorResponse = buildResponse(exception, request);
         return Response.status(errorResponse.getStatus()).entity(errorResponse).build();
     }
 
-    protected ErrorResponse buildResponse(Exception exception) throws URISyntaxException {
-        return new ErrorResponse(
-                new URI(""),
-                getTitle(),
-                getStatus(),
-                exception.getMessage(),
-                new URI(request.absoluteURI())
-        );
-    }
 
     public String getTitle() {
         return "Erro Interno do Servidor";
