@@ -12,12 +12,12 @@ public interface HandleExceptionMapper {
 
     int getStatus();
 
-    default ErrorResponse buildResponse(Exception exception, HttpServerRequest request) throws URISyntaxException {
+    default ErrorResponse buildResponse(Throwable exception, HttpServerRequest request) throws URISyntaxException {
         return new ErrorResponse(
                 new URI(""),
                 getTitle(),
                 getStatus(),
-                exception.getCause().getMessage(),
+                exception.getCause() != null ? exception.getCause().getMessage() : exception.getMessage(),
                 new URI(request.absoluteURI())
         );
     }

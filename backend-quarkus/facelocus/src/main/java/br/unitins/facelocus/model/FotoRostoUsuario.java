@@ -21,10 +21,9 @@ public abstract class FotoRostoUsuario {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private File arquivo;
-    private String tipoMime;
-    private long tamanhoArquivo;
     private String nomeArquivo;
     private LocalDate dataUpload;
+    private String caminhoArquivo;
     @OneToOne
     private Usuario usuario;
 

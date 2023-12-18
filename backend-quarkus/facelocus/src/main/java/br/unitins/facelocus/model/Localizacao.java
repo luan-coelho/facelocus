@@ -16,8 +16,9 @@ public class Localizacao {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Double latitude;
-    private Double longitude;
+    private String descricao;
+    private String latitude;
+    private String longitude;
     @ManyToOne
     private Evento evento;
 }

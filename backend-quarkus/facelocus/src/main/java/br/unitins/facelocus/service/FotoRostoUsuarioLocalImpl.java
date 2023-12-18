@@ -2,7 +2,6 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartForm;
 import br.unitins.facelocus.model.FotoRostoUsuario;
-import br.unitins.facelocus.model.FotoRostoUsuarioLocal;
 import br.unitins.facelocus.model.Usuario;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
@@ -23,7 +22,7 @@ public class FotoRostoUsuarioLocalImpl implements FotoRostoUsuarioService {
 
     @Override
     public FotoRostoUsuario construirInstancia(MultipartForm multipartForm) {
-        FotoRostoUsuario fotoRostoUsuario = new FotoRostoUsuarioLocal();
+//        FotoRostoUsuario fotoRostoUsuario = new FotoRostoUsuarioLocal();
 //        fotoRostoUsuario.setArquivo(multipartForm);
         return null;
     }
