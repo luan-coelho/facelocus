@@ -2,6 +2,8 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.dto.EventDTO;
+import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.repository.EventRepository;
@@ -16,21 +18,27 @@ import java.util.List;
 public class EventService extends BaseService<Event, EventRepository> {
 
     @Inject
+    EventMapper eventMapper;
+
+    @Inject
     LocationService locationService;
 
-    /**
-     * Busca todos os eventos de maneira paginada, juntamente com seus relacionamentos.
-     *
-     * @param pageable contem informacoes de paginacao
-     * @return lista paginada
-     */
-    public DataPagination<Event> findAllPaginated(Pageable pageable) {
+    public DataPagination<?> findAllPaginated(Pageable pageable) {
         List<Event> events = repository.listAll();
         for (Event event : events) {
             List<Location> locations = locationService.findAllByEvent(event);
             event.setLocations(locations);
         }
-        return buildPagination(events, pageable);
+        List<EventDTO> dtos = events.stream().map(event -> eventMapper.toResource(event)).toList();
+        return buildPagination(dtos, pageable);
+    }
+
+    @Override
+    public Event findById(Long eventId) {
+        Event event = super.findById(eventId);
+        List<Location> locations = locationService.findAllByEvent(event);
+        event.setLocations(locations);
+        return event;
     }
 
     @Transactional
@@ -45,6 +53,13 @@ public class EventService extends BaseService<Event, EventRepository> {
         return super.create(event);
     }
 
+    @Transactional
+    public Event updateById(Long eventId, Event event) {
+        Event eventFound = findById(eventId);
+        eventFound = eventMapper.copyProperties(event, eventFound);
+        return super.update(eventFound);
+    }
+
     public String generateUniqueCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int codeSize = 6;
@@ -57,8 +72,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         }
 
         if (this.repository.existsByCode(code.toString())) {
-            code = new StringBuilder(generateUniqueCode());
-            return code.toString();
+            return generateUniqueCode();
         }
         return code.toString();
     }

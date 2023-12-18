@@ -10,14 +10,14 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 
-@SuppressWarnings({"CdiInjectionPointsInspection", "UnusedReturnValue"})
+@SuppressWarnings({"CdiInjectionPointsInspection", "UnusedReturnValue", "rawtypes", "unchecked"})
 public abstract class BaseService<T, R extends BaseRepository<T>> {
 
     @Inject
     public R repository;
 
-    public DataPagination<T> findAllPaginated(Pageable pageable) {
-        List<T> list = repository.listAll();
+    public DataPagination findAllPaginated(Pageable pageable) {
+        List list = repository.listAll();
         return buildPagination(list, pageable);
     }
 
@@ -44,7 +44,7 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         repository.deleteById(id);
     }
 
-    protected DataPagination<T> buildPagination(List<T> data, Pageable pageable) {
+    protected DataPagination buildPagination(List data, Pageable pageable) {
         Pagination pagination = repository.buildPagination(pageable);
         return new DataPagination<>(data, pagination);
     }
