@@ -12,7 +12,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@Path("/event")
+@Path("/ticket-request")
 public class TicketRequestResource {
 
     @Inject

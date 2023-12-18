@@ -60,7 +60,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         return super.update(eventFound);
     }
 
-    public String generateUniqueCode() {
+    private String generateUniqueCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int codeSize = 6;
         SecureRandom random = new SecureRandom();
@@ -81,5 +81,12 @@ public class EventService extends BaseService<Event, EventRepository> {
     public void changeTicketRequestPermissionByEventId(Long eventId) {
         existsByIdWithThrows(eventId);
         this.repository.changeTicketRequestPermissionByEventId(eventId);
+    }
+
+    @Transactional
+    public void generateNewCode(Long eventId) {
+        existsByIdWithThrows(eventId);
+        String code = generateUniqueCode();
+        this.repository.updateCodeById(eventId, code);
     }
 }

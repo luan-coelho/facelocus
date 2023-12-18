@@ -57,4 +57,11 @@ public class EventResource {
         eventService.changeTicketRequestPermissionByEventId(eventId);
         return Response.noContent().build();
     }
+
+    @Path("/generate-new-code/{id}")
+    @PATCH
+    public Response generateNewCode(@PathParam("id") Long eventId) {
+        eventService.generateNewCode(eventId);
+        return Response.noContent().build();
+    }
 }
