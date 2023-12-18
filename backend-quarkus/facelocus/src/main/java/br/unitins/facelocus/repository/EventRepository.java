@@ -11,12 +11,10 @@ public class EventRepository extends BaseRepository<Event> {
     }
 
     public void changeTicketRequestPermissionByEventId(Long eventId) {
-        String query = "UPDATE Event SET allowTicketRequests = (NOT allowTicketRequests) WHERE id = ?1";
-        update(query, eventId);
+        update("UPDATE Event SET allowTicketRequests = (NOT allowTicketRequests) WHERE id = ?1", eventId);
     }
 
     public void updateCodeById(Long eventId, String code) {
-        String query = "UPDATE Event SET code = ?1 WHERE id = ?2";
-        update(query, code, eventId);
+        update("UPDATE Event SET code = ?1 WHERE id = ?2", code, eventId);
     }
 }
