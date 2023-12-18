@@ -21,7 +21,7 @@ public class Evento {
     private String descricao;
     @OneToMany(mappedBy = "evento")
     private List<RegistroPonto> registrosPonto;
-    @OneToMany(mappedBy = "evento")
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<Localizacao> localizacoes;
     @ManyToOne
     private Usuario administrador;

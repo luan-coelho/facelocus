@@ -3,17 +3,34 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.PaginacaoDados;
 import br.unitins.facelocus.commons.pagination.Paginavel;
 import br.unitins.facelocus.model.Evento;
+import br.unitins.facelocus.model.Localizacao;
 import br.unitins.facelocus.repository.EventoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 import java.security.SecureRandom;
+import java.util.List;
 
 @ApplicationScoped
 public class EventoService extends BaseService<Evento, EventoRepository> {
 
-    public PaginacaoDados<Evento> buscarTodos(Paginavel paginavel) {
-        return this.buscarTodosPaginados(paginavel);
+    @Inject
+    LocalizacaoService localizacaoService;
+
+    /**
+     * Busca todos os eventos de maneira paginada, juntamente com seus relacionamentos.
+     *
+     * @param paginavel contem informacoes de paginacao
+     * @return lista paginada
+     */
+    public PaginacaoDados<Evento> buscarTodosPaginados(Paginavel paginavel) {
+        List<Evento> eventos = repository.listAll();
+        for (Evento evento : eventos) {
+            List<Localizacao> localizacoes = localizacaoService.buscarTodosPorEvento(evento);
+            evento.setLocalizacoes(localizacoes);
+        }
+        return construirPaginacaoDeDados(eventos, paginavel);
     }
 
     @Transactional
@@ -21,6 +38,9 @@ public class EventoService extends BaseService<Evento, EventoRepository> {
     public Evento criar(Evento evento) {
         if (evento.isPermitirSolicitacoesIngresso()) {
             evento.setCodigo(gerarCodigoUnico());
+        }
+        for (Localizacao localizacao : evento.getLocalizacoes()) {
+            localizacao.setEvento(evento);
         }
         return super.criar(evento);
     }

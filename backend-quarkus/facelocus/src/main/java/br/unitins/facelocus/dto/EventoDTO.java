@@ -1,4 +1,6 @@
 package br.unitins.facelocus.dto;
 
-public record EventoDTO(String descricao, boolean permitirSolicitacoesIngresso) {
+import java.util.List;
+
+public record EventoDTO(String descricao, List<LocalizacaoDTO> localizacoes, boolean permitirSolicitacoesIngresso) {
 }

@@ -11,9 +11,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 @Path("/evento")
 public class EventoResource {
 
@@ -25,13 +22,17 @@ public class EventoResource {
 
     @GET
     public Response buscarTodos(Paginavel paginavel) {
-        return Response.ok(eventoService.buscarTodos(paginavel)).build();
+        return Response.ok(eventoService.buscarTodosPaginados(paginavel).getDados()
+                .stream()
+                .map(p -> eventoMapper.toResource(p))
+                .toList()).build();
     }
 
     @POST
     public Response criar(EventoDTO eventoDTO) {
         Evento evento = eventoMapper.toEntity(eventoDTO);
-        eventoService.criar(evento);
-        return Response.status(Response.Status.CREATED).entity(evento).build();
+        evento = eventoService.criar(evento);
+        EventoDTO dto = eventoMapper.toResource(evento);
+        return Response.status(Response.Status.CREATED).entity(dto).build();
     }
 }
