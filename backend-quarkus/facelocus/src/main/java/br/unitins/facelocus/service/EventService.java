@@ -62,4 +62,10 @@ public class EventService extends BaseService<Event, EventRepository> {
         }
         return code.toString();
     }
+
+    @Transactional
+    public void changeTicketRequestPermissionByEventId(Long eventId) {
+        findById(eventId);
+        this.repository.changeTicketRequestPermissionByEventId(eventId);
+    }
 }

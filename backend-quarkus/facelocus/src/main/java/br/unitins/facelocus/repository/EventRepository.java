@@ -9,4 +9,9 @@ public class EventRepository extends BaseRepository<Event> {
     public boolean existsByCode(String code) {
         return count("FROM Event WHERE code = ?1", code) > 0;
     }
+
+    public void changeTicketRequestPermissionByEventId(Long eventId) {
+        String query = "UPDATE Event SET allowTicketRequests = (NOT allowTicketRequests) WHERE id = ?1";
+        update(query, eventId);
+    }
 }

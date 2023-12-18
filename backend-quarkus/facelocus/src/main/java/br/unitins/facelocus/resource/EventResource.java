@@ -6,9 +6,8 @@ import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
@@ -30,10 +29,24 @@ public class EventResource {
     }
 
     @POST
-    public Response create(EventDTO eventDTO) {
+    public Response create(@Valid EventDTO eventDTO) {
         Event event = eventMapper.toEntity(eventDTO);
         event = eventService.create(event);
         EventDTO dto = eventMapper.toResource(event);
         return Response.status(Response.Status.CREATED).entity(dto).build();
+    }
+
+    @Path("/{id}")
+    @DELETE
+    public Response deleteById(@PathParam("id") Long eventId) {
+        eventService.deleteById(eventId);
+        return Response.noContent().build();
+    }
+
+    @Path("/change-ticket-request-permission/{id}")
+    @PATCH
+    public Response changeTicketRequestPermissionByEventId(@PathParam("id") Long eventId) {
+        eventService.changeTicketRequestPermissionByEventId(eventId);
+        return Response.noContent().build();
     }
 }

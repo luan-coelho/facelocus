@@ -22,7 +22,7 @@ public class PointRecord {
     private LocalDate date;
     @ManyToOne
     private Event event;
-    @OneToMany(mappedBy = "pointRecords")
+    @OneToMany(mappedBy = "pointRecord")
     private List<Point> points;
     @ElementCollection
     private List<Factor> factors;
