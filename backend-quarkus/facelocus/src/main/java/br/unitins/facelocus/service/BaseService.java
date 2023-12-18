@@ -21,6 +21,18 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return buildPagination(list, pageable);
     }
 
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    public boolean existsByIdWithThrows(Long id) {
+        boolean exists = repository.existsById(id);
+        if (!exists) {
+            throw new NotFoundException("Recurso não encontrado pelo id");
+        }
+        return true;
+    }
+
     public T findById(Long id) {
         return repository
                 .findByIdOptional(id)
@@ -40,7 +52,7 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
 
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
+        existsByIdWithThrows(id);
         repository.deleteById(id);
     }
 

@@ -79,7 +79,7 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Transactional
     public void changeTicketRequestPermissionByEventId(Long eventId) {
-        findById(eventId);
+        existsByIdWithThrows(eventId);
         this.repository.changeTicketRequestPermissionByEventId(eventId);
     }
 }
