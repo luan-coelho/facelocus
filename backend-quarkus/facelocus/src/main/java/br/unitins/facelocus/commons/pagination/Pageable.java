@@ -1,31 +1,31 @@
 package br.unitins.facelocus.commons.pagination;
 
+import jakarta.ws.rs.QueryParam;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.ws.rs.QueryParam;
 import java.lang.reflect.Field;
 
 @Setter
 @Getter
-public class Paginavel {
+public class Pageable {
 
     @QueryParam("page")
-    private int pagina = 0;
+    private int page = 0;
     @QueryParam("size")
-    private int tamanho = Paginacao.TAMANHO_PADRAO_PAGINACAO;
+    private int size = Pagination.STANDARD_PAGE_SIZE;
     @QueryParam("sort")
-    private String ordenacao;
+    private String sort;
 
     /**
      * Campo para ser ordenado
      *
      * @return Campo
      */
-    public String pegarCampoOrdenacao() {
-        if (this.ordenacao != null) {
-            if (this.ordenacao.contains(",")) {
-                String[] properties = this.ordenacao.split(",");
+    public String getByOrder() {
+        if (this.sort != null) {
+            if (this.sort.contains(",")) {
+                String[] properties = this.sort.split(",");
                 return properties[0];
             }
         }
@@ -37,17 +37,17 @@ public class Paginavel {
      *
      * @return Campo
      */
-    public String pegarCampoOrdenacao(Class<?> clazz) {
-        if (this.ordenacao != null) {
-            if (this.ordenacao.contains(",")) {
-                String[] properties = this.ordenacao.split(",");
-                if (campoExiste(clazz, properties[0])) {
+    public String getByOrder(Class<?> clazz) {
+        if (this.sort != null) {
+            if (this.sort.contains(",")) {
+                String[] properties = this.sort.split(",");
+                if (fieldExists(clazz, properties[0])) {
                     return properties[0];
                 }
             }
         }
-        this.ordenacao = pegarNomeCampoAleatoriamente(clazz);
-        return ordenacao;
+        this.sort = getRandomFieldName(clazz);
+        return sort;
     }
 
     /**
@@ -55,10 +55,10 @@ public class Paginavel {
      *
      * @return Ordem
      */
-    public String pegarOrdem() {
-        if (this.ordenacao != null) {
-            if (this.ordenacao.contains(",")) {
-                String[] propriedades = this.ordenacao.split(",");
+    public String getOrder() {
+        if (this.sort != null) {
+            if (this.sort.contains(",")) {
+                String[] propriedades = this.sort.split(",");
                 if (propriedades[1].equalsIgnoreCase("DESC"))
                     return propriedades[1].toUpperCase();
             }
@@ -69,11 +69,11 @@ public class Paginavel {
     /**
      * Verifica em tempo de execução se o campo passado por query params existe na entidade. Caso não existe é definido
      *
-     * @param clazz Classe
+     * @param clazz     Classe
      * @param fieldName Nome do campo
      * @return Verdadeiro se o campo passado como argumento existir na classe
      */
-    boolean campoExiste(Class<?> clazz, String fieldName) {
+    boolean fieldExists(Class<?> clazz, String fieldName) {
         Field[] campos = clazz.getDeclaredFields();
         for (Field campo : campos) {
             if (campo.getName().equalsIgnoreCase(fieldName)) {
@@ -85,10 +85,11 @@ public class Paginavel {
 
     /**
      * Pega um nome de qualquer campo da classe
+     *
      * @param clazz Classe
      * @return Campo aleatorio da classe
      */
-    String pegarNomeCampoAleatoriamente(Class<?> clazz) {
+    String getRandomFieldName(Class<?> clazz) {
         Field[] campos = clazz.getDeclaredFields();
         for (Field campo : campos) {
             if (campo.getType().isArray()) {

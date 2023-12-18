@@ -13,22 +13,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Usuario {
+@Table(name = "tb_user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String nome;
-    private String sobreNome;
+    private String name;
+    private String surname;
     private String email;
     private String cpf;
-    private String senha;
-    @OneToOne(mappedBy = "usuario")
-    private FotoRostoUsuario fotoRostoUsuario;
-    @OneToMany(mappedBy = "usuario")
-    private List<Dispositivo> dispositivos;
+    private String password;
+    @OneToOne(mappedBy = "user")
+    private UserFacePhoto userFacePhoto;
+    @OneToMany(mappedBy = "user")
+    private List<Device> devices;
 
-    public String getNomeCompleto() {
-        return this.nome.trim() + " " + this.sobreNome.trim();
+    public String getFullName() {
+        return this.name.trim() + " " + this.surname.trim();
     }
 }

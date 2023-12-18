@@ -6,25 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RegistroPonto {
+public class TicketRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalDate data;
+    private String code;
+    private LocalDateTime finalDateTime;
     @ManyToOne
-    private Evento evento;
-    @OneToMany(mappedBy = "registroPonto")
-    private List<Ponto> pontos;
-    @ElementCollection
-    private List<Fator> fatores;
-    private boolean emAndamento;
+    private Event event;
+    private TicketRequestStatus requestStatus;
+    @ManyToOne
+    private User user;
 }

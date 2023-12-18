@@ -30,7 +30,7 @@ public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalAr
 
     @Override
     public String getTitle() {
-        return "Validação Falhou";
+        return "Validation Failed";
     }
 
     @Override

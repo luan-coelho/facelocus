@@ -1,8 +1,8 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartForm;
-import br.unitins.facelocus.model.FotoRostoUsuario;
-import br.unitins.facelocus.model.Usuario;
+import br.unitins.facelocus.model.UserFacePhoto;
+import br.unitins.facelocus.model.User;
 
 public interface FotoRostoUsuarioService {
 
@@ -13,7 +13,7 @@ public interface FotoRostoUsuarioService {
      * @param fotoRostoUsuario Contém informações sobre o arquivo de foto de rosto de um usuário.
      * @return caminho do arquivo
      */
-    String salvar(Usuario usuario, FotoRostoUsuario fotoRostoUsuario);
+    String salvar(User usuario, UserFacePhoto fotoRostoUsuario);
 
     /**
      * Responsável por construir uma instância de foto de rosto de um usuário.
@@ -21,5 +21,5 @@ public interface FotoRostoUsuarioService {
      * @param multipartForm Contém dados necessários para construção de FotoRostoUsuario.
      * @return Instância de FotoRostoUsuario com todos os valores preenchidos.
      */
-    FotoRostoUsuario construirInstancia(MultipartForm multipartForm);
+    UserFacePhoto construirInstancia(MultipartForm multipartForm);
 }

@@ -6,19 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Localizacao {
+public class Point {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String descricao;
-    private String latitude;
-    private String longitude;
+    private LocalTime initialDate;
+    private int minutesToValidate;
+    private boolean validated;
     @ManyToOne
-    private Evento evento;
+    private PointRecord pointRecord;
 }

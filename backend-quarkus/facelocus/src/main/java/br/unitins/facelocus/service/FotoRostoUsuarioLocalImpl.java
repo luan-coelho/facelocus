@@ -1,8 +1,8 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartForm;
-import br.unitins.facelocus.model.FotoRostoUsuario;
-import br.unitins.facelocus.model.Usuario;
+import br.unitins.facelocus.model.UserFacePhoto;
+import br.unitins.facelocus.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 
@@ -16,12 +16,12 @@ public class FotoRostoUsuarioLocalImpl implements FotoRostoUsuarioService {
     public static final String DIRETORIO_FOTOS = "rffotos";
 
     @Override
-    public String salvar(Usuario usuario, FotoRostoUsuario fotoRostoUsuario) {
+    public String salvar(User usuario, UserFacePhoto fotoRostoUsuario) {
         return null;
     }
 
     @Override
-    public FotoRostoUsuario construirInstancia(MultipartForm multipartForm) {
+    public UserFacePhoto construirInstancia(MultipartForm multipartForm) {
 //        FotoRostoUsuario fotoRostoUsuario = new FotoRostoUsuarioLocal();
 //        fotoRostoUsuario.setArquivo(multipartForm);
         return null;

@@ -1,7 +1,5 @@
 package br.unitins.facelocus.model;
 
-import java.time.LocalTime;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,14 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Ponto {
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalTime horaInicio;
-    private int minutosParaValidar;
-    private boolean validado;
+    private String description;
+    private String latitude;
+    private String longitude;
     @ManyToOne
-    private RegistroPonto registroPonto;
+    private Event event;
 }

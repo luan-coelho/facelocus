@@ -10,10 +10,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @AllArgsConstructor
-public class PaginacaoDados<T> {
+public class DataPagination<T> {
 
     @Setter
-    private List<T> dados;
-    private Paginacao paginacao = new Paginacao();
+    private List<T> data;
+    private Pagination pagination = new Pagination();
 }
 

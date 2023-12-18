@@ -31,7 +31,7 @@ public class AuthenticationExceptionMapper implements ExceptionMapper<Authentica
 
     @Override
     public String getTitle() {
-        return "Autenticação falhou";
+        return "Authentication failed";
     }
 
     @Override

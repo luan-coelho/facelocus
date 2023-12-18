@@ -15,20 +15,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class FotoRostoUsuario {
+public abstract class UserFacePhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private File arquivo;
-    private String nomeArquivo;
-    private LocalDate dataUpload;
-    private String caminhoArquivo;
+    private File file;
+    private String fileName;
+    private LocalDate uploudDate;
+    private String filePath;
     @OneToOne
-    private Usuario usuario;
+    private User user;
 
     @PrePersist
-    public void gerarDataUploud(){
-        this.dataUpload = LocalDate.now();
+    public void generateUploudDate() {
+        this.uploudDate = LocalDate.now();
     }
 }

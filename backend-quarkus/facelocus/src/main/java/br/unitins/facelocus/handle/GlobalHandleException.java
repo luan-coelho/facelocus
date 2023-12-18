@@ -24,7 +24,7 @@ public class GlobalHandleException implements ExceptionMapper<Exception>, Handle
 
 
     public String getTitle() {
-        return "Erro Interno do Servidor";
+        return "Internal Server Error";
     }
 
     public int getStatus() {

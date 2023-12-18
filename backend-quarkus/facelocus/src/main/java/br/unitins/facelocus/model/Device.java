@@ -6,23 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class SolicitacaoIngresso {
+public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String codigo;
-    private LocalDateTime dataHoraLimite;
+    private UUID bluetoothIdentifier;
+    private String imei;
+    private String description;
     @ManyToOne
-    private Evento evento;
-    private SituacaoSolicitacao situacao;
-    @ManyToOne
-    private Usuario usuario;
+    private User user;
 }

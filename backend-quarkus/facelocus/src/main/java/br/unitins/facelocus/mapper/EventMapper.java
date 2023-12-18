@@ -1,14 +1,14 @@
 package br.unitins.facelocus.mapper;
 
-import br.unitins.facelocus.dto.EventoDTO;
-import br.unitins.facelocus.model.Evento;
+import br.unitins.facelocus.dto.EventDTO;
+import br.unitins.facelocus.model.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface EventoMapper {
+public interface EventMapper {
 
-    Evento toEntity(EventoDTO eventoDTO);
+    Event toEntity(EventDTO eventDTO);
 
-    EventoDTO toResource(Evento evento);
+    EventDTO toResource(Event event);
 }

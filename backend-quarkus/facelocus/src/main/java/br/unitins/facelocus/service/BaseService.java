@@ -1,8 +1,8 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.commons.pagination.Paginacao;
-import br.unitins.facelocus.commons.pagination.PaginacaoDados;
-import br.unitins.facelocus.commons.pagination.Paginavel;
+import br.unitins.facelocus.commons.pagination.DataPagination;
+import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.repository.BaseRepository;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -16,36 +16,36 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
     @Inject
     public R repository;
 
-    public PaginacaoDados<T> buscarTodosPaginados(Paginavel paginavel) {
-        List<T> lista = repository.listAll();
-        return construirPaginacaoDeDados(lista, paginavel);
+    public DataPagination<T> findAllPaginated(Pageable paginavel) {
+        List<T> list = repository.listAll();
+        return buildPagination(list, paginavel);
     }
 
-    public T buscarPeloId(Long id) {
+    public T findById(Long id) {
         return repository
                 .findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Recurso não encontrado por id"));
+                .orElseThrow(() -> new NotFoundException("Recurso não encontrado pelo id"));
     }
 
     @Transactional
-    public T criar(T entity) {
+    public T create(T entity) {
         repository.persist(entity);
         return entity;
     }
 
     @Transactional
-    public T atualizar(T entity) {
+    public T update(T entity) {
         return repository.getEntityManager().merge(entity);
     }
 
     @Transactional
-    public void deletarPeloId(Long id) {
-        buscarPeloId(id);
+    public void deleteById(Long id) {
+        findById(id);
         repository.deleteById(id);
     }
 
-    protected PaginacaoDados<T> construirPaginacaoDeDados(List<T> dados, Paginavel paginavel) {
-        Paginacao paginacao = repository.construirPaginacao(paginavel);
-        return new PaginacaoDados<>(dados, paginacao);
+    protected DataPagination<T> buildPagination(List<T> data, Pageable pageable) {
+        Pagination pagination = repository.buildPagination(pageable);
+        return new DataPagination<>(data, pagination);
     }
 }

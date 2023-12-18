@@ -38,7 +38,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
 
     @Override
     public String getTitle() {
-        return "Violação de Restrição";
+        return "Constraint Violation";
     }
 
     @Override
