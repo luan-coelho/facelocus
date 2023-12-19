@@ -20,9 +20,9 @@ public class LocationService extends BaseService<Location, LocationRepository> {
     @Inject
     EventService eventService;
 
-    public List<Location> findAllByEventId(Long eventoId) {
-        existsById(eventoId);
-        return this.repository.findAllByEventId(eventoId);
+    public List<Location> findAllByEventId(Long eventId) {
+        existsById(eventId);
+        return this.repository.findAllByEventId(eventId);
     }
 
     @Transactional
