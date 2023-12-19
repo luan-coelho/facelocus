@@ -5,7 +5,7 @@ import br.unitins.facelocus.model.TicketRequest;
 import org.mapstruct.*;
 
 @Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {EventMapper.class, UserMapper.class})
 public interface TicketRequestMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -13,9 +13,11 @@ public interface TicketRequestMapper {
     @Mapping(target = "requestStatus", ignore = true)
     TicketRequest toCreateEntity(TicketRequestDTO ticketRequestDTO);
 
+    @Mapping(source = "event", target = "event", qualifiedByName = "toCreateEntity")
     @Mapping(target = "id", ignore = true)
     TicketRequest toUpdateEntity(TicketRequestDTO ticketRequestDTO);
 
+    @Mapping(source = "requested", target = "requested", qualifiedByName = "toResource")
     TicketRequestDTO toResource(TicketRequest ticketRequestDTO);
 
     @Mapping(target = "id", ignore = true)

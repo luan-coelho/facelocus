@@ -12,7 +12,7 @@ public record TicketRequestDTO(
         LocalDateTime finalDateTime,
         EventDTO event,
         TicketRequestStatus requestStatus,
-        UserDTO requester,
-        UserDTO requested
+        UserResponseDTO requester,
+        UserResponseDTO requested
 ) {
 }

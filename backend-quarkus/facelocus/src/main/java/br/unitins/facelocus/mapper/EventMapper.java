@@ -8,6 +8,7 @@ import org.mapstruct.*;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface EventMapper {
 
+    @Named("toCreateEntity")
     Event toCreateEntity(EventDTO eventDTO);
 
     @Mapping(ignore = true, target = "registrationPoints")
@@ -17,6 +18,7 @@ public interface EventMapper {
     @Mapping(ignore = true, target = "ticketRequests")
     Event toUpdateEntity(EventDTO eventDTO);
 
+    @Named("toResource")
     EventDTO toResource(Event event);
 
     @Mapping(target = "id", ignore = true)
