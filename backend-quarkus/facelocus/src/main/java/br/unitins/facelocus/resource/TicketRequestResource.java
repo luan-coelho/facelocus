@@ -38,7 +38,7 @@ public class TicketRequestResource {
     @Path("/{id}")
     @PUT
     public Response updateById(@PathParam("id") Long eventId, EventDTO eventDTO) {
-        Event event = eventMapper.copyProperties(eventDTO);
+        Event event = eventMapper.toUpdateEntity(eventDTO);
         event = eventService.updateById(eventId, event);
         EventDTO dto = eventMapper.toResource(event);
         return Response.ok(dto).build();
