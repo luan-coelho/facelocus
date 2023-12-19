@@ -56,7 +56,7 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Transactional
     public Event updateById(Long eventId, Event event) {
         Event eventFound = findById(eventId);
-        eventFound = eventMapper.copyProperties(event, eventFound);
+        eventFound = eventMapper.toUpdateEntity(event, eventFound);
         return super.update(eventFound);
     }
 

@@ -15,10 +15,10 @@ public interface EventMapper {
     @Mapping(ignore = true, target = "administrator")
     @Mapping(ignore = true, target = "code")
     @Mapping(ignore = true, target = "ticketRequests")
-    Event copyProperties(EventDTO eventDTO);
+    Event toUpdateEntity(EventDTO eventDTO);
 
     EventDTO toResource(Event event);
 
     @Mapping(target = "id", ignore = true)
-    Event copyProperties(Event event, @MappingTarget Event existingEvent);
+    Event toUpdateEntity(Event event, @MappingTarget Event existingEvent);
 }
