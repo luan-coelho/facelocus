@@ -6,6 +6,7 @@ import br.unitins.facelocus.dto.TicketRequestDTO;
 import br.unitins.facelocus.mapper.TicketRequestMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.TicketRequest;
+import br.unitins.facelocus.model.TicketRequestStatus;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.TicketRequestRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,5 +50,16 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
         ticketRequest.setRequested(requested);
 
         return super.create(ticketRequest);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long ticketRequestId) {
+        TicketRequestStatus status = this.repository.getStatusById(ticketRequestId);
+        if (status != TicketRequestStatus.PENDING) {
+            String message = "A solicitação não está mais pendente. Desta forma, ela não pode ser apagada";
+            throw new IllegalArgumentException(message);
+        }
+        super.deleteById(ticketRequestId);
     }
 }

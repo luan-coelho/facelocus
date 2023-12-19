@@ -8,9 +8,7 @@ import br.unitins.facelocus.model.TicketRequest;
 import br.unitins.facelocus.service.TicketRequestService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -35,5 +33,12 @@ public class TicketRequestResource {
         TicketRequest ticketRequest = ticketRequestMapper.toCreateEntity(createTicketRequestDTO);
         ticketRequestService.create(ticketRequest);
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @Path("/{id}")
+    @DELETE
+    public Response deleteById(@PathParam("id") Long ticketRequestId) {
+        ticketRequestService.deleteById(ticketRequestId);
+        return Response.noContent().build();
     }
 }
