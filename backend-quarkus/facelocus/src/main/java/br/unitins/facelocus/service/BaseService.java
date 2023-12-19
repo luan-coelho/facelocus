@@ -16,6 +16,10 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
     @Inject
     public R repository;
 
+    public List<T> findAll() {
+        return this.repository.listAll();
+    }
+
     public DataPagination findAllPaginated(Pageable pageable) {
         List list = repository.listAll();
         return buildPagination(list, pageable);
