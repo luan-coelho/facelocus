@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings({"CdiInjectionPointsInspection", "UnusedReturnValue", "rawtypes", "unchecked"})
 public abstract class BaseService<T, R extends BaseRepository<T>> {
@@ -37,10 +38,22 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return true;
     }
 
+    public boolean existsByIdWithThrows(Long id, String throwsMessage) {
+        boolean exists = repository.existsById(id);
+        if (!exists) {
+            throw new NotFoundException(throwsMessage);
+        }
+        return true;
+    }
+
     public T findById(Long id) {
         return repository
                 .findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Recurso não encontrado pelo id"));
+    }
+
+    public Optional<T> findByIdOptional(Long id) {
+        return repository.findByIdOptional(id);
     }
 
     @Transactional
