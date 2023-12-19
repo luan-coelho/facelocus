@@ -41,4 +41,18 @@ public class TicketRequestResource {
         ticketRequestService.deleteById(ticketRequestId);
         return Response.noContent().build();
     }
+
+    @Path("/approve")
+    @PATCH
+    public Response approve(@RestQuery("user") Long userId, @RestQuery("ticketrequest") Long ticketRequestId) {
+        ticketRequestService.approve(userId, ticketRequestId);
+        return Response.ok().build();
+    }
+
+    @Path("/reject")
+    @PATCH
+    public Response reject(@RestQuery("user") Long userId, @RestQuery("ticketrequest") Long ticketRequestId) {
+        ticketRequestService.reject(userId, ticketRequestId);
+        return Response.ok().build();
+    }
 }

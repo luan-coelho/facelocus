@@ -5,7 +5,7 @@ import br.unitins.facelocus.model.Event;
 import org.mapstruct.*;
 
 @Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = UserMapper.class)
 public interface EventMapper {
 
     @Named("toCreateEntity")
@@ -19,6 +19,7 @@ public interface EventMapper {
     Event toUpdateEntity(EventDTO eventDTO);
 
     @Named("toResource")
+    @Mapping(source = "administrator", target = "administrator", qualifiedByName = "toResource")
     EventDTO toResource(Event event);
 
     @Mapping(target = "id", ignore = true)

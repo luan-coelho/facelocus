@@ -6,10 +6,12 @@ import br.unitins.facelocus.dto.EventDTO;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.Location;
+import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.EventRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -23,6 +25,9 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Inject
     LocationService locationService;
+
+    @Inject
+    UserService userService;
 
     public DataPagination<?> findAllPaginated(Pageable pageable) {
         List<Event> events = repository.listAll();
@@ -38,8 +43,15 @@ public class EventService extends BaseService<Event, EventRepository> {
     public Event findById(Long eventId) {
         Event event = super.findById(eventId);
         List<Location> locations = locationService.findAllByEventId(eventId);
+        List<User> users = userService.findAllByEventId(eventId);
         event.setLocations(locations);
+        event.setUsers(users);
         return event;
+    }
+
+    @Override
+    public Optional<Event> findByIdOptional(Long eventId) {
+        return Optional.ofNullable(findById(eventId));
     }
 
     public Optional<Event> findByCodeOptional(String code) {
@@ -108,5 +120,26 @@ public class EventService extends BaseService<Event, EventRepository> {
         existsByIdWithThrows(eventId);
         String code = generateUniqueCode();
         this.repository.updateCodeById(eventId, code);
+    }
+
+    /**
+     * Responsável por adicionar um usuário a um evento
+     *
+     * @param eventId Identificador do evento
+     * @param userId  Identificador do usuário
+     */
+    @Transactional
+    public void addUserByEventIdAndUserId(Long eventId, Long userId) {
+        User user = userService.findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
+        Event event = findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        for (User eventUser : event.getUsers()) {
+            if (eventUser.getId().equals(userId)) {
+                throw new IllegalArgumentException("Usuário já vinculado ao evento");
+            }
+        }
+        event.getUsers().add(user);
+        update(event);
     }
 }

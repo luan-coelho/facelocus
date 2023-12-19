@@ -7,6 +7,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 @ApplicationScoped
 public class UserService extends BaseService<User, UserRepository> {
 
@@ -37,5 +39,9 @@ public class UserService extends BaseService<User, UserRepository> {
         }
         user.setPassword(changePasswordDTO.confirmPassword());
         this.update(user);
+    }
+
+    public List<User> findAllByEventId(Long eventId) {
+        return this.repository.findAllByEventId(eventId);
     }
 }

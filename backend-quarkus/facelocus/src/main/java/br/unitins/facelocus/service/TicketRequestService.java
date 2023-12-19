@@ -62,4 +62,31 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
         }
         super.deleteById(ticketRequestId);
     }
+
+    /**
+     * Responsável por aprovar uma solicitação de ingresso
+     *
+     * @param userId          Identificador do usuário solicitado
+     * @param ticketRequestId Identificador da solicitação de ingresso
+     * @param requestStatus   Situação da solicitação
+     */
+    private void updateStatus(Long userId, Long ticketRequestId, TicketRequestStatus requestStatus) {
+        TicketRequest ticketRequest = findByIdOptional(ticketRequestId)
+                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
+        if (!ticketRequest.getRequested().getId().equals(userId)) {
+            throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
+        }
+        this.repository.updateStatus(ticketRequestId, requestStatus);
+        eventService.addUserByEventIdAndUserId(ticketRequest.getEvent().getId(), userId);
+    }
+
+    @Transactional
+    public void approve(Long userId, Long ticketRequestId) {
+        updateStatus(userId, ticketRequestId, TicketRequestStatus.APPROVED);
+    }
+
+    @Transactional
+    public void reject(Long userId, Long ticketRequestId) {
+        updateStatus(userId, ticketRequestId, TicketRequestStatus.REJECTED);
+    }
 }
