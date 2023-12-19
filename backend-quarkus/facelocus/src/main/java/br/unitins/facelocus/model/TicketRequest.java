@@ -22,7 +22,9 @@ public class TicketRequest {
     private LocalDateTime finalDateTime;
     @ManyToOne
     private Event event;
-    private TicketRequestStatus requestStatus;
+    private TicketRequestStatus requestStatus = TicketRequestStatus.PENDING;
     @ManyToOne
-    private User user;
+    private User requester;
+    @ManyToOne
+    private User requested;
 }

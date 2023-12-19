@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class EventService extends BaseService<Event, EventRepository> {
@@ -39,6 +40,10 @@ public class EventService extends BaseService<Event, EventRepository> {
         List<Location> locations = locationService.findAllByEventId(eventId);
         event.setLocations(locations);
         return event;
+    }
+
+    public Optional<Event> findByCodeOptional(String code) {
+        return this.repository.findByCodeOptional(code);
     }
 
     @Transactional

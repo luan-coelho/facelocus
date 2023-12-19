@@ -2,59 +2,38 @@ package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.EventDTO;
-import br.unitins.facelocus.mapper.EventMapper;
-import br.unitins.facelocus.model.Event;
-import br.unitins.facelocus.service.EventService;
+import br.unitins.facelocus.dto.TicketRequestDTO;
+import br.unitins.facelocus.mapper.TicketRequestMapper;
+import br.unitins.facelocus.model.TicketRequest;
+import br.unitins.facelocus.service.TicketRequestService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Path("/ticket-request")
 public class TicketRequestResource {
 
     @Inject
-    EventService eventService;
+    TicketRequestService ticketRequestService;
 
     @Inject
-    EventMapper eventMapper;
+    TicketRequestMapper ticketRequestMapper;
 
     @GET
-    public Response findAll(Pageable pageable) {
-        DataPagination<?> dataPagination = eventService.findAllPaginated(pageable);
+    public Response findAllByEvent(Pageable pageable, @RestQuery("event") Long eventId) {
+        DataPagination<?> dataPagination = ticketRequestService.findAllPaginatedByEvent(pageable, eventId);
         return Response.ok(dataPagination).build();
     }
 
     @POST
-    public Response create(@Valid EventDTO eventDTO) {
-        Event event = eventMapper.toCreateEntity(eventDTO);
-        event = eventService.create(event);
-        EventDTO dto = eventMapper.toResource(event);
-        return Response.status(Response.Status.CREATED).entity(dto).build();
-    }
-
-    @Path("/{id}")
-    @PUT
-    public Response updateById(@PathParam("id") Long eventId, EventDTO eventDTO) {
-        Event event = eventMapper.toUpdateEntity(eventDTO);
-        event = eventService.updateById(eventId, event);
-        EventDTO dto = eventMapper.toResource(event);
-        return Response.ok(dto).build();
-    }
-
-    @Path("/{id}")
-    @DELETE
-    public Response deleteById(@PathParam("id") Long eventId) {
-        eventService.deleteById(eventId);
-        return Response.noContent().build();
-    }
-
-    @Path("/change-ticket-request-permission/{id}")
-    @PATCH
-    public Response changeTicketRequestPermissionByEventId(@PathParam("id") Long eventId) {
-        eventService.changeTicketRequestPermissionByEventId(eventId);
-        return Response.noContent().build();
+    public Response create(@Valid TicketRequestDTO createTicketRequestDTO) {
+        TicketRequest ticketRequest = ticketRequestMapper.toCreateEntity(createTicketRequestDTO);
+        ticketRequestService.create(ticketRequest);
+        return Response.status(Response.Status.CREATED).build();
     }
 }

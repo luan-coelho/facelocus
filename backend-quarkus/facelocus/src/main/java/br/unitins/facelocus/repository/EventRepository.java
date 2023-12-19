@@ -3,8 +3,14 @@ package br.unitins.facelocus.repository;
 import br.unitins.facelocus.model.Event;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.Optional;
+
 @ApplicationScoped
 public class EventRepository extends BaseRepository<Event> {
+
+    public Optional<Event> findByCodeOptional(String code) {
+        return find("FROM Event WHERE code = ?1", code).singleResultOptional();
+    }
 
     public boolean existsByCode(String code) {
         return count("FROM Event WHERE code = ?1", code) > 0;
