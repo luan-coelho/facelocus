@@ -60,6 +60,11 @@ public class EventService extends BaseService<Event, EventRepository> {
         return super.update(eventFound);
     }
 
+    /**
+     * Gera um código único de 6 dígitos para um evento.
+     *
+     * @return Código
+     */
     private String generateUniqueCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int codeSize = 6;
@@ -77,12 +82,22 @@ public class EventService extends BaseService<Event, EventRepository> {
         return code.toString();
     }
 
+    /**
+     * Habilita ou desabilita, possibilidade para outros usúarios realizarem solicitações de ingresso.
+     *
+     * @param eventId Identificador do evento
+     */
     @Transactional
     public void changeTicketRequestPermissionByEventId(Long eventId) {
         existsByIdWithThrows(eventId);
         this.repository.changeTicketRequestPermissionByEventId(eventId);
     }
 
+    /**
+     * Atribui um novo código para um evento
+     *
+     * @param eventId Identificador do evento
+     */
     @Transactional
     public void generateNewCode(Long eventId) {
         existsByIdWithThrows(eventId);
