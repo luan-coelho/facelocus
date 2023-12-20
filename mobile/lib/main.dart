@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Validação de presença',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          canvasColor: const Color(0xFF003C84),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF003C84), background: const Color(0xFFF1F2F6)),
           useMaterial3: true,
           fontFamily: 'Inter'),
       debugShowCheckedModeBanner: false,

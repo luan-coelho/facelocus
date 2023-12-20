@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mobile/widgets/app_button.dart';
-import 'package:mobile/widgets/app_card.dart';
+import 'package:mobile/widgets/feature_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,36 +7,30 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Validação")),
+      appBar: AppBar(
+          title: const Text("Facelocus", style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color(0xFF003C84)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text("Validação de presença",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
-              child: Button(
-                  text: "Navegar para dashboard",
-                  onPressed: () {
-                    context.go("/dashboard");
-                  }),
-            ),
-            const Text("Cards",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             SizedBox(
-              height: 200,
               child: ListView.separated(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(left: 50, right: 50),
                 separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 12);
+                  return const SizedBox(height: 20);
                 },
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: 3,
                 itemBuilder: (context, index) {
-                  return const AppCard(text: "Teste");
+                  return const FeatureCard(
+                    description: "Registros de ponto",
+                    route: "",
+                    color: Color(0xFF003C84),
+                  );
                 },
               ),
             ),
