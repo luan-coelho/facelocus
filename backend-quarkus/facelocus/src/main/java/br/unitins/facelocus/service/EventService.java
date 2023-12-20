@@ -12,6 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -75,6 +76,20 @@ public class EventService extends BaseService<Event, EventRepository> {
         Event eventFound = findById(eventId);
         eventFound = eventMapper.toUpdateEntity(event, eventFound);
         return super.update(eventFound);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long eventId) {
+        try {
+            findByIdOptional(eventId)
+                    .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+            this.repository.deleteEntityById(eventId);
+        } catch (ConstraintViolationException e) {
+            throw new IllegalArgumentException("O evento não pode ser deletado pois está vinculado a outros registros");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -141,5 +156,9 @@ public class EventService extends BaseService<Event, EventRepository> {
         }
         event.getUsers().add(user);
         update(event);
+    }
+
+    public boolean linkedUser(Long eventId, Long userId) {
+        return this.repository.linkedUser(eventId, userId);
     }
 }

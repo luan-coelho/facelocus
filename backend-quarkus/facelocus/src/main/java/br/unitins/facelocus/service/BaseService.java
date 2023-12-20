@@ -67,10 +67,13 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return repository.getEntityManager().merge(entity);
     }
 
-    @Transactional
     public void deleteById(Long id) {
         existsByIdWithThrows(id);
-        repository.deleteById(id);
+        try {
+            repository.deleteEntityById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected DataPagination buildPagination(List data, Pageable pageable) {

@@ -8,6 +8,10 @@ import java.util.List;
 @ApplicationScoped
 public class LocationRepository extends BaseRepository<Location> {
 
+    public LocationRepository() {
+        super(Location.class);
+    }
+
     public List<Location> findAllByEventId(Long eventId) {
         return find("FROM Location WHERE event.id = ?1", eventId).list();
     }

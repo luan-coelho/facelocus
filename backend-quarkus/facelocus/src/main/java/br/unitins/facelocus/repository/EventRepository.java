@@ -8,6 +8,10 @@ import java.util.Optional;
 @ApplicationScoped
 public class EventRepository extends BaseRepository<Event> {
 
+    public EventRepository() {
+        super(Event.class);
+    }
+
     public Optional<Event> findByCodeOptional(String code) {
         return find("FROM Event WHERE code = ?1", code).singleResultOptional();
     }
@@ -22,5 +26,9 @@ public class EventRepository extends BaseRepository<Event> {
 
     public void updateCodeById(Long eventId, String code) {
         update("UPDATE Event SET code = ?1 WHERE id = ?2", code, eventId);
+    }
+
+    public boolean linkedUser(Long eventId, Long userId) {
+        return count("FROM Event e JOIN e.users u WHERE e.id = ?1 AND u.id = ?2", eventId, userId) > 0;
     }
 }

@@ -28,6 +28,13 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     @Inject
     EventService eventService;
 
+    /**
+     * Responsável por buscar todas as solicitações de ingresso vinculadas ao um evento
+     *
+     * @param pageable Informações de paginação
+     * @param eventId  Identificador do evento
+     * @return Objeto paginável de solicitações de ingresso
+     */
     public DataPagination<?> findAllPaginatedByEvent(Pageable pageable, Long eventId) {
         List<TicketRequestDTO> dtos = this.repository.findAllByEventId(eventId)
                 .stream()
@@ -36,13 +43,32 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
         return buildPagination(dtos, pageable);
     }
 
+    public TicketRequest findById(Long id) {
+        return repository.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
+    }
+
     @Transactional
     public TicketRequest create(TicketRequest ticketRequest) {
-        Event event = eventService.findByCodeOptional(ticketRequest.getCode())
+        Long requestedId = ticketRequest.getRequested().getId();
+        if (ticketRequest.getRequester().getId() != null && ticketRequest.getRequester().getId().equals(requestedId)) {
+            throw new IllegalArgumentException("O usuário solicitante não pode ser o mesmo solicitado");
+        }
+
+        Event event = eventService
+                .findByCodeOptional(ticketRequest.getCode())
                 .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
-        User requester = userService.findByIdOptional(ticketRequest.getRequester().getId())
+
+        Long eventId = event.getId();
+        if (eventService.linkedUser(eventId, requestedId)) {
+            throw new IllegalArgumentException("Usuário já vinculado ao evento");
+        }
+
+        User requester = userService
+                .findByIdOptional(ticketRequest.getRequester().getId())
                 .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado pelo id"));
-        User requested = userService.findByIdOptional(ticketRequest.getRequester().getId())
+        User requested = userService
+                .findByIdOptional(requestedId)
                 .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
 
         ticketRequest.setEvent(event);
@@ -55,7 +81,9 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     @Transactional
     @Override
     public void deleteById(Long ticketRequestId) {
-        TicketRequestStatus status = this.repository.getStatusById(ticketRequestId);
+        TicketRequest ticketRequest = findByIdOptional(ticketRequestId)
+                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
+        TicketRequestStatus status = ticketRequest.getRequestStatus();
         if (status != TicketRequestStatus.PENDING) {
             String message = "A solicitação não está mais pendente. Desta forma, ela não pode ser apagada";
             throw new IllegalArgumentException(message);
@@ -71,13 +99,13 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
      * @param requestStatus   Situação da solicitação
      */
     private void updateStatus(Long userId, Long ticketRequestId, TicketRequestStatus requestStatus) {
-        TicketRequest ticketRequest = findByIdOptional(ticketRequestId)
-                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
-        if (!ticketRequest.getRequested().getId().equals(userId)) {
+        TicketRequest ticketRequest = findById(ticketRequestId);
+        Long requestedId = ticketRequest.getRequested().getId();
+        if (!requestedId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
         }
-        this.repository.updateStatus(ticketRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(ticketRequest.getEvent().getId(), userId);
+        this.repository.updateStatus(requestedId, requestStatus);
+        eventService.addUserByEventIdAndUserId(ticketRequest.getEvent().getId(), requestedId);
     }
 
     @Transactional

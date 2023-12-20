@@ -9,6 +9,10 @@ import java.util.Optional;
 @ApplicationScoped
 public class UserRepository extends BaseRepository<User> {
 
+    public UserRepository() {
+        super(User.class);
+    }
+
     public boolean existsByCpf(String cpf) {
         return count("FROM User WHERE cpf = ?1", cpf) > 0;
     }
