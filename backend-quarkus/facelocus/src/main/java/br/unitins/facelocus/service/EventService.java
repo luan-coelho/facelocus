@@ -145,7 +145,7 @@ public class EventService extends BaseService<Event, EventRepository> {
      */
     @Transactional
     public void addUserByEventIdAndUserId(Long eventId, Long userId) {
-        User user = userService.findByIdOptional(eventId)
+        User user = userService.findByIdOptional(userId)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
         Event event = findByIdOptional(eventId)
                 .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));

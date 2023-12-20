@@ -104,7 +104,7 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
         if (!requestedId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
         }
-        this.repository.updateStatus(requestedId, requestStatus);
+        this.repository.updateStatus(ticketRequestId, requestStatus);
         eventService.addUserByEventIdAndUserId(ticketRequest.getEvent().getId(), requestedId);
     }
 
