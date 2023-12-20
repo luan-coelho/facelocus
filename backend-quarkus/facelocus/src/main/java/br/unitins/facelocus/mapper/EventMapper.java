@@ -11,7 +11,7 @@ public interface EventMapper {
     @Named("toCreateEntity")
     Event toCreateEntity(EventDTO eventDTO);
 
-    @Mapping(ignore = true, target = "registrationPoints")
+    @Mapping(ignore = true, target = "pointRecords")
     @Mapping(ignore = true, target = "locations")
     @Mapping(ignore = true, target = "administrator")
     @Mapping(ignore = true, target = "code")

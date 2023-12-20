@@ -20,7 +20,7 @@ public class Event {
     private Long id;
     private String description;
     @OneToMany(mappedBy = "event")
-    private List<PointRecord> registrationPoints;
+    private List<PointRecord> pointRecords;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Location> locations;
     @ManyToOne
