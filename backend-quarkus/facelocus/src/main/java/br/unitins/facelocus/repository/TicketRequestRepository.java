@@ -17,6 +17,14 @@ public class TicketRequestRepository extends BaseRepository<TicketRequest> {
         return find("FROM TicketRequest WHERE event.id = ?1", eventId).list();
     }
 
+    public List<TicketRequest> findAllReceivedByUser(Long userId) {
+        return find("FROM TicketRequest WHERE requested.id = ?1", userId).list();
+    }
+
+    public List<TicketRequest> findAllSentByUser(Long userId) {
+        return find("FROM TicketRequest WHERE requester.id = ?1", userId).list();
+    }
+
     public void updateStatus(Long ticketRequestId, TicketRequestStatus requestStatus) {
         update("UPDATE TicketRequest SET requestStatus = ?2 WHERE id = ?1", ticketRequestId, requestStatus);
     }

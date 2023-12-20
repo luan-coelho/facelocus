@@ -8,6 +8,8 @@ import br.unitins.facelocus.model.TicketRequest;
 import br.unitins.facelocus.service.TicketRequestService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
@@ -24,7 +26,21 @@ public class TicketRequestResource {
 
     @GET
     public Response findAllByEvent(Pageable pageable, @RestQuery("event") Long eventId) {
-        DataPagination<?> dataPagination = ticketRequestService.findAllPaginatedByEvent(pageable, eventId);
+        DataPagination<?> dataPagination = ticketRequestService.findAllByEvent(pageable, eventId);
+        return Response.ok(dataPagination).build();
+    }
+
+    @Path("/sent")
+    @GET
+    public Response findAllSent(Pageable pageable, @RestQuery("user") @Valid Long userId) {
+        DataPagination<?> dataPagination = ticketRequestService.findAllSentByUser(pageable, userId);
+        return Response.ok(dataPagination).build();
+    }
+
+    @Path("/received")
+    @GET
+    public Response findAllReceived(Pageable pageable, @RestQuery("user") Long userId) {
+        DataPagination<?> dataPagination = ticketRequestService.findAllReceivedByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 

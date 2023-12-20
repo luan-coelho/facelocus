@@ -35,8 +35,24 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
      * @param eventId  Identificador do evento
      * @return Objeto paginável de solicitações de ingresso
      */
-    public DataPagination<?> findAllPaginatedByEvent(Pageable pageable, Long eventId) {
+    public DataPagination<?> findAllByEvent(Pageable pageable, Long eventId) {
         List<TicketRequestDTO> dtos = this.repository.findAllByEventId(eventId)
+                .stream()
+                .map(t -> ticketRequestMapper.toResource(t))
+                .toList();
+        return buildPagination(dtos, pageable);
+    }
+
+    public DataPagination<?> findAllReceivedByUser(Pageable pageable, Long userId) {
+        List<TicketRequestDTO> dtos = this.repository.findAllReceivedByUser(userId)
+                .stream()
+                .map(t -> ticketRequestMapper.toResource(t))
+                .toList();
+        return buildPagination(dtos, pageable);
+    }
+
+    public DataPagination<?> findAllSentByUser(Pageable pageable, Long userId) {
+        List<TicketRequestDTO> dtos = this.repository.findAllSentByUser(userId)
                 .stream()
                 .map(t -> ticketRequestMapper.toResource(t))
                 .toList();
