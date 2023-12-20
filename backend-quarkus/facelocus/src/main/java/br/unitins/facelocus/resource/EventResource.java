@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Path("/event")
@@ -62,6 +63,13 @@ public class EventResource {
     @PATCH
     public Response generateNewCode(@PathParam("id") Long eventId) {
         eventService.generateNewCode(eventId);
+        return Response.noContent().build();
+    }
+
+    @Path("/remove-user")
+    @DELETE
+    public Response removeUser(@RestQuery("event") Long eventId, @RestQuery("user") Long userId) {
+        eventService.removeUser(eventId, userId);
         return Response.noContent().build();
     }
 }

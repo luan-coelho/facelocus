@@ -149,16 +149,23 @@ public class EventService extends BaseService<Event, EventRepository> {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
         Event event = findByIdOptional(eventId)
                 .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
-        for (User eventUser : event.getUsers()) {
-            if (eventUser.getId().equals(userId)) {
-                throw new IllegalArgumentException("Usuário já vinculado ao evento");
-            }
-        }
+        event.getUsers().forEach(u -> {
+            if (u.getId().equals(userId)) throw new IllegalArgumentException("Usuário já vinculado ao evento");
+        });
         event.getUsers().add(user);
         update(event);
     }
 
     public boolean linkedUser(Long eventId, Long userId) {
         return this.repository.linkedUser(eventId, userId);
+    }
+
+    @Transactional
+    public void removeUser(Long eventId, Long userId) {
+        userService.existsByIdWithThrows(userId);
+        Event event = findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        event.getUsers().removeIf(user -> user.getId().equals(userId));
+        update(event);
     }
 }
