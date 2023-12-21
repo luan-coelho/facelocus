@@ -20,9 +20,7 @@ class FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => {
-        context.go('/dashboard')
-      },
+      onTap: () => {context.go(route)},
       child: Container(
         height: 160,
         decoration: BoxDecoration(
