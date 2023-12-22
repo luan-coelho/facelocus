@@ -1,7 +1,7 @@
 package br.unitins.facelocus.mapper;
 
 import br.unitins.facelocus.exception.ErrorResponse;
-import br.unitins.facelocus.exception.ValidationErrorResponse;
+import br.unitins.facelocus.handle.restresponse.ValidationErrorResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

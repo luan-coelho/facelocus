@@ -1,7 +1,7 @@
 package br.unitins.facelocus.handle;
 
 import br.unitins.facelocus.exception.ErrorResponse;
-import br.unitins.facelocus.exception.ValidationErrorResponse;
+import br.unitins.facelocus.handle.restresponse.ValidationErrorResponse;
 import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerRequest;

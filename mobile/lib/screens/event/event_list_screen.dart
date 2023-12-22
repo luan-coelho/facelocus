@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/models/event.dart';
 import 'package:mobile/services/event_service.dart';
 import 'package:mobile/widgets/event/event_card.dart';
@@ -23,9 +24,7 @@ class _EventListScreenState extends State<EventListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Eventos", style: TextStyle(color: Colors.white)),
-          backgroundColor: const Color(0xFF003C84)),
+      appBar: AppBar(title: const Text("Eventos")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -37,6 +36,15 @@ class _EventListScreenState extends State<EventListScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text("Ainda não há nenhum evento cadastrado",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w500)),
+                      );
+                    }
+
                     return ListView.separated(
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       separatorBuilder: (BuildContext context, int index) {
@@ -56,6 +64,11 @@ class _EventListScreenState extends State<EventListScreen> {
                 }),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push("/event/create"),
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),
     );
   }

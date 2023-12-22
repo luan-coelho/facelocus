@@ -29,8 +29,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Facelocus", style: TextStyle(color: Colors.white)),
-          backgroundColor: const Color(0xFF003C84)),
+          title: const Text("Facelocus")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -1,6 +1,6 @@
 package br.unitins.facelocus.handle;
 
-import br.unitins.facelocus.exception.AuthenticationException;
+import br.unitins.facelocus.handle.restresponse.AuthenticationException;
 import br.unitins.facelocus.exception.ErrorResponse;
 import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;

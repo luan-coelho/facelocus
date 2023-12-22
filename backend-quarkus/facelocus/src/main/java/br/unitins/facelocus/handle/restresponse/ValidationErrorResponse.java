@@ -1,5 +1,6 @@
-package br.unitins.facelocus.exception;
+package br.unitins.facelocus.handle.restresponse;
 
+import br.unitins.facelocus.exception.ErrorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
