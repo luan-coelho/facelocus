@@ -3,6 +3,7 @@ import 'package:mobile/screens/dashboard/dashboard_screen.dart';
 import 'package:mobile/screens/event/event_create_screen.dart';
 import 'package:mobile/screens/event/event_list_screen.dart';
 import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/ticket_request.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -22,6 +23,10 @@ final router = GoRouter(
     GoRoute(
       path: '/event/create',
       builder: (context, state) => const EventCreateScreen(),
+    ),
+    GoRoute(
+      path: '/ticket-request',
+      builder: (context, state) => const TicketRequestScreen(),
     ),
   ],
 );
