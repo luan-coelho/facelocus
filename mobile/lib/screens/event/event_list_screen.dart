@@ -59,7 +59,7 @@ class _EventListScreenState extends State<EventListScreen> {
                       },
                     );
                   } else {
-                    return const CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   }
                 }),
           ],
