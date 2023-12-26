@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/feature_card.dart';
+import 'package:facelocus/constants.dart';
+import 'package:facelocus/widgets/feature_card.dart';
 
 class TicketRequestScreen extends StatelessWidget {
   const TicketRequestScreen({super.key});
@@ -11,13 +12,13 @@ class TicketRequestScreen extends StatelessWidget {
           description: "Enviadas",
           route: "/point-record",
           color: Colors.white,
-          backgroundColor: Color(0xFF003C84),
+          backgroundColor: AppConst.primary,
           imageName: "sent-icon.svg"),
       FeatureCard(
           description: "Recebidas",
           route: "/event",
           color: Colors.black,
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: Colors.white,
           imageName: "received-icon.svg")];
 
     return Scaffold(

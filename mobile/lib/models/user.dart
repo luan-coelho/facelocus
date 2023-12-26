@@ -1,6 +1,5 @@
-import 'package:mobile/models/device.dart';
-import 'package:mobile/models/event.dart';
-import 'package:mobile/models/user_face_photo.dart';
+import 'package:facelocus/models/device.dart';
+import 'package:facelocus/models/user_face_photo.dart';
 
 class User {
   late int id;
@@ -41,6 +40,15 @@ class User {
               .toList(),*/
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'cpf': cpf,
+        'password': password,
+      };
 
   String getFullName() {
     return '$name $surname'.trim();

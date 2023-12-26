@@ -1,10 +1,8 @@
-import 'package:mobile/models/event.dart';
-
 class Location {
-  late int id;
-  late String description;
-  late String latitude;
-  late String longitude;
+  int? id;
+  String description;
+  String latitude;
+  String longitude;
 
   Location({
     required this.id,
@@ -21,4 +19,11 @@ class Location {
       longitude: json['longitude'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'description': description,
+        'latitude': latitude,
+        'longitude': longitude,
+      };
 }

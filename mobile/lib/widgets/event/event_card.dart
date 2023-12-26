@@ -8,8 +8,9 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 331,
-        height: 47,
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        width: 330,
+        height: 45,
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
@@ -17,9 +18,34 @@ class EventCard extends StatelessWidget {
             blurRadius: 5,
             offset: const Offset(0, 1.5),
           ),
-        ], borderRadius: BorderRadius.circular(10), color: Colors.white),
+        ], borderRadius: BorderRadius.circular(8), color: Colors.white),
         child: Center(
-            child: Text(description,
-                style: const TextStyle(fontWeight: FontWeight.w500))));
+            child: Row(
+          children: [
+            Text(description,
+                style: const TextStyle(fontWeight: FontWeight.w500)),
+            Align(
+              alignment: Alignment.centerRight,
+              child: PopupMenuButton(
+                  icon: const Icon(Icons.more_vert), // Ícone de três pontos
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry>[
+                      PopupMenuItem(
+                        child: const Text('Editar'),
+                        onTap: () {
+                          // Ação a ser realizada quando a Opção 1 for selecionada
+                          // Pode ser uma função ou um Navigator para outra tela
+                        },
+                      ),
+                      PopupMenuItem(
+                          child: const Text('Deletar'),
+                          onTap: () {
+                            // Ação a ser realizada quando a Opção 2 for selecionada
+                          })
+                    ];
+                  }),
+            )
+          ],
+        )));
   }
 }

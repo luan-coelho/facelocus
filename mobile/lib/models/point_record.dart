@@ -1,6 +1,6 @@
-import 'package:mobile/models/event.dart';
-import 'package:mobile/models/factor.dart';
-import 'package:mobile/models/point.dart';
+import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/factor.dart';
+import 'package:facelocus/models/point.dart';
 
 class PointRecord {
   late int id;

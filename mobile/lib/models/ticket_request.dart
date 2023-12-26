@@ -1,6 +1,6 @@
-import 'package:mobile/models/event.dart';
-import 'package:mobile/models/ticket_request_status.dart';
-import 'package:mobile/models/user.dart';
+import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/ticket_request_status.dart';
+import 'package:facelocus/models/user.dart';
 
 class TicketRequest {
   late int id;

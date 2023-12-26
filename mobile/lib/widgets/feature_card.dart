@@ -41,7 +41,7 @@ class FeatureCard extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 'images/$imageName',
-                width: 50,
+                width: 60,
                 colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
               ),
               const SizedBox(height: 5),

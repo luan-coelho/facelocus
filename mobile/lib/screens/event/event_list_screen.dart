@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile/models/event.dart';
-import 'package:mobile/services/event_service.dart';
-import 'package:mobile/widgets/event/event_card.dart';
+import 'package:facelocus/models/event.dart';
+import 'package:facelocus/services/event_service.dart';
+import 'package:facelocus/widgets/event/event_card.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -46,7 +46,7 @@ class _EventListScreenState extends State<EventListScreen> {
                     }
 
                     return ListView.separated(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
                       separatorBuilder: (BuildContext context, int index) {
                         return const SizedBox(height: 20);
                       },
@@ -55,7 +55,7 @@ class _EventListScreenState extends State<EventListScreen> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         var event = snapshot.data![index];
-                        return EventCard(description: event.description);
+                        return EventCard(description: event.description!);
                       },
                     );
                   } else {

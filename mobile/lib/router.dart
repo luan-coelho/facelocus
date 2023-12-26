@@ -1,9 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:mobile/screens/dashboard/dashboard_screen.dart';
-import 'package:mobile/screens/event/event_create_screen.dart';
-import 'package:mobile/screens/event/event_list_screen.dart';
-import 'package:mobile/screens/home_screen.dart';
-import 'package:mobile/screens/ticket_request.dart';
+import 'package:facelocus/screens/event/event_create_screen.dart';
+import 'package:facelocus/screens/event/event_list_screen.dart';
+import 'package:facelocus/screens/home_screen.dart';
+import 'package:facelocus/screens/ticket_request.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -11,10 +10,6 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      path: '/dashboard',
-      builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/event',

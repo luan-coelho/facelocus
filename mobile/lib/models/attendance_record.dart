@@ -1,6 +1,6 @@
-import 'package:mobile/models/point.dart';
-import 'package:mobile/models/user.dart';
-import 'package:mobile/models/user_face_photo.dart';
+import 'package:facelocus/models/point.dart';
+import 'package:facelocus/models/user.dart';
+import 'package:facelocus/models/user_face_photo.dart';
 
 class AttendanceRecord {
   late int id;

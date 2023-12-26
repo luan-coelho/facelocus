@@ -1,4 +1,4 @@
-import 'package:mobile/models/point_record.dart';
+import 'package:facelocus/models/point_record.dart';
 
 class Point {
   late int id;

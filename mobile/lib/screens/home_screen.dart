@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/feature_card.dart';
+import 'package:facelocus/widgets/feature_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,8 +28,6 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Facelocus")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

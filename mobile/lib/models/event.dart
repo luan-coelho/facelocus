@@ -1,29 +1,29 @@
-import 'package:mobile/models/location.dart';
-import 'package:mobile/models/point_record.dart';
-import 'package:mobile/models/user.dart';
+import 'package:facelocus/models/location.dart';
+import 'package:facelocus/models/point_record.dart';
+import 'package:facelocus/models/user.dart';
 
 class Event {
-  late int id;
-  late String description;
-  late List<PointRecord>? pointRecords;
-  late List<Location>? locations;
-  late User administrator;
-  late List<User>? users;
-  late String code;
-  late bool allowTicketRequests;
-
-  Event({
-    required this.id,
-    required this.description,
-    required this.pointRecords,
-    required this.locations,
-    required this.administrator,
-    required this.users,
-    required this.code,
-    required this.allowTicketRequests,
-  });
+  int? id;
+  String? description;
+  List<PointRecord>? pointRecords;
+  List<Location>? locations;
+  User? administrator;
+  List<User>? users;
+  String? code;
+  bool? allowTicketRequests = false;
 
   Event.empty();
+
+  Event({
+    this.id,
+    required this.description,
+    this.pointRecords,
+    this.locations,
+    required this.administrator,
+    this.users,
+    this.code,
+    this.allowTicketRequests,
+  });
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
         id: json['id'],
@@ -48,4 +48,13 @@ class Event {
         code: json['code'],
         allowTicketRequests: json['allowTicketRequests'],
       );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'description': description,
+        'locations': locations?.map((loc) => loc.toJson()).toList(),
+        'administrator': /*administrator.toJson()*/ 1,
+        'code': code,
+        'allowTicketRequests': allowTicketRequests,
+      };
 }

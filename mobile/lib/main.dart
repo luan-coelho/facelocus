@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/router.dart';
+import 'package:facelocus/constants.dart';
+import 'package:facelocus/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +15,11 @@ class MyApp extends StatelessWidget {
       title: 'Validação de presença',
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xFF003C84), foregroundColor: Colors.white),
+              backgroundColor: AppConst.primary, foregroundColor: Colors.white),
           colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF003C84),
-              background: const Color(0xFFF1F2F6)),
+              seedColor: AppConst.primary, background: AppConst.background),
           useMaterial3: true,
-          fontFamily: 'Inter'),
+          fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
