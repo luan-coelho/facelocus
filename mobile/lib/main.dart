@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
       title: 'Validação de presença',
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              backgroundColor: AppConst.primary, foregroundColor: Colors.white),
+              backgroundColor: AppConst.blue, foregroundColor: Colors.white),
           colorScheme: ColorScheme.fromSeed(
-              seedColor: AppConst.primary, background: AppConst.background),
+              seedColor: AppConst.blue, background: AppConst.white),
           useMaterial3: true,
           fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,

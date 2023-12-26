@@ -1,14 +1,19 @@
+import 'package:facelocus/screens/login_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/home_screen.dart';
-import 'package:facelocus/screens/ticket_request.dart';
+import 'package:facelocus/screens/ticket-request/ticket_request.dart';
 
 final router = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/home',
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
