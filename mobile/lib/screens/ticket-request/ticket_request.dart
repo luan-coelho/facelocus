@@ -1,6 +1,6 @@
+import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:flutter/material.dart';
-import 'package:facelocus/constants.dart';
-import 'package:facelocus/widgets/feature_card.dart';
+import 'package:facelocus/shared/constants.dart';
 
 class TicketRequestScreen extends StatelessWidget {
   const TicketRequestScreen({super.key});

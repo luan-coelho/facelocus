@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:facelocus/constants.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/router.dart';
 
 void main() {

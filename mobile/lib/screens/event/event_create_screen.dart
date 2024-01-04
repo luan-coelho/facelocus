@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:facelocus/message_snacks.dart';
+import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/models/event.dart';
 
 class EventCreateScreen extends StatefulWidget {

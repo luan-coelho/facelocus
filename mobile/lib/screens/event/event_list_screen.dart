@@ -1,8 +1,8 @@
+import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/services/event_service.dart';
-import 'package:facelocus/widgets/event/event_card.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
