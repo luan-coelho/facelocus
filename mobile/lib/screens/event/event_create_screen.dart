@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:facelocus/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/models/event.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class EventCreateScreen extends StatefulWidget {
   const EventCreateScreen({super.key});
@@ -42,6 +45,12 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
   }
 
   @override
+  void dispose() {
+    Provider.of<EventProvider>(context, listen: false).clean();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Cadastrar evento")),
@@ -79,17 +88,22 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                 onSaved: (value) => event.description = value!,
               ),
               const SizedBox(height: 15),
-              TextButton.icon(
-                  onPressed: () => getDeviceLocation(),
-                  label: const Text(
-                    "Localizações",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  icon: const Icon(Icons.location_on_rounded,
-                      color: Colors.black),
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFAB411)))),
+              Consumer<EventProvider>(builder: (context, provider, child) {
+                return TextButton.icon(
+                    onPressed: () {
+                      provider.change(event);
+                      context.push("/event/locations");
+                    },
+                    label: const Text(
+                      "Localizações",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    icon: const Icon(Icons.location_on_rounded,
+                        color: Colors.black),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFAB411))));
+              }),
               const SizedBox(height: 15),
               Row(
                 children: [

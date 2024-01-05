@@ -1,8 +1,8 @@
 class Location {
   int? id;
-  String description;
-  String latitude;
-  String longitude;
+  String? description;
+  double? latitude;
+  double? longitude;
 
   Location({
     required this.id,
@@ -10,6 +10,8 @@ class Location {
     required this.latitude,
     required this.longitude,
   });
+
+  Location.empty();
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
