@@ -1,8 +1,9 @@
+import 'package:facelocus/models/event.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:facelocus/models/event.dart';
-import 'package:facelocus/services/event_service.dart';
+
+import '../../services/event_service.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -55,7 +56,7 @@ class _EventListScreenState extends State<EventListScreen> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         var event = snapshot.data![index];
-                        return EventCard(description: event.description!);
+                        return EventCard(event: event);
                       },
                     );
                   } else {

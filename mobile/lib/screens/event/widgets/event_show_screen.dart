@@ -6,14 +6,16 @@ import 'package:facelocus/models/event.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class EventCreateScreen extends StatefulWidget {
-  const EventCreateScreen({super.key});
+class EventShowScreen extends StatefulWidget {
+  const EventShowScreen({super.key, required this.eventId});
+
+  final int eventId;
 
   @override
-  State<EventCreateScreen> createState() => _EventCreateScreenState();
+  State<EventShowScreen> createState() => _EventShowScreenState();
 }
 
-class _EventCreateScreenState extends State<EventCreateScreen> {
+class _EventShowScreenState extends State<EventShowScreen> {
   final Dio _dio = Dio();
   final String _baseUrl = "http://10.0.2.2:8080";
   final _formKey = GlobalKey<FormState>();
@@ -42,6 +44,12 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Provider.of<EventProvider>(context, listen: false).clean();
+    super.dispose();
   }
 
   @override

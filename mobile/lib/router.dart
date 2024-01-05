@@ -1,4 +1,5 @@
 import 'package:facelocus/screens/auth/login_screen.dart';
+import 'package:facelocus/screens/event/widgets/event_show_screen.dart';
 import 'package:facelocus/screens/location/location_list_screen.dart';
 import 'package:facelocus/screens/location/location_form_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
@@ -26,6 +27,13 @@ final router = GoRouter(
     GoRoute(
       path: "/event",
       builder: (context, state) => const EventListScreen(),
+    ),
+    GoRoute(
+      path: "/event/show/:id",
+      builder: (context, state) {
+        final int eventId = int.parse(state.pathParameters["id"]!);
+        return EventShowScreen(eventId: eventId);
+      },
     ),
     GoRoute(
       path: "/event/create",
