@@ -22,7 +22,7 @@ class _UserCardHomeState extends State<UserCardHome> {
         width: double.infinity,
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: AppConst.white,
+          color: const Color(0xff0F172A),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -44,7 +44,7 @@ class _UserCardHomeState extends State<UserCardHome> {
                   Text(
                     'Seja bem-vindo',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w200),
                   ),
@@ -52,7 +52,7 @@ class _UserCardHomeState extends State<UserCardHome> {
                   Text(
                     "Luan",
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.w600),
                   )
@@ -62,7 +62,7 @@ class _UserCardHomeState extends State<UserCardHome> {
             Container(
               alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black.withOpacity(0.2)),
+                  border: Border.all(color: Colors.white.withOpacity(0.7)),
                   shape: BoxShape.circle),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

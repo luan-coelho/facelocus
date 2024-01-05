@@ -7,10 +7,10 @@ import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
 
 final router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/login',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(

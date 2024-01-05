@@ -1,6 +1,8 @@
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -91,10 +93,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       );
                     },
-                    child: const Text("Alterar senha"))
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: 200,
+                        decoration: const BoxDecoration(
+                            color: AppConst.blue,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: const Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.key, color: Colors.white),
+                              SizedBox(width: 5),
+                              Text("Alterar senha",
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ))),
+                const SizedBox(height: 5),
+                TextButton(
+                    onPressed: () => _logout(),
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: 200,
+                        child: const Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.logout, color: Colors.red),
+                              SizedBox(width: 5),
+                              Text("Encerrar sessão",
+                                  style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        )))
               ],
             ),
           ),
         ));
+  }
+
+  _logout() {
+    context.replace("/login");
   }
 }
