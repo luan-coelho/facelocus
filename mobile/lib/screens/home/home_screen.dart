@@ -14,23 +14,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             UserCardHome(),
-            SizedBox(height: 25),
-            Row(
-              children: [
-                Icon(Icons.settings),
-                SizedBox(width: 5),
-                Text(
-                  "Funcionalidades",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Expanded(
-              child: HomeFeatures(),
-            ),
+            HomeFeatures(),
           ],
         ),
       ),

@@ -7,34 +7,36 @@ class HomeFeatures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      children: const [
-        FeatureCard(
-          description: "Registros de ponto",
-          route: "/point-record",
-          color: Colors.white,
-          backgroundColor: AppConst.blue,
-          imageName: "point-record-icon.svg",
-        ),
-        FeatureCard(
-          description: "Eventos",
-          route: "/event",
-          color: Colors.black,
-          backgroundColor: Colors.white,
-          imageName: "event-icon.svg",
-        ),
-        FeatureCard(
-          description: "Solicitações de ingresso",
-          route: "/ticket-request",
-          color: Colors.black,
-          backgroundColor: AppConst.yellow,
-          imageName: "ticket-request-icon.svg",
-        ),
-        // Adicione mais FeatureCards conforme necessário
-      ],
+    return Expanded(
+      child: GridView.count(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        children: const [
+          FeatureCard(
+            description: "Registros de ponto",
+            route: "/point-record",
+            color: Colors.white,
+            backgroundColor: AppConst.blue,
+            imageName: "point-record-icon.svg",
+          ),
+          FeatureCard(
+            description: "Eventos",
+            route: "/event",
+            color: Colors.black,
+            backgroundColor: Colors.white,
+            imageName: "event-icon.svg",
+          ),
+          FeatureCard(
+            description: "Solicitações de ingresso",
+            route: "/ticket-request",
+            color: Colors.black,
+            backgroundColor: AppConst.yellow,
+            imageName: "ticket-request-icon.svg",
+          ),
+          // Adicione mais FeatureCards conforme necessário
+        ],
+      ),
     );
   }
 }
