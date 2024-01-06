@@ -28,6 +28,14 @@ public class EventResource {
         return Response.ok(dataPagination).build();
     }
 
+    @Path("/{id}")
+    @GET
+    public Response findById(@PathParam("id") Long eventId) {
+        Event event = eventService.findById(eventId);
+        EventDTO dto = eventMapper.toResource(event);
+        return Response.ok(dto).build();
+    }
+
     @POST
     public Response create(@Valid EventDTO eventDTO) {
         Event event = eventMapper.toCreateEntity(eventDTO);
