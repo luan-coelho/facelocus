@@ -60,7 +60,10 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.eventLocationsForm,
-      builder: (context, state) => const LocationFormScreen(),
+      builder: (context, state) {
+        int eventId = int.parse(state.uri.queryParameters['event']!);
+        return LocationFormScreen(eventId: eventId);
+      },
     ),
     GoRoute(
       path: AppRoutes.ticketRequest,

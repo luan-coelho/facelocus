@@ -1,14 +1,15 @@
 import 'package:facelocus/models/location.dart';
-import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/services/location_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class LocationFormScreen extends StatefulWidget {
-  const LocationFormScreen({super.key});
+  const LocationFormScreen({super.key, required this.eventId});
+
+  final int eventId;
 
   @override
   State<LocationFormScreen> createState() => _LocationFormScreenState();
@@ -16,12 +17,14 @@ class LocationFormScreen extends StatefulWidget {
 
 class _LocationFormScreenState extends State<LocationFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  LocationService _locationService = LocationService();
   late TextEditingController _descriptionController;
   final Location _location = Location.empty();
   bool _showPosition = false;
 
   @override
   void initState() {
+    _locationService = LocationService();
     _descriptionController = TextEditingController();
     super.initState();
     if (_location.id != null) {
@@ -38,12 +41,12 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
   void addLocation() {
     if (_formKey.currentState!.validate()) {
       if (_location.longitude == null && _location.longitude == null) {
-        MessageSnacks.danger(context, "Sem localização definida");
+        MessageSnacks.warn(context, "Sem localização definida");
         return;
       }
 
       _formKey.currentState!.save();
-      Provider.of<EventProvider>(context, listen: false).addLocation(_location);
+      _locationService.create(context, _location, widget.eventId);
       context.pop();
     }
   }
@@ -93,7 +96,8 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                   icon: const Icon(Icons.location_on_rounded,
                       color: Colors.white),
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green))),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green))),
               const SizedBox(height: 10),
               Builder(
                 builder: (context) {

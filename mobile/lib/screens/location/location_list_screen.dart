@@ -72,7 +72,9 @@ class _LocationListScreenState extends State<LocationListScreen> {
             }
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.eventLocationsForm),
+        onPressed: () => context.push(Uri(
+            path: AppRoutes.eventLocationsForm,
+            queryParameters: {'event': widget.eventId.toString()}).toString()),
         backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),

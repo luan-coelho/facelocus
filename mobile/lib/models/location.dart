@@ -1,8 +1,8 @@
 class Location {
   int? id;
   String? description;
-  late double latitude;
-  late double longitude;
+  double? latitude;
+  double? longitude;
 
   Location({
     required this.id,
