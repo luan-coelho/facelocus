@@ -1,4 +1,4 @@
-import 'package:facelocus/models/location.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/location/widgets/location_card.dart';
 import 'package:facelocus/services/location_service.dart';
@@ -20,26 +20,26 @@ class _LocationListScreenState extends State<LocationListScreen> {
     super.initState();
     _locationService = LocationService();
     _futureLocations =
-        _locationService.getAllByEventId(context, widget.eventId);
+        _locationService.getAllByEventId(widget.eventId);
   }
 
   late LocationService _locationService;
-  late Future<List<Location>> _futureLocations;
+  late Future<List<LocationModel>> _futureLocations;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Localizações")),
-      body: FutureBuilder<List<Location>>(
+      body: FutureBuilder<List<LocationModel>>(
           future: _futureLocations,
           builder:
-              (BuildContext context, AsyncSnapshot<List<Location>> snapshot) {
+              (BuildContext context, AsyncSnapshot<List<LocationModel>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return const Center(child: Text('Erro ao buscar dados'));
             } else {
-              List<Location> locations = snapshot.data!;
+              List<LocationModel> locations = snapshot.data!;
 
               if (locations.isEmpty) {
                 return const Center(
@@ -63,7 +63,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                     shrinkWrap: true,
                     itemCount: locations.length,
                     itemBuilder: (context, index) {
-                      Location location = locations[index];
+                      LocationModel location = locations[index];
                       return LocationCard(location: location);
                     },
                   ),

@@ -26,11 +26,11 @@ class _EventListScreenState extends State<EventListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Eventos")),
+      appBar: AppBar(title: const Text('Eventos')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             FutureBuilder<List<Event>>(
@@ -40,7 +40,7 @@ class _EventListScreenState extends State<EventListScreen> {
                       snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.data!.isEmpty) {
                       return const Center(
-                        child: Text("Ainda não há nenhum evento cadastrado",
+                        child: Text('Ainda não há nenhum evento cadastrado',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w500)),

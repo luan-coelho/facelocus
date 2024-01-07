@@ -197,7 +197,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                 child: TextButton(
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(AppConst.blue),
+                          MaterialStateProperty.all<Color>(AppColorsConst.blue),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(

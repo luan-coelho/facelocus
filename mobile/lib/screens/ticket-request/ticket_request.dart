@@ -19,7 +19,7 @@ class TicketRequestScreen extends StatelessWidget {
                 description: "Enviadas",
                 route: "/point-record",
                 color: Colors.white,
-                backgroundColor: AppConst.blue,
+                backgroundColor: AppColorsConst.blue,
                 imageName: "sent-icon.svg"),
             SizedBox(height: 20),
             FeatureCard(

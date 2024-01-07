@@ -18,7 +18,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
   void initState() {
     super.initState();
     _eventService = EventService();
-    _futureEvent = _eventService.getById(context, widget.eventId);
+    _futureEvent = _eventService.getById(widget.eventId);
   }
 
   late EventService _eventService;
@@ -39,8 +39,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
             Event event = snapshot.data!;
 
             void updateSwith() async {
-              bool success = await _eventService.changeTicketRequestPermission(
-                  context, event.id!);
+              bool success = await _eventService.changeTicketRequestPermission(event.id!);
               if (success) {
                 setState(() {
                   event.allowTicketRequests = !event.allowTicketRequests!;

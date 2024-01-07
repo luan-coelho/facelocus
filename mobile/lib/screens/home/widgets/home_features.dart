@@ -17,7 +17,7 @@ class HomeFeatures extends StatelessWidget {
             description: "Registros de ponto",
             route: "/point-record",
             color: Colors.white,
-            backgroundColor: AppConst.blue,
+            backgroundColor: AppColorsConst.blue,
             imageName: "point-record-icon.svg",
           ),
           FeatureCard(
@@ -31,7 +31,7 @@ class HomeFeatures extends StatelessWidget {
             description: "Solicitações de ingresso",
             route: "/ticket-request",
             color: Colors.black,
-            backgroundColor: AppConst.yellow,
+            backgroundColor: AppColorsConst.yellow,
             imageName: "ticket-request-icon.svg",
           ),
           // Adicione mais FeatureCards conforme necessário

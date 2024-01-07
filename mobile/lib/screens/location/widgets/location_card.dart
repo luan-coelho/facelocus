@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/models/location.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/services/location_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class LocationCard extends StatefulWidget {
   const LocationCard({super.key, required this.location});
 
-  final Location location;
+  final LocationModel location;
 
   @override
   State<LocationCard> createState() => _LocationCardState();

@@ -85,10 +85,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
               const SizedBox(height: 15),
               Consumer<EventProvider>(builder: (context, provider, child) {
                 return TextButton.icon(
-                    onPressed: () {
-                      provider.change(event);
-                      context.push(AppRoutes.eventLocations);
-                    },
+                    onPressed: () => context.push(AppRoutes.eventLocations),
                     label: const Text(
                       "Localizações",
                       style: TextStyle(color: Colors.black),

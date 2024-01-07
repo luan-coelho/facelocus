@@ -1,4 +1,4 @@
-import 'package:facelocus/models/location.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_record.dart';
 import 'package:facelocus/models/user.dart';
 
@@ -6,7 +6,7 @@ class Event {
   int? id;
   String? description;
   List<PointRecord>? pointRecords;
-  List<Location>? locations;
+  List<LocationModel>? locations;
   User? administrator;
   List<User>? users;
   String? code;
@@ -36,7 +36,7 @@ class Event {
         locations: json['locations'] == null
             ? null
             : (json['locations'] as List)
-                .map((e) => Location.fromJson(e as Map<String, dynamic>))
+                .map((e) => LocationModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
         administrator:
             User.fromJson(json['administrator'] as Map<String, dynamic>),

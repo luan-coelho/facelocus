@@ -1,4 +1,4 @@
-import 'package:facelocus/models/location.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/services/location_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
@@ -19,7 +19,8 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
   final _formKey = GlobalKey<FormState>();
   LocationService _locationService = LocationService();
   late TextEditingController _descriptionController;
-  final Location _location = Location.empty();
+  double _latitude = 0.0;
+  double _longitude = 0.0;
   bool _showPosition = false;
 
   @override
@@ -27,9 +28,6 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
     _locationService = LocationService();
     _descriptionController = TextEditingController();
     super.initState();
-    if (_location.id != null) {
-      _showPosition = true;
-    }
   }
 
   @override
@@ -40,13 +38,17 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
 
   void addLocation() {
     if (_formKey.currentState!.validate()) {
-      if (_location.longitude == null && _location.longitude == null) {
+      if (_latitude == 0.0 && _longitude == 0.0) {
         MessageSnacks.warn(context, "Sem localização definida");
         return;
       }
 
       _formKey.currentState!.save();
-      _locationService.create(context, _location, widget.eventId);
+      LocationModel location = LocationModel(
+          description: _descriptionController.text,
+          latitude: _latitude,
+          longitude: _longitude);
+      _locationService.create(location, widget.eventId);
       context.pop();
     }
   }
@@ -65,6 +67,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                   style: TextStyle(fontWeight: FontWeight.w500)),
               const SizedBox(height: 10),
               TextFormField(
+                controller: _descriptionController,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 10.0),
@@ -84,7 +87,6 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _location.description = value!,
               ),
               const SizedBox(height: 15),
               TextButton.icon(
@@ -114,7 +116,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                               style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(width: 5),
-                            Text(_location.latitude.toString()),
+                            Text(_latitude.toString()),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -126,7 +128,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                             const Text("Longitude",
                                 style: TextStyle(fontWeight: FontWeight.w500)),
                             const SizedBox(width: 5),
-                            Text(_location.longitude.toString()),
+                            Text(_longitude.toString()),
                           ],
                         ),
                       ],
@@ -142,7 +144,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
                 child: TextButton(
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(AppConst.blue),
+                          MaterialStateProperty.all<Color>(AppColorsConst.blue),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -182,8 +184,8 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     Position position = await Geolocator.getCurrentPosition();
-    _location.latitude = position.latitude;
-    _location.longitude = position.longitude;
+    _latitude = position.latitude;
+    _longitude = position.longitude;
     setState(() {
       _showPosition = true;
     });
