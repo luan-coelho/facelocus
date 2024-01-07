@@ -1,4 +1,5 @@
 import 'package:facelocus/models/event.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -67,7 +68,7 @@ class _EventListScreenState extends State<EventListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push("/event/create"),
+        onPressed: () => context.push(AppRoutes.eventCreate),
         backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),

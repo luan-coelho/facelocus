@@ -1,4 +1,5 @@
 import 'package:facelocus/models/location.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/location/widgets/location_card.dart';
 import 'package:facelocus/services/location_service.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
             }
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push("/event/locations/form"),
+        onPressed: () => context.push(AppRoutes.eventLocationsForm),
         backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),

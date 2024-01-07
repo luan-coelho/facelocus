@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/models/event.dart';
@@ -86,7 +87,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                 return TextButton.icon(
                     onPressed: () {
                       provider.change(event);
-                      context.push("/event/locations");
+                      context.push(AppRoutes.eventLocations);
                     },
                     label: const Text(
                       "Localizações",

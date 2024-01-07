@@ -9,49 +9,61 @@ import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
 
+class AppRoutes {
+  static const home = '/home';
+  static const login = '/login';
+  static const profile = '/profile';
+  static const event = '/event';
+  static const eventShow = '$event/show/:id';
+  static const eventCreate = '$event/create';
+  static const eventLocations = '$event-location';
+  static const eventLocationsForm = '$eventLocations/form';
+  static const ticketRequest = '/ticket-request';
+}
+
 final router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: AppRoutes.home,
   routes: [
     GoRoute(
-      path: '/login',
+      path: AppRoutes.login,
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
-      path: '/home',
+      path: AppRoutes.home,
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/profile',
+      path: AppRoutes.profile,
       builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
-      path: '/event',
+      path: AppRoutes.event,
       builder: (context, state) => const EventListScreen(),
     ),
     GoRoute(
-      path: '/event/show/:id',
+      path: AppRoutes.eventShow,
       builder: (context, state) {
         final int eventId = int.parse(state.pathParameters['id']!);
         return EventShowScreen(eventId: eventId);
       },
     ),
     GoRoute(
-      path: '/event/create',
+      path: AppRoutes.eventCreate,
       builder: (context, state) => const EventCreateScreen(),
     ),
     GoRoute(
-      path: '/event/locations',
+      path: AppRoutes.eventLocations,
       builder: (context, state) {
         int eventId = int.parse(state.uri.queryParameters['event']!);
         return LocationListScreen(eventId: eventId);
       },
     ),
     GoRoute(
-      path: '/event/locations/form',
+      path: AppRoutes.eventLocationsForm,
       builder: (context, state) => const LocationFormScreen(),
     ),
     GoRoute(
-      path: '/ticket-request',
+      path: AppRoutes.ticketRequest,
       builder: (context, state) => const TicketRequestScreen(),
     ),
   ],

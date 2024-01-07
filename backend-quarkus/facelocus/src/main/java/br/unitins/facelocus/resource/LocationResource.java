@@ -31,6 +31,14 @@ public class LocationResource {
         return Response.ok(dtos).build();
     }
 
+    @Path("/{id}")
+    @GET
+    public Response findById(@PathParam("id") Long locationId) {
+        Location location = locationService.findById(locationId);
+        LocationDTO dto = locationMapper.toResource(location);
+        return Response.ok(dto).build();
+    }
+
     @POST
     public Response create(@RestQuery("event") Long eventId, @Valid LocationDTO locationDTO) {
         Location location = locationMapper.toCreateEntity(locationDTO);

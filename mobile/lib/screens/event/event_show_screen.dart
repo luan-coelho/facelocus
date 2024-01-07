@@ -1,4 +1,5 @@
 import 'package:facelocus/models/event.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/services/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -59,7 +60,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                     const SizedBox(height: 15),
                     TextButton.icon(
                         onPressed: () => context.push(Uri(
-                                path: '/event/locations',
+                                path: AppRoutes.eventLocations,
                                 queryParameters: {
                                   'event': widget.eventId.toString()
                                 }).toString()),
