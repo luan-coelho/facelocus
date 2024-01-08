@@ -1,8 +1,8 @@
 class LocationModel {
   final int? id;
-  final String description;
-  final double latitude;
-  final double longitude;
+  String description;
+  double latitude;
+  double longitude;
 
   LocationModel({
     this.id,

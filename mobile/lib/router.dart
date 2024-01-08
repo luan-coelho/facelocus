@@ -1,13 +1,13 @@
 import 'package:facelocus/screens/auth/login_screen.dart';
-import 'package:facelocus/screens/event/event_show_screen.dart';
-import 'package:facelocus/screens/location/location_list_screen.dart';
-import 'package:facelocus/screens/location/location_form_screen.dart';
-import 'package:facelocus/screens/profile/profile_screen.dart';
-import 'package:go_router/go_router.dart';
 import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
+import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
+import 'package:facelocus/screens/location/location_create_screen.dart';
+import 'package:facelocus/screens/location/location_list_screen.dart';
+import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
+import 'package:go_router/go_router.dart';
 
 class AppRoutes {
   static const home = '/home';
@@ -17,6 +17,7 @@ class AppRoutes {
   static const eventShow = '$event/show/:id';
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
+  static const eventLocationsCreate = '$eventLocations/create';
   static const eventLocationsForm = '$eventLocations/form';
   static const ticketRequest = '/ticket-request';
 }
@@ -59,10 +60,10 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppRoutes.eventLocationsForm,
+      path: AppRoutes.eventLocationsCreate,
       builder: (context, state) {
         int eventId = int.parse(state.uri.queryParameters['event']!);
-        return LocationFormScreen(eventId: eventId);
+        return LocationCreateScreen(eventId: eventId);
       },
     ),
     GoRoute(

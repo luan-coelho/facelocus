@@ -6,10 +6,13 @@ class LocationProvider with ChangeNotifier {
   final LocationService _locationService = LocationService();
   late int eventId;
   late LocationModel _location;
+  late LocationModel _auxLocation;
   List<LocationModel> _locations = [];
   bool isLoading = false;
 
-  LocationModel get location => _location;
+  LocationModel get location => _auxLocation;
+
+  LocationModel get auxLocation => _location;
 
   List<LocationModel> get locations => _locations;
 
@@ -41,5 +44,10 @@ class LocationProvider with ChangeNotifier {
   Future<void> deleteById(int locationId, int eventId) async {
     await _locationService.deleteById(locationId);
     fetchAllByEventId(eventId);
+  }
+
+  void changeAuxiliaryLocation(LocationModel location) {
+    _auxLocation = location;
+    notifyListeners();
   }
 }
