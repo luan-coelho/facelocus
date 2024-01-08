@@ -21,6 +21,8 @@ class LocationForm extends StatefulWidget {
 }
 
 class _LocationFormState extends State<LocationForm> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -55,7 +57,9 @@ class _LocationFormState extends State<LocationForm> {
               'Pegar localização',
               style: TextStyle(color: Colors.white),
             ),
-            icon: const Icon(Icons.location_on_rounded, color: Colors.white),
+            icon: isLoading
+                ? const SizedBox(width: 17, height: 17, child: CircularProgressIndicator(color: Colors.white))
+                : const Icon(Icons.location_on_rounded, color: Colors.white),
             style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.green))),
@@ -65,29 +69,26 @@ class _LocationFormState extends State<LocationForm> {
             if (widget.location.latitude != 0.0 &&
                 widget.location.longitude != 0.0) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Icon(Icons.location_searching),
-                      const SizedBox(width: 5),
-                      const Text(
-                        'Latitudade',
+                      Text(
+                        'Latitudade e Longitude',
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(width: 5),
-                      Text(widget.location.latitude.toString()),
                     ],
                   ),
                   const SizedBox(height: 5),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Icon(Icons.location_searching),
                       const SizedBox(width: 5),
-                      const Text('Longitude',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
-                      const SizedBox(width: 5),
+                      Text(widget.location.latitude.toString()),
+                      const SizedBox(width: 10),
                       Text(widget.location.longitude.toString()),
                     ],
                   ),
@@ -103,6 +104,9 @@ class _LocationFormState extends State<LocationForm> {
   }
 
   void _savePosition() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       Position position = await _determinePosition();
       setState(() {
@@ -112,6 +116,9 @@ class _LocationFormState extends State<LocationForm> {
     } on Exception catch (e) {
       MessageSnacks.danger(context, e.toString());
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<Position> _determinePosition() async {
