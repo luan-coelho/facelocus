@@ -1,8 +1,9 @@
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/event_service.dart';
+import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class EventShowScreen extends StatefulWidget {
   const EventShowScreen({super.key, required this.eventId});
@@ -39,7 +40,8 @@ class _EventShowScreenState extends State<EventShowScreen> {
             Event event = snapshot.data!;
 
             void updateSwith() async {
-              bool success = await _eventService.changeTicketRequestPermission(event.id!);
+              bool success =
+                  await _eventService.changeTicketRequestPermission(event.id!);
               if (success) {
                 setState(() {
                   event.allowTicketRequests = !event.allowTicketRequests!;
@@ -57,21 +59,30 @@ class _EventShowScreenState extends State<EventShowScreen> {
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500)),
                     const SizedBox(height: 15),
-                    TextButton.icon(
-                        onPressed: () => context.push(Uri(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const FeatureCard(
+                            description: 'Usuários',
+                            route: AppRoutes.eventLocations,
+                            color: Colors.white,
+                            backgroundColor: AppColorsConst.blue,
+                            imageName: 'users-icon.svg',
+                            width: 150),
+                        const SizedBox(width: 15),
+                        FeatureCard(
+                            description: 'Localizações',
+                            route: Uri(
                                 path: AppRoutes.eventLocations,
                                 queryParameters: {
                                   'event': widget.eventId.toString()
-                                }).toString()),
-                        label: const Text(
-                          'Localizações',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        icon: const Icon(Icons.location_on_rounded,
-                            color: Colors.black),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                const Color(0xFFFAB411)))),
+                                }).toString(),
+                            color: Colors.black,
+                            backgroundColor: AppColorsConst.yellow,
+                            imageName: 'locations-icon.svg',
+                            width: 150),
+                      ],
+                    ),
                     const SizedBox(height: 15),
                     Row(
                       children: [

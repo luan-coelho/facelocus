@@ -23,35 +23,32 @@ class EventCard extends StatelessWidget {
               offset: const Offset(0, 1.5),
             ),
           ], borderRadius: BorderRadius.circular(8), color: Colors.white),
-          child: Center(
-              child: Row(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(event.description!,
-                  style: const TextStyle(fontWeight: FontWeight.w500)),
-              Align(
-                alignment: Alignment.centerRight,
-                child: PopupMenuButton(
-                    icon: const Icon(Icons.more_vert),
-                    // Ícone de três pontos
-                    itemBuilder: (BuildContext context) {
-                      return <PopupMenuEntry>[
-                        PopupMenuItem(
-                          child: const Text('Editar'),
-                          onTap: () {
-                            // Ação a ser realizada quando a Opção 1 for selecionada
-                            // Pode ser uma função ou um Navigator para outra tela
-                          },
-                        ),
-                        PopupMenuItem(
-                            child: const Text('Deletar'),
-                            onTap: () {
-                              // Ação a ser realizada quando a Opção 2 for selecionada
-                            })
-                      ];
-                    }),
-              )
+          Text(event.description!,
+              style: const TextStyle(fontWeight: FontWeight.w500)),
+          PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              // Ícone de três pontos
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+                    child: const Text('Editar'),
+                    onTap: () {
+                      // Ação a ser realizada quando a Opção 1 for selecionada
+                      // Pode ser uma função ou um Navigator para outra tela
+                    },
+                  ),
+                  PopupMenuItem(
+                      child: const Text('Deletar'),
+                      onTap: () {
+                        // Ação a ser realizada quando a Opção 2 for selecionada
+                      })
+                ];
+              })
             ],
-          ))),
+          )),
     );
   }
 }

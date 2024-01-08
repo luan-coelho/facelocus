@@ -8,6 +8,8 @@ class FeatureCard extends StatelessWidget {
   final Color color;
   final Color backgroundColor;
   final String imageName;
+  final double? width;
+  final double? height;
 
   const FeatureCard(
       {super.key,
@@ -15,14 +17,17 @@ class FeatureCard extends StatelessWidget {
       required this.route,
       required this.color,
       required this.backgroundColor,
-      required this.imageName});
+      required this.imageName,
+      this.width,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {context.push(route)},
       child: Container(
-        height: 130,
+        width: width,
+        height: height ?? 130,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: backgroundColor,
