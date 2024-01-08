@@ -4,19 +4,42 @@ import 'package:flutter/foundation.dart';
 
 class LocationProvider with ChangeNotifier {
   final LocationService _locationService = LocationService();
+  late int eventId;
+  late LocationModel _location;
+  List<LocationModel> _locations = [];
+  bool isLoading = false;
 
-  Future<LocationModel>? _futureLocation;
-  Future<List<LocationModel>>? _futureLocationsList;
+  LocationModel get location => _location;
 
-  Future<LocationModel>? get futureEvent => _futureLocation;
+  List<LocationModel> get locations => _locations;
 
-  void refleshFutureById(int locationId) {
-    _futureLocation = _locationService.getById(locationId);
+  Future<void> fetchAllByEventId(int eventId) async {
+    isLoading = true;
+    notifyListeners();
+
+    _locations = await _locationService.getAllByEventId(eventId);
+
+    isLoading = false;
     notifyListeners();
   }
 
-  void refleshFutureListByEventId(int eventId) {
-    _futureLocationsList = _locationService.getAllByEventId(eventId);
+  Future<void> fetchById(int locationId) async {
+    isLoading = true;
     notifyListeners();
+
+    _location = await _locationService.getById(locationId);
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> create(LocationModel locationModel, int eventId) async {
+    await _locationService.create(locationModel, eventId);
+    fetchAllByEventId(eventId);
+  }
+
+  Future<void> deleteById(int locationId, int eventId) async {
+    await _locationService.deleteById(locationId);
+    fetchAllByEventId(eventId);
   }
 }

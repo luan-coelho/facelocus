@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/location_model.dart';
-import 'package:facelocus/services/location_service.dart';
+import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LocationCard extends StatefulWidget {
   const LocationCard({super.key, required this.location});
@@ -14,20 +15,21 @@ class LocationCard extends StatefulWidget {
 }
 
 class _LocationCardState extends State<LocationCard> {
-  LocationService _locationService = LocationService();
+  late LocationProvider _locationProvider;
 
   @override
   void initState() {
-    _locationService = LocationService();
+    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    deleteLocation() async {
+    deleteLocation() {
       try {
         Navigator.pop(context, "OK");
-        await _locationService.deleteById(widget.location.id!);
+        _locationProvider.deleteById(
+            widget.location.id!, _locationProvider.eventId);
         MessageSnacks.success(context, "Localização deletada com sucesso");
       } on DioException catch (e) {
         MessageSnacks.danger(context, e.message!);
@@ -54,7 +56,7 @@ class _LocationCardState extends State<LocationCard> {
               children: [
                 const Icon(Icons.location_on_rounded, color: Colors.black),
                 const SizedBox(width: 5),
-                Text(widget.location.description!,
+                Text(widget.location.description,
                     style: const TextStyle(fontWeight: FontWeight.w500)),
               ],
             ),

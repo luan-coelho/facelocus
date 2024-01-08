@@ -1,13 +1,15 @@
 import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => EventProvider())],
-      child: const FaceLocusApplication()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => EventProvider()),
+    ChangeNotifierProvider(create: (_) => LocationProvider())
+  ], child: const FaceLocusApplication()));
 }
 
 class FaceLocusApplication extends StatelessWidget {
@@ -19,7 +21,8 @@ class FaceLocusApplication extends StatelessWidget {
       title: "Validação de presença",
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              backgroundColor: AppColorsConst.blue, foregroundColor: Colors.white),
+              backgroundColor: AppColorsConst.blue,
+              foregroundColor: Colors.white),
           colorScheme: ColorScheme.fromSeed(
               seedColor: AppColorsConst.blue, background: AppColorsConst.white),
           useMaterial3: true,

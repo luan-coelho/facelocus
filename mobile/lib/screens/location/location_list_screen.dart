@@ -1,9 +1,10 @@
 import 'package:facelocus/models/location_model.dart';
+import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/location/widgets/location_card.dart';
-import 'package:facelocus/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class LocationListScreen extends StatefulWidget {
   const LocationListScreen({super.key, required this.eventId});
@@ -15,62 +16,55 @@ class LocationListScreen extends StatefulWidget {
 }
 
 class _LocationListScreenState extends State<LocationListScreen> {
+  late LocationProvider _locationProvider;
+
   @override
   void initState() {
+    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _locationProvider.fetchAllByEventId(widget.eventId);
+      _locationProvider.eventId = widget.eventId;
+    });
     super.initState();
-    _locationService = LocationService();
-    _futureLocations =
-        _locationService.getAllByEventId(widget.eventId);
   }
-
-  late LocationService _locationService;
-  late Future<List<LocationModel>> _futureLocations;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Localizações")),
-      body: FutureBuilder<List<LocationModel>>(
-          future: _futureLocations,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<LocationModel>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('Erro ao buscar dados'));
-            } else {
-              List<LocationModel> locations = snapshot.data!;
+      body: Consumer<LocationProvider>(builder: (context, state, child) {
+        if (state.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.locations.isEmpty) {
+          return const Center(
+            child: Text(
+              "Ainda não há nenhuma localização",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+          );
+        }
 
-              if (locations.isEmpty) {
-                return const Center(
-                  child: Text(
-                    "Ainda não há nenhuma localização",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                );
-              }
-
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-                  child: ListView.separated(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 20);
-                    },
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: locations.length,
-                    itemBuilder: (context, index) {
-                      LocationModel location = locations[index];
-                      return LocationCard(location: location);
-                    },
-                  ),
-                ),
-              );
-            }
-          }),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: ListView.separated(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(height: 20);
+              },
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: state.locations.length,
+              itemBuilder: (context, index) {
+                LocationModel location = state.locations[index];
+                return LocationCard(location: location);
+              },
+            ),
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(Uri(
             path: AppRoutes.eventLocationsForm,

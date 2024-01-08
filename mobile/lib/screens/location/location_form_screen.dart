@@ -1,10 +1,12 @@
 import 'package:facelocus/models/location_model.dart';
+import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/services/location_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class LocationFormScreen extends StatefulWidget {
   const LocationFormScreen({super.key, required this.eventId});
@@ -17,7 +19,7 @@ class LocationFormScreen extends StatefulWidget {
 
 class _LocationFormScreenState extends State<LocationFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  LocationService _locationService = LocationService();
+  late LocationProvider _locationProvider;
   late TextEditingController _descriptionController;
   double _latitude = 0.0;
   double _longitude = 0.0;
@@ -25,7 +27,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
 
   @override
   void initState() {
-    _locationService = LocationService();
+    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _descriptionController = TextEditingController();
     super.initState();
   }
@@ -48,7 +50,7 @@ class _LocationFormScreenState extends State<LocationFormScreen> {
           description: _descriptionController.text,
           latitude: _latitude,
           longitude: _longitude);
-      _locationService.create(location, widget.eventId);
+      _locationProvider.create(location, widget.eventId);
       context.pop();
     }
   }
