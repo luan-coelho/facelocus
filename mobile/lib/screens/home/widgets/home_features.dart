@@ -10,8 +10,8 @@ class HomeFeatures extends StatelessWidget {
     return Expanded(
       child: GridView.count(
         crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 15,
         children: const [
           FeatureCard(
             description: "Registros de ponto",

@@ -1,3 +1,4 @@
+import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,7 +18,7 @@ class AppLayout extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            backgroundColor: const Color(0xff0F172A),
+            backgroundColor: AppColorsConst.blue,
             title: Text(
               appBarTitle,
               textAlign: TextAlign.center,

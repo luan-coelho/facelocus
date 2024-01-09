@@ -1,3 +1,4 @@
+import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class UserFaceImage extends StatelessWidget {
@@ -9,9 +10,8 @@ class UserFaceImage extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.black, width: 2),
               shape: BoxShape.circle),
           child: const CircleAvatar(
             radius: 100.0,
@@ -20,19 +20,19 @@ class UserFaceImage extends StatelessWidget {
         ),
         Positioned(
           right: 30,
-          bottom: 5,
+          bottom: -2,
           child: GestureDetector(
             onTap: () => {},
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black),
+                  color: AppColorsConst.blue,
+                  border: Border.all(color: Colors.white, width: 3),
                   shape: BoxShape.circle),
               child: const Icon(
                 Icons.edit,
-                size: 25.0,
-                color: Colors.blue,
+                size: 30.0,
+                color: Colors.white,
               ),
             ),
           ),
