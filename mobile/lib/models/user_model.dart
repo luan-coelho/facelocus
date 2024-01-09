@@ -1,7 +1,7 @@
 import 'package:facelocus/models/device.dart';
 import 'package:facelocus/models/user_face_photo.dart';
 
-class User {
+class UserModel {
   late int id;
   late String name;
   late String surname;
@@ -11,7 +11,7 @@ class User {
   late UserFacePhoto? userFacePhoto;
   late List<Device>? devices;
 
-  User({
+  UserModel({
     required this.id,
     required this.name,
     required this.surname,
@@ -22,8 +22,8 @@ class User {
     this.devices,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['id'],
       name: json['name'],
       surname: json['surname'],

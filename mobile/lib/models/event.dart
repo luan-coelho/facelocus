@@ -1,14 +1,14 @@
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_record.dart';
-import 'package:facelocus/models/user.dart';
+import 'package:facelocus/models/user_model.dart';
 
 class Event {
   int? id;
   String? description;
   List<PointRecord>? pointRecords;
   List<LocationModel>? locations;
-  User? administrator;
-  List<User>? users;
+  UserModel? administrator;
+  List<UserModel>? users;
   String? code;
   bool? allowTicketRequests = false;
 
@@ -39,11 +39,11 @@ class Event {
                 .map((e) => LocationModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
         administrator:
-            User.fromJson(json['administrator'] as Map<String, dynamic>),
+            UserModel.fromJson(json['administrator'] as Map<String, dynamic>),
         users: json['users'] == null
             ? null
             : (json['users'] as List)
-                .map((e) => User.fromJson(e as Map<String, dynamic>))
+                .map((e) => UserModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
         code: json['code'],
         allowTicketRequests: json['allowTicketRequests'],

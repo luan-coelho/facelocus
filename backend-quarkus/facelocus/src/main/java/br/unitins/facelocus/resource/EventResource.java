@@ -30,7 +30,7 @@ public class EventResource {
 
     @Path("/{id}")
     @GET
-    public Response findById(@PathParam("id") Long eventId) {
+    public Response findById(@PathParam("id") Long eventId) throws InterruptedException {
         Event event = eventService.findById(eventId);
         EventDTO dto = eventMapper.toResource(event);
         return Response.ok(dto).build();

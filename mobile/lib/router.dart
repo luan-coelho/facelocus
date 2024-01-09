@@ -17,6 +17,8 @@ class AppRoutes {
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
   static const ticketRequest = '/ticket-request';
+  static const user = '/user';
+  static const userSearch = '$user/search';
 }
 
 final router = GoRouter(

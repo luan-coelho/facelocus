@@ -1,5 +1,6 @@
 import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/providers/location_provider.dart';
+import 'package:facelocus/providers/user_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => EventProvider()),
-    ChangeNotifierProvider(create: (_) => LocationProvider())
+    ChangeNotifierProvider(create: (_) => LocationProvider()),
+    ChangeNotifierProvider(create: (_) => UserProvider())
   ], child: const FaceLocusApplication()));
 }
 

@@ -1,6 +1,6 @@
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/models/ticket_request_status.dart';
-import 'package:facelocus/models/user.dart';
+import 'package:facelocus/models/user_model.dart';
 
 class TicketRequest {
   late int id;
@@ -8,8 +8,8 @@ class TicketRequest {
   late DateTime finalDateTime;
   late Event event;
   late TicketRequestStatus requestStatus;
-  late User requester;
-  late User requested;
+  late UserModel requester;
+  late UserModel requested;
 
   TicketRequest({
     required this.id,
@@ -29,8 +29,8 @@ class TicketRequest {
       event: Event.fromJson(json['event']),
       requestStatus: TicketRequestStatus.values.firstWhere(
           (e) => e.toString().split('.').last == json['requestStatus']),
-      requester: User.fromJson(json['requester']),
-      requested: User.fromJson(json['requested']),
+      requester: UserModel.fromJson(json['requester']),
+      requested: UserModel.fromJson(json['requested']),
     );
   }
 }

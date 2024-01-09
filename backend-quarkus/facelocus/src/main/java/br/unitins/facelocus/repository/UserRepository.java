@@ -28,4 +28,15 @@ public class UserRepository extends BaseRepository<User> {
     public List<User> findAllByEventId(Long eventId) {
         return find("SELECT u FROM User u JOIN u.events e WHERE e.id = ?1", eventId).list();
     }
+
+    public List<User> findAllByNameOrCpf(String identifier) {
+        String sql = """
+                FROM User
+                WHERE LOWER(name)
+                LIKE '%'||?1||'%' OR LOWER(surname)
+                LIKE '%'||?1||'%' OR LOWER(cpf)
+                LIKE '%'||?1||'%'
+                """;
+        return find(sql, identifier).list();
+    }
 }
