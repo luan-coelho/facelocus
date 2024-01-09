@@ -21,7 +21,7 @@ class AppLayout extends StatelessWidget {
             title: Text(
               appBarTitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 16),
             ),
             leading: Navigator.canPop(context)
                 ? IconButton(

@@ -4,13 +4,23 @@ import 'package:flutter/foundation.dart';
 
 class EventProvider with ChangeNotifier {
   final EventService _eventService = EventService();
-  Future<Event>? _futureEvent;
+  late Event _event;
+  bool isLoading = false;
 
-  Future<Event>? get futureEvent => _futureEvent;
+  Event get event => _event;
 
-  /// Faz uma chamada para a API
-  void refleshById(int eventId) {
-    _futureEvent = _eventService.getById(eventId);
+  Future<void> fetchById(int eventId) async {
+    isLoading = true;
     notifyListeners();
+
+    _event = await _eventService.getById(eventId);
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> changeTicketRequestPermission(int eventId) async {
+    await _eventService.changeTicketRequestPermission(eventId);
+    fetchById(eventId);
   }
 }
