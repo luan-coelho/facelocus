@@ -33,7 +33,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
   Widget build(BuildContext context) {
     return Consumer<EventProvider>(builder: (context, state, child) {
       return AppLayout(
-          appBarTitle: 'Evento',
+          appBarTitle: state.event?.description ?? 'Evento',
           body: SingleChildScrollView(
             child: Skeletonizer(
                 enabled: state.isLoading,
@@ -85,7 +85,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                         widget.eventId)),
                           ],
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 15),
                         UsersAccordion(eventId: widget.eventId)
                       ]),
                 )),
