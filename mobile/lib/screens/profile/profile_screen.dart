@@ -1,6 +1,7 @@
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,8 +15,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text("Perfil")),
+    return AppLayout(
+        appBarTitle: 'Perfil',
         body: Padding(
           padding: const EdgeInsets.only(top: 50),
           child: Center(
@@ -25,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const UserFaceImage(),
                 const SizedBox(height: 50),
                 const Text(
-                  "Nome Completo",
+                  'Nome Completo',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -33,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  "Luan Coêlho de Souza".toUpperCase(),
+                  'Luan Coêlho de Souza'.toUpperCase(),
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -41,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "CPF",
+                  'CPF',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -49,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 2),
                 const Text(
-                  "414.949.080-50",
+                  '414.949.080-50',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -57,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Email",
+                  'Email',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -65,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 2),
                 const Text(
-                  "joa***@gmail.com",
+                  'joa***@gmail.com',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -106,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Icon(Icons.key, color: Colors.white),
                               SizedBox(width: 5),
-                              Text("Alterar senha",
+                              Text('Alterar senha',
                                   style: TextStyle(color: Colors.white)),
                             ],
                           ),
@@ -123,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Icon(Icons.logout, color: Colors.red),
                               SizedBox(width: 5),
-                              Text("Encerrar sessão",
+                              Text('Encerrar sessão',
                                   style: TextStyle(color: Colors.red)),
                             ],
                           ),
@@ -135,6 +136,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _logout() {
-    context.replace("/login");
+    context.replace('/login');
   }
 }

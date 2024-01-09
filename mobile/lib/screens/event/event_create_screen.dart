@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 
 class EventCreateScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class EventCreateScreen extends StatefulWidget {
 
 class _EventCreateScreenState extends State<EventCreateScreen> {
   final Dio _dio = Dio();
-  final String _baseUrl = "http://10.0.2.2:8080";
+  final String _baseUrl = 'http://10.0.2.2:8080';
   final _formKey = GlobalKey<FormState>();
   Event event = Event.empty();
   bool allowTicketRequests = false;
@@ -30,9 +31,9 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
     try {
       var json = event.toJson();
       await _dio.post('$_baseUrl/event', data: json);
-      MessageSnacks.success(context, "Evento cadastrado com sucesso");
+      MessageSnacks.success(context, 'Evento cadastrado com sucesso');
     } catch (e) {
-      MessageSnacks.danger(context, "Falha ao criar evento");
+      MessageSnacks.danger(context, 'Falha ao criar evento');
     }
   }
 
@@ -43,8 +44,8 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Cadastrar evento")),
+    return AppLayout(
+      appBarTitle: 'Cadastrar evento',
       body: Padding(
         padding:
             const EdgeInsets.only(top: 20, right: 30, left: 30, bottom: 20),
@@ -52,7 +53,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
           key: _formKey,
           child: Column(
             children: [
-              const Text("Descrição",
+              const Text('Descrição',
                   style: TextStyle(fontWeight: FontWeight.w500)),
               const SizedBox(height: 10),
               TextFormField(
@@ -71,7 +72,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                     )),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Por favor, informe a descrição";
+                    return 'Por favor, informe a descrição';
                   }
                   return null;
                 },
@@ -82,7 +83,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                 children: [
                   const Flexible(
                     child: Text(
-                        "Permitir que outros participantes enviem solicitações para ingresso",
+                        'Permitir que outros participantes enviem solicitações para ingresso',
                         style: TextStyle(fontWeight: FontWeight.w500)),
                   ),
                   Switch(
@@ -109,7 +110,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ))),
                   onPressed: () => onSubmit ? null : _submitForm(),
-                  child: const Text("Cadastrar",
+                  child: const Text('Cadastrar',
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 ),

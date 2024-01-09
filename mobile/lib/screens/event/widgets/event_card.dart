@@ -22,7 +22,7 @@ class EventCard extends StatelessWidget {
               blurRadius: 5,
               offset: const Offset(0, 1.5),
             ),
-          ], borderRadius: BorderRadius.circular(8), color: Colors.white),
+          ], color: Colors.white),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

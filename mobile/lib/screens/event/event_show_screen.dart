@@ -2,6 +2,7 @@ import 'package:facelocus/models/event.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,8 @@ class _EventShowScreenState extends State<EventShowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Evento')),
+    return AppLayout(
+      appBarTitle: 'Evento',
       body: FutureBuilder(
           future: _futureEvent,
           builder: (BuildContext context, AsyncSnapshot<Event> snapshot) {

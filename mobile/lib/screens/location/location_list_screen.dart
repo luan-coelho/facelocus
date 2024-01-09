@@ -3,6 +3,7 @@ import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/screens/location/widgets/location_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -57,8 +58,8 @@ class _LocationListScreenState extends State<LocationListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Localizações")),
+    return AppLayout(
+      appBarTitle: 'Localizações',
       body: Consumer<LocationProvider>(builder: (context, state, child) {
         return SingleChildScrollView(
           child: Padding(
@@ -173,7 +174,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                             BorderRadius.circular(10.0),
                                       ))),
                                   onPressed: () => addLocation(),
-                                  child: const Text("Adicionar",
+                                  child: const Text('Adicionar',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600)),
@@ -190,7 +191,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                   if (state.locations.isEmpty) {
                     return const Center(
                       child: Text(
-                        "Ainda não há nenhuma localização",
+                        'Ainda não há nenhuma localização',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
