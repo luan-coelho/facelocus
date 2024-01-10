@@ -1,10 +1,10 @@
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/screens/event/widgets/location_card.dart';
-import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -37,6 +37,12 @@ class _LocationListScreenState extends State<LocationListScreen> {
     _location = newLocationInstace();
     _descriptionController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   LocationModel newLocationInstace() =>
@@ -76,32 +82,16 @@ class _LocationListScreenState extends State<LocationListScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Descrição',
-                            style: TextStyle(fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 5),
-                        TextFormField(
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 10.0),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.black, width: 2),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.black12),
-                                borderRadius: BorderRadius.circular(10.0),
-                              )),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Informe a descrição';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => _location.description = value!,
-                        ),
+                        AppTextField(
+                            labelText: 'Descrição',
+                            textEditingController: _descriptionController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe a descrição';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) => _location.description = value),
                         const SizedBox(height: 10),
                         AppButton(
                             text: 'Pegar localização',
@@ -168,7 +158,8 @@ class _LocationListScreenState extends State<LocationListScreen> {
                 SizedBox(height: showPosition ? 15 : 0),
                 Builder(builder: (context) {
                   if (state.locations.isEmpty) {
-                    return const Center(
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 10),
                       child: Text(
                         'Ainda não há nenhuma localização',
                         style: TextStyle(
@@ -183,7 +174,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                       children: [
                         const Text('Locais',
                             style: TextStyle(fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 5),
                         ListView.separated(
                           separatorBuilder: (BuildContext context, int index) {
                             return const SizedBox(height: 20);
