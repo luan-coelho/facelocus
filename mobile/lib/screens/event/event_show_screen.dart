@@ -1,5 +1,6 @@
 import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/router.dart';
+import 'package:facelocus/screens/event/widgets/event_code_card.dart';
 import 'package:facelocus/screens/event/widgets/lincked_users.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -43,6 +44,8 @@ class _EventShowScreenState extends State<EventShowScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        EventCodeCard(event: state.event!),
+                        const SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [

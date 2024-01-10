@@ -28,4 +28,10 @@ class EventService {
     var response = await _dio.patch(url);
     return response.statusCode == 204;
   }
+
+  Future<bool> generateNewCode(int id) async {
+    String url = "$_baseUrl/event/generate-new-code/$id";
+    var response = await _dio.patch(url);
+    return response.statusCode == 204;
+  }
 }
