@@ -35,16 +35,20 @@ class LoginFormState extends State<LoginScreen> {
 
   void _login() async {
     try {
-      AuthService service = AuthService();
-      String login = _loginController.text;
-      String password = _passwordController.text;
-      TokenResponse tokenResponse = await service.login(context, login, password);
-      if (tokenResponse.token.isNotEmpty) {
-        context.replace("/home");
-        return;
+      if (_formKey.currentState!.validate()) {
+        AuthService service = AuthService();
+        String login = _loginController.text;
+        String password = _passwordController.text;
+        TokenResponse tokenResponse =
+            await service.login(context, login, password);
+        if (tokenResponse.token.isNotEmpty) {
+          context.replace("/home");
+          return;
+        }
       }
     } on DioException catch (e) {
-      MessageSnacks.danger(context, e.response?.data['detail'] ?? 'Não foi possível realizar o login');
+      MessageSnacks.danger(context,
+          e.response?.data['detail'] ?? 'Não foi possível realizar o login');
     }
   }
 
@@ -101,12 +105,8 @@ class LoginFormState extends State<LoginScreen> {
                                 return 'Informe o email';
                               }
 
-                              String regexExpression =
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-                              final RegExp pattern = RegExp(regexExpression);
-                              RegExp regex = RegExp(pattern.pattern);
-                              if (!regex.hasMatch(value)) {
-                                return 'Informe um login válido';
+                              if (value.length <= 3) {
+                                return 'Informe pelo 3 caracteres para o login';
                               }
                               return null;
                             },
