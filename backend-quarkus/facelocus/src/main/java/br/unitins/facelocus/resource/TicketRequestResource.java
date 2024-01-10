@@ -8,8 +8,6 @@ import br.unitins.facelocus.model.TicketRequest;
 import br.unitins.facelocus.service.TicketRequestService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;

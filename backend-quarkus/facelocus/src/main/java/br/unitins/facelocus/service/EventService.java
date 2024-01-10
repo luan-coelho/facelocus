@@ -65,8 +65,10 @@ public class EventService extends BaseService<Event, EventRepository> {
         if (event.isAllowTicketRequests()) {
             event.setCode(generateUniqueCode());
         }
-        for (Location location : event.getLocations()) {
-            location.setEvent(event);
+        if (event.getLocations() != null) {
+            for (Location location : event.getLocations()) {
+                location.setEvent(event);
+            }
         }
         return super.create(event);
     }
@@ -115,7 +117,8 @@ public class EventService extends BaseService<Event, EventRepository> {
     }
 
     /**
-     * Habilita ou desabilita, possibilidade para outros usúarios realizarem solicitações de ingresso.
+     * Habilita ou desabilita, possibilidade para outros usúarios realizarem
+     * solicitações de ingresso.
      *
      * @param eventId Identificador do evento
      */
@@ -150,7 +153,8 @@ public class EventService extends BaseService<Event, EventRepository> {
         Event event = findByIdOptional(eventId)
                 .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
         event.getUsers().forEach(u -> {
-            if (u.getId().equals(userId)) throw new IllegalArgumentException("Usuário já vinculado ao evento");
+            if (u.getId().equals(userId))
+                throw new IllegalArgumentException("Usuário já vinculado ao evento");
         });
         event.getUsers().add(user);
         update(event);
