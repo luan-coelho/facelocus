@@ -1,6 +1,6 @@
 import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/event/widgets/users_accordion.dart';
+import 'package:facelocus/screens/event/widgets/lincked_users.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
@@ -44,35 +44,10 @@ class _EventShowScreenState extends State<EventShowScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const FeatureCard(
-                                description: 'Usuários',
-                                route: AppRoutes.eventLocations,
-                                color: Colors.white,
-                                backgroundColor: AppColorsConst.blue,
-                                imageName: 'users-icon.svg',
-                                width: 150),
-                            const SizedBox(width: 15),
-                            FeatureCard(
-                                description: 'Localizações',
-                                route: Uri(
-                                    path: AppRoutes.eventLocations,
-                                    queryParameters: {
-                                      'event': widget.eventId.toString()
-                                    }).toString(),
-                                color: Colors.black,
-                                backgroundColor: AppColorsConst.yellow,
-                                imageName: 'locations-icon.svg',
-                                width: 150),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const Flexible(
-                              child: Text(
-                                  'Permitir que outros participantes enviem solicitações para ingresso',
+                              child: Text('Permitir solicitações de ingresso',
                                   style:
                                       TextStyle(fontWeight: FontWeight.w500)),
                             ),
@@ -86,7 +61,36 @@ class _EventShowScreenState extends State<EventShowScreen> {
                           ],
                         ),
                         const SizedBox(height: 15),
-                        UsersAccordion(eventId: widget.eventId)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FeatureCard(
+                                description: 'Usuários',
+                                route: Uri(
+                                    path: AppRoutes.eventUsers,
+                                    queryParameters: {
+                                      'event': widget.eventId.toString()
+                                    }).toString(),
+                                color: Colors.white,
+                                backgroundColor: AppColorsConst.blue,
+                                imageName: 'users-icon.svg',
+                                width: 130,
+                                height: 100),
+                            const SizedBox(width: 15),
+                            FeatureCard(
+                                description: 'Localizações',
+                                route: Uri(
+                                    path: AppRoutes.eventLocations,
+                                    queryParameters: {
+                                      'event': widget.eventId.toString()
+                                    }).toString(),
+                                color: Colors.black,
+                                backgroundColor: AppColorsConst.white,
+                                imageName: 'locations-icon.svg',
+                                width: 130,
+                                height: 100),
+                          ],
+                        ),
                       ]),
                 )),
           ));

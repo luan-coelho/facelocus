@@ -6,7 +6,7 @@ class TicketRequest {
   late int id;
   late String code;
   late DateTime finalDateTime;
-  late Event event;
+  late EventModel event;
   late TicketRequestStatus requestStatus;
   late UserModel requester;
   late UserModel requested;
@@ -26,7 +26,7 @@ class TicketRequest {
       id: json['id'] as int,
       code: json['code'],
       finalDateTime: DateTime.parse(json['finalDateTime']),
-      event: Event.fromJson(json['event']),
+      event: EventModel.fromJson(json['event']),
       requestStatus: TicketRequestStatus.values.firstWhere(
           (e) => e.toString().split('.').last == json['requestStatus']),
       requester: UserModel.fromJson(json['requester']),

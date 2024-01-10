@@ -2,8 +2,9 @@ import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
+import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
-import 'package:facelocus/screens/location/location_list_screen.dart';
+import 'package:facelocus/screens/event/location_list_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ class AppRoutes {
   static const eventShow = '$event/show/:id';
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
+  static const eventUsers = '$event-users';
   static const ticketRequest = '/ticket-request';
   static const user = '/user';
   static const userSearch = '$user/search';
@@ -56,6 +58,13 @@ final router = GoRouter(
       builder: (context, state) {
         int eventId = int.parse(state.uri.queryParameters['event']!);
         return LocationListScreen(eventId: eventId);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.eventUsers,
+      builder: (context, state) {
+        int eventId = int.parse(state.uri.queryParameters['event']!);
+        return LinckedUsersScreen(eventId: eventId);
       },
     ),
     GoRoute(

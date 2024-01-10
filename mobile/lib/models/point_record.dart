@@ -5,7 +5,7 @@ import 'package:facelocus/models/point.dart';
 class PointRecord {
   late int id;
   late DateTime date;
-  late Event event;
+  late EventModel event;
   late List<Point> points;
   late List<Factor> factors;
   late bool inProgress;
@@ -23,7 +23,7 @@ class PointRecord {
     return PointRecord(
       id: json['id'] as int,
       date: DateTime.parse(json['date']),
-      event: Event.fromJson(json['event']),
+      event: EventModel.fromJson(json['event']),
       points: (json['points'] as List)
           .map((e) => Point.fromJson(e as Map<String, dynamic>))
           .toList(),

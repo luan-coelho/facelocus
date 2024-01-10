@@ -2,7 +2,7 @@ import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_record.dart';
 import 'package:facelocus/models/user_model.dart';
 
-class Event {
+class EventModel {
   int? id;
   String? description;
   List<PointRecord>? pointRecords;
@@ -12,9 +12,9 @@ class Event {
   String? code;
   bool? allowTicketRequests = false;
 
-  Event.empty();
+  EventModel.empty();
 
-  Event({
+  EventModel({
     this.id,
     required this.description,
     this.pointRecords,
@@ -25,7 +25,7 @@ class Event {
     this.allowTicketRequests,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) => Event(
+  factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         id: json['id'],
         description: json['description'],
         pointRecords: json['pointRecords'] == null

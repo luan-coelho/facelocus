@@ -1,12 +1,15 @@
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/providers/location_provider.dart';
-import 'package:facelocus/screens/location/widgets/location_card.dart';
+import 'package:facelocus/screens/event/widgets/location_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LocationListScreen extends StatefulWidget {
   const LocationListScreen({super.key, required this.eventId});
@@ -59,8 +62,10 @@ class _LocationListScreenState extends State<LocationListScreen> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      appBarTitle: 'Localizações',
+      appBarTitle: 'Localizações vinculadas',
       body: Consumer<LocationProvider>(builder: (context, state, child) {
+        bool showPosition =
+            _location.latitude != 0.0 && _location.longitude != 0.0;
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(29.0),
@@ -73,7 +78,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                       children: [
                         const Text('Descrição',
                             style: TextStyle(fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 5),
                         TextFormField(
                           controller: _descriptionController,
                           decoration: InputDecoration(
@@ -85,8 +90,8 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.black.withOpacity(0.5)),
+                                borderSide:
+                                    const BorderSide(color: Colors.black12),
                                 borderRadius: BorderRadius.circular(10.0),
                               )),
                           validator: (value) {
@@ -97,25 +102,23 @@ class _LocationListScreenState extends State<LocationListScreen> {
                           },
                           onSaved: (value) => _location.description = value!,
                         ),
-                        const SizedBox(height: 15),
-                        TextButton.icon(
+                        const SizedBox(height: 10),
+                        AppButton(
+                            text: 'Pegar localização',
                             onPressed: () => _savePosition(),
-                            label: const Text(
-                              'Pegar localização',
-                              style: TextStyle(color: Colors.white),
-                            ),
                             icon: isLoading
                                 ? const SizedBox(
                                     width: 17,
                                     height: 17,
                                     child: CircularProgressIndicator(
                                         color: Colors.white))
-                                : const Icon(Icons.location_on_rounded,
-                                    color: Colors.white),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green))),
+                                : SvgPicture.asset(
+                                    'images/location-icon.svg',
+                                    width: 25,
+                                    colorFilter: const ColorFilter.mode(
+                                        Colors.white, BlendMode.srcIn),
+                                  ),
+                            backgroundColor: Colors.green.shade600),
                         const SizedBox(height: 10),
                         Builder(
                           builder: (context) {
@@ -155,39 +158,15 @@ class _LocationListScreenState extends State<LocationListScreen> {
                           },
                         ),
                         const SizedBox(height: 5),
-                        _location.latitude != 0.0 && _location.longitude != 0.0
-                            ? SizedBox(
-                                width: double.infinity,
-                                height: 45,
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              AppColorsConst.blue),
-                                      foregroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.white),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ))),
-                                  onPressed: () => addLocation(),
-                                  child: const Text('Adicionar',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600)),
-                                ),
-                              )
+                        showPosition
+                            ? AppButton(
+                                text: 'Adicionar',
+                                onPressed: () => addLocation())
                             : const SizedBox()
                       ]),
                 ),
-                const SizedBox(height: 15),
+                SizedBox(height: showPosition ? 15 : 0),
                 Builder(builder: (context) {
-                  if (state.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
                   if (state.locations.isEmpty) {
                     return const Center(
                       child: Text(
@@ -197,26 +176,29 @@ class _LocationListScreenState extends State<LocationListScreen> {
                       ),
                     );
                   }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Localizações cadastradas',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
-                      const SizedBox(height: 10),
-                      ListView.separated(
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(height: 20);
-                        },
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: state.locations.length,
-                        itemBuilder: (context, index) {
-                          LocationModel location = state.locations[index];
-                          return LocationCard(location: location);
-                        },
-                      ),
-                    ],
+                  return Skeletonizer(
+                    enabled: state.isLoading,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Locais',
+                            style: TextStyle(fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 10),
+                        ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(height: 20);
+                          },
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: state.locations.length,
+                          itemBuilder: (context, index) {
+                            LocationModel location = state.locations[index];
+                            return LocationCard(location: location);
+                          },
+                        ),
+                      ],
+                    ),
                   );
                 }),
               ],

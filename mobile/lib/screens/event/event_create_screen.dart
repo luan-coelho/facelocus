@@ -15,7 +15,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
   final Dio _dio = Dio();
   final String _baseUrl = 'http://10.0.2.2:8080';
   final _formKey = GlobalKey<FormState>();
-  Event event = Event.empty();
+  EventModel event = EventModel.empty();
   bool allowTicketRequests = false;
   bool onSubmit = false;
 
@@ -27,7 +27,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
     }
   }
 
-  Future<void> create(Event event) async {
+  Future<void> create(EventModel event) async {
     try {
       var json = event.toJson();
       await _dio.post('$_baseUrl/event', data: json);

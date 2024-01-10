@@ -33,7 +33,7 @@ class _EventListScreenState extends State<EventListScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FutureBuilder<List<Event>>(
+            FutureBuilder<List<EventModel>>(
                 future: _eventService.getAll(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData &&

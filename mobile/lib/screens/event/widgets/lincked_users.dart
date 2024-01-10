@@ -2,16 +2,16 @@ import 'package:facelocus/screens/event/widgets/users_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class UsersAccordion extends StatefulWidget {
-  const UsersAccordion({super.key, required this.eventId});
+class LinckedUsersScreen extends StatefulWidget {
+  const LinckedUsersScreen({super.key, required this.eventId});
 
   final int eventId;
 
   @override
-  State<UsersAccordion> createState() => _UsersAccordionState();
+  State<LinckedUsersScreen> createState() => _LinckedUsersScreenState();
 }
 
-class _UsersAccordionState extends State<UsersAccordion> {
+class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [

@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 
 class EventProvider with ChangeNotifier {
   final EventService _eventService = EventService();
-  Event? _event;
+  EventModel? _event;
   bool isLoading = false;
 
-  Event? get event => _event;
+  EventModel? get event => _event;
 
   Future<void> fetchById(int eventId) async {
     isLoading = true;

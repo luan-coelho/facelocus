@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class EventCard extends StatelessWidget {
-  final Event event;
+  final EventModel event;
 
   const EventCard({super.key, required this.event});
 
