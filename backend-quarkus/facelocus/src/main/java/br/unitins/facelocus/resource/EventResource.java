@@ -7,7 +7,6 @@ import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
 import io.quarkus.security.Authenticated;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -15,7 +14,6 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@RequestScoped
 @Authenticated
 @Path("/event")
 public class EventResource {

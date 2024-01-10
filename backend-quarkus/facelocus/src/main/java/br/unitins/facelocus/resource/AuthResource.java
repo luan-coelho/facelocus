@@ -31,7 +31,7 @@ public class AuthResource {
     @Path("/login")
     @POST
     @PermitAll
-    public JwtDTO login(LoginRequestDTO loginRequestDTO) {
+    public JwtDTO login(@Valid LoginRequestDTO loginRequestDTO) {
         return authAuthenticationService.checkCredentials(loginRequestDTO);
     }
 

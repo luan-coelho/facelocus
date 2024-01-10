@@ -4,6 +4,7 @@ import br.unitins.facelocus.dto.LocationDTO;
 import br.unitins.facelocus.mapper.LocationMapper;
 import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.service.LocationService;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
+@Authenticated
 @Path("/event-location")
 public class LocationResource {
 

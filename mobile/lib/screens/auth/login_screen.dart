@@ -1,4 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:facelocus/dtos/token_response_dto.dart';
+import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginFormState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _emailController;
+  late TextEditingController _loginController;
   late TextEditingController _passwordController;
 
   late FocusNode _emailFocusNode;
@@ -30,13 +34,24 @@ class LoginFormState extends State<LoginScreen> {
   }
 
   void _login() async {
-    context.replace("/home");
+    try {
+      AuthService service = AuthService();
+      String login = _loginController.text;
+      String password = _passwordController.text;
+      TokenResponse tokenResponse = await service.login(context, login, password);
+      if (tokenResponse.token.isNotEmpty) {
+        context.replace("/home");
+        return;
+      }
+    } on DioException catch (e) {
+      MessageSnacks.danger(context, e.response?.data['detail'] ?? 'Não foi possível realizar o login');
+    }
   }
 
   @override
   void initState() {
     _emailFocusNode = FocusNode();
-    _emailController = TextEditingController();
+    _loginController = TextEditingController();
     _passwordController = TextEditingController();
     _emailFocusNode.requestFocus();
     super.initState();
@@ -44,7 +59,7 @@ class LoginFormState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _loginController.dispose();
     _passwordController.dispose();
     _emailFocusNode.dispose();
     super.dispose();
@@ -72,13 +87,13 @@ class LoginFormState extends State<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Email",
+                          const Text("Login",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w600),
                               textAlign: TextAlign.start),
                           const SizedBox(height: 3),
                           TextFormField(
-                            controller: _emailController,
+                            controller: _loginController,
                             focusNode: _emailFocusNode,
                             autofocus: true,
                             validator: (value) {
@@ -91,7 +106,7 @@ class LoginFormState extends State<LoginScreen> {
                               final RegExp pattern = RegExp(regexExpression);
                               RegExp regex = RegExp(pattern.pattern);
                               if (!regex.hasMatch(value)) {
-                                return 'Informe um email válido';
+                                return 'Informe um login válido';
                               }
                               return null;
                             },

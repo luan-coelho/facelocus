@@ -1,5 +1,13 @@
 package br.unitins.facelocus.service.auth;
 
+import br.unitins.facelocus.dto.JwtDTO;
+import br.unitins.facelocus.dto.UserResponseDTO;
+import br.unitins.facelocus.mapper.UserMapper;
+import br.unitins.facelocus.model.User;
+import io.smallrye.jwt.build.Jwt;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
@@ -9,15 +17,13 @@ import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.unitins.facelocus.dto.JwtDTO;
-import br.unitins.facelocus.model.User;
-import io.smallrye.jwt.build.Jwt;
-import jakarta.enterprise.context.ApplicationScoped;
-
 @ApplicationScoped
 public class JWTService {
 
     private static final Integer tempoExpiracao = 86400 * 10;
+
+    @Inject
+    UserMapper userMapper;
 
     public JwtDTO generateJwt(User user) {
         String zoneId = "America/Sao_Paulo";
@@ -25,7 +31,7 @@ public class JWTService {
         LocalDateTime exp = now.plus(Duration.ofSeconds(tempoExpiracao));
         Instant instantExp = exp.atZone(ZoneId.of(zoneId)).toInstant();
         Set<String> roles = new HashSet<>(); // TODO Implementar roles
-        String jwt = Jwt.issuer("amazon-jwt")
+        String token = Jwt.issuer("amazon-jwt")
                 .subject("amaonz")
                 .claim("userId", user.getId())
                 .claim("userEmail", user.getEmail())
@@ -35,7 +41,8 @@ public class JWTService {
                 .sign();
         long expiresAt = instantExp.getEpochSecond();
         String refreshToken = generateRefreshToken();
-        return new JwtDTO(jwt, expiresAt, user.getId(), roles, refreshToken);
+        UserResponseDTO userDTO = userMapper.toResource(user);
+        return new JwtDTO(token, expiresAt, roles, refreshToken, userDTO);
     }
 
     public String generateRefreshToken() {

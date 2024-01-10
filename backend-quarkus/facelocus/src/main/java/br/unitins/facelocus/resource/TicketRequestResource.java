@@ -6,6 +6,7 @@ import br.unitins.facelocus.dto.TicketRequestDTO;
 import br.unitins.facelocus.mapper.TicketRequestMapper;
 import br.unitins.facelocus.model.TicketRequest;
 import br.unitins.facelocus.service.TicketRequestService;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -14,6 +15,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Path("/ticket-request")
+@Authenticated
 public class TicketRequestResource {
 
     @Inject

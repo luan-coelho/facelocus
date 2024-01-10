@@ -2,6 +2,7 @@ package br.unitins.facelocus.handle;
 
 import br.unitins.facelocus.handle.restresponse.AuthenticationException;
 import br.unitins.facelocus.exception.ErrorResponse;
+import br.unitins.facelocus.handle.restresponse.UnauthorizedException;
 import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerRequest;
@@ -26,6 +27,10 @@ public class AuthenticationExceptionMapper implements ExceptionMapper<Authentica
     @Override
     public Response toResponse(AuthenticationException exception) {
         ErrorResponse errorResponse = buildResponse(exception, request);
+        if (exception instanceof UnauthorizedException) {
+            errorResponse.setTitle("Unauthorized");
+            errorResponse.setStatus(HttpResponseStatus.UNAUTHORIZED.code());
+        }
         return Response.status(errorResponse.getStatus()).entity(errorResponse).build();
     }
 

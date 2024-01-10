@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 
 class AppRoutes {
   static const home = '/home';
-  static const login = '/login';
+  static const login = '/auth/login';
   static const profile = '/profile';
   static const event = '/event';
   static const eventShow = '$event/show/:id';
@@ -24,7 +24,7 @@ class AppRoutes {
 }
 
 final router = GoRouter(
-  initialLocation: AppRoutes.home,
+  initialLocation: AppRoutes.login,
   routes: [
     GoRoute(
       path: AppRoutes.login,

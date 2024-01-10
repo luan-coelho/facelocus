@@ -6,6 +6,7 @@ import br.unitins.facelocus.dto.PointRecordDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
+@Authenticated
 @Path("/point-record")
 public class PointRecordResource {
 

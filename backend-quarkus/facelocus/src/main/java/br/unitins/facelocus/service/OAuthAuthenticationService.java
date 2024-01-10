@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.dto.JwtDTO;
 import br.unitins.facelocus.dto.LoginRequestDTO;
 import br.unitins.facelocus.handle.restresponse.AuthenticationException;
+import br.unitins.facelocus.handle.restresponse.UnauthorizedException;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.auth.JWTService;
 import br.unitins.facelocus.service.auth.PasswordHandlerService;
@@ -30,7 +31,7 @@ public class OAuthAuthenticationService {
                     return new AuthenticationException(message);
                 });
         if (!passwordHandlerService.checkPassword(loginRequest.password(), user.getPassword())) {
-            throw new AuthenticationException("Verifique seu email ou senha");
+            throw new UnauthorizedException("Verifique seu email ou senha");
         }
 
         JwtDTO jwt = jwtService.generateJwt(user);

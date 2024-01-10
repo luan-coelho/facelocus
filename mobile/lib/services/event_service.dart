@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/router.dart';
@@ -8,7 +10,11 @@ class EventService {
   final String _baseUrl = AppConfigConst.baseApiUrl;
 
   Future<List<EventModel>> getAll() async {
-    final response = await _dio.get('$_baseUrl${AppRoutes.event}');
+    final response = await _dio.get('$_baseUrl${AppRoutes.event}',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer token"
+        }));
     List data = response.data['data'];
     return data.map((json) => EventModel.fromJson(json)).toList();
   }
