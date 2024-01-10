@@ -17,8 +17,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation 'io.quarkus:quarkus-flyway'
     implementation 'io.quarkus:quarkus-hibernate-validator'
-  /*  implementation 'io.quarkus:quarkus-smallrye-jwt'
-    implementation 'io.quarkus:quarkus-smallrye-jwt-build'*/
+    implementation 'io.quarkus:quarkus-smallrye-jwt-build'
+    implementation 'io.quarkus:quarkus-smallrye-jwt'
+    implementation 'org.mindrot:jbcrypt:0.4'
     compileOnly 'org.projectlombok:lombok:1.18.30'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'

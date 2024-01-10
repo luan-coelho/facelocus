@@ -1,16 +1,22 @@
 package br.unitins.facelocus.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import br.unitins.facelocus.dto.ChangePasswordDTO;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.UserRepository;
+import br.unitins.facelocus.service.auth.PasswordHandlerService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.List;
-
 @ApplicationScoped
 public class UserService extends BaseService<User, UserRepository> {
+
+    @Inject
+    PasswordHandlerService passwordHandlerService;
 
     public List<User> findAllByEventId(Long eventId) {
         return this.repository.findAllByEventId(eventId);
@@ -18,6 +24,10 @@ public class UserService extends BaseService<User, UserRepository> {
 
     public List<User> findAllByNameOrCpf(String identifier) {
         return this.repository.findAllByNameOrCpf(identifier);
+    }
+
+    public Optional<User> findByEmailOrCpf(String identifier) {
+        return this.repository.findByEmailOrCpf(identifier);
     }
 
     @Transactional
@@ -29,6 +39,7 @@ public class UserService extends BaseService<User, UserRepository> {
         if (this.repository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Usuário já cadastrado com o email informado");
         }
+        user.setPassword(passwordHandlerService.passwordHash(user.getPassword()));
         return super.create(user);
     }
 

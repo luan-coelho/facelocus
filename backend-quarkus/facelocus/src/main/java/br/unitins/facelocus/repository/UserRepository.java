@@ -39,4 +39,14 @@ public class UserRepository extends BaseRepository<User> {
                 """;
         return find(sql, identifier).list();
     }
+
+    public Optional<User> findByEmailOrCpf(String identifier) {
+        String sql = """
+                FROM User
+                WHERE
+                LOWER(email) LIKE '%'||?1||'%'
+                OR LOWER(cpf) LIKE '%'||?1||'%'
+                """;
+        return find(sql, identifier).singleResultOptional();
+    }
 }
