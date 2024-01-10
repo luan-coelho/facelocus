@@ -4,7 +4,7 @@ import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
-import 'package:facelocus/screens/event/location_list_screen.dart';
+import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
 import 'package:go_router/go_router.dart';

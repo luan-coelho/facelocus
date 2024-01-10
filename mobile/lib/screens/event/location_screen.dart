@@ -17,10 +17,10 @@ class LocationListScreen extends StatefulWidget {
   final int eventId;
 
   @override
-  State<LocationListScreen> createState() => _LocationListScreenState();
+  State<LocationListScreen> createState() => _LocationScreenState();
 }
 
-class _LocationListScreenState extends State<LocationListScreen> {
+class _LocationScreenState extends State<LocationListScreen> {
   final _formKey = GlobalKey<FormState>();
   late LocationProvider _locationProvider;
   late LocationModel _location;

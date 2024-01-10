@@ -15,9 +15,7 @@ class EventProvider with ChangeNotifier {
   Future<void> fetchAll() async {
     isLoading = true;
     notifyListeners();
-
     _events = await _eventService.getAll();
-
     isLoading = false;
     notifyListeners();
   }
@@ -25,9 +23,15 @@ class EventProvider with ChangeNotifier {
   Future<void> fetchById(int eventId) async {
     isLoading = true;
     notifyListeners();
-
     _event = await _eventService.getById(eventId);
+    isLoading = false;
+    notifyListeners();
+  }
 
+  Future<void> create(EventModel event) async {
+    isLoading = true;
+    notifyListeners();
+    await _eventService.create(event);
     isLoading = false;
     notifyListeners();
   }
