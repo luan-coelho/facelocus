@@ -1,18 +1,16 @@
-import 'package:dio/dio.dart';
 import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/utils/dio_fetch_api.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuthService {
-  final Dio _dio = Dio();
-  final String _baseUrl = AppConfigConst.baseApiUrl;
+  final DioFetchApi _fetchApi = DioFetchApi();
 
   Future<TokenResponse> login(
       BuildContext context, String login, String password) async {
-    String url = '$_baseUrl${AppRoutes.login}';
+    String url = AppRoutes.login;
     var json = {'login': login, 'password': password};
-    var response = await _dio.post(url, data: json);
+    var response = await _fetchApi.post(url, data: json, authHeaders: false);
     return TokenResponse.fromJson(response.data);
   }
 }
