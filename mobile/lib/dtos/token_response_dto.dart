@@ -18,7 +18,7 @@ class TokenResponse {
   factory TokenResponse.fromJson(Map<String, dynamic> json) {
     return TokenResponse(
       token: json['token'],
-      expireIn: DateTime.fromMillisecondsSinceEpoch(json['expire_in']),
+      expireIn: DateTime.parse(json['expire_in']),
       groups: List<String>.from(json['groups']),
       refreshToken: json['refresh_token'],
       user: UserModel.fromJson(json['user']),

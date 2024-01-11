@@ -1,4 +1,5 @@
 import 'package:facelocus/screens/auth/login_screen.dart';
+import 'package:facelocus/screens/auth/register_screen.dart';
 import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
@@ -13,6 +14,7 @@ import 'package:go_router/go_router.dart';
 class AppRoutes {
   static const home = '/home';
   static const login = '/auth/login';
+  static const register = '/auth/register';
   static const profile = '/profile';
   static const event = '/event';
   static const eventShow = '$event/show/:id';
@@ -33,6 +35,10 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.login,
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.register,
+      builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
       path: AppRoutes.home,

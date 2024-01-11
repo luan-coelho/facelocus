@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
@@ -29,7 +30,7 @@ class LoginFormState extends State<LoginScreen> {
         AuthService service = AuthService();
         String login = _loginController.text;
         String password = _passwordController.text;
-        var tokenResponse = await service.login(context, login, password);
+        var tokenResponse = await service.login(login, password);
         if (tokenResponse.token.isNotEmpty) {
           const storage = FlutterSecureStorage();
           await storage.write(key: 'token', value: tokenResponse.token);
@@ -99,7 +100,7 @@ class LoginFormState extends State<LoginScreen> {
                     const SizedBox(height: 10),
                     AppButton(
                         text: 'Cadastrar',
-                        onPressed: _login,
+                        onPressed: () => context.push(AppRoutes.register),
                         textColor: Colors.black,
                         backgroundColor: AppColorsConst.white,
                         textFontSize: 14),

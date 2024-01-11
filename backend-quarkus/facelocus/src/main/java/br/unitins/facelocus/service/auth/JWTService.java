@@ -9,6 +9,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.security.SecureRandom;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashSet;
@@ -17,10 +19,6 @@ import java.util.Set;
 @ApplicationScoped
 public class JWTService {
 
-    //    private static final Integer tempoExpiracao = 86400 * 10;
-    private static final Integer expirationTime = 5000;
-    private static final Integer seconds = 15;
-
     @Inject
     UserMapper userMapper;
 
@@ -28,15 +26,15 @@ public class JWTService {
         /*String zoneId = "America/Sao_Paulo";
         Instant instant = Instant.now().plusMillis(expirationTime);*/
         Set<String> roles = new HashSet<>(); // TODO Implementar roles
-        long duration = 10000;
         LocalDateTime expireIn = LocalDateTime.now().plusSeconds(10);
+        Instant expiresAt = Instant.now().plus(Duration.ofSeconds(10));
         String token = Jwt.issuer("amazon-jwt")
                 .subject("amaonz")
                 .claim("userId", user.getId())
                 .claim("userEmail", user.getEmail())
                 .claim("userCpf", user.getCpf())
                 .groups(roles)
-                .expiresIn(10)
+                .expiresAt(expiresAt)
                 .sign();
         String refreshToken = generateRefreshToken();
         UserResponseDTO userDTO = userMapper.toResource(user);

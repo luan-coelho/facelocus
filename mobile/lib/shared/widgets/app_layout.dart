@@ -5,11 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 class AppLayout extends StatelessWidget {
   const AppLayout(
       {super.key,
-      required this.appBarTitle,
+      this.appBarTitle,
       required this.body,
       this.floatingActionButton});
 
-  final String appBarTitle;
+  final String? appBarTitle;
   final Widget body;
   final Widget? floatingActionButton;
 
@@ -18,21 +18,31 @@ class AppLayout extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            backgroundColor: AppColorsConst.blue,
-            title: Text(
-              appBarTitle,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
+            backgroundColor: appBarTitle != null
+                ? AppColorsConst.blue
+                : AppColorsConst.white,
+            title: appBarTitle != null
+                ? Text(
+                    appBarTitle!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            appBarTitle != null ? Colors.white : Colors.black),
+                  )
+                : null,
             leading: Navigator.canPop(context)
-                ? IconButton(
-                    icon: SvgPicture.asset(
-                      'images/chevron-left-icon.svg',
-                      width: 30,
-                      colorFilter:
-                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        'images/chevron-left-icon.svg',
+                        colorFilter: ColorFilter.mode(
+                            appBarTitle != null ? Colors.white : Colors.black,
+                            BlendMode.srcIn),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
                   )
                 : null),
         body: body,

@@ -2,7 +2,7 @@ import 'package:facelocus/models/device.dart';
 import 'package:facelocus/models/user_face_photo.dart';
 
 class UserModel {
-  late int id;
+  late int? id;
   late String name;
   late String surname;
   late String email;
@@ -12,7 +12,7 @@ class UserModel {
   late List<Device>? devices;
 
   UserModel({
-    required this.id,
+    this.id,
     required this.name,
     required this.surname,
     required this.email,

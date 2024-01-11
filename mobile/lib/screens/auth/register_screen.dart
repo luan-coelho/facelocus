@@ -1,14 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/router.dart';
+import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/auth_service.dart';
-import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -21,47 +18,60 @@ class RegisterScreen extends StatefulWidget {
 
 class LoginFormState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _loginController;
+  late UserModel _user;
+  late TextEditingController _nameController;
+  late TextEditingController _surnameController;
+  late TextEditingController _emailController;
+  late TextEditingController _cpfController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
 
-  void _login() async {
+  void _register() async {
     try {
       if (_formKey.currentState!.validate()) {
         AuthService service = AuthService();
-        String login = _loginController.text;
-        String password = _passwordController.text;
-        var tokenResponse = await service.login(context, login, password);
-        if (tokenResponse.token.isNotEmpty) {
-          const storage = FlutterSecureStorage();
-          await storage.write(key: 'token', value: tokenResponse.token);
-          context.replace(AppRoutes.home);
-          return;
-        }
+        _user = UserModel(
+            name: _nameController.text,
+            surname: _surnameController.text,
+            email: _emailController.text,
+            cpf: _cpfController.text,
+            password: _passwordController.text);
+        await service.register(_user);
       }
     } on DioException catch (e) {
       var detail = e.response?.data['detail'];
-      String message = 'Não foi possível realizar o login';
+      String message = 'Não foi possível finalizar o cadastro';
       MessageSnacks.danger(context, detail ?? message);
     }
   }
 
   @override
   void initState() {
-    _loginController = TextEditingController();
+    _nameController = TextEditingController();
+    _surnameController = TextEditingController();
+    _emailController = TextEditingController();
+    _cpfController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _loginController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _emailController.dispose();
+    _cpfController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppLayout(
+      appBarTitle: null,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -69,23 +79,41 @@ class LoginFormState extends State<RegisterScreen> {
             child: Form(
               key: _formKey,
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset(
-                      'images/login.svg',
-                      width: 280,
-                    ),
-                    const SizedBox(height: 15),
-                    const Text('Facelocus',
-                        textAlign: TextAlign.center,
+                    const Text('Criar conta',
+                        textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w600)),
+                            fontSize: 26, fontWeight: FontWeight.w600)),
+                    const Text('Por favor insira suas informações',
+                        style: TextStyle(color: Colors.black54)),
+                    const SizedBox(height: 25),
+                    AppTextField(
+                        textEditingController: _nameController,
+                        labelText: 'Nome',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Informe o nome'
+                            : null),
                     const SizedBox(height: 15),
                     AppTextField(
-                        textEditingController: _loginController,
-                        labelText: 'Login',
+                        textEditingController: _surnameController,
+                        labelText: 'Sobrenome',
                         validator: (value) => value == null || value.isEmpty
-                            ? 'Informe o login'
+                            ? 'Informe o sobrenome'
+                            : null),
+                    const SizedBox(height: 15),
+                    AppTextField(
+                        textEditingController: _emailController,
+                        labelText: 'Email',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Informe o email'
+                            : null),
+                    const SizedBox(height: 15),
+                    AppTextField(
+                        textEditingController: _cpfController,
+                        labelText: 'CPF',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Informe o cpf'
                             : null),
                     const SizedBox(height: 15),
                     AppTextField(
@@ -96,14 +124,15 @@ class LoginFormState extends State<RegisterScreen> {
                             ? 'Informe a senha'
                             : null),
                     const SizedBox(height: 15),
-                    AppButton(text: 'Entrar', onPressed: _login),
-                    const SizedBox(height: 10),
-                    AppButton(
-                        text: 'Cadastrar',
-                        onPressed: _login,
-                        textColor: Colors.black,
-                        backgroundColor: AppColorsConst.white,
-                        textFontSize: 14),
+                    AppTextField(
+                        textEditingController: _confirmPasswordController,
+                        labelText: 'Confirmar senha',
+                        passwordType: true,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Confirme a senha'
+                            : null),
+                    const SizedBox(height: 25),
+                    AppButton(text: 'Cadastrar', onPressed: _register),
                   ]),
             ),
           ),

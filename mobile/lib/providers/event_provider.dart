@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class EventProvider with ChangeNotifier {
   final EventService _eventService = EventService();
   EventModel? _event;
-  List<EventModel>? _events;
+  List<EventModel>? _events = [];
   bool isLoading = false;
 
   EventModel? get event => _event;
