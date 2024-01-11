@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,9 +29,10 @@ class LoginFormState extends State<LoginScreen> {
         AuthService service = AuthService();
         String login = _loginController.text;
         String password = _passwordController.text;
-        TokenResponse tokenResponse =
-            await service.login(context, login, password);
+        var tokenResponse = await service.login(context, login, password);
         if (tokenResponse.token.isNotEmpty) {
+          final storage = new FlutterSecureStorage();
+          await storage.write(key: 'token', value: tokenResponse.token);
           context.replace("/home");
           return;
         }

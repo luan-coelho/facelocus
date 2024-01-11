@@ -4,16 +4,19 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class EventService {
   final Dio _dio = Dio();
   final String _baseUrl = AppConfigConst.baseApiUrl;
 
   Future<List<EventModel>> getAll() async {
+    const storage = FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
     final response = await _dio.get('$_baseUrl${AppRoutes.event}',
         options: Options(headers: {
           HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader: "Bearer token"
+          HttpHeaders.authorizationHeader: "Bearer $token"
         }));
     List data = response.data['data'];
     return data.map((json) => EventModel.fromJson(json)).toList();
