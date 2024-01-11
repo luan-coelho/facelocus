@@ -1,4 +1,5 @@
-import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 
 class ChangeUserPassword extends StatefulWidget {
@@ -13,10 +14,6 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
   late TextEditingController _currentPasswordController;
   late TextEditingController _newPasswordController;
   late TextEditingController _confirmPasswordController;
-
-  bool _showCurrentPassword = true;
-  bool _showNewPassword = true;
-  bool _showConfirmPassword = true;
 
   void _login() async {
     if (_formKey.currentState!.validate()) {}
@@ -47,170 +44,38 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
             key: _formKey,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text("Senha atual",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.start),
-              const SizedBox(height: 3),
-              TextFormField(
-                controller: _currentPasswordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: _showCurrentPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Informe a senha atual";
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  isDense: true,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0F172A), width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Color.fromRGBO(203, 213, 225, 1), width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: const Icon(Icons.key, size: 24),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showCurrentPassword = !_showCurrentPassword;
-                        });
-                      },
-                      child: Icon(
-                        _showCurrentPassword
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              AppTextField(
+                  textEditingController: _currentPasswordController,
+                  labelText: 'Senha atual',
+                  passwordType: true,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Informe a senha atual'
+                      : null),
               const SizedBox(height: 15),
-              const Text("Nova senha",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.start),
-              const SizedBox(height: 3),
-              TextFormField(
-                controller: _newPasswordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: _showNewPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Informe a nova senha";
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  isDense: true,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0F172A), width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Color.fromRGBO(203, 213, 225, 1), width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: const Icon(Icons.key, size: 24),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showNewPassword = !_showNewPassword;
-                        });
-                      },
-                      child: Icon(
-                        _showNewPassword
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              AppTextField(
+                  textEditingController: _newPasswordController,
+                  labelText: 'Nova senha',
+                  passwordType: true,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Informe a nova senha'
+                      : null),
               const SizedBox(height: 15),
-              const Text("Confirme a senha",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.start),
-              const SizedBox(height: 3),
-              TextFormField(
-                controller: _confirmPasswordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: _showConfirmPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Confirme a nova senha";
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  isDense: true,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0F172A), width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Color.fromRGBO(203, 213, 225, 1), width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: const Icon(Icons.key, size: 24),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showConfirmPassword = !_showConfirmPassword;
-                        });
-                      },
-                      child: Icon(
-                        _showConfirmPassword
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              AppTextField(
+                  textEditingController: _confirmPasswordController,
+                  labelText: 'Confirmar senha',
+                  passwordType: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Confirme a nova senha';
+                    }
+
+                    if (_newPasswordController.text.isNotEmpty && value != _newPasswordController.text) {
+                      return 'As senhas não coincidem';
+                    }
+                    return null;
+                  }),
               const SizedBox(height: 15),
-              SizedBox(
-                width: double.infinity, // Largura 100%
-                height: 50, // Altura de 50
-                child: TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(AppColorsConst.blue),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ))),
-                  onPressed: () {
-                    _login();
-                  },
-                  child: const Text("Alterar",
-                      style: TextStyle(fontWeight: FontWeight.w600)),
-                ),
-              )
+              AppButton(text: 'Alterar', onPressed: _login)
             ]),
           )),
     );
