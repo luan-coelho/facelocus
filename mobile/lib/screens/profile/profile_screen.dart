@@ -4,6 +4,7 @@ import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +17,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    logout() {
+      const FlutterSecureStorage storage = FlutterSecureStorage();
+      storage.delete(key: 'token');
+      context.replace(AppRoutes.login);
+    }
+
     return AppLayout(
         appBarTitle: 'Perfil',
         body: Padding(
@@ -115,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ))),
                 const SizedBox(height: 5),
                 TextButton(
-                    onPressed: () => _logout(),
+                    onPressed: () => logout(),
                     child: Container(
                         padding: const EdgeInsets.all(10),
                         width: 200,
@@ -134,9 +141,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ));
-  }
-
-  _logout() {
-    context.replace(AppRoutes.login);
   }
 }

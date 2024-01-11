@@ -3,10 +3,11 @@ import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
-import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
+import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:facelocus/screens/ticket-request/ticket_request.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoutes {
@@ -23,7 +24,10 @@ class AppRoutes {
   static const userSearch = '$user/search';
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 final router = GoRouter(
+  navigatorKey: navigatorKey,
   initialLocation: AppRoutes.login,
   routes: [
     GoRoute(

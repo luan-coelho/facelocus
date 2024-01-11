@@ -31,7 +31,7 @@ class LoginFormState extends State<LoginScreen> {
         String password = _passwordController.text;
         var tokenResponse = await service.login(context, login, password);
         if (tokenResponse.token.isNotEmpty) {
-          final storage = new FlutterSecureStorage();
+          const storage = FlutterSecureStorage();
           await storage.write(key: 'token', value: tokenResponse.token);
           context.replace("/home");
           return;
