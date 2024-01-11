@@ -14,7 +14,7 @@ class AuthService {
   }
 
   Future<void> register(UserModel user) async {
-    String url = AppRoutes.login;
+    String url = AppRoutes.register;
     var json = user.toJson();
     await _fetchApi.post(url, data: json, authHeaders: false);
   }

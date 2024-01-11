@@ -9,7 +9,8 @@ class AppButton extends StatefulWidget {
       this.textFontSize,
       this.backgroundColor,
       this.onPressed,
-      this.icon});
+      this.icon,
+      this.isLoading = false});
 
   final String text;
   final Color? textColor;
@@ -17,6 +18,7 @@ class AppButton extends StatefulWidget {
   final Color? backgroundColor;
   final VoidCallback? onPressed;
   final Widget? icon;
+  final bool? isLoading;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -38,13 +40,18 @@ class _AppButtonState extends State<AppButton> {
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ))),
-        onPressed: widget.onPressed,
+        onPressed: widget.isLoading != null ? widget.onPressed : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.icon ?? const SizedBox(),
-            SizedBox(width: widget.icon != null ? 10 : 0),
+            widget.isLoading != null && widget.isLoading!
+                ? const SizedBox(
+                    width: 17,
+                    height: 17,
+                    child: CircularProgressIndicator(color: Colors.white))
+                : (widget.icon ?? const SizedBox()),
+            SizedBox(width: widget.icon != null || widget.isLoading! ? 10 : 0),
             Text(widget.text,
                 style: TextStyle(
                     fontSize: widget.textFontSize ?? 14,

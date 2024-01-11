@@ -38,7 +38,8 @@ public class AuthResource {
     @Path("/register")
     @POST
     @PermitAll
-    public Response register(@Valid UserDTO userDTO) {
+    public Response register(@Valid UserDTO userDTO) throws InterruptedException {
+        Thread.sleep(3000);
         User user = userMapper.toEntity(userDTO);
         User registeredUser = userService.create(user);
         UserResponseDTO dto = userMapper.toResource(registeredUser);

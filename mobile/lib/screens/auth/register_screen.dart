@@ -18,31 +18,41 @@ class RegisterScreen extends StatefulWidget {
 
 class LoginFormState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  late UserModel _user;
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
   late TextEditingController _emailController;
   late TextEditingController _cpfController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
+  bool _isLoading = false;
 
   void _register() async {
     try {
       if (_formKey.currentState!.validate()) {
         AuthService service = AuthService();
-        _user = UserModel(
+        UserModel user = UserModel(
             name: _nameController.text,
             surname: _surnameController.text,
             email: _emailController.text,
             cpf: _cpfController.text,
             password: _passwordController.text);
-        await service.register(_user);
+        updateLoading();
+        await service.register(user);
+        updateLoading();
+        MessageSnacks.success(context, 'Conta criada com sucesso');
       }
     } on DioException catch (e) {
+      updateLoading();
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível finalizar o cadastro';
       MessageSnacks.danger(context, detail ?? message);
     }
+  }
+
+  void updateLoading() {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
   }
 
   @override
@@ -132,7 +142,10 @@ class LoginFormState extends State<RegisterScreen> {
                             ? 'Confirme a senha'
                             : null),
                     const SizedBox(height: 25),
-                    AppButton(text: 'Cadastrar', onPressed: _register),
+                    AppButton(
+                        text: 'Cadastrar',
+                        onPressed: _register,
+                        isLoading: _isLoading),
                   ]),
             ),
           ),
