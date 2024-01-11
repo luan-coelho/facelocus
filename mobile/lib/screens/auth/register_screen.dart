@@ -6,6 +6,8 @@ import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -45,7 +47,13 @@ class LoginFormState extends State<RegisterScreen> {
       updateLoading();
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível finalizar o cadastro';
-      MessageSnacks.danger(context, detail ?? message);
+      var invalidFields = e.response?.data['invalidFields'];
+      showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.error(
+          message: detail ?? message,
+        ),
+      );
     }
   }
 
