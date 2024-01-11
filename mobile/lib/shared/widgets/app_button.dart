@@ -6,12 +6,14 @@ class AppButton extends StatefulWidget {
       {super.key,
       required this.text,
       this.textColor,
+      this.textFontSize,
       this.backgroundColor,
       this.onPressed,
       this.icon});
 
   final String text;
   final Color? textColor;
+  final double? textFontSize;
   final Color? backgroundColor;
   final VoidCallback? onPressed;
   final Widget? icon;
@@ -44,8 +46,9 @@ class _AppButtonState extends State<AppButton> {
             widget.icon ?? const SizedBox(),
             SizedBox(width: widget.icon != null ? 10 : 0),
             Text(widget.text,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    fontSize: widget.textFontSize ?? 14,
+                    fontWeight: FontWeight.w600)),
           ],
         ),
       ),

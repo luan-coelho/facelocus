@@ -3,7 +3,10 @@ import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,19 +23,6 @@ class LoginFormState extends State<LoginScreen> {
   late TextEditingController _loginController;
   late TextEditingController _passwordController;
 
-  late FocusNode _emailFocusNode;
-  bool _obscured = true;
-
-  void _toggleObscured() {
-    setState(() {
-      _obscured = !_obscured;
-      if (_emailFocusNode.hasPrimaryFocus) {
-        return;
-      }
-      _emailFocusNode.canRequestFocus = false;
-    });
-  }
-
   void _login() async {
     try {
       if (_formKey.currentState!.validate()) {
@@ -47,17 +37,16 @@ class LoginFormState extends State<LoginScreen> {
         }
       }
     } on DioException catch (e) {
-      MessageSnacks.danger(context,
-          e.response?.data['detail'] ?? 'Não foi possível realizar o login');
+      var detail = e.response?.data['detail'];
+      String message = 'Não foi possível realizar o login';
+      MessageSnacks.danger(context, detail ?? message);
     }
   }
 
   @override
   void initState() {
-    _emailFocusNode = FocusNode();
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
-    _emailFocusNode.requestFocus();
     super.initState();
   }
 
@@ -65,7 +54,6 @@ class LoginFormState extends State<LoginScreen> {
   void dispose() {
     _loginController.dispose();
     _passwordController.dispose();
-    _emailFocusNode.dispose();
     super.dispose();
   }
 
@@ -81,169 +69,39 @@ class LoginFormState extends State<LoginScreen> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Image.asset('images/box.png'),
+                    SvgPicture.asset(
+                      'images/login.svg',
+                      width: 280,
+                    ),
+                    const SizedBox(height: 15),
                     const Text('Facelocus',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 45, fontWeight: FontWeight.w600)),
-                    Container(
-                      padding: const EdgeInsets.only(top: 45),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Login",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
-                              textAlign: TextAlign.start),
-                          const SizedBox(height: 3),
-                          TextFormField(
-                            controller: _loginController,
-                            focusNode: _emailFocusNode,
-                            autofocus: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe o email';
-                              }
-
-                              if (value.length <= 3) {
-                                return 'Informe pelo 3 caracteres para o login';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              isDense: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xff0F172A), width: 2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(203, 213, 225, 1),
-                                      width: 1),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              prefixIcon: Icon(Icons.email, size: 24),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Senha",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
-                              textAlign: TextAlign.start),
-                          const SizedBox(height: 3),
-                          TextFormField(
-                            controller: _passwordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: _obscured,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe a senha';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              isDense: true,
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(0xff0F172A), width: 2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(203, 213, 225, 1),
-                                      width: 1),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              prefixIcon: const Icon(Icons.key, size: 24),
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                                child: GestureDetector(
-                                  onTap: _toggleObscured,
-                                  child: Icon(
-                                    _obscured
-                                        ? Icons.visibility_rounded
-                                        : Icons.visibility_off_rounded,
-                                    size: 24,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: SizedBox(
-                          width: double.infinity, // Largura 100%
-                          height: 50, // Altura de 50
-                          child: TextButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        AppColorsConst.blue),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ))),
-                            onPressed: () {
-                              _login();
-                            },
-                            child: const Text("Entrar",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20)),
-                          ),
-                        )),
+                            fontSize: 30, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 15),
-                    SizedBox(
-                      width: double.infinity, // Largura 100%
-                      height: 50, // Altura de 50
-                      child: TextButton(
-                        style: ButtonStyle(
-                            shadowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.black),
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ))),
-                        onPressed: () {
-                          _login();
-                        },
-                        child: const Text("Criar conta",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 20)),
-                      ),
-                    )
+                    AppTextField(
+                        textEditingController: _loginController,
+                        labelText: 'Login',
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Informe o login'
+                            : null),
+                    const SizedBox(height: 15),
+                    AppTextField(
+                        textEditingController: _passwordController,
+                        labelText: 'Senha',
+                        passwordType: true,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Informe a senha'
+                            : null),
+                    const SizedBox(height: 15),
+                    AppButton(text: 'Entrar', onPressed: _login),
+                    const SizedBox(height: 10),
+                    AppButton(
+                        text: 'Cadastrar',
+                        onPressed: _login,
+                        textColor: Colors.black,
+                        backgroundColor: AppColorsConst.white,
+                        textFontSize: 14),
                   ]),
             ),
           ),

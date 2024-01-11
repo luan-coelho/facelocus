@@ -20,7 +20,7 @@ class FaceLocusApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: "Validação de presença",
+      title: 'Validação de presença',
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
               backgroundColor: AppColorsConst.blue,
@@ -28,7 +28,7 @@ class FaceLocusApplication extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(
               seedColor: AppColorsConst.blue, background: AppColorsConst.white),
           useMaterial3: true,
-          fontFamily: "Inter"),
+          fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,

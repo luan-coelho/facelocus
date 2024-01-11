@@ -1,3 +1,4 @@
+import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -136,6 +137,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _logout() {
-    context.replace('/login');
+    context.replace(AppRoutes.login);
   }
 }

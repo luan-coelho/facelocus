@@ -9,7 +9,8 @@ class AppConfigConst {
 class AppColorsConst {
   AppColorsConst._();
 
-  static const Color blue = Color(0xFF003C84);
+  static const Color blue = Color(0xFF0085FF);
+  // static const Color blue = Color(0xFF003C84);
   static const Color yellow = Color(0xFFFAB411);
   // static const Color white = Color(0xFFF1F2F6);
   static const Color white = Colors.white;
