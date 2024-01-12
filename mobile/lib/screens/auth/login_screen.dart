@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:facelocus/providers/auth_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -34,6 +36,8 @@ class LoginFormState extends State<LoginScreen> {
         if (tokenResponse.token.isNotEmpty) {
           const storage = FlutterSecureStorage();
           await storage.write(key: 'token', value: tokenResponse.token);
+          var authProvider = Provider.of<AuthProvider>(context, listen: false);
+          authProvider.addAuthenticatedUser(tokenResponse.user);
           context.replace("/home");
           return;
         }

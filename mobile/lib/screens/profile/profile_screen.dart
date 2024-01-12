@@ -1,3 +1,4 @@
+import 'package:facelocus/providers/auth_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
@@ -6,6 +7,7 @@ import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,6 +21,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     logout() {
       const FlutterSecureStorage storage = FlutterSecureStorage();
+      var authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.logout();
       storage.delete(key: 'token');
       context.replace(AppRoutes.login);
     }

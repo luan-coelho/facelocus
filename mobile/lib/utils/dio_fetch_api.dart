@@ -29,9 +29,10 @@ class DioFetchApi implements FetchApi {
       {Object? data, bool authHeaders = true}) async {
     try {
       final String? token = await getToken();
-      return _dio.post('$_baseUrl$url',
+      var response = await _dio.post('$_baseUrl$url',
           data: data,
           options: authHeaders ? _getAuthenticationHeaders(token) : null);
+      return response;
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;

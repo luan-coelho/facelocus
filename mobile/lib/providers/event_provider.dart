@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/providers/auth_provider.dart';
 import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class EventProvider with ChangeNotifier {
   final EventService _eventService = EventService();
@@ -35,7 +39,12 @@ class EventProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
+      var authProvider = Provider.of<AuthProvider>(context, listen: false);
+      UserModel administrator = authProvider.authenticatedUser;
+      event.administrator = administrator;
       await _eventService.create(event);
+      MessageSnacks.success(context, 'Evento criado com sucesso');
+      context.pop();
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao criar evento');
       MessageSnacks.danger(context, detail);

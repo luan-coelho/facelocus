@@ -53,7 +53,7 @@ class EventModel {
         'id': id,
         'description': description,
         'locations': locations?.map((loc) => loc.toJson()).toList(),
-        'administrator': /*administrator.toJson()*/ 1,
+        'administrator': administrator?.toJson(),
         'code': code,
         'allowTicketRequests': allowTicketRequests,
       };
