@@ -11,11 +11,13 @@ public record UserDTO(
         @NotBlank(message = "Informe o campo sobrenome")
         String surname,
         @NotBlank(message = "Informe o campo email")
-        @Email(message = "Informe um email valido")
+        @Email(message = "Informe um email válido")
         String email,
         @NotBlank(message = "Informe o campo cpf")
-        @CPF(message = "Informe um cpf valido")
+        @CPF(message = "Informe um CPF válido")
         String cpf,
         @NotBlank(message = "Informe o campo senha")
-        String password) {
+        String password,
+        @NotBlank(message = "Confirme o campo senha")
+        String confirmPassword) {
 }

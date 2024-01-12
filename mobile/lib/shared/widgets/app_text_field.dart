@@ -7,13 +7,15 @@ class AppTextField extends StatefulWidget {
       required this.textEditingController,
       this.validator,
       this.onSaved,
-      this.passwordType});
+      this.passwordType,
+      this.maxLength});
 
   final String? labelText;
   final TextEditingController textEditingController;
   final FormFieldValidator? validator;
   final FormFieldSetter? onSaved;
   final bool? passwordType;
+  final int? maxLength;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -48,6 +50,7 @@ class _AppTextFieldState extends State<AppTextField> {
             widget.passwordType != null ? TextInputType.visiblePassword : null,
         obscureText: widget.passwordType != null ? _obscured : false,
         decoration: InputDecoration(
+          counter: const Offstage(),
             fillColor: Colors.white,
             filled: true,
             contentPadding:
@@ -76,6 +79,8 @@ class _AppTextFieldState extends State<AppTextField> {
                 : null),
         validator: widget.validator,
         onSaved: widget.onSaved,
+        maxLength: widget.maxLength,
+        maxLengthEnforcement: null,
       ),
     ]);
   }

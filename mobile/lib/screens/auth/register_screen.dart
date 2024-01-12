@@ -5,9 +5,8 @@ import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
+import 'package:facelocus/utils/fields_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,6 +26,7 @@ class LoginFormState extends State<RegisterScreen> {
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
   bool _isLoading = false;
+  Map<String, dynamic>? fieldErrors;
 
   void _register() async {
     try {
@@ -45,15 +45,16 @@ class LoginFormState extends State<RegisterScreen> {
       }
     } on DioException catch (e) {
       updateLoading();
-      var detail = e.response?.data['detail'];
-      String message = 'Não foi possível finalizar o cadastro';
-      var invalidFields = e.response?.data['invalidFields'];
-      showTopSnackBar(
-        Overlay.of(context),
-        CustomSnackBar.error(
-          message: detail ?? message,
-        ),
-      );
+      String detail = e.response?.data['detail'];
+      if (e.response?.data['invalidFields'] != null) {
+        Map<String, dynamic> invalidFields = e.response?.data['invalidFields'];
+        setState(() {
+          if (invalidFields.isNotEmpty) {
+            fieldErrors = invalidFields;
+          }
+        });
+      }
+      MessageSnacks.danger(context, detail);
     }
   }
 
@@ -123,32 +124,75 @@ class LoginFormState extends State<RegisterScreen> {
                     AppTextField(
                         textEditingController: _emailController,
                         labelText: 'Email',
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Informe o email'
-                            : null),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Informe o email';
+                          }
+
+                          if (!FieldsValidator.validateEmail(
+                              _emailController.text)) {
+                            return 'Informe um email válido';
+                          }
+
+                          return null;
+                        }),
                     const SizedBox(height: 15),
                     AppTextField(
                         textEditingController: _cpfController,
                         labelText: 'CPF',
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Informe o cpf'
-                            : null),
+                        maxLength: 14,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Informe o cpf';
+                          }
+
+                          if (fieldErrors != null &&
+                              fieldErrors!.containsKey('cpf')) {
+                            String message = fieldErrors!['cpf'];
+                            fieldErrors!.remove('cpf');
+                            return message;
+                          }
+
+                          if (!FieldsValidator.validateCPF(
+                              _cpfController.text)) {
+                            return 'Informe um CPF válido';
+                          }
+
+                          return null;
+                        }),
                     const SizedBox(height: 15),
                     AppTextField(
                         textEditingController: _passwordController,
                         labelText: 'Senha',
                         passwordType: true,
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Informe a senha'
-                            : null),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Informe a senha';
+                          }
+
+                          if (_confirmPasswordController.text.isNotEmpty &&
+                              value != _confirmPasswordController.text) {
+                            return 'As senhas não coincidem';
+                          }
+
+                          return null;
+                        }),
                     const SizedBox(height: 15),
                     AppTextField(
                         textEditingController: _confirmPasswordController,
                         labelText: 'Confirmar senha',
                         passwordType: true,
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Confirme a senha'
-                            : null),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Confirme a senha';
+                          }
+
+                          if (value != _passwordController.text) {
+                            return 'As senhas não coincidem';
+                          }
+
+                          return null;
+                        }),
                     const SizedBox(height: 25),
                     AppButton(
                         text: 'Cadastrar',
