@@ -3,6 +3,7 @@ import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -31,18 +32,14 @@ class _EventListScreenState extends State<EventListScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
       appBarTitle: 'Eventos',
-      body: Padding(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Consumer<EventProvider>(builder: (context, state, child) {
-          if (state.events!.isEmpty) {
-            return const Center(
-              child: Text('Ainda não há nenhum evento cadastrado',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-            );
-          }
+      body: Consumer<EventProvider>(builder: (context, state, child) {
+        if (!state.isLoading && state.events!.isEmpty) {
+          return const EmptyData('Você ainda não criou nenhum evento');
+        }
 
-          return Skeletonizer(
+        return Padding(
+          padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+          child: Skeletonizer(
             enabled: state.isLoading,
             child: ListView.separated(
               padding: const EdgeInsets.only(left: 15, right: 15),
@@ -57,9 +54,9 @@ class _EventListScreenState extends State<EventListScreen> {
                 return EventCard(event: event);
               },
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.eventCreate),
         backgroundColor: Colors.green,

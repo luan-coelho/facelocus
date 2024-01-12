@@ -1,12 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/services/event_service.dart';
-import 'package:flutter/foundation.dart';
+import 'package:facelocus/shared/message_snacks.dart';
+import 'package:flutter/cupertino.dart';
 
 class EventProvider with ChangeNotifier {
   final EventService _eventService = EventService();
   EventModel? _event;
   List<EventModel>? _events = [];
   bool isLoading = false;
+  Map<String, dynamic>? invalidFields;
 
   EventModel? get event => _event;
 
@@ -28,12 +31,28 @@ class EventProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> create(EventModel event) async {
+  Future<void> create(BuildContext context, EventModel event) async {
     isLoading = true;
     notifyListeners();
-    await _eventService.create(event);
+    try {
+      await _eventService.create(event);
+    } on DioException catch (e) {
+      String detail = onError(e, message: 'Falha ao criar evento');
+      MessageSnacks.danger(context, detail);
+    }
     isLoading = false;
     notifyListeners();
+  }
+
+  String onError(DioException e, {String? message}) {
+    if (e.response?.data == Map && e.response?.data['detail'] != null) {
+      String detail = e.response?.data.containsKey('detail');
+      if (e.response?.data['invalidFields'] != null) {
+        invalidFields = e.response?.data['invalidFields'];
+      }
+      return detail;
+    }
+    return message ?? 'Falha ao executar esta ação';
   }
 
   Future<void> changeTicketRequestPermission(int eventId) async {

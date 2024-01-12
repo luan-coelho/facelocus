@@ -14,42 +14,54 @@ class DioFetchApi implements FetchApi {
 
   @override
   Future<Response> get(String url, {bool authHeaders = true}) async {
-    final String? token = await getToken();
-    var request = _dio.get('$_baseUrl$url',
-        options: authHeaders ? _getAuthenticationHeaders(token) : null);
-    _checkAuthorization(request);
-    return await request;
+    try {
+      final String? token = await getToken();
+      return await _dio.get('$_baseUrl$url',
+          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+    } on DioException catch (e) {
+      _checkAuthorization(e);
+      rethrow;
+    }
   }
 
   @override
   Future<Response> post(String url,
       {Object? data, bool authHeaders = true}) async {
-    final String? token = await getToken();
-    var request = _dio.post('$_baseUrl$url',
-        data: data,
-        options: authHeaders ? _getAuthenticationHeaders(token) : null);
-    _checkAuthorization(request);
-    return await request;
+    try {
+      final String? token = await getToken();
+      return _dio.post('$_baseUrl$url',
+          data: data,
+          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+    } on DioException catch (e) {
+      _checkAuthorization(e);
+      rethrow;
+    }
   }
 
   @override
   Future<Response> patch(String url,
       {Object? data, bool authHeaders = true}) async {
-    final String? token = await getToken();
-    var request = _dio.patch('$_baseUrl$url',
-        data: data,
-        options: authHeaders ? _getAuthenticationHeaders(token) : null);
-    _checkAuthorization(request);
-    return await request;
+    try {
+      final String? token = await getToken();
+      return await _dio.patch('$_baseUrl$url',
+          data: data,
+          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+    } on DioException catch (e) {
+      _checkAuthorization(e);
+      rethrow;
+    }
   }
 
   @override
   Future<Response> delete(String url, {bool authHeaders = true}) async {
-    final String? token = await getToken();
-    var request = _dio.delete('$_baseUrl$url',
-        options: authHeaders ? _getAuthenticationHeaders(token) : null);
-    _checkAuthorization(request);
-    return await request;
+    try {
+      final String? token = await getToken();
+      return await _dio.delete('$_baseUrl$url',
+          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+    } on DioException catch (e) {
+      _checkAuthorization(e);
+      rethrow;
+    }
   }
 
   Options _getAuthenticationHeaders(String? token) {
@@ -59,17 +71,17 @@ class DioFetchApi implements FetchApi {
     });
   }
 
-  Future<Response> _checkAuthorization(Future<Response> fn) async {
-    var response = await fn;
+  void _checkAuthorization(DioException e) async {
     final String? token = await getToken();
-    if (token == null || response.statusCode == 401) {
+    if (token == null || e.response?.statusCode == 401) {
       final context = navigatorKey.currentContext;
       if (context != null && context.mounted) {
         context.go(AppRoutes.login);
       }
     }
-    return response;
   }
 
-  Future<String?> getToken() async => await storage.read(key: 'token');
+  Future<String?> getToken() async => await storage.containsKey(key: 'token')
+      ? await storage.read(key: 'token')
+      : null;
 }

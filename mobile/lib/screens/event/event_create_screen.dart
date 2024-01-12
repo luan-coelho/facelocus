@@ -4,7 +4,6 @@ import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class EventCreateScreen extends StatefulWidget {
@@ -77,7 +76,7 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState?.save();
                         event.allowTicketRequests = allowTicketRequests;
-                        state.create(event);
+                        state.create(context, event);
                       }
                     },
                     text: 'Cadastrar',
