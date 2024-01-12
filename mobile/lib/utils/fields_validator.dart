@@ -6,7 +6,7 @@ class FieldsValidator {
     if (cpf.length < 11 || cpf.length > 14) {
       return false;
     }
-
+    cpf = cpf.replaceAll(RegExp('[^0-9]'), '');
     List<int> digits = cpf.split('').map((e) => int.parse(e)).toList();
 
     int sum = 0;

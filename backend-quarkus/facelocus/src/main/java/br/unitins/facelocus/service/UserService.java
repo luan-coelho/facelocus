@@ -1,6 +1,8 @@
 package br.unitins.facelocus.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import br.unitins.facelocus.dto.ChangePasswordDTO;
@@ -10,6 +12,8 @@ import br.unitins.facelocus.service.auth.PasswordHandlerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
@@ -39,6 +43,7 @@ public class UserService extends BaseService<User, UserRepository> {
         if (this.repository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Usuário já cadastrado com o email informado");
         }
+        user.setCpf(user.getCpf().replaceAll("[^0-9]", ""));
         user.setPassword(passwordHandlerService.passwordHash(user.getPassword()));
         return super.create(user);
     }
