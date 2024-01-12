@@ -50,7 +50,7 @@ class _AppTextFieldState extends State<AppTextField> {
             widget.passwordType != null ? TextInputType.visiblePassword : null,
         obscureText: widget.passwordType != null ? _obscured : false,
         decoration: InputDecoration(
-          counter: const Offstage(),
+            counter: const Offstage(),
             fillColor: Colors.white,
             filled: true,
             contentPadding:
@@ -79,7 +79,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 : null),
         validator: widget.validator,
         onSaved: widget.onSaved,
-        maxLength: widget.maxLength,
+        maxLength: widget.maxLength ?? 255,
         maxLengthEnforcement: null,
       ),
     ]);

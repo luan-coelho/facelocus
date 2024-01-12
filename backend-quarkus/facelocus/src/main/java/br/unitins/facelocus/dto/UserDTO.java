@@ -17,7 +17,5 @@ public record UserDTO(
         @CPF(message = "Informe um CPF válido")
         String cpf,
         @NotBlank(message = "Informe o campo senha")
-        String password,
-        @NotBlank(message = "Confirme o campo senha")
-        String confirmPassword) {
+        String password) {
 }
