@@ -1,4 +1,5 @@
 import 'package:facelocus/models/event.dart';
+import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,7 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push("/event/show/${event.id}"),
+      onTap: () => context.push('${AppRoutes.eventShow}/${event.id}'),
       child: Container(
           padding: const EdgeInsets.only(left: 15, right: 15),
           width: 330,
@@ -26,27 +27,24 @@ class EventCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          Text(event.description!,
-              style: const TextStyle(fontWeight: FontWeight.w500)),
-          PopupMenuButton(
-              icon: const Icon(Icons.more_vert),
-              // Ícone de três pontos
-              itemBuilder: (BuildContext context) {
-                return <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: const Text('Editar'),
-                    onTap: () {
-                      // Ação a ser realizada quando a Opção 1 for selecionada
-                      // Pode ser uma função ou um Navigator para outra tela
-                    },
-                  ),
-                  PopupMenuItem(
-                      child: const Text('Deletar'),
-                      onTap: () {
-                        // Ação a ser realizada quando a Opção 2 for selecionada
-                      })
-                ];
-              })
+              Text(event.description!,
+                  style: const TextStyle(fontWeight: FontWeight.w500)),
+              PopupMenuButton(
+                  icon: const Icon(Icons.more_vert),
+                  // Ícone de três pontos
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry>[
+                      PopupMenuItem(
+                        child: const Text('Editar'),
+                        onTap: () {
+                        },
+                      ),
+                      PopupMenuItem(
+                          child: const Text('Deletar'),
+                          onTap: () {
+                          })
+                    ];
+                  })
             ],
           )),
     );

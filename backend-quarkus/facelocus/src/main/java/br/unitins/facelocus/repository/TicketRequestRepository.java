@@ -17,6 +17,11 @@ public class TicketRequestRepository extends BaseRepository<TicketRequest> {
         return find("FROM TicketRequest WHERE event.id = ?1", eventId).list();
     }
 
+    public List<TicketRequest> findAllByUserId(Long userId) {
+        String sql = "FROM TicketRequest WHERE requester.id = ?1 OR requested.id = ?1";
+        return find(sql, userId).list();
+    }
+
     public List<TicketRequest> findAllReceivedByUser(Long userId) {
         return find("FROM TicketRequest WHERE requested.id = ?1", userId).list();
     }

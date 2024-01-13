@@ -30,6 +30,13 @@ public class TicketRequestResource {
         return Response.ok(dataPagination).build();
     }
 
+    @Path("/by-user")
+    @GET
+    public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) {
+        DataPagination<?> dataPagination = ticketRequestService.findAllByUser(pageable, userId);
+        return Response.ok(dataPagination).build();
+    }
+
     @Path("/sent")
     @GET
     public Response findAllSent(Pageable pageable, @RestQuery("user") @Valid Long userId) {

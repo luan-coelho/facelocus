@@ -1,1 +1,1 @@
-enum TicketRequestStatus { PENDING, APPROVED, REJECTED }
+enum TicketRequestStatus { pending, approved, rejected }

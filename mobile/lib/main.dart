@@ -1,6 +1,7 @@
 import 'package:facelocus/providers/auth_provider.dart';
 import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/providers/location_provider.dart';
+import 'package:facelocus/providers/ticket_request_provider.dart';
 import 'package:facelocus/providers/user_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -11,6 +12,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider()),
     ChangeNotifierProvider(create: (_) => EventProvider()),
+    ChangeNotifierProvider(create: (_) => TicketRequestProvider()),
     ChangeNotifierProvider(create: (_) => LocationProvider()),
     ChangeNotifierProvider(create: (_) => UserProvider())
   ], child: const FaceLocusApplication()));
