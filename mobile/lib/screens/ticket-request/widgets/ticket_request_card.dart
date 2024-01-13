@@ -15,24 +15,26 @@ class _TicketRequestCardState extends State<TicketRequestCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {},
-      child: Container(
-          padding: const EdgeInsets.all(15),
-          width: 330,
-          height: 45,
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 0,
-              blurRadius: 5,
-              offset: const Offset(0, 1.5),
-            ),
-          ], color: Colors.white),
-          child: Column(
-            children: [
-              Text(widget.ticketRequest.event.description!.toUpperCase(),
-                  style: const TextStyle(fontWeight: FontWeight.w600)),
-            ],
-          )),
+      child: Flexible(
+        child: Container(
+            padding: const EdgeInsets.all(15),
+            width: 330,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 0,
+                blurRadius: 5,
+                offset: const Offset(0, 1.5),
+              ),
+            ], color: Colors.white),
+            child: Column(
+              children: [
+                Text(widget.ticketRequest.event.description!.toUpperCase(),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    overflow: TextOverflow.ellipsis),
+              ],
+            )),
+      ),
     );
   }
 }

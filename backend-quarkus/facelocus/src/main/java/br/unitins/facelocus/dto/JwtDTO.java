@@ -15,7 +15,6 @@ import java.util.Set;
 public class JwtDTO {
 
     private String token;
-    private LocalDateTime expire_in;
     private Set<String> groups;
     private String refresh_token;
     private UserResponseDTO user;

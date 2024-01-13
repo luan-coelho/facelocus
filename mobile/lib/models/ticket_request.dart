@@ -27,8 +27,8 @@ class TicketRequestModel {
       code: json['code'],
       finalDateTime: DateTime.parse(json['finalDateTime']),
       event: EventModel.fromJson(json['event']),
-      requestStatus: TicketRequestStatus.values.firstWhere(
-          (e) => e.toString().split('.').last == json['requestStatus']),
+      requestStatus: TicketRequestStatus.values
+          .byName((json['requestStatus'] as String).toLowerCase()),
       requester: UserModel.fromJson(json['requester']),
       requested: UserModel.fromJson(json['requested']),
     );

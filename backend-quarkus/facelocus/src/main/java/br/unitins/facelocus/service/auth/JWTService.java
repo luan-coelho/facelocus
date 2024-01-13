@@ -19,9 +19,6 @@ import java.util.Set;
 @ApplicationScoped
 public class JWTService {
 
-    @ConfigProperty(name = "com.quarkusjwt.jwt.duration")
-    Long duration;
-
     @Inject
     UserMapper userMapper;
 
@@ -33,15 +30,13 @@ public class JWTService {
         claimsBuilder.issuer("amazon-jwt");
         claimsBuilder.subject("amazon");
         claimsBuilder.issuedAt(currentTimeInSecs);
-        claimsBuilder.expiresAt(currentTimeInSecs + duration);
         claimsBuilder.groups(roles);
 
         String token = claimsBuilder.jws().sign();
-        LocalDateTime expireIn = LocalDateTime.now().plusSeconds(duration);
         String refreshToken = generateRefreshToken();
         UserResponseDTO userDTO = userMapper.toResource(user);
 
-        return new JwtDTO(token, expireIn, roles, refreshToken, userDTO);
+        return new JwtDTO(token, roles, refreshToken, userDTO);
     }
 
     public String generateRefreshToken() {
