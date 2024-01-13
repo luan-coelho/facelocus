@@ -53,6 +53,7 @@ class _EventListScreenState extends State<EventListScreen> {
               separatorBuilder: (BuildContext context, int index) {
                 return const SizedBox(height: 20);
               },
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: state.events!.length,

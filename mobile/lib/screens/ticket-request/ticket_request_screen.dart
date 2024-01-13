@@ -46,6 +46,7 @@ class _TicketRequestScreenState extends State<TicketRequestScreen> {
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 20);
                 },
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: state.ticketsRequest!.length,

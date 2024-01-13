@@ -16,19 +16,25 @@ class EventCard extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15, right: 15),
           width: 330,
           height: 45,
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 0,
-              blurRadius: 5,
-              offset: const Offset(0, 1.5),
-            ),
-          ], color: Colors.white),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 0,
+                  blurRadius: 5,
+                  offset: const Offset(0, 1.5),
+                ),
+              ],
+              color: Colors.white),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(event.description!,
-                  style: const TextStyle(fontWeight: FontWeight.w500)),
+              Expanded(
+                child: Text(event.description!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis)),
+              ),
               PopupMenuButton(
                   icon: const Icon(Icons.more_vert),
                   // Ícone de três pontos
@@ -36,13 +42,9 @@ class EventCard extends StatelessWidget {
                     return <PopupMenuEntry>[
                       PopupMenuItem(
                         child: const Text('Editar'),
-                        onTap: () {
-                        },
+                        onTap: () {},
                       ),
-                      PopupMenuItem(
-                          child: const Text('Deletar'),
-                          onTap: () {
-                          })
+                      PopupMenuItem(child: const Text('Deletar'), onTap: () {})
                     ];
                   })
             ],

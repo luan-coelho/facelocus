@@ -79,9 +79,38 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
                 .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
     }
 
+
+    @Transactional
+    public TicketRequest createInvitation(TicketRequest ticketRequest) {
+        Long requestedId = ticketRequest.getRequested().getId();
+
+        Event event = eventService
+                .findByCodeOptional(ticketRequest.getCode())
+                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
+
+        Long eventId = event.getId();
+        if (eventService.linkedUser(eventId, requestedId)) {
+            throw new IllegalArgumentException("Usuário já vinculado ao evento");
+        }
+
+        User requester = userService
+                .findByIdOptional(ticketRequest.getRequester().getId())
+                .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado pelo id"));
+        User requested = userService
+                .findByIdOptional(requestedId)
+                .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
+
+        ticketRequest.setEvent(event);
+        ticketRequest.setRequester(requester);
+        ticketRequest.setRequested(requested);
+
+        return super.create(ticketRequest);
+    }
+
     @Transactional
     public TicketRequest create(TicketRequest ticketRequest) {
         Long requestedId = ticketRequest.getRequested().getId();
+
         if (ticketRequest.getRequester().getId() != null && ticketRequest.getRequester().getId().equals(requestedId)) {
             throw new IllegalArgumentException("O usuário solicitante não pode ser o mesmo solicitado");
         }
