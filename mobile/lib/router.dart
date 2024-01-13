@@ -61,7 +61,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.eventCreate,
-      builder: (context, state) => const EventCreateScreen(),
+      builder: (context, state) => const EventCreateForm(),
     ),
     GoRoute(
       path: AppRoutes.eventLocations,

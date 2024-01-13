@@ -1,10 +1,8 @@
 package br.unitins.facelocus.handle;
 
 import br.unitins.facelocus.exception.ErrorResponse;
-import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerRequest;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -17,9 +15,6 @@ public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalAr
 
     @Context
     HttpServerRequest request;
-
-    @Inject
-    ErrorResponseMapper mapper;
 
     @SneakyThrows
     @Override

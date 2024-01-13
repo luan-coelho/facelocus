@@ -1,11 +1,10 @@
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/providers/event_provider.dart';
-import 'package:facelocus/router.dart';
+import 'package:facelocus/screens/event/event_create_screen.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -30,6 +29,14 @@ class _EventListScreenState extends State<EventListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    showDataAlert() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const EventCreateForm();
+          });
+    }
+
     return AppLayout(
       appBarTitle: 'Eventos',
       body: Consumer<EventProvider>(builder: (context, state, child) {
@@ -58,7 +65,7 @@ class _EventListScreenState extends State<EventListScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.eventCreate),
+        onPressed: showDataAlert,
         backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),

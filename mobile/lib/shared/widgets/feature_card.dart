@@ -26,7 +26,7 @@ class FeatureCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => {context.push(route)},
       child: Container(
-        width: width,
+        width: width ?? double.infinity,
         height: height ?? 130,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(

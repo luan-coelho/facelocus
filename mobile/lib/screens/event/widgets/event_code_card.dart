@@ -56,7 +56,7 @@ class EventCodeCard extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () async =>
-                      await Clipboard.setData(ClipboardData(text: event.code!)),
+                      await Clipboard.setData(ClipboardData(text: event.code ?? 'Sem código')),
                   child: SvgPicture.asset(
                     'images/clipboard-copy-icon.svg',
                     width: 20,

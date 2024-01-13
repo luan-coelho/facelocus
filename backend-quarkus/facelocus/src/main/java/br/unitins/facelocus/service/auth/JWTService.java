@@ -19,7 +19,7 @@ import java.util.Set;
 @ApplicationScoped
 public class JWTService {
 
-    public static final int TOKEN_DURATION = 60;
+    public static final int DURATION_IN_SECONDS = 15; // 60 minutos x 24 horas = 1 dia
 
     @Inject
     UserMapper userMapper;
@@ -28,15 +28,14 @@ public class JWTService {
         /*String zoneId = "America/Sao_Paulo";
         Instant instant = Instant.now().plusMillis(expirationTime);*/
         Set<String> roles = new HashSet<>(); // TODO Implementar roles
-        LocalDateTime expireIn = LocalDateTime.now().plusSeconds(TOKEN_DURATION);
-        Instant expiresAt = Instant.now().plus(Duration.ofSeconds(TOKEN_DURATION));
+        LocalDateTime expireIn = LocalDateTime.now().plusSeconds(DURATION_IN_SECONDS);
+        Instant expiresAt = Instant.now().plus(Duration.ofSeconds(DURATION_IN_SECONDS));
         String token = Jwt.issuer("amazon-jwt")
                 .subject("amaonz")
                 .claim("userId", user.getId())
                 .claim("userEmail", user.getEmail())
                 .claim("userCpf", user.getCpf())
                 .groups(roles)
-                .expiresAt(expiresAt)
                 .sign();
         String refreshToken = generateRefreshToken();
         UserResponseDTO userDTO = userMapper.toResource(user);

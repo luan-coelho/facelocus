@@ -1,12 +1,10 @@
 package br.unitins.facelocus.handle;
 
-import br.unitins.facelocus.handle.restresponse.AuthenticationException;
 import br.unitins.facelocus.exception.ErrorResponse;
+import br.unitins.facelocus.handle.restresponse.AuthenticationException;
 import br.unitins.facelocus.handle.restresponse.UnauthorizedException;
-import br.unitins.facelocus.mapper.ErrorResponseMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.http.HttpServerRequest;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -19,9 +17,6 @@ public class AuthenticationExceptionMapper implements ExceptionMapper<Authentica
 
     @Context
     HttpServerRequest request;
-
-    @Inject
-    ErrorResponseMapper mapper;
 
     @SneakyThrows
     @Override

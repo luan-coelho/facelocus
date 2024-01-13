@@ -83,7 +83,6 @@ class LoginFormState extends State<RegisterScreen> {
     _cpfController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 

@@ -1,7 +1,6 @@
 import 'package:facelocus/providers/event_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/event/widgets/event_code_card.dart';
-import 'package:facelocus/screens/event/widgets/lincked_users.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
@@ -44,26 +43,6 @@ class _EventShowScreenState extends State<EventShowScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        EventCodeCard(event: state.event!),
-                        const SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const Flexible(
-                              child: Text('Permitir solicitações de ingresso',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w500)),
-                            ),
-                            Switch(
-                                value: state.event != null
-                                    ? state.event!.allowTicketRequests!
-                                    : false,
-                                onChanged: (_) =>
-                                    state.changeTicketRequestPermission(
-                                        widget.eventId)),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -94,6 +73,30 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                 height: 100),
                           ],
                         ),
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Flexible(
+                              child: Text('Permitir solicitações de ingresso',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            Switch(
+                                value: state.event != null
+                                    ? state.event!.allowTicketRequests!
+                                    : false,
+                                onChanged: (_) =>
+                                    state.changeTicketRequestPermission(
+                                        widget.eventId)),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        !state.isLoading &&
+                                state.event != null &&
+                                state.event!.allowTicketRequests! == true
+                            ? EventCodeCard(event: state.event!)
+                            : const SizedBox(),
                       ]),
                 )),
           ));

@@ -124,7 +124,11 @@ public class EventService extends BaseService<Event, EventRepository> {
      */
     @Transactional
     public void changeTicketRequestPermissionByEventId(Long eventId) {
-        existsByIdWithThrows(eventId);
+        Event event = findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        if (event.getCode() == null) {
+            event.setCode(generateUniqueCode());
+        }
         this.repository.changeTicketRequestPermissionByEventId(eventId);
     }
 
