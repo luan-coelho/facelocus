@@ -1,4 +1,3 @@
-import 'package:facelocus/screens/event/widgets/users_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -26,8 +25,6 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
           const Text("Usuários", style: TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
-      const SizedBox(height: 10),
-      UsersSearch(widget.eventId)
     ]);
   }
 }

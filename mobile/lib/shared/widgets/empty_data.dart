@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EmptyData extends StatelessWidget {
-  final String text;
+  const EmptyData(this.text, {super.key, this.child});
 
-  const EmptyData(this.text, {super.key});
+  final String text;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,8 @@ class EmptyData extends StatelessWidget {
               textAlign: TextAlign.center,
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          SizedBox(height: child != null ? 25 : 0),
+          child != null ? child! : const SizedBox(),
         ],
       ),
     );
