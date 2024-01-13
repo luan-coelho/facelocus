@@ -54,7 +54,7 @@ final router = GoRouter(
       builder: (context, state) => const EventListScreen(),
     ),
     GoRoute(
-      path: AppRoutes.eventShow,
+      path: '${AppRoutes.eventShow}/:id',
       builder: (context, state) {
         final int eventId = int.parse(state.pathParameters['id']!);
         return EventShowScreen(eventId: eventId);
