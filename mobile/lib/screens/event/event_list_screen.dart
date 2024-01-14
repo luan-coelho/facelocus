@@ -21,7 +21,7 @@ class _EventListScreenState extends State<EventListScreen> {
 
   @override
   void initState() {
-    _controller = EventController(eventService: EventService());
+    _controller = Get.find<EventController>();
     _controller.fetchAll();
     super.initState();
   }

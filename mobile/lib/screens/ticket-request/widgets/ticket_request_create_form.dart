@@ -1,8 +1,9 @@
-import 'package:facelocus/providers/ticket_request_provider.dart';
+import 'package:facelocus/controllers/ticket_request_controller.dart';
+import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class TicketRequestCreateForm extends StatefulWidget {
   const TicketRequestCreateForm({super.key});
@@ -13,12 +14,14 @@ class TicketRequestCreateForm extends StatefulWidget {
 }
 
 class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
+  late TicketRequestController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _codeController;
-  bool allowTicketRequests = false;
 
   @override
   void initState() {
+    _controller =
+        TicketRequestController(service: TicketRequestService());
     _codeController = TextEditingController();
     super.initState();
   }
@@ -60,16 +63,16 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
         }),
       ),
       actions: [
-        Consumer<TicketRequestProvider>(builder: (context, state, child) {
+        Obx(() {
           return AppButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState?.save();
-                  state.createByCode(context, _codeController.text);
+                  _controller.createByCode(_codeController.text);
                 }
               },
               text: 'Solicitar',
-              icon: state.isLoading
+              icon: _controller.isLoading.value
                   ? const SizedBox(
                       width: 17,
                       height: 17,

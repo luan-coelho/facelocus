@@ -2,14 +2,15 @@ import 'package:facelocus/models/device.dart';
 import 'package:facelocus/models/user_face_photo.dart';
 
 class UserModel {
-  late int? id;
-  late String name;
-  late String surname;
-  late String email;
-  late String cpf;
-  late String? password;
-  late UserFacePhoto? userFacePhoto;
-  late List<Device>? devices;
+  final int? id;
+  final String name;
+  final String surname;
+  final String email;
+  final String cpf;
+  final String? password;
+  final UserFacePhoto? userFacePhoto;
+  final List<Device>? devices;
+
 
   UserModel({
     this.id,

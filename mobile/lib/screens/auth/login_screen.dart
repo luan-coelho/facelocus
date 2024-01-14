@@ -1,16 +1,14 @@
-import 'package:dio/dio.dart';
-import 'package:facelocus/providers/auth_provider.dart';
+import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/dtos/login_request_dto.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
-import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,35 +20,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginFormState extends State<LoginScreen> {
+  late final AuthController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _loginController;
   late TextEditingController _passwordController;
 
   void _login() async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        AuthService service = AuthService();
-        String login = _loginController.text;
-        String password = _passwordController.text;
-        var tokenResponse = await service.login(login, password);
-        if (tokenResponse.token.isNotEmpty) {
-          const storage = FlutterSecureStorage();
-          await storage.write(key: 'token', value: tokenResponse.token);
-          var authProvider = Provider.of<AuthProvider>(context, listen: false);
-          authProvider.addAuthenticatedUser(tokenResponse.user);
-          context.replace("/home");
-          return;
-        }
-      }
-    } on DioException catch (e) {
-      var detail = e.response?.data['detail'];
-      String message = 'Não foi possível realizar o login';
-      MessageSnacks.danger(context, detail ?? message);
+    if (_formKey.currentState!.validate()) {
+      String login = _loginController.text;
+      String password = _passwordController.text;
+      LoginRequest loginRequest = LoginRequest(login, password);
+      await _controller.login(context, loginRequest);
     }
   }
 
   @override
   void initState() {
+    _controller = Get.find<AuthController>();
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();

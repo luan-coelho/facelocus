@@ -1,7 +1,6 @@
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/event/widgets/event_code_card.dart';
-import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
@@ -24,7 +23,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = EventController(eventService: EventService());
+    _controller = Get.find<EventController>();
     _controller.fetchById(widget.eventId);
   }
 

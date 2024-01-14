@@ -1,9 +1,9 @@
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/models/event.dart';
-import 'package:facelocus/services/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class EventCodeCard extends StatelessWidget {
@@ -20,7 +20,7 @@ class EventCodeCard extends StatelessWidget {
     }
 
     generateNewCode() {
-      var controller = EventController(eventService: EventService());
+      var controller = Get.find<EventController>();
       controller.generateNewCode(event.id!);
       Navigator.pop(context, "Cancel");
     }

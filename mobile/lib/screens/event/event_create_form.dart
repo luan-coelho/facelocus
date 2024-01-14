@@ -24,7 +24,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
 
   @override
   void initState() {
-    _controller = EventController(eventService: EventService());
+    _controller = Get.find<EventController>();
     _descriptionController = TextEditingController();
     super.initState();
   }

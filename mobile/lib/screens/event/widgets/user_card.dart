@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/providers/user_provider.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class UserCard extends StatefulWidget {
   const UserCard({super.key, required this.user});
@@ -15,14 +13,6 @@ class UserCard extends StatefulWidget {
 }
 
 class _UserCardState extends State<UserCard> {
-  late UserProvider _userProvider;
-
-  @override
-  void initState() {
-    _userProvider = Provider.of<UserProvider>(context, listen: false);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     removeUser() {

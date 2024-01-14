@@ -1,63 +1,68 @@
 import 'package:dio/dio.dart';
+import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/dtos/event_ticket_request_create.dart';
 import 'package:facelocus/dtos/ticket_request_create.dart';
-import 'package:facelocus/models/event.dart';
 import 'package:facelocus/models/ticket_request.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/providers/auth_provider.dart';
+import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
-class TicketRequestProvider with ChangeNotifier {
-  final TicketRequestService _ticketRequestService = TicketRequestService();
+class TicketRequestController extends GetxController {
+  final TicketRequestService service;
   TicketRequestModel? _ticketRequest;
-  List<TicketRequestModel>? _ticketsRequest = [];
-  bool isLoading = false;
+  final List<TicketRequestModel> _ticketsRequest = <TicketRequestModel>[].obs;
+  final RxBool _isLoading = false.obs;
+
   String? error;
+
   Map<String, dynamic>? invalidFields;
 
   TicketRequestModel get ticketRequest => _ticketRequest!;
 
   List<TicketRequestModel>? get ticketsRequest => _ticketsRequest;
 
-  Future<void> fetchAllByUser(BuildContext context) async {
-    isLoading = true;
-    notifyListeners();
+  RxBool get isLoading => _isLoading;
+
+  TicketRequestController({required this.service});
+
+  Future<void> fetchAllByUser() async {
+    _isLoading.value = true;
+
     try {
-      var authProvider = Provider.of<AuthProvider>(context, listen: false);
-      int userId = authProvider.authenticatedUser.id!;
-      _ticketsRequest = await _ticketRequestService.getAllByUser(userId);
-      isLoading = false;
+      AuthController authController = Get.find<AuthController>();
+      int userId = authController.authenticatedUser.value!.id!;
+      var ticketsRequest = await service.getAllByUser(userId);
+      _ticketsRequest.addAll(ticketsRequest);
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao buscar solicitações');
       error = detail;
     }
-    isLoading = false;
-    notifyListeners();
+    _isLoading.value = false;
   }
 
   Future<void> fetchById(int userId) async {
-    isLoading = true;
-    notifyListeners();
-    _ticketRequest = await _ticketRequestService.getById(userId);
-    isLoading = false;
-    notifyListeners();
+    _isLoading.value = true;
+
+    _ticketRequest = await service.getById(userId);
+    _isLoading.value = false;
   }
 
-  Future<void> createByCode(BuildContext context, String code) async {
-    isLoading = true;
-    notifyListeners();
+  Future<void> createByCode(String code) async {
+    _isLoading.value = true;
+    BuildContext context = Get.context!;
+
     try {
-      var authProvider = Provider.of<AuthProvider>(context, listen: false);
-      UserModel user = authProvider.authenticatedUser;
+      AuthController authController = AuthController(service: AuthService());
+      UserModel user = authController.authenticatedUser.value!;
       EventTicketRequestCreate event = EventTicketRequestCreate(user: user);
       event.code = code;
       TicketRequestCreate ticketRequest =
           TicketRequestCreate(event: event, user: user);
-      await _ticketRequestService.create(ticketRequest);
+      await service.create(ticketRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       MessageSnacks.success(context, message);
       context.pop();
@@ -65,7 +70,7 @@ class TicketRequestProvider with ChangeNotifier {
       String detail = onError(e);
       MessageSnacks.danger(context, detail);
     }
-    fetchAllByUser(context);
+    fetchAllByUser();
   }
 
   String onError(DioException e, {String? message}) {

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class EventController extends GetxController {
-  final EventService eventService;
+  final EventService service;
 
   final List<EventModel> _events = <EventModel>[].obs;
   EventModel? _event;
@@ -24,18 +25,18 @@ class EventController extends GetxController {
 
   List<EventModel> get events => _events;
 
-  EventController({required this.eventService});
+  EventController({required this.service});
 
   fetchAll() async {
     _isLoading.value = true;
-    List<EventModel> events = await eventService.getAll();
+    List<EventModel> events = await service.getAll();
     _events.addAll(events);
     _isLoading.value = false;
   }
 
   fetchById(int eventId) async {
     _isLoading.value = true;
-    _event = await eventService.getById(eventId);
+    _event = await service.getById(eventId);
     _isLoading.value = false;
   }
 
@@ -43,10 +44,10 @@ class EventController extends GetxController {
     _isLoading.value = true;
     BuildContext context = Get.context!;
     try {
-      AuthController authController = AuthController();
-      UserModel administrator = authController.authenticatedUser!;
+      AuthController authController = AuthController(service: AuthService());
+      UserModel administrator = authController.authenticatedUser!.value!;
       event.administrator = administrator;
-      await eventService.create(event);
+      await service.create(event);
       MessageSnacks.success(context, 'Evento criado com sucesso');
       context.pop();
     } on DioException catch (e) {
@@ -57,12 +58,12 @@ class EventController extends GetxController {
   }
 
   Future<void> changeTicketRequestPermission(int eventId) async {
-    await eventService.changeTicketRequestPermission(eventId);
+    await service.changeTicketRequestPermission(eventId);
     fetchById(eventId);
   }
 
   Future<void> generateNewCode(int eventId) async {
-    await eventService.generateNewCode(eventId);
+    await service.generateNewCode(eventId);
     fetchById(eventId);
   }
 
