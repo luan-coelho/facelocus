@@ -2,7 +2,8 @@ package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.TicketRequestDTO;
+import br.unitins.facelocus.dto.ticketrequest.TicketRequestCreateDTO;
+import br.unitins.facelocus.dto.ticketrequest.TicketRequestResponseDTO;
 import br.unitins.facelocus.mapper.TicketRequestMapper;
 import br.unitins.facelocus.model.TicketRequest;
 import br.unitins.facelocus.service.TicketRequestService;
@@ -52,9 +53,8 @@ public class TicketRequestResource {
     }
 
     @POST
-    public Response create(@Valid TicketRequestDTO createTicketRequestDTO) {
-        TicketRequest ticketRequest = ticketRequestMapper.toCreateEntity(createTicketRequestDTO);
-        ticketRequestService.create(ticketRequest);
+    public Response create(@Valid TicketRequestCreateDTO createTicketRequestDTO) {
+        ticketRequestService.create(createTicketRequestDTO);
         return Response.status(Response.Status.CREATED).build();
     }
 

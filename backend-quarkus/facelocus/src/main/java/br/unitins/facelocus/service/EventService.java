@@ -59,6 +59,10 @@ public class EventService extends BaseService<Event, EventRepository> {
         return this.repository.findByCodeOptional(code);
     }
 
+    public boolean existsByCode(String code) {
+        return this.repository.existsByCode(code);
+    }
+
     @Transactional
     @Override
     public Event create(Event event) {

@@ -13,6 +13,7 @@ class TicketRequestProvider with ChangeNotifier {
   TicketRequestModel? _ticketRequest;
   List<TicketRequestModel>? _ticketsRequest = [];
   bool isLoading = false;
+  String? error;
   Map<String, dynamic>? invalidFields;
 
   TicketRequestModel get ticketRequest => _ticketRequest!;
@@ -22,9 +23,15 @@ class TicketRequestProvider with ChangeNotifier {
   Future<void> fetchAllByUser(BuildContext context) async {
     isLoading = true;
     notifyListeners();
-    var authProvider = Provider.of<AuthProvider>(context, listen: false);
-    int userId = authProvider.authenticatedUser.id!;
-    _ticketsRequest = await _ticketRequestService.getAllByUser(userId);
+    try {
+      var authProvider = Provider.of<AuthProvider>(context, listen: false);
+      int userId = authProvider.authenticatedUser.id!;
+      _ticketsRequest = await _ticketRequestService.getAllByUser(userId);
+      isLoading = false;
+    } on DioException catch (e) {
+      String detail = onError(e, message: 'Falha ao buscar solicitações');
+      error = detail;
+    }
     isLoading = false;
     notifyListeners();
   }

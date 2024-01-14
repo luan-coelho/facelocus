@@ -43,7 +43,6 @@ class _EventListScreenState extends State<EventListScreen> {
         if (!state.isLoading && state.events!.isEmpty) {
           return const EmptyData('Você ainda não criou nenhum evento');
         }
-
         return Padding(
           padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
           child: Skeletonizer(

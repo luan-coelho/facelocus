@@ -49,8 +49,7 @@ class EventProvider with ChangeNotifier {
       String detail = onError(e, message: 'Falha ao criar evento');
       MessageSnacks.danger(context, detail);
     }
-    isLoading = false;
-    notifyListeners();
+    fetchAll();
   }
 
   String onError(DioException e, {String? message}) {

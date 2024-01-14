@@ -23,8 +23,9 @@ public class TicketRequest {
     @ManyToOne
     private Event event;
     private TicketRequestStatus requestStatus = TicketRequestStatus.PENDING;
+    /**
+     * Usuário solicitante ou solicitado
+     */
     @ManyToOne
-    private User requester;
-    @ManyToOne
-    private User requested;
+    private User user;
 }

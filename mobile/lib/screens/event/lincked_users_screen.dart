@@ -1,7 +1,6 @@
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/providers/user_provider.dart';
 import 'package:facelocus/screens/event/widgets/user_card.dart';
-import 'package:facelocus/screens/event/widgets/users_search.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_search_field.dart';

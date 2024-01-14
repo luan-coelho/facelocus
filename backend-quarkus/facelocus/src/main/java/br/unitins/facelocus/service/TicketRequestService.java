@@ -2,7 +2,8 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.TicketRequestDTO;
+import br.unitins.facelocus.dto.ticketrequest.TicketRequestCreateDTO;
+import br.unitins.facelocus.dto.ticketrequest.TicketRequestResponseDTO;
 import br.unitins.facelocus.mapper.TicketRequestMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.TicketRequest;
@@ -36,7 +37,7 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
      * @return Objeto paginável de solicitações de ingresso
      */
     public DataPagination<?> findAllByEvent(Pageable pageable, Long eventId) {
-        List<TicketRequestDTO> dtos = this.repository.findAllByEventId(eventId)
+        List<TicketRequestResponseDTO> dtos = this.repository.findAllByEventId(eventId)
                 .stream()
                 .map(t -> ticketRequestMapper.toResource(t))
                 .toList();
@@ -51,7 +52,7 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
      * @return Objeto paginável de solicitações de ingresso
      */
     public DataPagination<?> findAllByUser(Pageable pageable, Long userId) {
-        List<TicketRequestDTO> dtos = this.repository.findAllByUserId(userId)
+        List<TicketRequestResponseDTO> dtos = this.repository.findAllByUserId(userId)
                 .stream()
                 .map(t -> ticketRequestMapper.toResource(t))
                 .toList();
@@ -59,7 +60,7 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     }
 
     public DataPagination<?> findAllReceivedByUser(Pageable pageable, Long userId) {
-        List<TicketRequestDTO> dtos = this.repository.findAllReceivedByUser(userId)
+        List<TicketRequestResponseDTO> dtos = this.repository.findAllReceivedByUser(userId)
                 .stream()
                 .map(t -> ticketRequestMapper.toResource(t))
                 .toList();
@@ -67,7 +68,8 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     }
 
     public DataPagination<?> findAllSentByUser(Pageable pageable, Long userId) {
-        List<TicketRequestDTO> dtos = this.repository.findAllSentByUser(userId)
+        List<TicketRequestResponseDTO> dtos = this.repository
+                .findAllSentByUser(userId)
                 .stream()
                 .map(t -> ticketRequestMapper.toResource(t))
                 .toList();
@@ -75,65 +77,45 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     }
 
     public TicketRequest findById(Long id) {
-        return repository.findByIdOptional(id)
+        return repository
+                .findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
     }
 
-
     @Transactional
-    public TicketRequest createInvitation(TicketRequest ticketRequest) {
-        Long requestedId = ticketRequest.getRequested().getId();
-
+    public TicketRequest create(TicketRequestCreateDTO ticketRequestCreateDTO) {
         Event event = eventService
-                .findByCodeOptional(ticketRequest.getCode())
-                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
+                .findByIdOptional(ticketRequestCreateDTO.event().getId())
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
 
-        Long eventId = event.getId();
-        if (eventService.linkedUser(eventId, requestedId)) {
-            throw new IllegalArgumentException("Usuário já vinculado ao evento");
-        }
+        TicketRequest ticketRequest = ticketRequestMapper.toCreateEntity(ticketRequestCreateDTO);
 
-        User requester = userService
-                .findByIdOptional(ticketRequest.getRequester().getId())
-                .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado pelo id"));
-        User requested = userService
-                .findByIdOptional(requestedId)
-                .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
+        User administrator = event.getAdministrator();
+        Long userRequestedId = ticketRequestCreateDTO.user().getId();
 
-        ticketRequest.setEvent(event);
-        ticketRequest.setRequester(requester);
-        ticketRequest.setRequested(requested);
-
-        return super.create(ticketRequest);
-    }
-
-    @Transactional
-    public TicketRequest create(TicketRequest ticketRequest) {
-        Long requestedId = ticketRequest.getRequested().getId();
-
-        if (ticketRequest.getRequester().getId() != null && ticketRequest.getRequester().getId().equals(requestedId)) {
+        if (administrator.getId().equals(userRequestedId)) {
             throw new IllegalArgumentException("O usuário solicitante não pode ser o mesmo solicitado");
         }
 
-        Event event = eventService
-                .findByCodeOptional(ticketRequest.getCode())
-                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
+        if (ticketRequestCreateDTO.event().getCode() != null) {
+            boolean existsByCode = eventService.existsByCode(event.getCode());
+            if (!existsByCode) {
+                throw new NotFoundException("Código de evento inválido ou não existe");
+            }
+            ticketRequest.setCode(ticketRequestCreateDTO.event().getCode());
+        }
 
         Long eventId = event.getId();
-        if (eventService.linkedUser(eventId, requestedId)) {
+        if (eventService.linkedUser(eventId, userRequestedId)) {
             throw new IllegalArgumentException("Usuário já vinculado ao evento");
         }
 
-        User requester = userService
-                .findByIdOptional(ticketRequest.getRequester().getId())
-                .orElseThrow(() -> new NotFoundException("Usuário solicitante não encontrado pelo id"));
         User requested = userService
-                .findByIdOptional(requestedId)
+                .findByIdOptional(userRequestedId)
                 .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
 
         ticketRequest.setEvent(event);
-        ticketRequest.setRequester(requester);
-        ticketRequest.setRequested(requested);
+        ticketRequest.setUser(requested);
 
         return super.create(ticketRequest);
     }
@@ -160,7 +142,7 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
      */
     private void updateStatus(Long userId, Long ticketRequestId, TicketRequestStatus requestStatus) {
         TicketRequest ticketRequest = findById(ticketRequestId);
-        Long requestedId = ticketRequest.getRequested().getId();
+        Long requestedId = ticketRequest.getUser().getId();
         if (!requestedId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
         }
