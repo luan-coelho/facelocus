@@ -1,9 +1,9 @@
+import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/models/event.dart';
-import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/services/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class EventCodeCard extends StatelessWidget {
@@ -14,14 +14,14 @@ class EventCodeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void shareCode() {
-      String subject =
-          'Ingresse no evento ${event.description} - ${event.code!}';
+      var message = 'Ingresse no evento ${event.description} - ${event.code!}';
+      String subject = message;
       Share.share(event.code!, subject: subject);
     }
 
     generateNewCode() {
-      var provider = Provider.of<EventProvider>(context, listen: false);
-      provider.generateNewCode(event.id!);
+      var controller = EventController(eventService: EventService());
+      controller.generateNewCode(event.id!);
       Navigator.pop(context, "Cancel");
     }
 
@@ -55,8 +55,8 @@ class EventCodeCard extends StatelessWidget {
             Row(
               children: [
                 GestureDetector(
-                  onTap: () async =>
-                      await Clipboard.setData(ClipboardData(text: event.code ?? 'Sem código')),
+                  onTap: () async => await Clipboard.setData(
+                      ClipboardData(text: event.code ?? 'Sem código')),
                   child: SvgPicture.asset(
                     'images/clipboard-copy-icon.svg',
                     width: 20,

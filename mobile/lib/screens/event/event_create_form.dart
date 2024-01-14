@@ -1,9 +1,11 @@
 import 'package:facelocus/models/event.dart';
-import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/event_controller.dart';
 
 class EventCreateForm extends StatefulWidget {
   const EventCreateForm({super.key});
@@ -13,6 +15,8 @@ class EventCreateForm extends StatefulWidget {
 }
 
 class _EventCreateFormState extends State<EventCreateForm> {
+  late EventController _controller;
+
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _descriptionController;
   EventModel event = EventModel.empty();
@@ -20,6 +24,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
 
   @override
   void initState() {
+    _controller = EventController(eventService: EventService());
     _descriptionController = TextEditingController();
     super.initState();
   }
@@ -75,17 +80,17 @@ class _EventCreateFormState extends State<EventCreateForm> {
         }),
       ),
       actions: [
-        Consumer<EventProvider>(builder: (context, state, child) {
+        Obx(() {
           return AppButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState?.save();
                   event.allowTicketRequests = allowTicketRequests;
-                  state.create(context, event);
+                  _controller.create(event);
                 }
               },
               text: 'Cadastrar',
-              icon: state.isLoading
+              icon: _controller.isLoading.value
                   ? const SizedBox(
                       width: 17,
                       height: 17,

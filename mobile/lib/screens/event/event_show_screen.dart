@@ -1,11 +1,12 @@
-import 'package:facelocus/providers/event_provider.dart';
+import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/event/widgets/event_code_card.dart';
+import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class EventShowScreen extends StatefulWidget {
@@ -18,25 +19,23 @@ class EventShowScreen extends StatefulWidget {
 }
 
 class _EventShowScreenState extends State<EventShowScreen> {
-  late EventProvider _eventProvider;
+  late EventController _controller;
 
   @override
   void initState() {
     super.initState();
-    _eventProvider = Provider.of<EventProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _eventProvider.fetchById(widget.eventId);
-    });
+    _controller = EventController(eventService: EventService());
+    _controller.fetchById(widget.eventId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EventProvider>(builder: (context, state, child) {
+    return Obx(() {
       return AppLayout(
-          appBarTitle: state.event?.description ?? 'Evento',
+          appBarTitle: _controller.event?.description ?? 'Evento',
           body: SingleChildScrollView(
             child: Skeletonizer(
-                enabled: state.isLoading,
+                enabled: _controller.isLoading.value,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 20, right: 30, left: 30, bottom: 20),
@@ -83,19 +82,19 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                       TextStyle(fontWeight: FontWeight.w500)),
                             ),
                             Switch(
-                                value: state.event != null
-                                    ? state.event!.allowTicketRequests!
+                                value: _controller.event != null
+                                    ? _controller.event!.allowTicketRequests!
                                     : false,
                                 onChanged: (_) =>
-                                    state.changeTicketRequestPermission(
+                                    _controller.changeTicketRequestPermission(
                                         widget.eventId)),
                           ],
                         ),
                         const SizedBox(height: 15),
-                        !state.isLoading &&
-                                state.event != null &&
-                                state.event!.allowTicketRequests! == true
-                            ? EventCodeCard(event: state.event!)
+                        !_controller.isLoading.value &&
+                                _controller.event != null &&
+                                _controller.event!.allowTicketRequests! == true
+                            ? EventCodeCard(event: _controller.event!)
                             : const SizedBox(),
                       ]),
                 )),
