@@ -18,16 +18,16 @@ public class TicketRequestRepository extends BaseRepository<TicketRequest> {
     }
 
     public List<TicketRequest> findAllByUserId(Long userId) {
-        String sql = "FROM TicketRequest WHERE requester.id = ?1 OR requested.id = ?1";
+        String sql = "FROM TicketRequest WHERE event.administrator.id = ?1 OR user.id = ?1";
         return find(sql, userId).list();
     }
 
     public List<TicketRequest> findAllReceivedByUser(Long userId) {
-        return find("FROM TicketRequest WHERE requested.id = ?1", userId).list();
+        return find("FROM TicketRequest WHERE event.administrator.id = ?1", userId).list();
     }
 
     public List<TicketRequest> findAllSentByUser(Long userId) {
-        return find("FROM TicketRequest WHERE requester.id = ?1", userId).list();
+        return find("FROM TicketRequest WHERE user.id = ?1", userId).list();
     }
 
     public void updateStatus(Long ticketRequestId, TicketRequestStatus requestStatus) {

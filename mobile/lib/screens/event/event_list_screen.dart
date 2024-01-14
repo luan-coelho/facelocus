@@ -1,6 +1,6 @@
 import 'package:facelocus/models/event.dart';
 import 'package:facelocus/providers/event_provider.dart';
-import 'package:facelocus/screens/event/event_create_screen.dart';
+import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';

@@ -1,6 +1,6 @@
 import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/auth/register_screen.dart';
-import 'package:facelocus/screens/event/event_create_screen.dart';
+import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';

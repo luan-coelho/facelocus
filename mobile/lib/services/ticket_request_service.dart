@@ -1,3 +1,4 @@
+import 'package:facelocus/dtos/ticket_request_create.dart';
 import 'package:facelocus/models/ticket_request.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
@@ -12,7 +13,7 @@ class TicketRequestService {
     return data.map((json) => TicketRequestModel.fromJson(json)).toList();
   }
 
-  Future<void> create(TicketRequestModel ticketRequest) async {
+  Future<void> create(TicketRequestCreate ticketRequest) async {
     var json = ticketRequest.toJson();
     await _fetchApi.post(AppRoutes.ticketRequest, data: json);
   }

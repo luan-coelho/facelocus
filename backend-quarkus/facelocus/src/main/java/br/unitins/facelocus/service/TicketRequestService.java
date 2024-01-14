@@ -84,9 +84,21 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
 
     @Transactional
     public TicketRequest create(TicketRequestCreateDTO ticketRequestCreateDTO) {
-        Event event = eventService
-                .findByIdOptional(ticketRequestCreateDTO.event().getId())
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        Event event = null;
+
+        if (ticketRequestCreateDTO.event().getId() != null) {
+            event = eventService.findByIdOptional(ticketRequestCreateDTO.event().getId())
+                    .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        }
+
+        if (event == null && ticketRequestCreateDTO.event().getCode() != null) {
+            event = eventService.findByCodeOptional(ticketRequestCreateDTO.event().getCode())
+                    .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo código"));
+        }
+
+        if (event == null) {
+            throw new NotFoundException("Evento não encontrado");
+        }
 
         TicketRequest ticketRequest = ticketRequestMapper.toCreateEntity(ticketRequestCreateDTO);
 
