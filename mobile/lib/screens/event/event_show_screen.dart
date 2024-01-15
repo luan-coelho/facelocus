@@ -22,9 +22,11 @@ class _EventShowScreenState extends State<EventShowScreen> {
 
   @override
   void initState() {
-    super.initState();
     _controller = Get.find<EventController>();
-    _controller.fetchById(widget.eventId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.fetchById(widget.eventId);
+    });
+    super.initState();
   }
 
   @override
@@ -42,7 +44,8 @@ class _EventShowScreenState extends State<EventShowScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             FeatureCard(
                                 description: 'Usuários',
@@ -54,7 +57,6 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                 color: Colors.black,
                                 backgroundColor: AppColorsConst.white,
                                 imageName: 'users-icon.svg',
-                                width: 130,
                                 height: 100),
                             const SizedBox(width: 15),
                             FeatureCard(
@@ -67,9 +69,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                 color: Colors.white,
                                 backgroundColor: AppColorsConst.blue,
                                 imageName: 'locations-icon.svg',
-                                width: 130,
                                 height: 100),
-                            const SizedBox(width: 15),
                           ],
                         ),
                         const SizedBox(height: 15),
@@ -85,13 +85,12 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                 color: Colors.black,
                                 backgroundColor: AppColorsConst.white,
                                 imageName: 'ticket-request-icon.svg',
-                                width: 130,
                                 height: 100),
                           ],
                         ),
                         const SizedBox(height: 15),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Flexible(
                               child: Text('Permitir solicitações de ingresso',
