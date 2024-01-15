@@ -5,9 +5,9 @@ import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
+import 'package:facelocus/screens/event/ticket_request_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
-import 'package:facelocus/screens/ticket-request/ticket_request_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,8 +21,7 @@ class AppRoutes {
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
   static const eventUsers = '$event-users';
-  static const ticketRequest = '/ticket-request';
-  static const ticketRequestByUser = '$ticketRequest/by-user';
+  static const eventTicketsRequest = '/ticket-request';
   static const user = '/user';
   static const userSearch = '$user/search';
 }
@@ -79,8 +78,11 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppRoutes.ticketRequest,
-      builder: (context, state) => const TicketRequestScreen(),
+      path: AppRoutes.eventTicketsRequest,
+      builder: (context, state) {
+        int eventId = int.parse(state.uri.queryParameters['event']!);
+        return TicketRequestScreen(eventId: eventId);
+      },
     ),
   ],
 );

@@ -30,6 +30,7 @@ class EventController extends GetxController {
   fetchAll() async {
     _isLoading.value = true;
     List<EventModel> events = await service.getAll();
+    _events.clear();
     _events.addAll(events);
     _isLoading.value = false;
   }

@@ -1,7 +1,7 @@
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/ticket_request_controller.dart';
-import 'package:facelocus/screens/ticket-request/widgets/ticket_request_card.dart';
-import 'package:facelocus/screens/ticket-request/widgets/ticket_request_create_form.dart';
+import 'package:facelocus/screens/event/widgets/ticket_request_card.dart';
+import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -12,7 +12,9 @@ import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class TicketRequestScreen extends StatefulWidget {
-  const TicketRequestScreen({super.key});
+  const TicketRequestScreen({super.key, required this.eventId});
+
+  final int eventId;
 
   @override
   State<TicketRequestScreen> createState() => _TicketRequestScreenState();
@@ -25,7 +27,7 @@ class _TicketRequestScreenState extends State<TicketRequestScreen> {
   @override
   void initState() {
     _controller = TicketRequestController(service: TicketRequestService());
-    _controller.fetchAllByUser();
+    _controller.fetchAll(eventId: widget.eventId);
     _authController = Get.find<AuthController>();
     super.initState();
   }
@@ -73,7 +75,8 @@ class _TicketRequestScreenState extends State<TicketRequestScreen> {
                     var ticketsRequest = _controller.ticketsRequest![index];
                     return TicketRequestCard(
                         ticketRequest: ticketsRequest,
-                        authenticatedUser: _authController.authenticatedUser!.value!);
+                        authenticatedUser:
+                            _authController.authenticatedUser.value!);
                   },
                 ),
               ),

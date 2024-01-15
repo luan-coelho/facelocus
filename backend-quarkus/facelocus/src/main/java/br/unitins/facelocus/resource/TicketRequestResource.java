@@ -26,16 +26,29 @@ public class TicketRequestResource {
     TicketRequestMapper ticketRequestMapper;
 
     @GET
-    public Response findAllByEvent(Pageable pageable, @RestQuery("event") Long eventId) {
-        DataPagination<?> dataPagination = ticketRequestService.findAllByEvent(pageable, eventId);
+    public Response findAll(Pageable pageable,
+                            @RestQuery("event") Long eventId,
+                            @RestQuery("user") Long userId) {
+        DataPagination<?> dataPagination;
+        if (eventId != null && userId != null) {
+            dataPagination = ticketRequestService.findAllByEventAndUser(pageable, eventId, userId);
+            return Response.ok(dataPagination).build();
+        }
+
+        if (userId != null) {
+            dataPagination = ticketRequestService.findAllByUser(pageable, userId);
+            return Response.ok(dataPagination).build();
+        }
+        dataPagination = ticketRequestService.findAllByEvent(pageable, eventId);
         return Response.ok(dataPagination).build();
     }
 
-    @Path("/by-user")
+    @Path("/{id}")
     @GET
-    public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) {
-        DataPagination<?> dataPagination = ticketRequestService.findAllByUser(pageable, userId);
-        return Response.ok(dataPagination).build();
+    public Response findById(@PathParam("id") Long ticketRequestId) {
+        TicketRequest ticketRequest = ticketRequestService.findById(ticketRequestId);
+        TicketRequestResponseDTO dto = ticketRequestMapper.toResource(ticketRequest);
+        return Response.ok(dto).build();
     }
 
     @Path("/sent")

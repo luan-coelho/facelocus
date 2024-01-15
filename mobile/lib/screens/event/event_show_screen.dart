@@ -51,8 +51,8 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                     queryParameters: {
                                       'event': widget.eventId.toString()
                                     }).toString(),
-                                color: Colors.white,
-                                backgroundColor: AppColorsConst.blue,
+                                color: Colors.black,
+                                backgroundColor: AppColorsConst.white,
                                 imageName: 'users-icon.svg',
                                 width: 130,
                                 height: 100),
@@ -64,9 +64,27 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                     queryParameters: {
                                       'event': widget.eventId.toString()
                                     }).toString(),
+                                color: Colors.white,
+                                backgroundColor: AppColorsConst.blue,
+                                imageName: 'locations-icon.svg',
+                                width: 130,
+                                height: 100),
+                            const SizedBox(width: 15),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          children: [
+                            FeatureCard(
+                                description: 'Solicitações',
+                                route: Uri(
+                                    path: AppRoutes.eventTicketsRequest,
+                                    queryParameters: {
+                                      'event': widget.eventId.toString()
+                                    }).toString(),
                                 color: Colors.black,
                                 backgroundColor: AppColorsConst.white,
-                                imageName: 'locations-icon.svg',
+                                imageName: 'ticket-request-icon.svg',
                                 width: 130,
                                 height: 100),
                           ],

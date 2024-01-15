@@ -29,13 +29,13 @@ class TicketRequestController extends GetxController {
 
   TicketRequestController({required this.service});
 
-  Future<void> fetchAllByUser() async {
+  Future<void> fetchAll({int? eventId}) async {
     _isLoading.value = true;
 
     try {
       AuthController authController = Get.find<AuthController>();
       int userId = authController.authenticatedUser.value!.id!;
-      var ticketsRequest = await service.getAllByUser(userId);
+      var ticketsRequest = await service.fetchAll(userId, eventId: eventId);
       _ticketsRequest.addAll(ticketsRequest);
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao buscar solicitações');
@@ -70,7 +70,7 @@ class TicketRequestController extends GetxController {
       String detail = onError(e);
       MessageSnacks.danger(context, detail);
     }
-    fetchAllByUser();
+    fetchAll();
   }
 
   String onError(DioException e, {String? message}) {

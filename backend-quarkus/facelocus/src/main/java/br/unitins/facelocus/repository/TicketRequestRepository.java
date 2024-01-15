@@ -33,4 +33,9 @@ public class TicketRequestRepository extends BaseRepository<TicketRequest> {
     public void updateStatus(Long ticketRequestId, TicketRequestStatus requestStatus) {
         update("UPDATE TicketRequest SET requestStatus = ?2 WHERE id = ?1", ticketRequestId, requestStatus);
     }
+
+    public List<TicketRequest> findAllByEventAndUser(Long eventId, Long userId) {
+        String sql = "FROM TicketRequest WHERE event.id = ?1 AND event.administrator.id = ?2";
+        return find(sql, eventId, userId).list();
+    }
 }
