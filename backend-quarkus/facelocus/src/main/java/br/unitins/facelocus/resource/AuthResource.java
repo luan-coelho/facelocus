@@ -16,6 +16,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
+@PermitAll
 @Path("/auth")
 public class AuthResource {
 
@@ -30,14 +31,12 @@ public class AuthResource {
 
     @Path("/login")
     @POST
-    @PermitAll
     public JwtDTO login(@Valid LoginRequestDTO loginRequestDTO) {
         return authAuthenticationService.checkCredentials(loginRequestDTO);
     }
 
     @Path("/register")
     @POST
-    @PermitAll
     public Response register(@Valid UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
         User registeredUser = userService.create(user);

@@ -7,6 +7,7 @@ import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;

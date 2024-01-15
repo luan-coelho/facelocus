@@ -5,6 +5,7 @@ import br.unitins.facelocus.mapper.LocationMapper;
 import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.service.LocationService;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;

@@ -65,15 +65,19 @@ class _TicketRequestCardState extends State<TicketRequestCard> {
       }
     }
 
+    showTicketRequest() {
+      int ticketRequestId = widget.ticketRequest.id!;
+      context.push(Uri(
+          path: '${AppRoutes.eventTicketsRequest}/$ticketRequestId',
+          queryParameters: {
+            'ticketrequest': widget.ticketRequest.id.toString()
+          }).toString());
+    }
+
     return GestureDetector(
-      onTap: () {
-        int ticketRequestId = widget.ticketRequest.id!;
-        context.push(Uri(
-            path: '${AppRoutes.eventTicketsRequest}/$ticketRequestId',
-            queryParameters: {
-              'ticketrequest': widget.ticketRequest.id.toString()
-            }).toString());
-      },
+      onTap: widget.ticketRequest.requestStatus == TicketRequestStatus.pending
+          ? showTicketRequest
+          : null,
       child: Stack(clipBehavior: Clip.none, children: [
         Container(
             padding: const EdgeInsets.all(20),

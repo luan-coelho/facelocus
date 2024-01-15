@@ -14,18 +14,19 @@ class HomeFeatures extends StatelessWidget {
         mainAxisSpacing: 15,
         children: const [
           FeatureCard(
-            description: "Registros de ponto",
-            route: "/point-record",
-            color: Colors.white,
-            backgroundColor: AppColorsConst.blue,
-            imageName: "point-record-icon.svg",
-          ),
+              description: "Registros de ponto",
+              route: "/point-record",
+              color: Colors.white,
+              backgroundColor: AppColorsConst.blue,
+              imageName: "point-record-icon.svg",
+              expanded: false),
           FeatureCard(
             description: "Eventos",
             route: "/event",
             color: Colors.black,
             backgroundColor: Colors.white,
             imageName: "event-icon.svg",
+            expanded: false,
           ),
           // Adicione mais FeatureCards conforme necessário
         ],

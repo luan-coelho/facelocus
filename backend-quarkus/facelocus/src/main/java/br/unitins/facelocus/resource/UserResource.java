@@ -16,8 +16,8 @@ import org.jboss.resteasy.reactive.RestQuery;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@Path("/user")
 @Authenticated
+@Path("/user")
 public class UserResource {
 
     @Inject
