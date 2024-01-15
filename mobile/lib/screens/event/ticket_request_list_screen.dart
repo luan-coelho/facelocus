@@ -11,16 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class TicketRequestScreen extends StatefulWidget {
-  const TicketRequestScreen({super.key, required this.eventId});
+class TicketRequestListScreen extends StatefulWidget {
+  const TicketRequestListScreen({super.key, required this.eventId});
 
   final int eventId;
 
   @override
-  State<TicketRequestScreen> createState() => _TicketRequestScreenState();
+  State<TicketRequestListScreen> createState() =>
+      _TicketRequestListScreenState();
 }
 
-class _TicketRequestScreenState extends State<TicketRequestScreen> {
+class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
   late final TicketRequestController _controller;
   late final AuthController _authController;
 

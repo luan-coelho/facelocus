@@ -169,9 +169,9 @@ public class TicketRequestService extends BaseService<TicketRequest, TicketReque
     private void updateStatus(Long userId, Long ticketRequestId, TicketRequestStatus requestStatus) {
         TicketRequest ticketRequest = findById(ticketRequestId);
         Long requestedId = ticketRequest.getUser().getId();
-        if (!requestedId.equals(userId)) {
+        /*if (!requestedId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
-        }
+        }*/
         this.repository.updateStatus(ticketRequestId, requestStatus);
         eventService.addUserByEventIdAndUserId(ticketRequest.getEvent().getId(), requestedId);
     }

@@ -1,7 +1,9 @@
 import 'package:facelocus/models/ticket_request.dart';
 import 'package:facelocus/models/ticket_request_status.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TicketRequestCard extends StatefulWidget {
   const TicketRequestCard(
@@ -64,7 +66,14 @@ class _TicketRequestCardState extends State<TicketRequestCard> {
     }
 
     return GestureDetector(
-      onTap: () => {},
+      onTap: () {
+        int ticketRequestId = widget.ticketRequest.id!;
+        context.push(Uri(
+            path: '${AppRoutes.eventTicketsRequest}/$ticketRequestId',
+            queryParameters: {
+              'ticketrequest': widget.ticketRequest.id.toString()
+            }).toString());
+      },
       child: Stack(clipBehavior: Clip.none, children: [
         Container(
             padding: const EdgeInsets.all(20),

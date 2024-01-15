@@ -4,7 +4,6 @@ import 'package:facelocus/dtos/event_ticket_request_create.dart';
 import 'package:facelocus/dtos/ticket_request_create.dart';
 import 'package:facelocus/models/ticket_request.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,7 +28,7 @@ class TicketRequestController extends GetxController {
 
   TicketRequestController({required this.service});
 
-  Future<void> fetchAll({int? eventId}) async {
+  fetchAll({int? eventId}) async {
     _isLoading.value = true;
 
     try {
@@ -44,19 +43,18 @@ class TicketRequestController extends GetxController {
     _isLoading.value = false;
   }
 
-  Future<void> fetchById(int userId) async {
+  fetchById(int userId) async {
     _isLoading.value = true;
-
     _ticketRequest = await service.getById(userId);
     _isLoading.value = false;
   }
 
-  Future<void> createByCode(String code) async {
+  createByCode(String code) async {
     _isLoading.value = true;
     BuildContext context = Get.context!;
 
     try {
-      AuthController authController = AuthController(service: AuthService());
+      AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
       EventTicketRequestCreate event = EventTicketRequestCreate(user: user);
       event.code = code;
@@ -66,6 +64,34 @@ class TicketRequestController extends GetxController {
       String message = 'Solicitação de ingresso enviada com sucesso';
       MessageSnacks.success(context, message);
       context.pop();
+    } on DioException catch (e) {
+      String detail = onError(e);
+      MessageSnacks.danger(context, detail);
+    }
+    fetchAll();
+  }
+
+  approve(BuildContext context, int ticketRequestId) async {
+    _isLoading.value = true;
+
+    try {
+      AuthController authController = Get.find<AuthController>();
+      UserModel user = authController.authenticatedUser.value!;
+      await service.approve(ticketRequestId, user.id!);
+    } on DioException catch (e) {
+      String detail = onError(e);
+      MessageSnacks.danger(context, detail);
+    }
+    fetchAll();
+  }
+
+  reject(BuildContext context, int ticketRequestId) async {
+    _isLoading.value = true;
+
+    try {
+      AuthController authController = Get.find<AuthController>();
+      UserModel user = authController.authenticatedUser.value!;
+      await service.reject(ticketRequestId, user.id!);
     } on DioException catch (e) {
       String detail = onError(e);
       MessageSnacks.danger(context, detail);

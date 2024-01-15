@@ -25,9 +25,9 @@ class TicketRequestService {
     return TicketRequestModel.fromJson(data);
   }
 
-  Future<bool> aprove(int ticketRequestId, int userId) async {
+  Future<bool> approve(int ticketRequestId, int userId) async {
     String url =
-        '${AppRoutes.eventTicketsRequest}/aprove?ticketrequest=$ticketRequestId&user=$userId';
+        '${AppRoutes.eventTicketsRequest}/approve?ticketrequest=$ticketRequestId&user=$userId';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
