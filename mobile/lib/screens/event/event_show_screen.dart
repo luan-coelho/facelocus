@@ -74,22 +74,6 @@ class _EventShowScreenState extends State<EventShowScreen> {
                         ),
                         const SizedBox(height: 15),
                         Row(
-                          children: [
-                            FeatureCard(
-                                description: 'Solicitações',
-                                route: Uri(
-                                    path: AppRoutes.eventTicketsRequest,
-                                    queryParameters: {
-                                      'event': widget.eventId.toString()
-                                    }).toString(),
-                                color: Colors.black,
-                                backgroundColor: AppColorsConst.white,
-                                imageName: 'ticket-request-icon.svg',
-                                height: 100),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Flexible(

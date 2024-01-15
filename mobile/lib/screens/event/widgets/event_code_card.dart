@@ -26,17 +26,20 @@ class EventCodeCard extends StatelessWidget {
     }
 
     return Container(
-        padding: const EdgeInsets.only(left: 15, right: 15),
+        padding:
+            const EdgeInsets.all(15),
         width: 330,
-        height: 45,
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 0,
-            blurRadius: 5,
-            offset: const Offset(0, 1.5),
-          ),
-        ], color: Colors.white),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 0,
+                blurRadius: 5,
+                offset: const Offset(0, 1.5),
+              ),
+            ],
+            color: Colors.white),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

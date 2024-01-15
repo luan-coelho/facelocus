@@ -27,13 +27,6 @@ class HomeFeatures extends StatelessWidget {
             backgroundColor: Colors.white,
             imageName: "event-icon.svg",
           ),
-          FeatureCard(
-            description: "Solicitações de ingresso",
-            route: "/ticket-request",
-            color: Colors.black,
-            backgroundColor: AppColorsConst.yellow,
-            imageName: "ticket-request-icon.svg",
-          ),
           // Adicione mais FeatureCards conforme necessário
         ],
       ),

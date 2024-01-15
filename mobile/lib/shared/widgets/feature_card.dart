@@ -10,6 +10,7 @@ class FeatureCard extends StatelessWidget {
   final String imageName;
   final double? width;
   final double? height;
+  final bool expanded;
 
   const FeatureCard(
       {super.key,
@@ -19,12 +20,13 @@ class FeatureCard extends StatelessWidget {
       required this.backgroundColor,
       required this.imageName,
       this.width,
-      this.height});
+      this.height,
+      this.expanded = true});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
+    GestureDetector cardChild() {
+      return GestureDetector(
         onTap: () => {context.push(route)},
         child: Container(
           width: width ?? double.infinity,
@@ -62,7 +64,13 @@ class FeatureCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    return expanded
+        ? Expanded(
+            child: cardChild(),
+          )
+        : cardChild();
   }
 }

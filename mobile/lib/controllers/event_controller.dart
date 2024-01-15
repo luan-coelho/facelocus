@@ -43,12 +43,11 @@ class EventController extends GetxController {
     _isLoading.value = false;
   }
 
-  Future<void> create(EventModel event) async {
+  Future<void> create(BuildContext context, EventModel event) async {
     _isLoading.value = true;
-    BuildContext context = Get.context!;
     try {
-      AuthController authController = AuthController(service: AuthService());
-      UserModel administrator = authController.authenticatedUser!.value!;
+      AuthController authController = Get.find<AuthController>();
+      UserModel administrator = authController.authenticatedUser.value!;
       event.administrator = administrator;
       await service.create(event);
       MessageSnacks.success(context, 'Evento criado com sucesso');

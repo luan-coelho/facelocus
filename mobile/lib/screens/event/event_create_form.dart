@@ -86,7 +86,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState?.save();
                   event.allowTicketRequests = allowTicketRequests;
-                  _controller.create(event);
+                  _controller.create(context, event);
                 }
               },
               text: 'Cadastrar',

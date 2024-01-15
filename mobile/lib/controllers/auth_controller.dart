@@ -30,7 +30,7 @@ class AuthController extends GetxController {
   login(BuildContext context, LoginRequest loginRequest) async {
     try {
       String login = loginRequest.login;
-      String password = loginRequest.password;
+      String password = loginRequest.password ;
       TokenResponse tokenResponse = await service.login(login, password);
       if (tokenResponse.token.isNotEmpty) {
         const storage = FlutterSecureStorage();
