@@ -12,7 +12,6 @@ import 'package:go_router/go_router.dart';
 
 class AuthController extends GetxController {
   final AuthService service;
-  // final Rxn<UserModel> _authenticatedUser = Rxn<UserModel>();
   final Rx<UserModel?> _authenticatedUser = (null as UserModel?).obs;
 
   Rx<UserModel?> get authenticatedUser => _authenticatedUser;

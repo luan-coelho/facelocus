@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:facelocus/providers/user_provider.dart';
+import 'package:facelocus/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class UsersSearch extends StatefulWidget {
   const UsersSearch(this.eventId, {super.key});
@@ -31,14 +31,14 @@ class Debouncer {
 
 class UsersSearchState extends State<UsersSearch> {
   final _debouncer = Debouncer();
-  late UserProvider _userProvider;
+  late final UserController _controller;
   late TextEditingController _searchController;
 
   @override
   void initState() {
-    super.initState();
-    _userProvider = Provider.of<UserProvider>(context, listen: false);
+    _controller = Get.find<UserController>();
     _searchController = TextEditingController();
+    super.initState();
   }
 
   @override
@@ -49,7 +49,7 @@ class UsersSearchState extends State<UsersSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(builder: (context, state, child) {
+    return Obx(() {
       return Column(
         children: [
           TextField(
@@ -77,14 +77,14 @@ class UsersSearchState extends State<UsersSearch> {
             ),
             onChanged: (string) {
               _debouncer.run(() {
-                _userProvider.fetchAllByNameOrCpf(_searchController.text);
+                _controller.fetchAllByNameOrCpf(_searchController.text);
               });
             },
           ),
           ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(5),
-            itemCount: state.users.length,
+            itemCount: _controller.users.length,
             itemBuilder: (BuildContext context, int index) {
               return Card(
                 shape: RoundedRectangleBorder(
@@ -101,11 +101,11 @@ class UsersSearchState extends State<UsersSearch> {
                     children: [
                       ListTile(
                         title: Text(
-                          state.users[index].name,
+                          _controller.users[index].name,
                           style: const TextStyle(fontSize: 16),
                         ),
                         subtitle: Text(
-                          state.users[index].cpf,
+                          _controller.users[index].cpf,
                           style: const TextStyle(fontSize: 16),
                         ),
                       )

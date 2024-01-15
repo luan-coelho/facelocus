@@ -1,5 +1,5 @@
+import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/providers/user_provider.dart';
 import 'package:facelocus/screens/event/widgets/user_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -7,7 +7,7 @@ import 'package:facelocus/shared/widgets/app_search_field.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class LinckedUsersScreen extends StatefulWidget {
   const LinckedUsersScreen({super.key, required this.eventId});
@@ -19,25 +19,39 @@ class LinckedUsersScreen extends StatefulWidget {
 }
 
 class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
+  late final UserController _controller;
+
+  @override
+  void initState() {
+    _controller = Get.find<UserController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.fetchAllByEventId(widget.eventId);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       appBarTitle: 'Usuários vinculados',
       body: Padding(
         padding: const EdgeInsets.all(29.0),
-        child: Consumer<UserProvider>(builder: (context, state, child) {
-          if (state.isLoading) {
+        child: Obx(() {
+          if (_controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.users.isEmpty) {
+
+          if (_controller.users.isEmpty) {
             return const Center(
-              child: EmptyData('Sem usuários vinculados', child: AppButton(text: 'Adicionar')),
+              child: EmptyData('Sem usuários vinculados',
+                  child: AppButton(text: 'Adicionar')),
             );
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppSearchField(itens: state.usersSearch, function: ()=>{}),
+              AppSearchField(
+                  itens: _controller.usersSearch, function: () => {}),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -45,15 +59,13 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                     'images/users-icon.svg',
                     width: 20,
                     colorFilter:
-                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
                   ),
                   const SizedBox(width: 5),
                   const Text('Usuários',
                       style: TextStyle(fontWeight: FontWeight.w500)),
                 ],
               ),
-              const Text('Usuários cadastrados',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
               const SizedBox(height: 10),
               ListView.separated(
                 separatorBuilder: (BuildContext context, int index) {
@@ -62,9 +74,9 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: state.users.length,
+                itemCount: _controller.users.length,
                 itemBuilder: (context, index) {
-                  UserModel user = state.users[index];
+                  UserModel user = _controller.users[index];
                   return UserCard(user: user);
                 },
               ),
