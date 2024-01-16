@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/utils/fetch_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart' as getx;
 import 'package:go_router/go_router.dart';
 
 class DioFetchApi implements FetchApi {
@@ -77,6 +79,8 @@ class DioFetchApi implements FetchApi {
     if (token == null || e.response?.statusCode == 401) {
       final context = navigatorKey.currentContext;
       if (context != null && context.mounted) {
+        AuthController controller = getx.Get.find<AuthController>();
+        controller.logout();
         context.go(AppRoutes.login);
       }
     }

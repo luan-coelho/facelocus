@@ -36,13 +36,15 @@ class LoginFormState extends State<LoginScreen> {
   @override
   void initState() {
     _controller = Get.find<AuthController>();
-    _controller.prefsGetInstace();
-    if (_controller.getToken() == null) {
-      _controller.checkToken(context);
-    }
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool logged = await _controller.isLogged();
+      if (logged && context.mounted) {
+        _controller.checkLogin(context);
+      }
+    });
   }
 
   @override

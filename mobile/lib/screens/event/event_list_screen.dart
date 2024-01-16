@@ -3,7 +3,6 @@ import 'package:facelocus/models/event.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';
-import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
@@ -55,8 +54,9 @@ class _EventListScreenState extends State<EventListScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                     child: AppButton(
+                  onPressed: showTicketRequestCreateForm,
                   text: 'Ingressar-se',
                 )),
                 const SizedBox(width: 15),

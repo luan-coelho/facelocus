@@ -16,7 +16,6 @@ class AuthController extends GetxController {
   final AuthService service;
   late final UserService _userService;
   late final FlutterSecureStorage _storage;
-  late final SharedPreferences _prefs;
 
   final Rxn<UserModel?> _authenticatedUser = Rxn<UserModel>();
 
@@ -36,7 +35,8 @@ class AuthController extends GetxController {
         String token = tokenResponse.token;
         int userId = tokenResponse.user.id!;
         await _storage.write(key: 'token', value: token);
-        await _prefs.setInt('user', userId);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('user', userId);
         addAuthenticatedUser(tokenResponse.user);
         context.replace(AppRoutes.home);
         return;
@@ -48,11 +48,13 @@ class AuthController extends GetxController {
     }
   }
 
-  checkToken(BuildContext context) async {
+  checkLogin(BuildContext context) async {
     try {
-      final int? userId = _prefs.getInt('user');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? userId = prefs.getInt('user');
       if (userId == null) {
         removeToken();
+        await prefs.remove('user');
         context.pushReplacement(AppRoutes.login);
         return;
       }
@@ -70,8 +72,9 @@ class AuthController extends GetxController {
     }
   }
 
-  prefsGetInstace() async {
-    _prefs = await SharedPreferences.getInstance();
+  isLogged() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.get('user') != null;
   }
 
   getToken() async {
@@ -88,7 +91,8 @@ class AuthController extends GetxController {
 
   logout() async {
     removeToken();
-    await _prefs.remove('user');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user');
     _authenticatedUser.value = null;
   }
 }
