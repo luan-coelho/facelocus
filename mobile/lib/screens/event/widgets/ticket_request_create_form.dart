@@ -1,5 +1,4 @@
 import 'package:facelocus/controllers/ticket_request_controller.dart';
-import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
 
   @override
   void initState() {
-    _controller = TicketRequestController(service: TicketRequestService());
+    _controller = Get.find<TicketRequestController>();
     _codeController = TextEditingController();
     super.initState();
   }
@@ -33,6 +32,13 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
 
   @override
   Widget build(BuildContext context) {
+    void request() {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState?.save();
+        _controller.createByCode(context, _codeController.text);
+      }
+    }
+
     return AlertDialog(
       scrollable: true,
       content: Padding(
@@ -64,12 +70,7 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
       actions: [
         Obx(() {
           return AppButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState?.save();
-                  _controller.createByCode(context, _codeController.text);
-                }
-              },
+              onPressed: request,
               text: 'Solicitar',
               icon: _controller.isLoading.value
                   ? const SizedBox(

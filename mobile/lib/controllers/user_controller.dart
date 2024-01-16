@@ -3,7 +3,7 @@ import 'package:facelocus/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-class UserController with ChangeNotifier {
+class UserController extends GetxController {
   final UserService service;
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
@@ -28,8 +28,9 @@ class UserController with ChangeNotifier {
   }
 
   fetchAllByNameOrCpf(String identifier) async {
+    _isLoading.value = true;
     _usersSearch = await service.getAllByNameOrCpf(identifier);
-    notifyListeners();
+    _isLoading.value = false;
   }
 
 /* fetchById(int locationId) async {
