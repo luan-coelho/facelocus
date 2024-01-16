@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/screens/event/widgets/users_search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UsersSearch extends StatefulWidget {
-  const UsersSearch(this.eventId, {super.key});
+  const UsersSearch(this.eventId,
+      {super.key, required this.textEditingController});
 
   final int eventId;
+  final TextEditingController textEditingController;
 
   @override
   UsersSearchState createState() => UsersSearchState();
@@ -32,99 +35,56 @@ class Debouncer {
 class UsersSearchState extends State<UsersSearch> {
   final _debouncer = Debouncer();
   late final UserController _controller;
-  late TextEditingController _searchController;
 
   @override
   void initState() {
     _controller = Get.find<UserController>();
-    _searchController = TextEditingController();
     super.initState();
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    runSearch() {
+      _debouncer.run(() {
+        _controller.fetchAllByNameOrCpf(widget.textEditingController.text);
+      });
+    }
+
     return SingleChildScrollView(
-      child: Obx(() {
-        return Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                suffixIcon: _controller.isLoading.value
-                    ? const UnconstrainedBox(
-                        child: SizedBox(
-                            width: 17,
-                            height: 17,
-                            child:
-                                CircularProgressIndicator(color: Colors.black)),
-                      )
-                    : const Icon(Icons.search),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 10.0),
-                hintText: 'Pesquisar',
+        child: Column(
+      children: [
+        TextField(
+          controller: widget.textEditingController,
+          textInputAction: TextInputAction.search,
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(
+                color: Colors.grey,
               ),
-              onChanged: (string) {
-                _debouncer.run(() {
-                  _controller.fetchAllByNameOrCpf(_searchController.text);
-                });
-              },
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(5),
-              itemCount: _controller.usersSearch.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: BorderSide(
-                      color: Colors.grey.shade300,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          title: Text(
-                            _controller.usersSearch[index].name,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          subtitle: Text(
-                            _controller.usersSearch[index].cpf,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(
+                color: Colors.grey,
+              ),
             ),
-          ],
-        );
-      }),
-    );
+            /*suffixIcon: _controller.isLoading.value
+                ? const UnconstrainedBox(
+                    child: SizedBox(
+                        width: 17,
+                        height: 17,
+                        child: CircularProgressIndicator(color: Colors.black)),
+                  )
+                : const Icon(Icons.search),*/
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+            hintText: 'Pesquisar',
+          ),
+          onChanged: (_) => runSearch(),
+        ),
+        const UsersSearchList()
+      ],
+    ));
   }
 }

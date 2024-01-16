@@ -1,14 +1,8 @@
 import 'package:facelocus/controllers/user_controller.dart';
-import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/event/widgets/user_card.dart';
 import 'package:facelocus/screens/event/widgets/users_search.dart';
-import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
-import 'package:facelocus/shared/widgets/app_search_field.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
-import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -24,9 +18,11 @@ class LinckedUsersScreen extends StatefulWidget {
 
 class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
   late final UserController _controller;
+  late final TextEditingController _textEditingController;
 
   @override
   void initState() {
+    _textEditingController = TextEditingController();
     _controller = Get.find<UserController>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.fetchAllByEventId(widget.eventId);
@@ -42,7 +38,8 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
         child: Padding(
           padding: const EdgeInsets.all(29.0),
           child: Column(
-            children: [/*
+            children: [
+              /*
               FeatureCard(
                   description: 'Solicitações',
                   route: Uri(
@@ -69,9 +66,14 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UsersSearch(widget.eventId),
-                /*                        AppSearchField(
-                        itens: _controller.usersSearch, function: () => {})*/
+                    UsersSearch(widget.eventId,
+                        textEditingController: _textEditingController),
+                    /*AppSearchField(
+                        textEditingController: _textEditingController,
+                        itens: _controller.usersSearch,
+                        function: () => _controller
+                            .fetchAllByNameOrCpf(_textEditingController.text),
+                        isLoading: _controller.isLoading.value),*/
                     const SizedBox(height: 10),
                     Row(
                       children: [
