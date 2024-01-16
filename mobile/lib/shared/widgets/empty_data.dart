@@ -22,7 +22,7 @@ class EmptyData extends StatelessWidget {
           Text(text,
               textAlign: TextAlign.center,
               style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
           SizedBox(height: child != null ? 25 : 0),
           child != null ? child! : const SizedBox(),
         ],

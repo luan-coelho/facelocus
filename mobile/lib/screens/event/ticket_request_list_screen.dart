@@ -35,13 +35,6 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    showDataAlert() {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const TicketRequestCreateForm();
-          });
-    }
 
     return AppLayout(
         appBarTitle: 'Solicitações',
@@ -53,7 +46,7 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
               const message = 'Nenhuma solicitação no momento';
               return EmptyData(message,
                   child:
-                      AppButton(text: 'Adicionar', onPressed: showDataAlert));
+                      AppButton(text: 'Adicionar', onPressed: null));
             }
 
             if (!_controller.isLoading.value && _controller.error != null) {
@@ -85,7 +78,7 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
           }),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: showDataAlert,
+          onPressed: null,
           backgroundColor: Colors.green,
           child: const Icon(Icons.add, color: Colors.white, size: 29),
         ));

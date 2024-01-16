@@ -8,9 +8,11 @@ import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.OAuthAuthenticationService;
 import br.unitins.facelocus.service.UserService;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -29,10 +31,19 @@ public class AuthResource {
     @Inject
     OAuthAuthenticationService authAuthenticationService;
 
+    @Authenticated
+    @Path("/check-token")
+    @GET
+    public Response checkToken() {
+        return Response.ok().build();
+    }
+
+
     @Path("/login")
     @POST
-    public JwtDTO login(@Valid LoginRequestDTO loginRequestDTO) {
-        return authAuthenticationService.checkCredentials(loginRequestDTO);
+    public Response login(@Valid LoginRequestDTO loginRequestDTO) {
+        JwtDTO dto = authAuthenticationService.checkCredentials(loginRequestDTO);
+        return Response.ok(dto).build();
     }
 
     @Path("/register")

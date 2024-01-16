@@ -6,16 +6,21 @@ import 'package:facelocus/utils/dio_fetch_api.dart';
 class AuthService {
   final DioFetchApi _fetchApi = DioFetchApi();
 
-  Future<TokenResponse> login(String login, String password) async {
+  login(String login, String password) async {
     String url = AppRoutes.login;
     var json = {'login': login, 'password': password};
     var response = await _fetchApi.post(url, data: json, authHeaders: false);
     return TokenResponse.fromJson(response.data);
   }
 
-  Future<void> register(UserModel user) async {
+  register(UserModel user) async {
     String url = AppRoutes.register;
     var json = user.toJson();
     await _fetchApi.post(url, data: json, authHeaders: false);
+  }
+
+  checkToken() async {
+    String url = AppRoutes.checkToken;
+    await _fetchApi.get(url, authHeaders: true);
   }
 }

@@ -16,6 +16,7 @@ class AppRoutes {
   static const home = '/home';
   static const login = '/auth/login';
   static const register = '/auth/register';
+  static const checkToken = '/auth/check-token';
   static const profile = '/profile';
   static const event = '/event';
   static const eventShow = '$event/show';

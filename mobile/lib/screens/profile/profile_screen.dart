@@ -1,12 +1,14 @@
 import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
-import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:facelocus/shared/widgets/information_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,11 +19,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final AuthController authController;
+  late final AuthController _controller;
+  late final UserModel _user;
 
   @override
   void initState() {
-    authController = AuthController(service: AuthService());
+    _controller = Get.find<AuthController>();
+    _user = _controller.authenticatedUser.value!;
     super.initState();
   }
 
@@ -29,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     logout() {
       const FlutterSecureStorage storage = FlutterSecureStorage();
-      authController.logout();
+      _controller.logout();
       storage.delete(key: 'token');
       context.replace(AppRoutes.login);
     }
@@ -43,55 +47,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const UserFaceImage(),
-                const SizedBox(height: 50),
-                const Text(
-                  'Nome Completo',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w200),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Luan Coêlho de Souza'.toUpperCase(),
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'CPF',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w200),
-                ),
-                const SizedBox(height: 2),
-                const Text(
-                  '414.949.080-50',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Email',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w200),
-                ),
-                const SizedBox(height: 2),
-                const Text(
-                  'joa***@gmail.com',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
+                InformationField(
+                    description: 'Nome Completo', value: _user.getFullName()),
+                const SizedBox(height: 15),
+                InformationField(description: 'CPF', value: _user.cpf),
+                const SizedBox(height: 15),
+                InformationField(description: 'Email', value: _user.email),
+                const SizedBox(height: 25),
                 TextButton(
                     onPressed: () {
                       showModalBottomSheet<void>(

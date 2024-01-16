@@ -14,7 +14,7 @@ class EventCard extends StatelessWidget {
       onTap: () => context.push('${AppRoutes.eventShow}/${event.id}'),
       child: Container(
           padding: const EdgeInsets.only(left: 15, right: 15),
-          width: 330,
+          width: double.infinity,
           height: 45,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),

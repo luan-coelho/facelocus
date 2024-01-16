@@ -3,6 +3,7 @@ package br.unitins.facelocus.resource;
 import br.unitins.facelocus.dto.ChangePasswordDTO;
 import br.unitins.facelocus.dto.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
+import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.UserService;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -43,6 +45,14 @@ public class UserResource {
                 .map(location -> userMapper.toResource(location))
                 .toList();
         return Response.ok(dtos).build();
+    }
+
+    @Path("/{id}")
+    @GET
+    public Response findById(@PathParam("id") Long userId) {
+        User user = userService.findById(userId);
+        UserResponseDTO dto = userMapper.toResource(user);
+        return Response.ok(dto).build();
     }
 
     @Path("/change-password")
