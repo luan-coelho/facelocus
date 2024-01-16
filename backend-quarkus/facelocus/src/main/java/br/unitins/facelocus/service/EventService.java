@@ -40,6 +40,16 @@ public class EventService extends BaseService<Event, EventRepository> {
         return buildPagination(dtos, pageable);
     }
 
+    public DataPagination<?> findAllPaginatedByUser(Pageable pageable, Long userId) {
+        List<Event> events = repository.findAllByUser(userId);
+        for (Event event : events) {
+            List<Location> locations = locationService.findAllByEventId(event.getId());
+            event.setLocations(locations);
+        }
+        List<EventDTO> dtos = events.stream().map(event -> eventMapper.toResource(event)).toList();
+        return buildPagination(dtos, pageable);
+    }
+
     @Override
     public Event findById(Long eventId) {
         Event event = super.findById(eventId);

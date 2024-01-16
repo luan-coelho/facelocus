@@ -49,9 +49,8 @@ class TicketRequestController extends GetxController {
     _isLoading.value = false;
   }
 
-  createByCode(String code) async {
+  createByCode(BuildContext context, String code) async {
     _isLoading.value = true;
-    BuildContext context = Get.context!;
 
     try {
       AuthController authController = Get.find<AuthController>();

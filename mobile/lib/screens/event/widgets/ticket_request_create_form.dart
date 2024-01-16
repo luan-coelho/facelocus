@@ -20,8 +20,7 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
 
   @override
   void initState() {
-    _controller =
-        TicketRequestController(service: TicketRequestService());
+    _controller = TicketRequestController(service: TicketRequestService());
     _codeController = TextEditingController();
     super.initState();
   }
@@ -68,7 +67,7 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState?.save();
-                  _controller.createByCode(_codeController.text);
+                  _controller.createByCode(context, _codeController.text);
                 }
               },
               text: 'Solicitar',

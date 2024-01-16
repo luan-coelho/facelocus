@@ -7,7 +7,6 @@ import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -26,8 +25,8 @@ public class EventResource {
     EventMapper eventMapper;
 
     @GET
-    public Response findAll(Pageable pageable) {
-        DataPagination<?> dataPagination = eventService.findAllPaginated(pageable);
+    public Response findAll(Pageable pageable, @RestQuery("user") Long userId) {
+        DataPagination<?> dataPagination = eventService.findAllPaginatedByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 

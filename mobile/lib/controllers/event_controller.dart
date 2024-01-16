@@ -27,11 +27,11 @@ class EventController extends GetxController {
 
   EventController({required this.service});
 
-
-
   fetchAll() async {
     _isLoading.value = true;
-    List<EventModel> events = await service.getAll();
+    AuthController authController = Get.find<AuthController>();
+    UserModel administrator = authController.authenticatedUser.value!;
+    List<EventModel> events = await service.getAllByUser(administrator.id!);
     _events.clear();
     _events.addAll(events);
     _isLoading.value = false;

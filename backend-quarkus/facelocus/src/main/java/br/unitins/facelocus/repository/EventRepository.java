@@ -3,6 +3,7 @@ package br.unitins.facelocus.repository;
 import br.unitins.facelocus.model.Event;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -10,6 +11,10 @@ public class EventRepository extends BaseRepository<Event> {
 
     public EventRepository() {
         super(Event.class);
+    }
+
+    public List<Event> findAllByUser(Long userId) {
+        return find("FROM Event WHERE administrator.id = ?1", userId).list();
     }
 
     public Optional<Event> findByCodeOptional(String code) {
