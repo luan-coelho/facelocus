@@ -1,4 +1,5 @@
 import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/screens/event/widgets/user_search_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -45,16 +46,7 @@ class UsersSearchListState extends State<UsersSearchList> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ListTile(
-                        title: Text(
-                          _controller.usersSearch[index].name,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        subtitle: Text(
-                          _controller.usersSearch[index].cpf,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      )
+                      UserSearchCard(user: _controller.usersSearch[index])
                     ],
                   ),
                 ),
