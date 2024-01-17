@@ -1,6 +1,4 @@
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserSearchCard extends StatefulWidget {

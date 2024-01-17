@@ -1,3 +1,4 @@
+import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/controllers/ticket_request_controller.dart';
@@ -13,14 +14,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  getControllers();
+
+  WidgetsFlutterBinding.ensureInitialized(); //Add this
+  await FaceCamera.initialize();
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => LocationProvider()),
+  ], child: const FaceLocusApp()));
+}
+
+void getControllers() {
   Get.put(AuthController(service: AuthService()));
   Get.put(EventController(service: EventService()));
   Get.put(TicketRequestController(service: TicketRequestService()));
   Get.put(UserController(service: UserService()));
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => LocationProvider()),
-  ], child: const FaceLocusApp()));
 }
 
 class FaceLocusApp extends StatelessWidget {
