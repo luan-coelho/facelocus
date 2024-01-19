@@ -1,6 +1,6 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.commons.MultipartForm;
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.model.UserFacePhoto;
 import br.unitins.facelocus.model.User;
 
@@ -21,5 +21,5 @@ public interface FotoRostoUsuarioService {
      * @param multipartForm Contém dados necessários para construção de FotoRostoUsuario.
      * @return Instância de FotoRostoUsuario com todos os valores preenchidos.
      */
-    UserFacePhoto construirInstancia(MultipartForm multipartForm);
+    UserFacePhoto construirInstancia(MultipartData multipartForm);
 }

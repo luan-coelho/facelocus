@@ -1,17 +1,17 @@
 package br.unitins.facelocus.resource;
 
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.dto.ChangePasswordDTO;
 import br.unitins.facelocus.dto.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
+import br.unitins.facelocus.service.FaceRecognitionService;
 import br.unitins.facelocus.service.UserService;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.PATCH;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -24,6 +24,9 @@ public class UserResource {
 
     @Inject
     UserService userService;
+
+    @Inject
+    FaceRecognitionService faceRecognitionService;
 
     @Inject
     UserMapper userMapper;
@@ -59,6 +62,22 @@ public class UserResource {
     @PATCH
     public Response changePassword(@RestQuery("user") Long userId, @Valid ChangePasswordDTO changePasswordDTO) {
         userService.changePassword(userId, changePasswordDTO);
+        return Response.ok().build();
+    }
+
+    @Path("/uploud-face-photo")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response facePhotoProfileUploud(@RestQuery("user") Long userId, MultipartData multipartBody) {
+        faceRecognitionService.facePhotoProfileUploud(userId, multipartBody);
+        return Response.ok().build();
+    }
+
+    @Path("/check-face")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response checkFace(@RestQuery("user") Long userId, MultipartData multipartBody) {
+        faceRecognitionService.facePhotoValidation(userId, multipartBody);
         return Response.ok().build();
     }
 }

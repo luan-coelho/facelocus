@@ -15,11 +15,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class UserFacePhoto {
+public class UserFacePhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Transient
     private File file;
     private String fileName;
     private LocalDate uploudDate;

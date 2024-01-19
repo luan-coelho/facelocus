@@ -24,8 +24,8 @@ public class User {
     private String email;
     private String cpf;
     private String password;
-    @OneToOne(mappedBy = "user")
-    private UserFacePhoto userFacePhoto;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserFacePhoto facePhoto;
     @OneToMany(mappedBy = "user")
     private List<Device> devices;
     @ManyToMany(mappedBy = "users")
