@@ -53,6 +53,9 @@ public class FaceRecognitionService {
             String UserNotFoundMessage = "Usuário não encontrado pelo id";
             return new NotFoundException(UserNotFoundMessage);
         });
+        if (user.getFacePhoto() == null) {
+            throw new IllegalArgumentException("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.");
+        }
         String[] subdirectories = {userId.toString(), UUID.randomUUID().toString()};
         String fileName = String.join("-", userId.toString(), "facephoto").concat(".");
         fileName = fileName.concat(imageFileService.getFileExtension(multipartBody.fileName));

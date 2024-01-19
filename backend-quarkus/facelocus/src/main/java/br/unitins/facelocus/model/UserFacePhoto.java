@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.File;
 import java.time.LocalDate;
 
 @Getter
@@ -20,8 +19,6 @@ public class UserFacePhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Transient
-    private File file;
     private String fileName;
     private LocalDate uploudDate;
     private String filePath;

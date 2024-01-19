@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
@@ -23,5 +26,13 @@ class UserService {
     final response = await _fetchApi.get('${AppRoutes.user}/$id');
     var data = response.data;
     return UserModel.fromJson(data);
+  }
+
+  checkFace(File facePhoto, int userId) async {
+    var filename = "facephoto.jpg";
+    var file = await MultipartFile.fromFile(facePhoto.path, filename: filename);
+    var formData = FormData.fromMap({"fileName": filename, "file": file});
+    String url = '${AppRoutes.user}/check-face?user=$userId';
+    return await _fetchApi.post(url, data: formData);
   }
 }

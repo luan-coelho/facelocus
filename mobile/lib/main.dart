@@ -1,6 +1,7 @@
 import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/event_controller.dart';
+import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/controllers/ticket_request_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/providers/location_provider.dart';
@@ -30,6 +31,7 @@ void getControllers() {
   Get.put(EventController(service: EventService()));
   Get.put(TicketRequestController(service: TicketRequestService()));
   Get.put(UserController(service: UserService()));
+  Get.put(PointRecordController(service: UserService()));
 }
 
 class FaceLocusApp extends StatelessWidget {
