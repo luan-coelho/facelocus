@@ -7,7 +7,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,8 +53,8 @@ public class FaceRecognitionService {
             String UserNotFoundMessage = "Usuário não encontrado pelo id";
             return new NotFoundException(UserNotFoundMessage);
         });
-        String[] subdirectories = {userId.toString()};
-        String fileName = String.join("-", userId.toString(), UUID.randomUUID().toString()).concat(".");
+        String[] subdirectories = {userId.toString(), UUID.randomUUID().toString()};
+        String fileName = String.join("-", userId.toString(), "facephoto").concat(".");
         fileName = fileName.concat(imageFileService.getFileExtension(multipartBody.fileName));
         UserFacePhoto facePhoto = saveFileAndBuildFacePhoto(fileName, multipartBody.inputStream, subdirectories);
         String photoFaceDirectory = facePhoto.getFilePath().replace("/".concat(fileName), "");
