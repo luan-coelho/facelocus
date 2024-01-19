@@ -8,8 +8,9 @@ import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/event/ticket_request_list_screen.dart';
 import 'package:facelocus/screens/event/ticket_request_show_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
-import 'package:facelocus/screens/point-request/point_record__list_screen.dart';
-import 'package:facelocus/screens/point-request/point_validate_screen.dart';
+import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
+import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
+import 'package:facelocus/screens/point-record/point_validate_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const user = '/user';
   static const userSearch = '$user/search';
   static const pointRecord = '/point-record';
+  static const pointRecordCreate = '$pointRecord/create';
   static const pointRecordPointValidate = '$pointRecord/point-validate';
 }
 
@@ -103,6 +105,12 @@ final router = GoRouter(
       path: AppRoutes.pointRecord,
       builder: (context, state) {
         return const PointRecordListScreen();
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.pointRecordCreate,
+      builder: (context, state) {
+        return const PointRecordCreateScreen();
       },
     ),
     GoRoute(
