@@ -106,10 +106,10 @@ public class FaceRecognitionService {
         return !output.contains("unknown_person");
     }
 
-    private String requestCall(String s, String s2) throws IOException, InterruptedException {
+    private String requestCall(String photoFaceDirectoryPath, String profilePhotoFacePath) throws IOException, InterruptedException {
         StringBuilder output = new StringBuilder();
         // É necessário adicionar face_recognition as variáveis de ambiente, caso contrário o java não encontra
-        String[] args = {"/home/luan/.pyenv/shims/face_recognition", "/home/luan/Imagens/1", "/home/luan/Imagens/1/profile/profile.jpg"};
+        String[] args = {"/home/luan/.pyenv/shims/face_recognition", photoFaceDirectoryPath, profilePhotoFacePath};
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
