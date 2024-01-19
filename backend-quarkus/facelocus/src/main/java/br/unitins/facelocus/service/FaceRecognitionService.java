@@ -105,7 +105,7 @@ public class FaceRecognitionService {
             } catch (IOException ignored) {
             }
         }*/
-        return !output.contains("unknown_person");
+        return !(output.contains("unknown_person") || output.contains("no_persons_found"));
     }
 
     private String requestCall(String photoFaceDirectoryPath, String profilePhotoFacePath) throws IOException, InterruptedException {

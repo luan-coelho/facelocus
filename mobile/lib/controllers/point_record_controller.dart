@@ -26,6 +26,7 @@ class PointRecordController extends GetxController {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.checkFace(file, user.id!);
+      MessageSnacks.success(context, 'Validação realizada com sucesso');
     } on DioException catch (e) {
       String detail = onError(e);
       MessageSnacks.danger(context, detail);
