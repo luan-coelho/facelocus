@@ -1,11 +1,11 @@
-class UserFacePhoto {
+class UserFacePhotoModel {
   late int id;
   late String file;
   late String fileName;
   late DateTime uploadDate;
   late String filePath;
 
-  UserFacePhoto({
+  UserFacePhotoModel({
     required this.id,
     required this.file,
     required this.fileName,
@@ -13,8 +13,8 @@ class UserFacePhoto {
     required this.filePath,
   });
 
-  factory UserFacePhoto.fromJson(Map<String, dynamic> json) {
-    return UserFacePhoto(
+  factory UserFacePhotoModel.fromJson(Map<String, dynamic> json) {
+    return UserFacePhotoModel(
       id: json['id'] as int,
       file: json['file'],
       fileName: json['fileName'],

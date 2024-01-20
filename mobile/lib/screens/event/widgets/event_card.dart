@@ -1,4 +1,4 @@
-import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -1,5 +1,4 @@
-import 'package:facelocus/models/event.dart';
-import 'package:facelocus/services/event_service.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';

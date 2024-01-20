@@ -1,5 +1,5 @@
 import 'package:facelocus/dtos/ticket_request_create.dart';
-import 'package:facelocus/models/ticket_request.dart';
+import 'package:facelocus/models/ticket_request_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 

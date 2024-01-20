@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/models/point_model.dart';
+import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/services/user_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,15 +13,20 @@ import 'package:get/get.dart';
 
 class PointRecordController extends GetxController {
   final UserService service;
-  final Rx<UserModel?> _user = (null).obs;
-
-  Rx<UserModel?> get user => _user;
+  late final PointRecordService _pointRecordService;
+  List<PointModel> _points = <PointModel>[].obs;
 
   final RxBool _isLoading = false.obs;
+
+  List<PointModel> get points => _points;
 
   RxBool get isLoading => _isLoading;
 
   PointRecordController({required this.service});
+
+  cleanPoints() {
+    _points = <PointModel>[].obs;
+  }
 
   checkFace(BuildContext context, File file) async {
     _isLoading.value = true;
@@ -26,10 +34,14 @@ class PointRecordController extends GetxController {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.checkFace(file, user.id!);
-      MessageSnacks.success(context, 'Validação realizada com sucesso');
+      if (context.mounted) {
+        MessageSnacks.success(context, 'Validação realizada com sucesso');
+      }
     } on DioException catch (e) {
       String detail = onError(e);
-      MessageSnacks.danger(context, detail);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
     }
     _isLoading.value = false;
   }
@@ -39,5 +51,21 @@ class PointRecordController extends GetxController {
       return e.response?.data['detail'];
     }
     return message ?? 'Falha ao executar esta ação';
+  }
+
+  create(BuildContext context, PointRecordModel pointRecord) async {
+    _isLoading.value = true;
+    try {
+      await _pointRecordService.create(pointRecord);
+      if (context.mounted) {
+        MessageSnacks.success(context, 'Registro de ponto criado com sucesso');
+      }
+    } on DioException catch (e) {
+      String detail = onError(e);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
+    }
+    _isLoading.value = false;
   }
 }

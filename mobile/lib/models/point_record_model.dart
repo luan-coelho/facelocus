@@ -1,31 +1,31 @@
-import 'package:facelocus/models/event.dart';
-import 'package:facelocus/models/factor.dart';
-import 'package:facelocus/models/point.dart';
+import 'package:facelocus/models/event_model.dart';
+import 'package:facelocus/models/factor_enum.dart';
+import 'package:facelocus/models/point_model.dart';
 
-class PointRecord {
-  late int id;
+class PointRecordModel {
+  late int? id;
   late DateTime date;
-  late EventModel event;
-  late List<Point> points;
+  late EventModel? event;
+  late List<PointModel> points;
   late List<Factor> factors;
   late bool inProgress;
 
-  PointRecord({
-    required this.id,
+  PointRecordModel({
+    this.id,
     required this.date,
-    required this.event,
+    this.event,
     required this.points,
     required this.factors,
     required this.inProgress,
   });
 
-  factory PointRecord.fromJson(Map<String, dynamic> json) {
-    return PointRecord(
+  factory PointRecordModel.fromJson(Map<String, dynamic> json) {
+    return PointRecordModel(
       id: json['id'] as int,
       date: DateTime.parse(json['date']),
       event: EventModel.fromJson(json['event']),
       points: (json['points'] as List)
-          .map((e) => Point.fromJson(e as Map<String, dynamic>))
+          .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       factors: (json['factors'] as List)
           .map((e) => Factor.values
@@ -34,4 +34,9 @@ class PointRecord {
       inProgress: json['inProgress'] as bool,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'date': date,
+    'event': event!.toJson(),
+  };
 }

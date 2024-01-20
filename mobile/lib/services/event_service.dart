@@ -1,4 +1,4 @@
-import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 

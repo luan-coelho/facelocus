@@ -1,5 +1,5 @@
 import 'package:facelocus/controllers/event_controller.dart';
-import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';

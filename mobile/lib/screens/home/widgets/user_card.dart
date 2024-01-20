@@ -1,4 +1,4 @@
-import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -68,7 +68,7 @@ class _UserCardHomeState extends State<UserCardHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () => context.push("/profile"),
+                    onTap: () => context.push(AppRoutes.profile),
                     child: const CircleAvatar(
                       radius: 30.0, // Define o tamanho do círculo
                       backgroundImage: AssetImage("images/user.jpg"),

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/dtos/event_ticket_request_create.dart';
 import 'package:facelocus/dtos/ticket_request_create.dart';
-import 'package:facelocus/models/ticket_request.dart';
+import 'package:facelocus/models/ticket_request_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
@@ -61,11 +61,15 @@ class TicketRequestController extends GetxController {
           TicketRequestCreate(event: event, user: user);
       await service.create(ticketRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
-      MessageSnacks.success(context, message);
-      context.pop();
+      if (context.mounted) {
+        MessageSnacks.success(context, message);
+        context.pop();
+      }
     } on DioException catch (e) {
       String detail = onError(e);
-      MessageSnacks.danger(context, detail);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
     }
     fetchAll();
   }
@@ -79,7 +83,9 @@ class TicketRequestController extends GetxController {
       await service.approve(ticketRequestId, user.id!);
     } on DioException catch (e) {
       String detail = onError(e);
-      MessageSnacks.danger(context, detail);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
     }
     fetchAll();
   }
@@ -93,7 +99,9 @@ class TicketRequestController extends GetxController {
       await service.reject(ticketRequestId, user.id!);
     } on DioException catch (e) {
       String detail = onError(e);
-      MessageSnacks.danger(context, detail);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
     }
     fetchAll();
   }

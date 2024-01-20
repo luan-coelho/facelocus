@@ -211,7 +211,9 @@ class _LocationScreenState extends State<LocationListScreen> {
         _location.longitude = position.longitude;
       });
     } on Exception catch (e) {
-      MessageSnacks.danger(context, e.toString());
+      if (context.mounted) {
+        MessageSnacks.danger(context, e.toString());
+      }
     }
     setState(() {
       isLoading = false;

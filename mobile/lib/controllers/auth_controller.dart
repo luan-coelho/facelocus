@@ -38,13 +38,17 @@ class AuthController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setInt('user', userId);
         addAuthenticatedUser(tokenResponse.user);
-        context.replace(AppRoutes.home);
+        if (context.mounted) {
+          context.replace(AppRoutes.home);
+        }
         return;
       }
     } on DioException catch (e) {
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível realizar o login';
-      MessageSnacks.danger(context, detail ?? message);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail ?? message);
+      }
     }
   }
 
@@ -55,20 +59,26 @@ class AuthController extends GetxController {
       if (userId == null) {
         removeToken();
         await prefs.remove('user');
-        context.pushReplacement(AppRoutes.login);
+        if (context.mounted) {
+          context.pushReplacement(AppRoutes.login);
+        }
         return;
       }
       var user = await _userService.getById(userId);
       addAuthenticatedUser(user);
-      context.pushReplacement(AppRoutes.home);
+      if (context.mounted) {
+        context.pushReplacement(AppRoutes.home);
+      }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 && context.mounted) {
         context.push(AppRoutes.login);
         MessageSnacks.warn(context, 'Sua sessão expirou');
       }
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível realizar o login';
-      MessageSnacks.danger(context, detail ?? message);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail ?? message);
+      }
     }
   }
 

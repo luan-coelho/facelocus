@@ -1,6 +1,5 @@
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/user_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -32,14 +31,4 @@ class UserController extends GetxController {
     _usersSearch = await service.getAllByNameOrCpf(identifier);
     _isLoading.value = false;
   }
-
-/* fetchById(int locationId) async {
-    isLoading = true;
-    notifyListeners();
-
-    _user = await _userService.getById(locationId);
-
-    isLoading = false;
-    notifyListeners();
-  }*/
 }

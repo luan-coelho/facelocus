@@ -1,7 +1,6 @@
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/ticket_request_controller.dart';
 import 'package:facelocus/screens/event/widgets/ticket_request_card.dart';
-import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -35,7 +34,6 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return AppLayout(
         appBarTitle: 'Solicitações',
         body: Padding(
@@ -44,9 +42,8 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
             if (!_controller.isLoading.value &&
                 _controller.ticketsRequest!.isEmpty) {
               const message = 'Nenhuma solicitação no momento';
-              return EmptyData(message,
-                  child:
-                      AppButton(text: 'Adicionar', onPressed: null));
+              return const EmptyData(message,
+                  child: AppButton(text: 'Adicionar', onPressed: null));
             }
 
             if (!_controller.isLoading.value && _controller.error != null) {
@@ -77,10 +74,10 @@ class _TicketRequestListScreenState extends State<TicketRequestListScreen> {
             );
           }),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: const FloatingActionButton(
           onPressed: null,
           backgroundColor: Colors.green,
-          child: const Icon(Icons.add, color: Colors.white, size: 29),
+          child: Icon(Icons.add, color: Colors.white, size: 29),
         ));
   }
 }

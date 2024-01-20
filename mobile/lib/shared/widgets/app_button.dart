@@ -10,7 +10,9 @@ class AppButton extends StatefulWidget {
       this.backgroundColor,
       this.onPressed,
       this.icon,
-      this.isLoading = false});
+      this.isLoading = false,
+      this.width,
+      this.height});
 
   final String text;
   final Color? textColor;
@@ -19,6 +21,8 @@ class AppButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final Widget? icon;
   final bool? isLoading;
+  final double? width;
+  final double? height;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -28,8 +32,8 @@ class _AppButtonState extends State<AppButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
-      height: 45,
+      width: widget.width ?? double.infinity,
+      height: widget.height ?? 45,
       child: TextButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(

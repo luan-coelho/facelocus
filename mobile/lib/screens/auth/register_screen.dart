@@ -41,7 +41,9 @@ class LoginFormState extends State<RegisterScreen> {
         updateLoading();
         await service.register(user);
         updateLoading();
-        MessageSnacks.success(context, 'Conta criada com sucesso');
+        if (context.mounted) {
+          MessageSnacks.success(context, 'Conta criada com sucesso');
+        }
       }
     } on DioException catch (e) {
       updateLoading();
@@ -54,7 +56,9 @@ class LoginFormState extends State<RegisterScreen> {
           }
         });
       }
-      MessageSnacks.danger(context, detail);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
     }
   }
 

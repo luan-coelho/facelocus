@@ -1,5 +1,5 @@
-import 'package:facelocus/models/event.dart';
-import 'package:facelocus/models/ticket_request_status.dart';
+import 'package:facelocus/models/event_model.dart';
+import 'package:facelocus/models/ticket_request_status_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 
 class TicketRequestModel {

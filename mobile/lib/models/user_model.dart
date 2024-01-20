@@ -1,5 +1,5 @@
-import 'package:facelocus/models/device.dart';
-import 'package:facelocus/models/user_face_photo.dart';
+import 'package:facelocus/models/device_model.dart';
+import 'package:facelocus/models/user_face_photo_model.dart';
 
 class UserModel {
   final int? id;
@@ -8,7 +8,7 @@ class UserModel {
   final String email;
   final String cpf;
   final String? password;
-  final UserFacePhoto? userFacePhoto;
+  final UserFacePhotoModel? userFacePhoto;
   final List<Device>? devices;
 
 

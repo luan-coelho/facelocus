@@ -1,5 +1,5 @@
-import 'package:facelocus/models/ticket_request.dart';
-import 'package:facelocus/models/ticket_request_status.dart';
+import 'package:facelocus/models/ticket_request_model.dart';
+import 'package:facelocus/models/ticket_request_status_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';

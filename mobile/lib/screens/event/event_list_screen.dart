@@ -1,5 +1,5 @@
 import 'package:facelocus/controllers/event_controller.dart';
-import 'package:facelocus/models/event.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
 import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';

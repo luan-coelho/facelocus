@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record PointRecordDTO(Long id,
-                             LocalDate date,
                              EventDTO event,
+                             LocalDate date,
+                             LocationDTO locationDTO,
                              List<PointDTO> points,
-                             List<Factor> factors,
-                             boolean inProgress) {
+                             List<Factor> factors) {
 }

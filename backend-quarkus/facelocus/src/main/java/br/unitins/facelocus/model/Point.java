@@ -19,7 +19,7 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private LocalTime initialDate;
-    private int minutesToValidate;
+    private LocalTime finalDate;
     private boolean validated;
     @ManyToOne
     private PointRecord pointRecord;

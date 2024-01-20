@@ -1,13 +1,13 @@
-import 'package:facelocus/models/point.dart';
+import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/models/user_face_photo.dart';
+import 'package:facelocus/models/user_face_photo_model.dart';
 
 class AttendanceRecord {
   late int id;
   late DateTime dateTime;
   late UserModel user;
-  late UserFacePhoto userFacePhoto;
-  late Point point;
+  late UserFacePhotoModel userFacePhoto;
+  late PointModel point;
 
   AttendanceRecord({
     required this.id,
@@ -22,8 +22,8 @@ class AttendanceRecord {
       id: json['id'] as int,
       dateTime: DateTime.parse(json['dateTime']),
       user: UserModel.fromJson(json['user']),
-      userFacePhoto: UserFacePhoto.fromJson(json['userFacePhoto']),
-      point: Point.fromJson(json['point']),
+      userFacePhoto: UserFacePhotoModel.fromJson(json['userFacePhoto']),
+      point: PointModel.fromJson(json['point']),
     );
   }
 }
