@@ -1,6 +1,7 @@
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -101,6 +102,12 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SvgPicture.asset(
+              'images/calendar-icon.svg',
+              colorFilter:
+                  const ColorFilter.mode(AppColorsConst.blue, BlendMode.srcIn),
+            ),
+            const SizedBox(width: 5),
             Text(getFormattedDate(_selectedDate.value),
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),

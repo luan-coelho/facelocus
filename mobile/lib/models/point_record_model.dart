@@ -3,12 +3,13 @@ import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 
 class PointRecordModel {
-  late int? id;
-  late DateTime date;
-  late EventModel? event;
-  late List<PointModel> points;
-  late List<Factor> factors;
-  late bool? inProgress;
+  int? id;
+  DateTime date;
+  EventModel? event;
+  List<PointModel> points;
+  List<Factor> factors;
+  double? allowableRadiusInMeters;
+  bool? inProgress;
 
   PointRecordModel({
     this.id,
@@ -16,6 +17,7 @@ class PointRecordModel {
     this.event,
     required this.points,
     required this.factors,
+    this.allowableRadiusInMeters,
     this.inProgress,
   });
 
@@ -39,6 +41,7 @@ class PointRecordModel {
         'date': date.toIso8601String(),
         'event': event!.toJson(),
         'points': points.map((p) => p.toJson()).toList(),
+        'allowableRadiusInMeters': allowableRadiusInMeters,
         'factors': factors.map((f) => f.toJson()).toList()
       };
 }

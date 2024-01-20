@@ -25,7 +25,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   late final EventController _eventController;
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
-  double _currentSliderValue = 5.0;
+  double _allowableRadiusInMeters = 5.0;
   late final RestorableDateTime _date;
   late PointModel _point;
   List<PointModel> points = [];
@@ -39,10 +39,12 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
       factors.add(Factor.indoorLocation);
     }
     PointRecordModel pointRecord = PointRecordModel(
-        event: _eventController.event,
-        date: _controller.date.value!,
-        points: _controller.points,
-        factors: factors.toList());
+      event: _eventController.event,
+      date: _controller.date.value ?? DateTime.now(),
+      points: _controller.points,
+      factors: factors.toList(),
+      allowableRadiusInMeters: _allowableRadiusInMeters,
+    );
     _controller.create(context, pointRecord);
   }
 
@@ -124,14 +126,14 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                           const Text('Raio permitido em metros (m)',
                               style: TextStyle(fontWeight: FontWeight.normal)),
                           Slider(
-                            value: _currentSliderValue,
+                            value: _allowableRadiusInMeters,
                             min: 0.0,
                             max: 10.0,
                             divisions: 5,
-                            label: _currentSliderValue.round().toString(),
+                            label: _allowableRadiusInMeters.round().toString(),
                             onChanged: (double value) {
                               setState(() {
-                                _currentSliderValue = value;
+                                _allowableRadiusInMeters = value;
                               });
                             },
                           )
