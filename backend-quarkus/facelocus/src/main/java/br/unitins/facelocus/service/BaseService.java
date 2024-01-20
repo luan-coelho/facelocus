@@ -63,6 +63,11 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
     }
 
     @Transactional
+    public void persistAll(List<T> entities) {
+        this.repository.persist(entities);
+    }
+
+    @Transactional
     public T update(T entity) {
         return repository.getEntityManager().merge(entity);
     }

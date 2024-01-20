@@ -17,6 +17,9 @@ import java.util.List;
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
 
     @Inject
+    PointService pointService;
+
+    @Inject
     PointRecordMapper pointRecordMapper;
 
     /**
@@ -37,9 +40,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     @Override
     public PointRecord create(PointRecord pointRecord) {
+        PointRecord pr = super.create(pointRecord);
         for (Point point : pointRecord.getPoints()) {
-            point.setPointRecord(pointRecord);
+            point.setPointRecord(pr);
         }
-        return super.create(pointRecord);
+        pointService.persistAll(pr.getPoints());
+        return pr;
     }
 }
