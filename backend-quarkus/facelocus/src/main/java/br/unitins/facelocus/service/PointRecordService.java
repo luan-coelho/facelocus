@@ -4,6 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.PointRecordDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
+import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.repository.PointRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,7 +37,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     @Override
     public PointRecord create(PointRecord pointRecord) {
-        pointRecord.getPoints().forEach(point -> point.setPointRecord(pointRecord));
+        for (Point point : pointRecord.getPoints()) {
+            point.setPointRecord(pointRecord);
+        }
         return super.create(pointRecord);
     }
 }

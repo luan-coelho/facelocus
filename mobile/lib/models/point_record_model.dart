@@ -8,7 +8,7 @@ class PointRecordModel {
   late EventModel? event;
   late List<PointModel> points;
   late List<Factor> factors;
-  late bool inProgress;
+  late bool? inProgress;
 
   PointRecordModel({
     this.id,
@@ -16,7 +16,7 @@ class PointRecordModel {
     this.event,
     required this.points,
     required this.factors,
-    required this.inProgress,
+    this.inProgress,
   });
 
   factory PointRecordModel.fromJson(Map<String, dynamic> json) {
@@ -36,7 +36,9 @@ class PointRecordModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'date': date,
-    'event': event!.toJson(),
-  };
+        'date': date.toIso8601String(),
+        'event': event!.toJson(),
+        'points': points.map((p) => p.toJson()).toList(),
+        'factors': factors.map((f) => f.toJson()).toList()
+      };
 }

@@ -44,7 +44,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
               padding: const EdgeInsets.all(5),
               height: 35,
               decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -56,7 +56,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(10),
                       bottomRight: Radius.circular(10))),
-              child: const Icon(Icons.delete, color: Colors.white),
+              child: const Icon(Icons.delete, color: Colors.red),
             ),
           ),
         )

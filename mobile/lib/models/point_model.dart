@@ -19,4 +19,9 @@ class PointModel {
       validated: json['validated'] as bool,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'initialDate': initialDate.toIso8601String(),
+        'finalDate': finalDate.toIso8601String(),
+      };
 }

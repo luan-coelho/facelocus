@@ -8,6 +8,7 @@ import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/event_service.dart';
+import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
 import 'package:facelocus/services/user_service.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -31,7 +32,10 @@ void getControllers() {
   Get.put(EventController(service: EventService()));
   Get.put(TicketRequestController(service: TicketRequestService()));
   Get.put(UserController(service: UserService()));
-  Get.put(PointRecordController(service: UserService()));
+  Get.put(PointRecordController(
+    service: UserService(),
+    pointRecordService: PointRecordService(),
+  ));
 }
 
 class FaceLocusApp extends StatelessWidget {

@@ -1,9 +1,13 @@
+import 'dart:collection';
+
+import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,26 +22,37 @@ class PointRecordCreateScreen extends StatefulWidget {
 
 class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   late final PointRecordController _controller;
+  late final EventController _eventController;
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _currentSliderValue = 5.0;
-  late PointModel point;
+  late final RestorableDateTime _date;
+  late PointModel _point;
   List<PointModel> points = [];
-  List<Factor> factors = [];
+  HashSet<Factor> factors = HashSet();
 
   _create() {
+    if (faceRecognitionFactor) {
+      factors.add(Factor.facialRecognition);
+    }
+    if (indoorLocationFactor) {
+      factors.add(Factor.indoorLocation);
+    }
     PointRecordModel pointRecord = PointRecordModel(
-        date: DateTime.now(),
-        points: points,
-        factors: factors,
-        inProgress: false);
+        event: _eventController.event,
+        date: _controller.date.value!,
+        points: _controller.points,
+        factors: factors.toList());
     _controller.create(context, pointRecord);
   }
 
   @override
   void initState() {
     _controller = Get.find<PointRecordController>();
-    point = PointModel(initialDate: DateTime.now(), finalDate: DateTime.now());
+    _eventController = Get.find<EventController>();
+    _eventController.fetchById(1);
+    _date = RestorableDateTime(DateTime.now());
+    _point = PointModel(initialDate: DateTime.now(), finalDate: DateTime.now());
     super.initState();
   }
 
@@ -52,8 +67,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     newPoint() {
       DateTime initialDate = DateTime.now();
       DateTime finalDate = DateTime.now();
-      point = PointModel(initialDate: initialDate, finalDate: finalDate);
-      _controller.points.add(point);
+      _point = PointModel(initialDate: initialDate, finalDate: finalDate);
+      _controller.points.add(_point);
     }
 
     return AppLayout(
@@ -64,6 +79,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text('Data',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                AppDatePicker(date: _date),
+                const SizedBox(height: 15),
                 const Text('Fatores de validação',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Row(

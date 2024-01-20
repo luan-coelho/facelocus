@@ -13,16 +13,19 @@ import 'package:get/get.dart';
 
 class PointRecordController extends GetxController {
   final UserService service;
-  late final PointRecordService _pointRecordService;
+  final PointRecordService pointRecordService;
+  final Rxn<DateTime> _date = Rxn<DateTime>();
   List<PointModel> _points = <PointModel>[].obs;
-
   final RxBool _isLoading = false.obs;
+
+  Rxn<DateTime> get date => _date;
 
   List<PointModel> get points => _points;
 
   RxBool get isLoading => _isLoading;
 
-  PointRecordController({required this.service});
+  PointRecordController(
+      {required this.service, required this.pointRecordService});
 
   cleanPoints() {
     _points = <PointModel>[].obs;
@@ -56,7 +59,7 @@ class PointRecordController extends GetxController {
   create(BuildContext context, PointRecordModel pointRecord) async {
     _isLoading.value = true;
     try {
-      await _pointRecordService.create(pointRecord);
+      await pointRecordService.create(pointRecord);
       if (context.mounted) {
         MessageSnacks.success(context, 'Registro de ponto criado com sucesso');
       }
