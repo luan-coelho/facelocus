@@ -2,7 +2,7 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.PointRecordDTO;
+import br.unitins.facelocus.dto.ticketrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
@@ -11,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
@@ -30,11 +31,15 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      * @return Objeto paginável de registros de ponto
      */
     public DataPagination<?> findAllByUser(Pageable pageable, Long userId) {
-        List<PointRecordDTO> dtos = this.repository.findAllByUser(userId)
+        List<PointRecordResponseDTO> dtos = this.repository.findAllByUser(userId)
                 .stream()
                 .map(t -> pointRecordMapper.toResource(t))
                 .toList();
         return buildPagination(dtos, pageable);
+    }
+
+    public List<PointRecord> findAllByDate(Long userId, LocalDate date) {
+        return this.repository.findAllByDate(userId, date);
     }
 
     @Transactional

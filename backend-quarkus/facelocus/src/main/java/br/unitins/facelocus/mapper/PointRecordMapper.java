@@ -1,6 +1,7 @@
 package br.unitins.facelocus.mapper;
 
 import br.unitins.facelocus.dto.PointRecordDTO;
+import br.unitins.facelocus.dto.ticketrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.model.PointRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +12,7 @@ import org.mapstruct.ReportingPolicy;
 public interface PointRecordMapper {
 
     @Named("toResource")
-    PointRecordDTO toResource(PointRecord pointRecord);
+    PointRecordResponseDTO toResource(PointRecord pointRecord);
 
     @Mapping(ignore = true, target = "id")
     PointRecord toEntity(PointRecordDTO dto);

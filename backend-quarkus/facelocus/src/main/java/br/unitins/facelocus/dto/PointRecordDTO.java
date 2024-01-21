@@ -11,5 +11,5 @@ public record PointRecordDTO(Long id,
                              LocationDTO locationDTO,
                              List<PointDTO> points,
                              List<Factor> factors,
-                             double allowableRadiusInMeters) {
+                             Double allowableRadiusInMeters) {
 }

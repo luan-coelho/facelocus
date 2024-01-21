@@ -26,6 +26,6 @@ public class PointRecord {
     private List<Point> points;
     @ElementCollection
     private List<Factor> factors;
-    private double allowableRadiusInMeters;
+    private Double allowableRadiusInMeters;
     private boolean inProgress;
 }
