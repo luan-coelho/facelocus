@@ -10,8 +10,9 @@ import java.util.List;
 public record PointRecordResponseDTO(Long id,
                                      EventWithoutRelationshipsDTO event,
                                      LocalDate date,
-                                     LocationDTO locationDTO,
+                                     LocationDTO location,
                                      List<PointDTO> points,
                                      List<Factor> factors,
-                                     Double allowableRadiusInMeters) {
+                                     Double allowableRadiusInMeters,
+                                     boolean inProgress) {
 }

@@ -1,8 +1,12 @@
+import 'dart:collection';
+
+import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
-import 'package:facelocus/utils/calendar_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,37 +18,46 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late final PointRecordController _controller;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
 
   @override
   void initState() {
-    super.initState();
+    _controller = Get.find<PointRecordController>();
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _controller.fetchAllByDate(context, _selectedDay!);
+    super.initState();
   }
 
-  @override
-  void dispose() {
-    _selectedEvents.dispose();
-    super.dispose();
+  List<PointRecordModel> _getEventsForDate(DateTime date) {
+    Map<DateTime, List<PointRecordModel>> pointsRecordsByDate =
+        _groupByDate(_controller.pointsRecord);
+    var list = pointsRecordsByDate[date] ?? [];
+    return list;
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
-    return kEvents[day] ?? [];
+  LinkedHashMap<DateTime, List<PointRecordModel>> _groupByDate(
+      List<PointRecordModel> pointRecords) {
+    Map<DateTime, List<PointRecordModel>> groupedByDate = {};
+
+    for (PointRecordModel record in pointRecords) {
+      DateTime date = record.date;
+      if (groupedByDate.containsKey(date)) {
+        groupedByDate[date]!.add(record);
+      } else {
+        groupedByDate[date] = [record];
+      }
+    }
+    return LinkedHashMap<DateTime, List<PointRecordModel>>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(groupedByDate);
   }
 
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    final days = daysInRange(start, end);
-
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -52,122 +65,97 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
-        _rangeEnd = null;
-        _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
-
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-    }
-  }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-
-    // `start` or `end` could be null
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
+      _controller.fetchAllByDate(context, selectedDay);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-        showAppBar: false,
-        body: Padding(
-          padding:
-              const EdgeInsets.only(top: 50, bottom: 20, left: 32, right: 32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const UserCardHome(),
-              const SizedBox(height: 30),
-              Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        spreadRadius: 0,
-                        blurRadius: 5,
-                        offset: const Offset(0, 1.5),
-                      ),
-                    ],
-                    borderRadius: const BorderRadius.all(Radius.circular(15))),
-                child: TableCalendar<Event>(
-                  firstDay: kFirstDay,
-                  lastDay: kLastDay,
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
-                  calendarFormat: _calendarFormat,
-                  rangeSelectionMode: _rangeSelectionMode,
-                  eventLoader: _getEventsForDay,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: const CalendarStyle(
-                    // Use `CalendarStyle` to customize the UI
-                    outsideDaysVisible: false,
+      showAppBar: false,
+      body: Padding(
+        padding:
+            const EdgeInsets.only(top: 50, bottom: 20, left: 32, right: 32),
+        child: Obx(
+          () {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const UserCardHome(),
+                const SizedBox(height: 30),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 0,
+                          blurRadius: 5,
+                          offset: const Offset(0, 1.5),
+                        ),
+                      ],
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(15))),
+                  child: TableCalendar<PointRecordModel>(
+                    firstDay: _controller.firstDay.value,
+                    lastDay: _controller.lastDay.value,
+                    focusedDay: _focusedDay,
+                    selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                    calendarFormat: _calendarFormat,
+                    eventLoader: _getEventsForDate,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    calendarStyle: const CalendarStyle(
+                      // Use `CalendarStyle` to customize the UI
+                      outsideDaysVisible: false,
+                    ),
+                    onDaySelected: _onDaySelected,
+                    onFormatChanged: (format) {
+                      if (_calendarFormat != format) {
+                        setState(() {
+                          _calendarFormat = format;
+                        });
+                      }
+                    },
+                    onPageChanged: (focusedDay) {
+                      _focusedDay = focusedDay;
+                    },
                   ),
-                  onDaySelected: _onDaySelected,
-                  onRangeSelected: _onRangeSelected,
-                  onFormatChanged: (format) {
-                    if (_calendarFormat != format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    }
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
-                  },
                 ),
-              ),
-              const SizedBox(height: 8.0),
-              Expanded(
-                child: ValueListenableBuilder<List<Event>>(
-                  valueListenable: _selectedEvents,
-                  builder: (context, value, _) {
-                    return ListView.builder(
-                      itemCount: value.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 4.0,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: ListTile(
-                            onTap: () => print('${value[index]}'),
-                            title: Text('${value[index]}'),
-                          ),
-                        );
-                      },
+                const SizedBox(height: 8.0),
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: _controller.pointsRecord.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ListTile(
+                        onTap: () =>
+                            print('${_controller.pointsRecord[index]}'),
+                        title: Text(
+                            '${_controller.pointsRecord[index].event!.description}'),
+                      ),
                     );
                   },
-                ),
-              ),
-            ],
-          ),
+                )),
+              ],
+            );
+          },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => context.push(AppRoutes.pointRecordCreate),
-          backgroundColor: Colors.green,
-          child: const Icon(Icons.add, color: Colors.white, size: 29),
-        ));
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push(AppRoutes.pointRecordCreate),
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add, color: Colors.white, size: 29),
+      ),
+    );
   }
 }

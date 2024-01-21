@@ -10,4 +10,14 @@ enum Factor {
         return 'INDOOR_LOCATION';
     }
   }
+
+  static Factor? parse(String factor) {
+    switch (factor) {
+      case 'FACIAL_RECOGNITION':
+        return Factor.facialRecognition;
+      case 'INDOOR_LOCATION':
+        return Factor.indoorLocation;
+    }
+    return null;
+  }
 }

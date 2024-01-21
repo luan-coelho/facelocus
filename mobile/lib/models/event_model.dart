@@ -31,15 +31,15 @@ class EventModel {
         pointRecords: json['pointRecords'] == null
             ? null
             : (json['pointRecords'] as List)
-                .map((e) => PointRecordModel.fromJson(e as Map<String, dynamic>))
+                .map(
+                    (e) => PointRecordModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
         locations: json['locations'] == null
             ? null
             : (json['locations'] as List)
                 .map((e) => LocationModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
-        administrator:
-            UserModel.fromJson(json['administrator'] as Map<String, dynamic>),
+        administrator: /*UserModel.fromJson(json['administrator'])*/ null,
         users: json['users'] == null
             ? null
             : (json['users'] as List)

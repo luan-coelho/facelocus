@@ -1,9 +1,9 @@
 package br.unitins.facelocus.dto;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public record PointDTO(Long id,
-                       LocalTime initialDate,
-                       LocalTime finalDate,
+                       LocalDateTime initialDate,
+                       LocalDateTime finalDate,
                        boolean validated) {
 }

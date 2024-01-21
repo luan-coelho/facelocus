@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -18,12 +18,12 @@ class PointValidateScreen extends StatefulWidget {
 }
 
 class PointValidateScreenState extends State<PointValidateScreen> {
-  late final PointRecordController _controller;
+  late final UserController _controller;
   File? _capturedImage;
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordController>();
+    _controller = Get.find<UserController>();
     super.initState();
   }
 

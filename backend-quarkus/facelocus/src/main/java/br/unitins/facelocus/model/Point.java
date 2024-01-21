@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -18,8 +19,8 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalTime initialDate;
-    private LocalTime finalDate;
+    private LocalDateTime initialDate;
+    private LocalDateTime finalDate;
     private boolean validated;
     @ManyToOne
     private PointRecord pointRecord;

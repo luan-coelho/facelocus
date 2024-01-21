@@ -7,7 +7,7 @@ class PointRecordModel {
   DateTime date;
   EventModel? event;
   List<PointModel> points;
-  List<Factor> factors;
+  List<Factor>? factors;
   double? allowableRadiusInMeters;
   bool? inProgress;
 
@@ -29,10 +29,8 @@ class PointRecordModel {
       points: (json['points'] as List)
           .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      factors: (json['factors'] as List)
-          .map((e) => Factor.values
-              .firstWhere((element) => element.toString().split('.').last == e))
-          .toList(),
+      factors: /*(json['factors'] as List<Factor>).map((e) => e.parse(factor)).toList()*/
+          null,
       inProgress: json['inProgress'] as bool,
     );
   }
@@ -42,6 +40,6 @@ class PointRecordModel {
         'event': event!.toJson(),
         'points': points.map((p) => p.toJson()).toList(),
         'allowableRadiusInMeters': allowableRadiusInMeters,
-        'factors': factors.map((f) => f.toJson()).toList()
+        'factors': factors ?? factors!.map((f) => f.toJson()).toList()
       };
 }
