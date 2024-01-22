@@ -150,9 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 10),
                 Expanded(
                     child: SingleChildScrollView(
                   child: ListView.separated(
+                    padding: const EdgeInsets.all(5),
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);
                     },

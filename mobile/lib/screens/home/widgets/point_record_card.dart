@@ -40,6 +40,7 @@ class _TicketRequestCardState extends State<PointRecordCard> {
                   overflow: TextOverflow.ellipsis),
               const SizedBox(height: 5),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   widget.pointRecord.inProgress!
                       ? Container(
@@ -51,7 +52,7 @@ class _TicketRequestCardState extends State<PointRecordCard> {
                           ),
                         )
                       : const SizedBox(),
-                  SizedBox(width: widget.pointRecord.inProgress! ? 5 : 0),
+                  SizedBox(width: widget.pointRecord.inProgress! ? 7 : 0),
                   Builder(builder: (context) {
                     DateTime date = widget.pointRecord.date;
                     String datef = DateFormat('dd/MM/yyyy').format(date);
