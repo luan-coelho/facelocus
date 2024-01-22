@@ -3,7 +3,9 @@ import 'dart:collection';
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
+import 'package:facelocus/screens/home/widgets/point_record_card.dart';
 import 'package:facelocus/screens/home/widgets/user_card.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -97,8 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(15))),
+                          const BorderRadius.all(Radius.circular(10))),
                   child: TableCalendar<PointRecordModel>(
+                    headerStyle: const HeaderStyle(
+                      titleCentered: true,
+                      formatButtonVisible: false,
+                    ),
                     firstDay: _controller.firstDay.value,
                     lastDay: _controller.lastDay.value,
                     focusedDay: _focusedDay,
@@ -106,8 +112,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     calendarFormat: _calendarFormat,
                     eventLoader: _getEventsForDate,
                     startingDayOfWeek: StartingDayOfWeek.monday,
-                    calendarStyle: const CalendarStyle(
-                      // Use `CalendarStyle` to customize the UI
+                    locale: 'pt_br',
+                    calendarBuilders: CalendarBuilders(
+                      markerBuilder: (context, day, events) => events.isNotEmpty
+                          ? Container(
+                              width: 20,
+                              height: 20,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: AppColorsConst.blue,
+                              ),
+                              child: Text(
+                                events.length.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            )
+                          : null,
+                    ),
+                    calendarStyle: CalendarStyle(
+                      selectedDecoration:
+                          BoxDecoration(color: Colors.green.shade600),
+                      todayDecoration: BoxDecoration(
+                          color: Colors.deepPurple.withOpacity(0.3)),
+                      markersAlignment: Alignment.bottomRight,
                       outsideDaysVisible: false,
                     ),
                     onDaySelected: _onDaySelected,
@@ -123,27 +150,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8.0),
                 Expanded(
-                    child: ListView.builder(
+                    child: ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(height: 10);
+                  },
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   itemCount: _controller.pointsRecordByDate.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () =>
-                            print('${_controller.pointsRecordByDate[index]}'),
-                        title: Text(
-                            '${_controller.pointsRecordByDate[index].event!.description}'),
-                      ),
-                    );
+                    var pointRecord = _controller.pointsRecordByDate[index];
+                    return PointRecordCard(pointRecord: pointRecord);
                   },
                 )),
               ],

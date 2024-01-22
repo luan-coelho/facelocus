@@ -48,6 +48,8 @@ dependencies:
   face_camera: ^0.0.9
   table_calendar: ^3.0.9
   intl: ^0.18.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
