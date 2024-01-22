@@ -12,15 +12,17 @@ class PointRecordController extends GetxController {
   final PointRecordService service;
   final Rxn<DateTime> _date = Rxn<DateTime>();
   final List<PointRecordModel> _pointsRecord = <PointRecordModel>[].obs;
+  final List<PointRecordModel> _pointsRecordByDate = <PointRecordModel>[].obs;
   List<PointModel> _points = <PointModel>[].obs;
   final Rx<DateTime> _firstDayCalendar = DateTime.now().obs;
   final Rx<DateTime> _lastDayCalendar = DateTime.now().obs;
-
   final RxBool _isLoading = false.obs;
 
   Rxn<DateTime> get date => _date;
 
   List<PointRecordModel> get pointsRecord => _pointsRecord;
+
+  List<PointRecordModel> get pointsRecordByDate => _pointsRecordByDate;
 
   List<PointModel> get points => _points;
 
@@ -57,7 +59,7 @@ class PointRecordController extends GetxController {
       }
     }
     if (context.mounted) {
-      fetchAllByDate(context, DateTime.now());
+      fetchAllByUser(context);
     }
   }
 
@@ -65,10 +67,22 @@ class PointRecordController extends GetxController {
     _isLoading.value = true;
     AuthController authController = Get.find<AuthController>();
     UserModel administrator = authController.authenticatedUser.value!;
-    var pointsRecord = await service.getAllByDate(administrator.id!, date);
+    List<PointRecordModel> pointsRecord;
+    pointsRecord = await service.getAllByDate(administrator.id!, date);
+    _pointsRecordByDate.clear();
+    _pointsRecordByDate.addAll(pointsRecord);
+    _isLoading.value = false;
+  }
+
+  fetchAllByUser(BuildContext context) async {
+    _isLoading.value = true;
+    AuthController authController = Get.find<AuthController>();
+    UserModel administrator = authController.authenticatedUser.value!;
+    List<PointRecordModel> pointsRecord;
+    pointsRecord = await service.getAllByUser(administrator.id!);
     _pointsRecord.clear();
     _pointsRecord.addAll(pointsRecord);
-    if ((pointsRecord as List<PointRecordModel>).isNotEmpty) {
+    if (pointsRecord.isNotEmpty) {
       changeFirstAndLastDay(pointsRecord);
     }
     _isLoading.value = false;

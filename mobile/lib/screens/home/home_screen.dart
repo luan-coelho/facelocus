@@ -27,13 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _controller = Get.find<PointRecordController>();
     _selectedDay = _focusedDay;
-    _controller.fetchAllByDate(context, _selectedDay!);
+    _controller.fetchAllByUser(context);
     super.initState();
   }
 
   List<PointRecordModel> _getEventsForDate(DateTime date) {
-    Map<DateTime, List<PointRecordModel>> pointsRecordsByDate =
-        _groupByDate(_controller.pointsRecord);
+    Map<DateTime, List<PointRecordModel>> pointsRecordsByDate;
+    pointsRecordsByDate = _groupByDate(_controller.pointsRecord);
     var list = pointsRecordsByDate[date] ?? [];
     return list;
   }
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 8.0),
                 Expanded(
                     child: ListView.builder(
-                  itemCount: _controller.pointsRecord.length,
+                  itemCount: _controller.pointsRecordByDate.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.symmetric(
@@ -139,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: ListTile(
                         onTap: () =>
-                            print('${_controller.pointsRecord[index]}'),
+                            print('${_controller.pointsRecordByDate[index]}'),
                         title: Text(
-                            '${_controller.pointsRecord[index].event!.description}'),
+                            '${_controller.pointsRecordByDate[index].event!.description}'),
                       ),
                     );
                   },
