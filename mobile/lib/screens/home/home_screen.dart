@@ -151,18 +151,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Expanded(
-                    child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 10);
-                  },
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: _controller.pointsRecordByDate.length,
-                  itemBuilder: (context, index) {
-                    var pointRecord = _controller.pointsRecordByDate[index];
-                    return PointRecordCard(pointRecord: pointRecord);
-                  },
+                    child: SingleChildScrollView(
+                  child: ListView.separated(
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: 10);
+                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: _controller.pointsRecordByDate.length,
+                    itemBuilder: (context, index) {
+                      var pointRecord = _controller.pointsRecordByDate[index];
+                      return PointRecordCard(pointRecord: pointRecord);
+                    },
+                  ),
                 )),
               ],
             );

@@ -25,7 +25,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
   @override
   Widget build(BuildContext context) {
     removePoint() {
-      _controller.pointsRecord.remove(widget.point);
+      _controller.points.remove(widget.point);
     }
 
     return Row(

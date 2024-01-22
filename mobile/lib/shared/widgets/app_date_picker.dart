@@ -87,8 +87,8 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
       height: 45,
       child: TextButton(
         style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(const Color(0xFFF1F2F6)),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Colors.black12.withOpacity(0.1)),
             foregroundColor:
                 MaterialStateProperty.all<Color>(AppColorsConst.blue),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

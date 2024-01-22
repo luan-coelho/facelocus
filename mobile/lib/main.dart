@@ -40,8 +40,7 @@ class FaceLocusApp extends StatelessWidget {
       routeInformationProvider: router.routeInformationProvider,
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [
-        Locale('en'),
-        Locale('pt_br'),
+        Locale('pt', 'BR'),
       ],
     );
   }
