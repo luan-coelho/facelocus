@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     calendarStyle: CalendarStyle(
                       selectedDecoration:
-                          BoxDecoration(color: Colors.green.shade600),
+                          const BoxDecoration(color: Colors.blue),
                       todayDecoration: BoxDecoration(
                           color: Colors.deepPurple.withOpacity(0.3)),
                       markersAlignment: Alignment.bottomRight,
