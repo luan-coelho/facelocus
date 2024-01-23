@@ -5,7 +5,9 @@ import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/screens/point-record/widgets/event_search.dart';
 import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
+import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -81,6 +83,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const EventSearch(),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 AppDatePicker(date: _date),

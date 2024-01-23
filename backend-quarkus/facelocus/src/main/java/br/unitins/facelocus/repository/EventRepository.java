@@ -36,4 +36,9 @@ public class EventRepository extends BaseRepository<Event> {
     public boolean linkedUser(Long eventId, Long userId) {
         return count("FROM Event e JOIN e.users u WHERE e.id = ?1 AND u.id = ?2", eventId, userId) > 0;
     }
+
+    public List<Event> findAllByDescription(Long userId, String description) {
+        String query = "FROM Event WHERE administrator.id = ?1 AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))";
+        return find(query, userId, description).list();
+    }
 }

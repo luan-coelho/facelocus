@@ -36,6 +36,17 @@ class EventController extends GetxController {
     _isLoading.value = false;
   }
 
+  fetchAllByDescription(BuildContext context, String description) async {
+    _isLoading.value = true;
+    AuthController authController = Get.find<AuthController>();
+    UserModel administrator = authController.authenticatedUser.value!;
+    List<EventModel> events;
+    events = await service.getAllByDescription(administrator.id!, description);
+    _events.clear();
+    _events.addAll(events);
+    _isLoading.value = false;
+  }
+
   fetchById(int eventId) async {
     _isLoading.value = true;
     _event = await service.getById(eventId);
