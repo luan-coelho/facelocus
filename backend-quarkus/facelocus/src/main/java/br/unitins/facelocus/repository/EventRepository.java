@@ -38,7 +38,11 @@ public class EventRepository extends BaseRepository<Event> {
     }
 
     public List<Event> findAllByDescription(Long userId, String description) {
-        String query = "FROM Event WHERE administrator.id = ?1 AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))";
+        String query = """
+                FROM Event
+                WHERE administrator.id = ?1
+                AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
+                """;
         return find(query, userId, description).list();
     }
 }
