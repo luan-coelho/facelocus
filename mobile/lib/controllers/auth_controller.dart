@@ -44,10 +44,12 @@ class AuthController extends GetxController {
         return;
       }
     } on DioException catch (e) {
-      var detail = e.response?.data['detail'];
-      String message = 'Não foi possível realizar o login';
+      String detail = 'Não foi possível realizar o login';
+      if (e.response?.data['detail']) {
+        detail = e.response?.data['detail'];
+      }
       if (context.mounted) {
-        MessageSnacks.danger(context, detail ?? message);
+        MessageSnacks.danger(context, detail);
       }
     }
   }

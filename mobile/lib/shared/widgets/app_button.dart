@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class AppButton extends StatefulWidget {
   const AppButton(
       {super.key,
-      required this.text,
+      this.text,
+      this.textStyle,
       this.textColor,
       this.textFontSize,
       this.backgroundColor,
@@ -14,7 +15,8 @@ class AppButton extends StatefulWidget {
       this.width,
       this.height});
 
-  final String text;
+  final String? text;
+  final TextStyle? textStyle;
   final Color? textColor;
   final double? textFontSize;
   final Color? backgroundColor;
@@ -56,10 +58,13 @@ class _AppButtonState extends State<AppButton> {
                     child: CircularProgressIndicator(color: Colors.white))
                 : (widget.icon ?? const SizedBox()),
             SizedBox(width: widget.icon != null || widget.isLoading! ? 10 : 0),
-            Text(widget.text,
-                style: TextStyle(
-                    fontSize: widget.textFontSize ?? 14,
-                    fontWeight: FontWeight.w600)),
+            widget.text != null
+                ? Text(widget.text!,
+                    style: widget.textStyle ??
+                        TextStyle(
+                            fontSize: widget.textFontSize ?? 14,
+                            fontWeight: FontWeight.w600))
+                : const SizedBox(),
           ],
         ),
       ),

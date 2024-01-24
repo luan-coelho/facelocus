@@ -8,10 +8,12 @@ import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/screens/point-record/widgets/event_search.dart';
 import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
 import 'package:facelocus/services/event_service.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class PointRecordCreateScreen extends StatefulWidget {
@@ -41,7 +43,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
       factors.add(Factor.indoorLocation);
     }
     PointRecordModel pointRecord = PointRecordModel(
-      event: _eventController.event,
+      event: _controller.event.value,
       date: _controller.date.value ?? DateTime.now(),
       points: _controller.points,
       factors: factors.toList(),
@@ -50,11 +52,18 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     _controller.create(context, pointRecord);
   }
 
+  showEventSearch() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const EventSearch();
+        });
+  }
+
   @override
   void initState() {
     _controller = Get.find<PointRecordController>();
     _eventController = Get.find<EventController>();
-    _eventController.fetchById(1);
     _date = RestorableDateTime(DateTime.now());
     _point = PointModel(initialDate: DateTime.now(), finalDate: DateTime.now());
     super.initState();
@@ -83,7 +92,77 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const EventSearch(),
+                Obx(() {
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Evento',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        // const SizedBox(height: 5),
+                        _controller.event.value != null
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(_controller.event.value!.description!),
+                                  const SizedBox(width: 5),
+                                  GestureDetector(
+                                    onTap: () => _controller.event.value = null,
+                                    child: SizedBox(
+                                      height: 20.0,
+                                      width: 20.0,
+                                      child: IconButton(
+                                        padding: const EdgeInsets.all(0.0),
+                                        onPressed: () =>
+                                            _controller.event.value = null,
+                                        icon: const Icon(Icons.delete,
+                                            size: 15.0),
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white),
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.red),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                width: double.infinity,
+                                height: 35,
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.black12.withOpacity(0.1)),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              AppColorsConst.blue),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ))),
+                                  onPressed: showEventSearch,
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text('Selecionar evento',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ]);
+                }),
+                const SizedBox(height: 10),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 AppDatePicker(date: _date),

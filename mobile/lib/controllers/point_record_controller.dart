@@ -7,9 +7,13 @@ import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+
+import '../models/event_model.dart';
 
 class PointRecordController extends GetxController {
   final PointRecordService service;
+  final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
   final List<PointRecordModel> _pointsRecord = <PointRecordModel>[].obs;
   final List<PointRecordModel> _pointsRecordByDate = <PointRecordModel>[].obs;
@@ -51,6 +55,8 @@ class PointRecordController extends GetxController {
       await service.create(pointRecord);
       if (context.mounted) {
         MessageSnacks.success(context, 'Registro de ponto criado com sucesso');
+        event.value = null;
+        context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
@@ -60,6 +66,7 @@ class PointRecordController extends GetxController {
     }
     if (context.mounted) {
       fetchAllByUser(context);
+      fetchAllByDate(context, DateTime.now());
     }
   }
 
