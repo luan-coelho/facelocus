@@ -47,11 +47,11 @@ class _UserCardHomeState extends State<UserCardHome> {
       if (_isLoading) {
         return const Center(child: CircularProgressIndicator());
       }
-
       return Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class _UserCardHomeState extends State<UserCardHome> {
               ),
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black12.withOpacity(0.7)),
+                    border: Border.all(color: Colors.white.withOpacity(0.7)),
                     shape: BoxShape.circle),
                 child: Column(
                   children: [
@@ -86,21 +86,20 @@ class _UserCardHomeState extends State<UserCardHome> {
                         String route = AppRoutes.user;
                         var url = '$api$route/face-photo?user=${_user.id}';
                         return CachedNetworkImage(
-                          width: 100,
                           imageUrl: url,
                           httpHeaders: _httpHeaders,
                           placeholder: (context, url) => const CircleAvatar(
                             backgroundColor: Colors.amber,
-                            radius: 150,
+                            radius: 25,
                           ),
                           imageBuilder: (context, image) => CircleAvatar(
                             backgroundImage: image,
-                            radius: 150,
+                            radius: 25,
                           ),
                           errorWidget: (context, url, error) {
                             return SvgPicture.asset(
                               'images/user-icon.svg',
-                              width: 45,
+                              width: 25,
                             );
                           },
                         );

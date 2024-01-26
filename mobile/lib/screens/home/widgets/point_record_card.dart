@@ -21,16 +21,8 @@ class _TicketRequestCardState extends State<PointRecordCard> {
       onTap: null,
       child: Container(
           padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 0,
-                  blurRadius: 5,
-                  offset: const Offset(0, 1.5),
-                ),
-              ],
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

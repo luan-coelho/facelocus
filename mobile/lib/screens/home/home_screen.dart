@@ -76,34 +76,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppLayout(
       showAppBar: false,
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 50, bottom: 20, left: 32, right: 32),
+        padding: const EdgeInsets.only(top: 50, left: 40, right: 40),
         child: Obx(
           () {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // const UserCardHome(),
-                const SizedBox(height: 30),
+                const UserCardHome(),
+                const SizedBox(height: 15),
                 Container(
                   padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 0,
-                          blurRadius: 5,
-                          offset: const Offset(0, 1.5),
-                        ),
-                      ],
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: TableCalendar<PointRecordModel>(
                     headerStyle: const HeaderStyle(
-                      titleCentered: true,
-                      formatButtonVisible: false,
-                    ),
+                        titleCentered: true,
+                        formatButtonVisible: false,
+                        titleTextStyle: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
                     firstDay: _controller.firstDay.value,
                     lastDay: _controller.lastDay.value,
                     focusedDay: _focusedDay,
@@ -149,10 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 20),
+                const Text('Registros de ponto',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 const SizedBox(height: 10),
                 Expanded(
                     child: SingleChildScrollView(
                   child: ListView.separated(
+                    padding: const EdgeInsets.all(0),
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);
                     },
@@ -165,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return PointRecordCard(pointRecord: pointRecord);
                     },
                   ),
-                )),
+                ))
               ],
             );
           },

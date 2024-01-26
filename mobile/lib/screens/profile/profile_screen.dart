@@ -3,7 +3,7 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
-import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
 import 'package:flutter/material.dart';
@@ -38,81 +38,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context.replace(AppRoutes.login);
     }
 
+    showModal() {
+      showModalBottomSheet<void>(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 2 +
+                MediaQuery.of(context).viewInsets.bottom,
+            child: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ChangeUserPassword(),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return AppLayout(
         appBarTitle: 'Perfil',
         body: Padding(
-          padding: const EdgeInsets.only(top: 50),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const UserFaceImage(),
-                const SizedBox(height: 25),
-                InformationField(
-                    description: 'Nome Completo', value: _user.getFullName()),
-                const SizedBox(height: 15),
-                InformationField(description: 'CPF', value: _user.cpf),
-                const SizedBox(height: 15),
-                InformationField(description: 'Email', value: _user.email),
-                const SizedBox(height: 25),
-                TextButton(
-                    onPressed: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const SingleChildScrollView(
-                            child: SizedBox(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ChangeUserPassword(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 200,
-                        decoration: const BoxDecoration(
-                            color: AppColorsConst.blue,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: const Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.key, color: Colors.white),
-                              SizedBox(width: 5),
-                              Text('Alterar senha',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ))),
-                const SizedBox(height: 5),
-                TextButton(
-                    onPressed: () => logout(),
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: 200,
-                        child: const Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.logout, color: Colors.red),
-                              SizedBox(width: 5),
-                              Text('Encerrar sessão',
-                                  style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
-                        )))
-              ],
-            ),
+          padding: const EdgeInsets.all(45),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const UserFaceImage(),
+              const SizedBox(height: 25),
+              InformationField(
+                  description: 'Nome Completo', value: _user.getFullName()),
+              const SizedBox(height: 15),
+              InformationField(description: 'CPF', value: _user.cpf),
+              const SizedBox(height: 15),
+              InformationField(description: 'Email', value: _user.email),
+              const SizedBox(height: 25),
+              AppButton(
+                  text: 'Alterar senha',
+                  onPressed: showModal,
+                  icon: const Icon(Icons.key, color: Colors.white)),
+              const SizedBox(height: 5),
+              AppButton(
+                  text: 'Encerrar sessão',
+                  onPressed: logout,
+                  icon: const Icon(Icons.logout, color: Colors.white),
+                  backgroundColor: Colors.red)
+            ],
           ),
         ));
   }

@@ -9,7 +9,7 @@ class AppLayout extends StatefulWidget {
       {super.key,
       this.appBarTitle,
       bool this.showAppBar = true,
-      this.showBottomNavigationBar,
+      this.showBottomNavigationBar = true,
       required this.body,
       this.floatingActionButton,
       this.onPressLeading});
@@ -26,84 +26,66 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    switch (index) {
-      case 0:
-        {
-          context.replace(AppRoutes.home);
-          break;
-        }
-      case 1:
-        {
-          context.replace(AppRoutes.event);
-          break;
-        }
-      case 2:
-        {
-          context.replace(AppRoutes.eventTicketsRequest);
-          break;
-        }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: widget.showAppBar != null && widget.showAppBar == true
-            ? AppBar(
-                centerTitle: true,
-                backgroundColor: widget.appBarTitle != null
-                    ? AppColorsConst.blue
-                    : AppColorsConst.white,
-                title: widget.appBarTitle != null
-                    ? Text(
-                        widget.appBarTitle!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: widget.appBarTitle != null
-                                ? Colors.white
-                                : Colors.black),
-                      )
-                    : null)
-            : null,
-        body: widget.body,
-        bottomNavigationBar: widget.showBottomNavigationBar != null &&
-                widget.showBottomNavigationBar == true
-            ? BottomNavigationBar(
-                backgroundColor: AppColorsConst.blue,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'images/home-icon.svg',
-                    ),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'images/event-icon.svg',
-                    ),
-                    label: 'Eventos',
-                  ),
-                  BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'images/ticket-request-icon.svg',
-                      ),
-                      label: 'Solicitações',
-                      backgroundColor: Colors.white),
-                ],
-                currentIndex: _selectedIndex,
-                selectedIconTheme: const IconThemeData(color: Colors.green),
-                selectedItemColor: Colors.amber[800],
-                selectedLabelStyle: const TextStyle(color: Colors.white),
-                onTap: _onItemTapped,
-              )
-            : null,
-        floatingActionButton: widget.floatingActionButton);
+      appBar: widget.showAppBar != null && widget.showAppBar == true
+          ? AppBar(
+              centerTitle: true,
+              backgroundColor: widget.appBarTitle != null
+                  ? AppColorsConst.blue
+                  : AppColorsConst.white,
+              title: widget.appBarTitle != null
+                  ? Text(
+                      widget.appBarTitle!,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: widget.appBarTitle != null
+                              ? Colors.white
+                              : Colors.black),
+                    )
+                  : null)
+          : null,
+      body: widget.body,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        elevation: 13,
+        backgroundColor: Colors.green,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        height: 60,
+        color: AppColorsConst.blue,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 5,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: SvgPicture.asset(
+                'images/home-icon.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+              onPressed: () => context.replace(AppRoutes.home),
+            ),
+            IconButton(
+              icon: SvgPicture.asset(
+                'images/event-icon.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+              onPressed: () => context.replace(AppRoutes.event),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
