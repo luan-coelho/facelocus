@@ -20,13 +20,13 @@ public class UserFacePhoto {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String fileName;
-    private LocalDate uploudDate;
+    private LocalDate uploadDate;
     private String filePath;
     @OneToOne
     private User user;
 
     @PrePersist
     public void generateUploudDate() {
-        this.uploudDate = LocalDate.now();
+        this.uploadDate = LocalDate.now();
     }
 }

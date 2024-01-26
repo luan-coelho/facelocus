@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public record UserFacePhotoResponseDTO(
         Long id,
         String fileName,
-        LocalDate uploudDate,
+        LocalDate uploadDate,
         String filePath
 ) {
 }

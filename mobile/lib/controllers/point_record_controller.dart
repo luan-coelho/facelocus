@@ -96,7 +96,14 @@ class PointRecordController extends GetxController {
   }
 
   changeFirstAndLastDay(List<PointRecordModel> pointsRecord) {
-    _firstDayCalendar.value = pointsRecord.first.date;
+    // _firstDayCalendar.value = pointsRecord.first.date;
+    // _lastDayCalendar.value = pointsRecord.last.date;
+    DateTime firstDay = pointsRecord.first.date;
+    DateTime today = DateTime.now();
+    if (firstDay.isAfter(today)) {
+      firstDay = today;
+    }
+    _firstDayCalendar.value = firstDay;
     _lastDayCalendar.value = pointsRecord.last.date;
   }
 }

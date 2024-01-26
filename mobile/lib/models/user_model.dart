@@ -11,7 +11,6 @@ class UserModel {
   final UserFacePhotoModel? facePhoto;
   final List<Device>? devices;
 
-
   UserModel({
     this.id,
     required this.name,
@@ -31,10 +30,10 @@ class UserModel {
       email: json['email'],
       cpf: json['cpf'],
       password: json['password'],
-      /* userFacePhoto: json['userFacePhoto']
-          ? null
-          : UserFacePhoto.fromJson(json['userFacePhoto']),
-      devices: json['devices']
+      facePhoto: json['facePhoto'] != null
+          ? UserFacePhotoModel.fromJson(json['facePhoto'])
+          : null,
+      /*devices: json['devices']
           ? null
           : (json['devices'] as List)
               .map((e) => Device.fromJson(e as Map<String, dynamic>))

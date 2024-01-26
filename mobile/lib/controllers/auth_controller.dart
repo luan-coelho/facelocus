@@ -52,7 +52,7 @@ class AuthController extends GetxController {
       }
     } on DioException catch (e) {
       String detail = 'Não foi possível realizar o login';
-      if (e.response?.data['detail']) {
+      if (e.response?.data['detail'] != null) {
         detail = e.response?.data['detail'];
       }
       if (context.mounted) {
@@ -69,7 +69,7 @@ class AuthController extends GetxController {
         removeToken();
         await prefs.remove('user');
         if (context.mounted) {
-          context.pushReplacement(AppRoutes.login);
+          context.replace(AppRoutes.login);
         }
         return;
       }
@@ -84,7 +84,7 @@ class AuthController extends GetxController {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401 && context.mounted) {
-        context.push(AppRoutes.login);
+        context.replace(AppRoutes.login);
         MessageSnacks.warn(context, 'Sua sessão expirou');
       }
       var detail = e.response?.data['detail'];

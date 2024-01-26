@@ -35,17 +35,17 @@ class _AppLayoutState extends State<AppLayout> {
     switch (index) {
       case 0:
         {
-          context.go(AppRoutes.home);
+          context.replace(AppRoutes.home);
           break;
         }
       case 1:
         {
-          context.go(AppRoutes.event);
+          context.replace(AppRoutes.event);
           break;
         }
       case 2:
         {
-          context.go(AppRoutes.eventTicketsRequest);
+          context.replace(AppRoutes.eventTicketsRequest);
           break;
         }
     }
@@ -70,30 +70,7 @@ class _AppLayoutState extends State<AppLayout> {
                                 ? Colors.white
                                 : Colors.black),
                       )
-                    : null,
-                leading:
-                    Navigator.canPop(context) || widget.onPressLeading != null
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: IconButton(
-                              icon: SvgPicture.asset(
-                                'images/chevron-left-icon.svg',
-                                colorFilter: ColorFilter.mode(
-                                    widget.appBarTitle != null
-                                        ? Colors.white
-                                        : Colors.black,
-                                    BlendMode.srcIn),
-                              ),
-                              onPressed: () {
-                                if (widget.onPressLeading != null) {
-                                  widget.onPressLeading!();
-                                  return;
-                                }
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          )
-                        : null)
+                    : null)
             : null,
         body: widget.body,
         bottomNavigationBar: widget.showBottomNavigationBar != null &&
