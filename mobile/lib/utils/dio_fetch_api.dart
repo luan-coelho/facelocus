@@ -19,7 +19,7 @@ class DioFetchApi implements FetchApi {
     try {
       final String? token = await getToken();
       return await _dio.get('$_baseUrl$url',
-          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+          options: authHeaders ? getAuthenticationHeaders(token) : null);
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;
@@ -33,7 +33,7 @@ class DioFetchApi implements FetchApi {
       final String? token = await getToken();
       var response = await _dio.post('$_baseUrl$url',
           data: data,
-          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+          options: authHeaders ? getAuthenticationHeaders(token) : null);
       return response;
     } on DioException catch (e) {
       _checkAuthorization(e);
@@ -48,7 +48,7 @@ class DioFetchApi implements FetchApi {
       final String? token = await getToken();
       return await _dio.patch('$_baseUrl$url',
           data: data,
-          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+          options: authHeaders ? getAuthenticationHeaders(token) : null);
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;
@@ -60,14 +60,14 @@ class DioFetchApi implements FetchApi {
     try {
       final String? token = await getToken();
       return await _dio.delete('$_baseUrl$url',
-          options: authHeaders ? _getAuthenticationHeaders(token) : null);
+          options: authHeaders ? getAuthenticationHeaders(token) : null);
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;
     }
   }
 
-  Options _getAuthenticationHeaders(String? token) {
+  Options getAuthenticationHeaders(String? token) {
     return Options(headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer $token"

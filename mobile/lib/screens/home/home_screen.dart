@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/home/widgets/home_features.dart';
 import 'package:facelocus/screens/home/widgets/point_record_card.dart';
 import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -31,18 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller = Get.find<PointRecordController>();
     _selectedDay = _focusedDay;
     _controller.fetchAllByUser(context);
+    _controller.fetchAllByDate(context, DateTime.now());
     super.initState();
   }
 
   List<PointRecordModel> _getEventsForDate(DateTime date) {
     Map<DateTime, List<PointRecordModel>> pointsRecordsByDate;
     pointsRecordsByDate = _groupByDate(_controller.pointsRecord);
-    var list = pointsRecordsByDate[date] ?? [];
-    return list;
+    return pointsRecordsByDate[date] ?? [];
   }
 
-  LinkedHashMap<DateTime, List<PointRecordModel>> _groupByDate(
-      List<PointRecordModel> pointRecords) {
+  _groupByDate(List<PointRecordModel> pointRecords) {
     Map<DateTime, List<PointRecordModel>> groupedByDate = {};
 
     for (PointRecordModel record in pointRecords) {
@@ -86,8 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const UserCardHome(),
-                const SizedBox(height: 30),
-                const HomeFeatures(),
                 const SizedBox(height: 30),
                 Container(
                   padding: const EdgeInsets.all(5),

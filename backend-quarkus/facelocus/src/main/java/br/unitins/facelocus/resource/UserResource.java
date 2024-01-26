@@ -15,6 +15,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
@@ -79,5 +80,13 @@ public class UserResource {
     public Response checkFace(@RestQuery("user") Long userId, MultipartData multipartBody) {
         faceRecognitionService.facePhotoValidation(userId, multipartBody);
         return Response.ok().build();
+    }
+
+    @Path("/face-photo")
+    @GET
+    @Produces({"image/png", "image/jpeg"})
+    public Response getUserFacePhoto(@RestQuery("user") Long userId) {
+        ByteArrayInputStream inputStream = userService.getUserFacePhoto(userId);
+        return Response.ok(inputStream).build();
     }
 }

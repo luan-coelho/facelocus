@@ -35,4 +35,9 @@ class UserService {
     String url = '${AppRoutes.user}/check-face?user=$userId';
     return await _fetchApi.post(url, data: formData);
   }
+
+  getFacePhotoById(int userId) async {
+    String url = '${AppRoutes.user}/face-photo?user=$userId';
+    return await _fetchApi.get(url);
+  }
 }

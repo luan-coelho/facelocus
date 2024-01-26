@@ -1,10 +1,5 @@
 package br.unitins.facelocus.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import br.unitins.facelocus.dto.ChangePasswordDTO;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.UserRepository;
@@ -12,9 +7,16 @@ import br.unitins.facelocus.service.auth.PasswordHandlerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.NotFoundException;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class UserService extends BaseService<User, UserRepository> {
@@ -63,5 +65,21 @@ public class UserService extends BaseService<User, UserRepository> {
         }
         user.setPassword(changePasswordDTO.confirmPassword());
         this.update(user);
+    }
+
+    public ByteArrayInputStream getUserFacePhoto(Long userId) {
+        User user = findByIdOptional(userId)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
+        try {
+            File file = new File(user.getFacePhoto().getFilePath());
+            String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+            BufferedImage image = ImageIO.read(file);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, extension, baos);
+            byte[] byteArray = baos.toByteArray();
+            return new ByteArrayInputStream(byteArray);
+        } catch (Exception e) {
+            throw new NotFoundException("Arquivo foto não encontrado");
+        }
     }
 }

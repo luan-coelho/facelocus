@@ -1,19 +1,16 @@
 import 'dart:collection';
 
-import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/screens/point-record/widgets/event_search.dart';
 import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
-import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class PointRecordCreateScreen extends StatefulWidget {
@@ -26,7 +23,6 @@ class PointRecordCreateScreen extends StatefulWidget {
 
 class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   late final PointRecordController _controller;
-  late final EventController _eventController;
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _allowableRadiusInMeters = 5.0;
@@ -63,7 +59,6 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   @override
   void initState() {
     _controller = Get.find<PointRecordController>();
-    _eventController = Get.find<EventController>();
     _date = RestorableDateTime(DateTime.now());
     _point = PointModel(initialDate: DateTime.now(), finalDate: DateTime.now());
     super.initState();
