@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/services/user_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class UserController extends GetxController {
   final UserService service;
@@ -35,6 +37,25 @@ class UserController extends GetxController {
   fetchAllByNameOrCpf(String identifier) async {
     _isLoading.value = true;
     _usersSearch = await service.getAllByNameOrCpf(identifier);
+    _isLoading.value = false;
+  }
+
+  facePhotoProfileUploud(BuildContext context, File file) async {
+    _isLoading.value = true;
+    try {
+      AuthController authController = Get.find<AuthController>();
+      UserModel user = authController.authenticatedUser.value!;
+      await service.facePhotoProfileUploud(file, user.id!);
+      if (context.mounted) {
+        context.replace(AppRoutes.home);
+        MessageSnacks.success(context, 'Uploud realizado com sucesso');
+      }
+    } on DioException catch (e) {
+      String detail = onError(e);
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
+    }
     _isLoading.value = false;
   }
 

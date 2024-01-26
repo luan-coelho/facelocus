@@ -37,10 +37,17 @@ class AuthController extends GetxController {
         await _storage.write(key: 'token', value: token);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setInt('user', userId);
-        addAuthenticatedUser(tokenResponse.user);
+        UserModel user = tokenResponse.user;
+        addAuthenticatedUser(user);
+
         if (context.mounted) {
+          if (user.facePhoto == null) {
+            context.replace(AppRoutes.userUploadFacePhoto);
+            return;
+          }
           context.replace(AppRoutes.home);
         }
+
         return;
       }
     } on DioException catch (e) {
@@ -69,6 +76,10 @@ class AuthController extends GetxController {
       var user = await _userService.getById(userId);
       addAuthenticatedUser(user);
       if (context.mounted) {
+        if (user.facePhoto == null) {
+          context.pushReplacement(AppRoutes.userUploadFacePhoto);
+          return;
+        }
         context.pushReplacement(AppRoutes.home);
       }
     } on DioException catch (e) {

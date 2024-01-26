@@ -8,14 +8,18 @@ class AppLayout extends StatefulWidget {
   const AppLayout(
       {super.key,
       this.appBarTitle,
-      this.showAppBar,
+      bool this.showAppBar = true,
+      this.showBottomNavigationBar,
       required this.body,
-      this.floatingActionButton});
+      this.floatingActionButton,
+      this.onPressLeading});
 
   final String? appBarTitle;
   final bool? showAppBar;
+  final bool? showBottomNavigationBar;
   final Widget body;
   final Widget? floatingActionButton;
+  final void Function()? onPressLeading;
 
   @override
   State<AppLayout> createState() => _AppLayoutState();
@@ -50,7 +54,7 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: widget.showAppBar == null
+        appBar: widget.showAppBar != null && widget.showAppBar == true
             ? AppBar(
                 centerTitle: true,
                 backgroundColor: widget.appBarTitle != null
@@ -67,52 +71,62 @@ class _AppLayoutState extends State<AppLayout> {
                                 : Colors.black),
                       )
                     : null,
-                leading: Navigator.canPop(context)
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            'images/chevron-left-icon.svg',
-                            colorFilter: ColorFilter.mode(
-                                widget.appBarTitle != null
-                                    ? Colors.white
-                                    : Colors.black,
-                                BlendMode.srcIn),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      )
-                    : null)
+                leading:
+                    Navigator.canPop(context) || widget.onPressLeading != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: IconButton(
+                              icon: SvgPicture.asset(
+                                'images/chevron-left-icon.svg',
+                                colorFilter: ColorFilter.mode(
+                                    widget.appBarTitle != null
+                                        ? Colors.white
+                                        : Colors.black,
+                                    BlendMode.srcIn),
+                              ),
+                              onPressed: () {
+                                if (widget.onPressLeading != null) {
+                                  widget.onPressLeading!();
+                                  return;
+                                }
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          )
+                        : null)
             : null,
         body: widget.body,
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: AppColorsConst.blue,
-          items: [
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'images/home-icon.svg',
-              ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'images/event-icon.svg',
-              ),
-              label: 'Eventos',
-            ),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'images/ticket-request-icon.svg',
-                ),
-                label: 'Solicitações',
-                backgroundColor: Colors.white),
-          ],
-          currentIndex: _selectedIndex,
-          selectedIconTheme: const IconThemeData(color: Colors.green),
-          selectedItemColor: Colors.amber[800],
-          selectedLabelStyle: const TextStyle(color: Colors.white),
-          onTap: _onItemTapped,
-        ),
+        bottomNavigationBar: widget.showBottomNavigationBar != null &&
+                widget.showBottomNavigationBar == true
+            ? BottomNavigationBar(
+                backgroundColor: AppColorsConst.blue,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      'images/home-icon.svg',
+                    ),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      'images/event-icon.svg',
+                    ),
+                    label: 'Eventos',
+                  ),
+                  BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        'images/ticket-request-icon.svg',
+                      ),
+                      label: 'Solicitações',
+                      backgroundColor: Colors.white),
+                ],
+                currentIndex: _selectedIndex,
+                selectedIconTheme: const IconThemeData(color: Colors.green),
+                selectedItemColor: Colors.amber[800],
+                selectedLabelStyle: const TextStyle(color: Colors.white),
+                onTap: _onItemTapped,
+              )
+            : null,
         floatingActionButton: widget.floatingActionButton);
   }
 }

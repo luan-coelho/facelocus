@@ -7,6 +7,7 @@ import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,36 +53,31 @@ class _UserCardHomeState extends State<UserCardHome> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Seja bem-vindo',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w200),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      "Luan",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Seja bem-vindo',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    "Luan",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  )
+                ],
               ),
               Container(
-                alignment: Alignment.centerLeft,
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white.withOpacity(0.7)),
+                    border: Border.all(color: Colors.black12.withOpacity(0.7)),
                     shape: BoxShape.circle),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () => context.push(AppRoutes.profile),
@@ -101,6 +97,12 @@ class _UserCardHomeState extends State<UserCardHome> {
                             backgroundImage: image,
                             radius: 150,
                           ),
+                          errorWidget: (context, url, error) {
+                            return SvgPicture.asset(
+                              'images/user-icon.svg',
+                              width: 45,
+                            );
+                          },
                         );
                       }),
                     )

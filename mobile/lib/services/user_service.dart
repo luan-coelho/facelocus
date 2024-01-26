@@ -28,6 +28,14 @@ class UserService {
     return UserModel.fromJson(data);
   }
 
+  facePhotoProfileUploud(File facePhoto, int userId) async {
+    var filename = "facephoto.jpg";
+    var file = await MultipartFile.fromFile(facePhoto.path, filename: filename);
+    var formData = FormData.fromMap({"fileName": filename, "file": file});
+    String url = '${AppRoutes.user}/uploud-face-photo?user=$userId';
+    return await _fetchApi.post(url, data: formData);
+  }
+
   checkFace(File facePhoto, int userId) async {
     var filename = "facephoto.jpg";
     var file = await MultipartFile.fromFile(facePhoto.path, filename: filename);

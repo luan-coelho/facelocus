@@ -30,8 +30,4 @@ public class User {
     private List<Device> devices;
     @ManyToMany(mappedBy = "users")
     private List<Event> events;
-
-    public String getFullName() {
-        return this.name.trim() + " " + this.surname.trim();
-    }
 }

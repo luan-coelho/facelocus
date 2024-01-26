@@ -8,7 +8,7 @@ class UserModel {
   final String email;
   final String cpf;
   final String? password;
-  final UserFacePhotoModel? userFacePhoto;
+  final UserFacePhotoModel? facePhoto;
   final List<Device>? devices;
 
 
@@ -19,7 +19,7 @@ class UserModel {
     required this.email,
     required this.cpf,
     this.password,
-    this.userFacePhoto,
+    this.facePhoto,
     this.devices,
   });
 

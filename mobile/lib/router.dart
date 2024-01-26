@@ -1,3 +1,4 @@
+import 'package:facelocus/screens/auth/face_upload_screen.dart';
 import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/auth/register_screen.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
@@ -29,6 +30,7 @@ class AppRoutes {
   static const eventTicketsRequest = '/ticket-request';
   static const eventTicketsRequestShow = '/ticket-request';
   static const user = '/user';
+  static const userUploadFacePhoto = '$user/uploud-face-photo';
   static const userSearch = '$user/search';
   static const pointRecord = '/point-record';
   static const pointRecordCreate = '$pointRecord/create';
@@ -48,6 +50,10 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.register,
       builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.userUploadFacePhoto,
+      builder: (context, state) => const FaceUploadScreen(),
     ),
     GoRoute(
       path: AppRoutes.home,
