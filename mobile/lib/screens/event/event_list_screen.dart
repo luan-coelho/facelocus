@@ -48,7 +48,7 @@ class _EventListScreenState extends State<EventListScreen> {
     return AppLayout(
       appBarTitle: 'Eventos',
       body: Padding(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+        padding: const EdgeInsets.all(30),
         child: Column(
           children: [
             Row(
@@ -57,14 +57,14 @@ class _EventListScreenState extends State<EventListScreen> {
                 Expanded(
                     child: AppButton(
                   onPressed: showTicketRequestCreateForm,
+                  textColor: Colors.black,
+                  backgroundColor: Colors.white,
                   text: 'Ingressar-se',
                 )),
                 const SizedBox(width: 15),
                 Expanded(
                     child: AppButton(
-                        onPressed: showEventCreateForm,
-                        text: 'Criar evento',
-                        backgroundColor: Colors.green.shade600))
+                        onPressed: showEventCreateForm, text: 'Criar evento'))
               ],
             ),
             const SizedBox(height: 25),
@@ -75,7 +75,6 @@ class _EventListScreenState extends State<EventListScreen> {
               return Skeletonizer(
                 enabled: _controller.isLoading.value,
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(height: 20);
                   },

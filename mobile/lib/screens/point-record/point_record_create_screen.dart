@@ -232,7 +232,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                   const EdgeInsets.only(left: 15, right: 15),
                               separatorBuilder:
                                   (BuildContext context, int index) {
-                                return const SizedBox(height: 15);
+                                return const SizedBox(height: 10);
                               },
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.vertical,
@@ -251,20 +251,17 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: newPoint,
-                      child: const AppButton(
-                        text: 'Ponto',
-                        width: 100,
-                        height: 40,
-                        icon: Icon(Icons.add),
-                        backgroundColor: Colors.green,
-                      ),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppButton(
+                    onPressed: newPoint,
+                    textColor: Colors.green,
+                    text: 'Adicionar ponto',
+                    height: 35,
+                    textFontSize: 12,
+                    borderColor: Colors.green,
+                    backgroundColor: Colors.green.withOpacity(0.3),
+                  ),
                 ),
                 const SizedBox(height: 15),
                 AppButton(text: 'Cadastrar', onPressed: _create),
@@ -327,14 +324,9 @@ class _TimePickerCardState extends State<TimePickerCard> {
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 width: 110,
                 height: 35,
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 0,
-                    blurRadius: 5,
-                    offset: const Offset(0, 1.5),
-                  ),
-                ], color: Colors.white),
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

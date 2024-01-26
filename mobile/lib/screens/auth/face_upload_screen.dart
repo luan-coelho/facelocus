@@ -37,8 +37,9 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      showAppBar: true,
       appBarTitle: 'Realizar uploud de foto',
+      showAppBar: true,
+      showBottomNavigationBar: false,
       onPressLeading: _openCamera
           ? () {
               setState(() {

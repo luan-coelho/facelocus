@@ -2,14 +2,12 @@ import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/home/widgets/point_record_card.dart';
 import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -141,8 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('Registros de ponto',
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                _controller.pointsRecordByDate.isNotEmpty
+                    ? const Text('Registros de ponto',
+                        style: TextStyle(fontWeight: FontWeight.w600))
+                    : const SizedBox(),
                 const SizedBox(height: 10),
                 Expanded(
                     child: SingleChildScrollView(
@@ -165,11 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.pointRecordCreate),
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.add, color: Colors.white, size: 29),
       ),
     );
   }

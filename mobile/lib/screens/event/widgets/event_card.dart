@@ -16,16 +16,8 @@ class EventCard extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15, right: 15),
           width: double.infinity,
           height: 45,
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 0,
-                  blurRadius: 5,
-                  offset: const Offset(0, 1.5),
-                ),
-              ],
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,20 +25,9 @@ class EventCard extends StatelessWidget {
               Expanded(
                 child: Text(event.description!,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis)),
-              ),
-              PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
-                  // Ícone de três pontos
-                  itemBuilder: (BuildContext context) {
-                    return <PopupMenuEntry>[
-                      PopupMenuItem(
-                        child: const Text('Editar'),
-                        onTap: () {},
-                      ),
-                      PopupMenuItem(child: const Text('Deletar'), onTap: () {})
-                    ];
-                  })
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis)),
+              )
             ],
           )),
     );

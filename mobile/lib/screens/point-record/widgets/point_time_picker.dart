@@ -34,32 +34,28 @@ class _PointTimePickerState extends State<PointTimePicker> {
         TimePickerCard(
             dateTime: widget.point.initialDate,
             borderPosition: AxisDirection.left),
-        TimePickerCard(
-            dateTime: widget.point.finalDate,
-            borderPosition: AxisDirection.right),
-        Flexible(
-          child: GestureDetector(
-            onTap: removePoint,
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              height: 35,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 0,
-                      blurRadius: 5,
-                      offset: const Offset(0, 1.5),
-                    ),
-                  ],
-                  borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10))),
-              child: const Icon(Icons.delete, color: Colors.red),
+        const SizedBox(
+          width: 10,
+        ),
+        SizedBox(
+          height: 20.0,
+          width: 20.0,
+          child: IconButton(
+            padding: const EdgeInsets.all(0.0),
+            onPressed: removePoint,
+            icon: const Icon(Icons.delete, size: 15.0),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
             ),
           ),
-        )
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        TimePickerCard(
+            dateTime: widget.point.finalDate,
+            borderPosition: AxisDirection.right)
       ],
     );
   }

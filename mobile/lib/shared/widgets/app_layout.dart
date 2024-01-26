@@ -48,44 +48,50 @@ class _AppLayoutState extends State<AppLayout> {
                   : null)
           : null,
       body: widget.body,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        elevation: 13,
-        backgroundColor: Colors.green,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton: widget.showBottomNavigationBar != null &&
+              widget.showBottomNavigationBar == true
+          ? FloatingActionButton(
+              onPressed: () => context.push(AppRoutes.pointRecordCreate),
+              elevation: 13,
+              backgroundColor: Colors.green,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 60,
-        color: AppColorsConst.blue,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 5,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: SvgPicture.asset(
-                'images/home-icon.svg',
-                colorFilter:
-                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+      bottomNavigationBar: widget.showBottomNavigationBar != null &&
+              widget.showBottomNavigationBar == true
+          ? BottomAppBar(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 60,
+              color: AppColorsConst.blue,
+              shape: const CircularNotchedRectangle(),
+              notchMargin: 5,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      'images/home-icon.svg',
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    onPressed: () => context.replace(AppRoutes.home),
+                  ),
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      'images/event-icon.svg',
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    onPressed: () => context.replace(AppRoutes.event),
+                  ),
+                ],
               ),
-              onPressed: () => context.replace(AppRoutes.home),
-            ),
-            IconButton(
-              icon: SvgPicture.asset(
-                'images/event-icon.svg',
-                colorFilter:
-                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              ),
-              onPressed: () => context.replace(AppRoutes.event),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null,
     );
   }
 }

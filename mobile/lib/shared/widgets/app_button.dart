@@ -9,6 +9,7 @@ class AppButton extends StatefulWidget {
       this.textColor,
       this.textFontSize,
       this.backgroundColor,
+      this.borderColor,
       this.onPressed,
       this.icon,
       this.isLoading = false,
@@ -20,6 +21,7 @@ class AppButton extends StatefulWidget {
   final Color? textColor;
   final double? textFontSize;
   final Color? backgroundColor;
+  final Color? borderColor;
   final VoidCallback? onPressed;
   final Widget? icon;
   final bool? isLoading;
@@ -44,6 +46,11 @@ class _AppButtonState extends State<AppButton> {
                 widget.textColor ?? Colors.white),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
+              side: BorderSide(
+                color: widget.borderColor != null
+                    ? widget.borderColor!
+                    : AppColorsConst.blue,
+              ),
               borderRadius: BorderRadius.circular(10.0),
             ))),
         onPressed: widget.isLoading != null ? widget.onPressed : null,
