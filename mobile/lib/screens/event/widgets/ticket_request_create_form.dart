@@ -39,10 +39,9 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
       }
     }
 
-    return AlertDialog(
-      scrollable: true,
-      content: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(29.0),
         child: Builder(builder: (context) {
           return Form(
             key: _formKey,
@@ -62,24 +61,24 @@ class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
                       return null;
                     },
                     maxLength: 6),
+                const SizedBox(height: 10),
+                Obx(() {
+                  return AppButton(
+                      onPressed: request,
+                      text: 'Solicitar',
+                      icon: _controller.isLoading.value
+                          ? const SizedBox(
+                              width: 17,
+                              height: 17,
+                              child: CircularProgressIndicator(
+                                  color: Colors.white))
+                          : null);
+                })
               ],
             ),
           );
         }),
       ),
-      actions: [
-        Obx(() {
-          return AppButton(
-              onPressed: request,
-              text: 'Solicitar',
-              icon: _controller.isLoading.value
-                  ? const SizedBox(
-                      width: 17,
-                      height: 17,
-                      child: CircularProgressIndicator(color: Colors.white))
-                  : null);
-        })
-      ],
     );
   }
 }

@@ -21,7 +21,6 @@ class _UserFaceImageState extends State<UserFaceImage> {
   late final AuthController _authController;
   late final UserModel _user;
   late final Map<String, String> _httpHeaders;
-  bool _isLoading = true;
 
   @override
   void initState() {
@@ -33,9 +32,6 @@ class _UserFaceImageState extends State<UserFaceImage> {
         HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: "Bearer $token"
       };
-      setState(() {
-        _isLoading = false;
-      });
     });
     super.initState();
   }

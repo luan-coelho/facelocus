@@ -36,11 +36,9 @@ class _EventCreateFormState extends State<EventCreateForm> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      scrollable: true,
-      title: const Text('Novo evento'),
-      content: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(29.0),
         child: Builder(builder: (context) {
           return Form(
             key: _formKey,
@@ -56,7 +54,6 @@ class _EventCreateFormState extends State<EventCreateForm> {
                       return null;
                     },
                     onSaved: (value) => event.description = value!),
-                const SizedBox(height: 15),
                 Row(
                   children: [
                     const Flexible(
@@ -73,30 +70,30 @@ class _EventCreateFormState extends State<EventCreateForm> {
                         }),
                   ],
                 ),
+                const SizedBox(height: 15),
+                Obx(() {
+                  return AppButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState?.save();
+                          event.allowTicketRequests = allowTicketRequests;
+                          _controller.create(context, event);
+                        }
+                      },
+                      text: 'Cadastrar',
+                      icon: _controller.isLoading.value
+                          ? const SizedBox(
+                              width: 17,
+                              height: 17,
+                              child: CircularProgressIndicator(
+                                  color: Colors.white))
+                          : null);
+                })
               ],
             ),
           );
         }),
       ),
-      actions: [
-        Obx(() {
-          return AppButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState?.save();
-                  event.allowTicketRequests = allowTicketRequests;
-                  _controller.create(context, event);
-                }
-              },
-              text: 'Cadastrar',
-              icon: _controller.isLoading.value
-                  ? const SizedBox(
-                      width: 17,
-                      height: 17,
-                      child: CircularProgressIndicator(color: Colors.white))
-                  : null);
-        })
-      ],
     );
   }
 }

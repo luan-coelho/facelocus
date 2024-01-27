@@ -30,19 +30,31 @@ class _EventListScreenState extends State<EventListScreen> {
   @override
   Widget build(BuildContext context) {
     showEventCreateForm() {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const EventCreateForm();
-          });
+      showModalBottomSheet<void>(
+        isScrollControlled: true,
+        isDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: const EventCreateForm(),
+          );
+        },
+      );
     }
 
     showTicketRequestCreateForm() {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const TicketRequestCreateForm();
-          });
+      showModalBottomSheet<void>(
+        isScrollControlled: true,
+        isDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: const TicketRequestCreateForm(),
+          );
+        },
+      );
     }
 
     return AppLayout(
