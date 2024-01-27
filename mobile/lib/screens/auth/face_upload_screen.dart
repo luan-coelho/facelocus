@@ -69,12 +69,15 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                     }),
                 const SizedBox(height: 10),
                 AppButton(
-                    text: 'Sair',
-                    onPressed: () {
-                      _authController.logout();
-                      context.replace(AppRoutes.login);
-                    },
-                    backgroundColor: Colors.red)
+                  text: 'Sair',
+                  onPressed: () {
+                    _authController.logout();
+                    context.replace(AppRoutes.login);
+                  },
+                  textColor: Colors.red,
+                  backgroundColor: Colors.red.withOpacity(0.2),
+                  borderColor: Colors.red,
+                )
               ],
             ),
           );

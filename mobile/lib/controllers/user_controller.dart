@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/user_service.dart';
@@ -82,5 +83,28 @@ class UserController extends GetxController {
       return e.response?.data['detail'];
     }
     return message ?? 'Falha ao executar esta ação';
+  }
+
+  changePassword(BuildContext context, ChangePasswordDTO credentials) async {
+    _isLoading.value = true;
+    try {
+      AuthController authController = Get.find<AuthController>();
+      UserModel user = authController.authenticatedUser.value!;
+      await service.changePassword(user.id!, credentials);
+      if (context.mounted) {
+        context.pop();
+        MessageSnacks.success(context, 'Senha alterada com sucesso');
+      }
+    } on DioException catch (e) {
+      String detail = 'Não foi possível realizar o login';
+      if (e.response?.data['detail'] != null) {
+        detail = e.response?.data['detail'];
+      }
+
+      if (context.mounted) {
+        MessageSnacks.danger(context, detail);
+      }
+    }
+    _isLoading.value = false;
   }
 }

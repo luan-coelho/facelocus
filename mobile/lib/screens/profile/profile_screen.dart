@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return AppLayout(
         appBarTitle: 'Perfil',
         body: Padding(
-          padding: const EdgeInsets.all(45),
+          padding: const EdgeInsets.all(29),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,13 +78,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   text: 'Alterar senha',
                   onPressed: showModal,
                   icon: const Icon(Icons.key, color: Colors.white)),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               AppButton(
-                text: 'Encerrar sessão',
+                text: 'Sair',
                 onPressed: logout,
-                icon: const Icon(Icons.logout, color: Colors.red),
                 textColor: Colors.red,
-                backgroundColor: Colors.red.withOpacity(0.1),
+                backgroundColor: Colors.red.withOpacity(0.2),
                 borderColor: Colors.red,
               )
             ],

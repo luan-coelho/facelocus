@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
@@ -26,6 +27,12 @@ class UserService {
     final response = await _fetchApi.get('${AppRoutes.user}/$id');
     var data = response.data;
     return UserModel.fromJson(data);
+  }
+
+  changePassword(int userId, ChangePasswordDTO credentials) async {
+    var json = credentials.toJson();
+    String url = '${AppRoutes.user}/change-password?user=$userId';
+    return await _fetchApi.patch(url, data: json);
   }
 
   facePhotoProfileUploud(File facePhoto, int userId) async {

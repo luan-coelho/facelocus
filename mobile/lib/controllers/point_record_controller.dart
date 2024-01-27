@@ -3,6 +3,7 @@ import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +57,7 @@ class PointRecordController extends GetxController {
       if (context.mounted) {
         MessageSnacks.success(context, 'Registro de ponto criado com sucesso');
         event.value = null;
-        context.pop();
+        context.pushReplacement(AppRoutes.home);
       }
     } on DioException catch (e) {
       String detail = onError(e);

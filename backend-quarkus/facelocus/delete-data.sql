@@ -27,3 +27,6 @@ FROM pointrecord;
 
 DELETE
 FROM event;
+
+DELETE
+FROM tb_user;

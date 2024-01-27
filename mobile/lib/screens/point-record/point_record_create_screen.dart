@@ -146,6 +146,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const SizedBox(height: 15),
                 const Text('Fatores de validação',
                     style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -153,15 +154,22 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                       child: Text('Reconhecimento Facial',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
-                    Switch(
-                        value: faceRecognitionFactor,
-                        onChanged: (value) {
-                          setState(() {
-                            faceRecognitionFactor = value;
-                          });
-                        }),
+                    SizedBox(
+                      width: 50,
+                      height: 20,
+                      child: Switch(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          value: faceRecognitionFactor,
+                          onChanged: (value) {
+                            setState(() {
+                              faceRecognitionFactor = value;
+                            });
+                          }),
+                    ),
                   ],
                 ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -169,13 +177,19 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                       child: Text('Localização Indoor',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                     ),
-                    Switch(
-                        value: indoorLocationFactor,
-                        onChanged: (value) {
-                          setState(() {
-                            indoorLocationFactor = value;
-                          });
-                        }),
+                    SizedBox(
+                      width: 50,
+                      height: 20,
+                      child: Switch(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          value: indoorLocationFactor,
+                          onChanged: (value) {
+                            setState(() {
+                              indoorLocationFactor = value;
+                            });
+                          }),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 15),
@@ -242,7 +256,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     height: 35,
                     textFontSize: 12,
                     borderColor: Colors.green,
-                    backgroundColor: Colors.green.withOpacity(0.3),
+                    backgroundColor: Colors.green.withOpacity(0.2),
                   ),
                 ),
                 const SizedBox(height: 15),

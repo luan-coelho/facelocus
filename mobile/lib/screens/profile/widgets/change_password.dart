@@ -1,6 +1,9 @@
+import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChangeUserPassword extends StatefulWidget {
   const ChangeUserPassword({super.key});
@@ -10,6 +13,7 @@ class ChangeUserPassword extends StatefulWidget {
 }
 
 class _ChangeUserPasswordState extends State<ChangeUserPassword> {
+  late final UserController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _currentPasswordController;
   late TextEditingController _newPasswordController;
@@ -21,6 +25,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
 
   @override
   void initState() {
+    _controller = Get.find<UserController>();
     _currentPasswordController = TextEditingController();
     _newPasswordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
@@ -37,6 +42,16 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
 
   @override
   Widget build(BuildContext context) {
+    changePassword() {
+      if (_formKey.currentState!.validate()) {
+        ChangePasswordDTO credentials = ChangePasswordDTO(
+            currentPassword: _currentPasswordController.text,
+            newPassword: _newPasswordController.text,
+            confirmPassword: _confirmPasswordController.text);
+        _controller.changePassword(context, credentials);
+      }
+    }
+
     return Padding(
         padding: const EdgeInsets.all(29.0),
         child: Form(
@@ -76,7 +91,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                     return null;
                   }),
               const SizedBox(height: 15),
-              AppButton(text: 'Alterar', onPressed: _login)
+              AppButton(text: 'Alterar', onPressed: changePassword)
             ]),
           ),
         ));

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/shared/message_snacks.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -7,6 +8,7 @@ import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:facelocus/utils/fields_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -42,6 +44,7 @@ class LoginFormState extends State<RegisterScreen> {
         await service.register(user);
         updateLoading();
         if (context.mounted) {
+          context.replace(AppRoutes.login);
           MessageSnacks.success(context, 'Conta criada com sucesso');
         }
       }
@@ -94,6 +97,7 @@ class LoginFormState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
       appBarTitle: null,
+      showBottomNavigationBar: false,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(

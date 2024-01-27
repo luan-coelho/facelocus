@@ -60,10 +60,10 @@ public class UserService extends BaseService<User, UserRepository> {
         User user = findByIdOptional(userId)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
 
-        if (!user.getPassword().equals(changePasswordDTO.currentPassword())) {
+        if (!passwordHandlerService.checkPassword(changePasswordDTO.currentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("A senha atual informada está incorreta");
         }
-        user.setPassword(changePasswordDTO.confirmPassword());
+        user.setPassword(passwordHandlerService.passwordHash(changePasswordDTO.confirmPassword()));
         this.update(user);
     }
 
