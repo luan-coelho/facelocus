@@ -5,7 +5,7 @@ import 'package:facelocus/dtos/ticket_request_create.dart';
 import 'package:facelocus/models/ticket_request_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/ticket_request_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -62,13 +62,13 @@ class TicketRequestController extends GetxController {
       await service.create(ticketRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
-        MessageSnacks.success(context, message);
+        Toast.success(context, message);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     fetchAll();
@@ -84,7 +84,7 @@ class TicketRequestController extends GetxController {
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     fetchAll();
@@ -100,7 +100,7 @@ class TicketRequestController extends GetxController {
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     fetchAll();

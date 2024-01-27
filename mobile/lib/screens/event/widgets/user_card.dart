@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatefulWidget {
@@ -19,9 +19,9 @@ class _UserCardState extends State<UserCard> {
       try {
         Navigator.pop(context, "OK");
         // _userProvider.deleteById(widget.user.id, _userProvider.eventId);
-        MessageSnacks.success(context, "Localização deletada com sucesso");
+        Toast.success(context, "Localização deletada com sucesso");
       } on DioException catch (e) {
-        MessageSnacks.danger(context, e.message!);
+        Toast.danger(context, e.message!);
       }
     }
 

@@ -6,7 +6,7 @@ import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/user_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -49,12 +49,12 @@ class UserController extends GetxController {
       await service.facePhotoProfileUploud(file, user.id!);
       if (context.mounted) {
         context.replace(AppRoutes.home);
-        MessageSnacks.success(context, 'Uploud realizado com sucesso');
+        Toast.success(context, 'Uploud realizado com sucesso');
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     _isLoading.value = false;
@@ -67,12 +67,12 @@ class UserController extends GetxController {
       UserModel user = authController.authenticatedUser.value!;
       await service.checkFace(file, user.id!);
       if (context.mounted) {
-        MessageSnacks.success(context, 'Validação realizada com sucesso');
+        Toast.success(context, 'Validação realizada com sucesso');
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     _isLoading.value = false;
@@ -93,7 +93,7 @@ class UserController extends GetxController {
       await service.changePassword(user.id!, credentials);
       if (context.mounted) {
         context.pop();
-        MessageSnacks.success(context, 'Senha alterada com sucesso');
+        Toast.success(context, 'Senha alterada com sucesso');
       }
     } on DioException catch (e) {
       String detail = 'Não foi possível realizar o login';
@@ -102,7 +102,7 @@ class UserController extends GetxController {
       }
 
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     _isLoading.value = false;

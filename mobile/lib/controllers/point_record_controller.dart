@@ -5,7 +5,7 @@ import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/point_record_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -55,14 +55,14 @@ class PointRecordController extends GetxController {
     try {
       await service.create(pointRecord);
       if (context.mounted) {
-        MessageSnacks.success(context, 'Registro de ponto criado com sucesso');
+        Toast.success(context, 'Registro de ponto criado com sucesso');
         event.value = null;
         context.pushReplacement(AppRoutes.home);
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     if (context.mounted) {

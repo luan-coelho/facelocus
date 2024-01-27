@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
@@ -45,7 +45,7 @@ class LoginFormState extends State<RegisterScreen> {
         updateLoading();
         if (context.mounted) {
           context.replace(AppRoutes.login);
-          MessageSnacks.success(context, 'Conta criada com sucesso');
+          Toast.success(context, 'Conta criada com sucesso');
         }
       }
     } on DioException catch (e) {
@@ -60,7 +60,7 @@ class LoginFormState extends State<RegisterScreen> {
         });
       }
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
   }

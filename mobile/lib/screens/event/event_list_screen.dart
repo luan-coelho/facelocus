@@ -47,6 +47,7 @@ class _EventListScreenState extends State<EventListScreen> {
       showModalBottomSheet<void>(
         isScrollControlled: true,
         isDismissible: true,
+        useSafeArea: true,
         context: context,
         builder: (BuildContext context) {
           return Padding(

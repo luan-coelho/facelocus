@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/providers/location_provider.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +31,9 @@ class _LocationCardState extends State<LocationCard> {
         Navigator.pop(context, "OK");
         _locationProvider.deleteById(
             widget.location.id!, _locationProvider.eventId);
-        MessageSnacks.success(context, "Localização deletada com sucesso");
+        Toast.success(context, "Localização deletada com sucesso");
       } on DioException catch (e) {
-        MessageSnacks.danger(context, e.message!);
+        Toast.danger(context, e.message!);
       }
     }
 

@@ -1,7 +1,7 @@
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/screens/event/widgets/location_card.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
@@ -51,7 +51,7 @@ class _LocationScreenState extends State<LocationListScreen> {
   void addLocation() {
     if (_formKey.currentState!.validate()) {
       if (_location.latitude == 0.0 && _location.longitude == 0.0) {
-        MessageSnacks.warn(context, 'Sem localização definida');
+        Toast.warn(context, 'Sem localização definida');
         return;
       }
 
@@ -212,7 +212,7 @@ class _LocationScreenState extends State<LocationListScreen> {
       });
     } on Exception catch (e) {
       if (context.mounted) {
-        MessageSnacks.danger(context, e.toString());
+        Toast.danger(context, e.toString());
       }
     }
     setState(() {

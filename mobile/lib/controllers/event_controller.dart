@@ -3,7 +3,7 @@ import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/event_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -61,13 +61,13 @@ class EventController extends GetxController {
       event.administrator = administrator;
       await service.create(event);
       if (context.mounted) {
-        MessageSnacks.success(context, 'Evento criado com sucesso');
+        Toast.success(context, 'Evento criado com sucesso');
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao criar evento');
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
     fetchAll();

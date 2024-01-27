@@ -5,7 +5,7 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/user_service.dart';
-import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -56,7 +56,7 @@ class AuthController extends GetxController {
         detail = e.response?.data['detail'];
       }
       if (context.mounted) {
-        MessageSnacks.danger(context, detail);
+        Toast.danger(context, detail);
       }
     }
   }
@@ -85,12 +85,12 @@ class AuthController extends GetxController {
     } on DioException catch (e) {
       if (e.response?.statusCode == 401 && context.mounted) {
         context.replace(AppRoutes.login);
-        MessageSnacks.warn(context, 'Sua sessão expirou');
+        Toast.warn(context, 'Sua sessão expirou');
       }
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível realizar o login';
       if (context.mounted) {
-        MessageSnacks.danger(context, detail ?? message);
+        Toast.danger(context, detail ?? message);
       }
     }
   }
