@@ -89,7 +89,7 @@ class _EventListScreenState extends State<EventListScreen> {
                 enabled: _controller.isLoading.value,
                 child: ListView.separated(
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 20);
+                    return const SizedBox(height: 10);
                   },
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,

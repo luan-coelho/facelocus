@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const UserFaceImage(),
+              // const UserFaceImage(),
               const SizedBox(height: 25),
               InformationField(
                   description: 'Nome Completo', value: _user.getFullName()),
