@@ -2,7 +2,6 @@ import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
-import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';

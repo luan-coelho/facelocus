@@ -4,7 +4,6 @@ import 'package:facelocus/screens/event/widgets/users_search.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
-import 'package:facelocus/shared/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,7 +42,15 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
             padding: const EdgeInsets.all(29.0),
             child: Column(
               children: [
-                const Search(),
+                // AppButton(
+                //   text: 'Selecionar evento',
+                //   onPressed: () async {
+                //     await showSearch(
+                //       context: context,
+                //       delegate: CustomSearchDelegate(),
+                //     );
+                //   },
+                // ),
                 /*
                 FeatureCard(
                     description: 'Solicitações',
