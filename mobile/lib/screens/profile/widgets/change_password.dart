@@ -19,10 +19,6 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
   late TextEditingController _newPasswordController;
   late TextEditingController _confirmPasswordController;
 
-  void _login() async {
-    if (_formKey.currentState!.validate()) {}
-  }
-
   @override
   void initState() {
     _controller = Get.find<UserController>();
@@ -52,11 +48,12 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
       }
     }
 
-    return Padding(
+    return SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(29.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
+        child: Builder(builder: (context) {
+          return Form(
+            key: _formKey,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               AppTextField(
@@ -93,7 +90,9 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               const SizedBox(height: 15),
               AppButton(text: 'Alterar', onPressed: changePassword)
             ]),
-          ),
-        ));
+          );
+        }),
+      ),
+    );
   }
 }

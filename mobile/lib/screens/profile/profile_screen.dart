@@ -40,17 +40,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showModal() {
       showModalBottomSheet<void>(
         isScrollControlled: true,
+        isDismissible: true,
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height / 2 +
-                MediaQuery.of(context).viewInsets.bottom,
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ChangeUserPassword(),
-              ],
-            ),
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: const ChangeUserPassword(),
           );
         },
       );
