@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/shared/message_snacks.dart';
+import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,28 @@ class _LocationCardState extends State<LocationCard> {
       }
     }
 
+    showDeleteDialog() {
+      return showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Você tem certeza?"),
+          content: const Text(
+              "Tem certeza de que deseja excluir este item? Esta ação é irreversível e os dados excluídos não poderão ser recuperados."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, "Cancel"),
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () => deleteLocation(),
+              child:
+                  const Text("Confirmar", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         width: double.infinity,
@@ -55,38 +78,7 @@ class _LocationCardState extends State<LocationCard> {
                     style: const TextStyle(fontWeight: FontWeight.w300)),
               ],
             ),
-            SizedBox(
-              height: 25.0,
-              width: 25.0,
-              child: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                onPressed: () => showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text("Você tem certeza?"),
-                    content: const Text(
-                        "Tem certeza de que deseja excluir este item? Esta ação é irreversível e os dados excluídos não poderão ser recuperados."),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, "Cancel"),
-                        child: const Text("Cancelar"),
-                      ),
-                      TextButton(
-                        onPressed: () => deleteLocation(),
-                        child: const Text("Confirmar",
-                            style: TextStyle(color: Colors.red)),
-                      ),
-                    ],
-                  ),
-                ),
-                icon: const Icon(Icons.delete, size: 20.0),
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                ),
-              ),
-            )
+            AppDeleteButton(onPressed: showDeleteDialog)
           ],
         )));
   }

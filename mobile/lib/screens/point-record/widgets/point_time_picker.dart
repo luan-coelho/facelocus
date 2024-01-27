@@ -1,6 +1,7 @@
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
+import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,19 +38,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
         const SizedBox(
           width: 10,
         ),
-        SizedBox(
-          height: 25.0,
-          width: 25.0,
-          child: IconButton(
-            padding: const EdgeInsets.all(0.0),
-            onPressed: removePoint,
-            icon: const Icon(Icons.delete, size: 20.0),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-            ),
-          ),
-        ),
+        AppDeleteButton(onPressed: removePoint),
         const SizedBox(
           width: 10,
         ),

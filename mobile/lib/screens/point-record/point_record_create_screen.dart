@@ -9,6 +9,7 @@ import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
+import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -100,28 +101,9 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                 children: [
                                   Text(_controller.event.value!.description!),
                                   const SizedBox(width: 5),
-                                  GestureDetector(
-                                    onTap: () => _controller.event.value = null,
-                                    child: SizedBox(
-                                      height: 25.0,
-                                      width: 25.0,
-                                      child: IconButton(
-                                        padding: const EdgeInsets.all(0.0),
-                                        onPressed: () =>
-                                            _controller.event.value = null,
-                                        icon: const Icon(Icons.delete,
-                                            size: 20.0),
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.white),
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.red),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  AppDeleteButton(
+                                      onPressed: () =>
+                                          _controller.event.value = null),
                                 ],
                               )
                             : SizedBox(
