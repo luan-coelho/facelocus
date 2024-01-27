@@ -116,7 +116,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                               Colors.black12.withOpacity(0.1)),
                                       foregroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              AppColorsConst.blue),
+                                              AppColorsConst.black),
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(

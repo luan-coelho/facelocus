@@ -28,10 +28,13 @@ class FaceLocusApp extends StatelessWidget {
       title: 'Validação de presença',
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              backgroundColor: AppColorsConst.blue,
+              backgroundColor: AppColorsConst.dark,
+              shadowColor: Colors.white,
               foregroundColor: Colors.white),
           colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColorsConst.blue, background: AppColorsConst.white),
+              seedColor: AppColorsConst.purple,
+              onBackground: Colors.white,
+              background: AppColorsConst.white),
           useMaterial3: true,
           fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,

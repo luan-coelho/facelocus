@@ -41,15 +41,15 @@ class _AppButtonState extends State<AppButton> {
       child: TextButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
-                widget.backgroundColor ?? AppColorsConst.blue),
+                widget.backgroundColor ?? AppColorsConst.purple),
             foregroundColor: MaterialStateProperty.all<Color>(
-                widget.textColor ?? Colors.white),
+                widget.textColor ?? AppColorsConst.white),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               side: BorderSide(
                 color: widget.borderColor != null
                     ? widget.borderColor!
-                    : widget.backgroundColor ?? AppColorsConst.blue,
+                    : widget.backgroundColor ?? AppColorsConst.purple,
               ),
               borderRadius: BorderRadius.circular(10.0),
             ))),

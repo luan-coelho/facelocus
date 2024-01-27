@@ -83,10 +83,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 10),
               AppButton(
                 text: 'Sair',
+                icon: const Icon(Icons.logout, color: Colors.red),
                 onPressed: logout,
                 textColor: Colors.red,
-                backgroundColor: Colors.red.withOpacity(0.2),
-                borderColor: Colors.red,
+                backgroundColor: Colors.transparent,
               )
             ],
           ),

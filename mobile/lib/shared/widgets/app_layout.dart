@@ -33,7 +33,7 @@ class _AppLayoutState extends State<AppLayout> {
           ? AppBar(
               centerTitle: true,
               backgroundColor: widget.appBarTitle != null
-                  ? AppColorsConst.blue
+                  ? AppColorsConst.dark
                   : AppColorsConst.white,
               title: widget.appBarTitle != null
                   ? Text(
@@ -53,7 +53,7 @@ class _AppLayoutState extends State<AppLayout> {
           ? FloatingActionButton(
               onPressed: () => context.replace(AppRoutes.pointRecordCreate),
               elevation: 13,
-              backgroundColor: Colors.green,
+              backgroundColor: AppColorsConst.blue,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30))),
               child: const Icon(Icons.add, color: Colors.white),
@@ -65,7 +65,7 @@ class _AppLayoutState extends State<AppLayout> {
           ? BottomAppBar(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 60,
-              color: AppColorsConst.blue,
+              color: AppColorsConst.dark,
               shape: const CircularNotchedRectangle(),
               notchMargin: 5,
               child: Row(

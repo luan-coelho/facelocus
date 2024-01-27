@@ -8,6 +8,7 @@ import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/event/ticket_request_list_screen.dart';
 import 'package:facelocus/screens/event/ticket_request_show_screen.dart';
+import 'package:facelocus/screens/event/app_search.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
@@ -123,6 +124,12 @@ final router = GoRouter(
       path: AppRoutes.pointRecordPointValidate,
       builder: (context, state) {
         return const PointValidateScreen();
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.userSearch,
+      builder: (context, state) {
+        return const AppSearch();
       },
     ),
   ],

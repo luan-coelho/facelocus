@@ -90,7 +90,7 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
             backgroundColor: MaterialStateProperty.all<Color>(
                 Colors.black12.withOpacity(0.1)),
             foregroundColor:
-                MaterialStateProperty.all<Color>(AppColorsConst.blue),
+                MaterialStateProperty.all<Color>(AppColorsConst.black),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -105,7 +105,7 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
             SvgPicture.asset(
               'images/calendar-icon.svg',
               colorFilter:
-                  const ColorFilter.mode(AppColorsConst.blue, BlendMode.srcIn),
+                  const ColorFilter.mode(AppColorsConst.black, BlendMode.srcIn),
             ),
             const SizedBox(width: 5),
             Text(getFormattedDate(_selectedDate.value),

@@ -67,7 +67,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                       'event': widget.eventId.toString()
                                     }).toString(),
                                 color: Colors.white,
-                                backgroundColor: AppColorsConst.blue,
+                                backgroundColor: AppColorsConst.purple,
                                 imageName: 'locations-icon.svg',
                                 height: 100),
                           ],
