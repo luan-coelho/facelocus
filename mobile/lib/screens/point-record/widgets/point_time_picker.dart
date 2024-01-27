@@ -38,12 +38,12 @@ class _PointTimePickerState extends State<PointTimePicker> {
           width: 10,
         ),
         SizedBox(
-          height: 20.0,
-          width: 20.0,
+          height: 25.0,
+          width: 25.0,
           child: IconButton(
             padding: const EdgeInsets.all(0.0),
             onPressed: removePoint,
-            icon: const Icon(Icons.delete, size: 15.0),
+            icon: const Icon(Icons.delete, size: 20.0),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
               backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

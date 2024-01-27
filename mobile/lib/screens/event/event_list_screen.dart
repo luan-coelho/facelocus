@@ -59,6 +59,7 @@ class _EventListScreenState extends State<EventListScreen> {
                   onPressed: showTicketRequestCreateForm,
                   textColor: Colors.black,
                   backgroundColor: Colors.white,
+                  borderColor: Colors.black.withOpacity(0.5),
                   text: 'Ingressar-se',
                 )),
                 const SizedBox(width: 15),

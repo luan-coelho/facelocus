@@ -80,10 +80,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: const Icon(Icons.key, color: Colors.white)),
               const SizedBox(height: 5),
               AppButton(
-                  text: 'Encerrar sessão',
-                  onPressed: logout,
-                  icon: const Icon(Icons.logout, color: Colors.white),
-                  backgroundColor: Colors.red)
+                text: 'Encerrar sessão',
+                onPressed: logout,
+                icon: const Icon(Icons.logout, color: Colors.red),
+                textColor: Colors.red,
+                backgroundColor: Colors.red.withOpacity(0.1),
+                borderColor: Colors.red,
+              )
             ],
           ),
         ));

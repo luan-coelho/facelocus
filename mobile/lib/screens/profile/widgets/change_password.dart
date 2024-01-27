@@ -37,11 +37,11 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.all(29.0),
-          child: Form(
-            key: _formKey,
+    return Padding(
+        padding: const EdgeInsets.all(29.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               AppTextField(
@@ -69,7 +69,8 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                       return 'Confirme a nova senha';
                     }
 
-                    if (_newPasswordController.text.isNotEmpty && value != _newPasswordController.text) {
+                    if (_newPasswordController.text.isNotEmpty &&
+                        value != _newPasswordController.text) {
                       return 'As senhas não coincidem';
                     }
                     return null;
@@ -77,7 +78,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               const SizedBox(height: 15),
               AppButton(text: 'Alterar', onPressed: _login)
             ]),
-          )),
-    );
+          ),
+        ));
   }
 }

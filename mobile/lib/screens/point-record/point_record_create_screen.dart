@@ -103,14 +103,14 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                   GestureDetector(
                                     onTap: () => _controller.event.value = null,
                                     child: SizedBox(
-                                      height: 20.0,
-                                      width: 20.0,
+                                      height: 25.0,
+                                      width: 25.0,
                                       child: IconButton(
                                         padding: const EdgeInsets.all(0.0),
                                         onPressed: () =>
                                             _controller.event.value = null,
                                         icon: const Icon(Icons.delete,
-                                            size: 15.0),
+                                            size: 20.0),
                                         style: ButtonStyle(
                                           foregroundColor:
                                               MaterialStateProperty.all<Color>(

@@ -37,7 +37,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width ?? double.infinity,
-      height: widget.height ?? 45,
+      height: widget.height ?? 40,
       child: TextButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
@@ -49,7 +49,7 @@ class _AppButtonState extends State<AppButton> {
               side: BorderSide(
                 color: widget.borderColor != null
                     ? widget.borderColor!
-                    : AppColorsConst.blue,
+                    : widget.backgroundColor ?? AppColorsConst.blue,
               ),
               borderRadius: BorderRadius.circular(10.0),
             ))),

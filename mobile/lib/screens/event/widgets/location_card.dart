@@ -38,16 +38,11 @@ class _LocationCardState extends State<LocationCard> {
 
     return Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
-        width: 330,
+        width: double.infinity,
         height: 45,
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 0,
-            blurRadius: 5,
-            offset: const Offset(0, 1.5),
-          ),
-        ], color: Colors.white),
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white),
         child: Center(
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,30 +52,41 @@ class _LocationCardState extends State<LocationCard> {
                 const Icon(Icons.location_on_rounded, color: Colors.black),
                 const SizedBox(width: 5),
                 Text(widget.location.description,
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
+                    style: const TextStyle(fontWeight: FontWeight.w300)),
               ],
             ),
-            GestureDetector(
-                onTap: () => showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Você tem certeza?"),
-                        content: const Text(
-                            "Tem certeza de que deseja excluir este item? Esta ação é irreversível e os dados excluídos não poderão ser recuperados."),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, "Cancel"),
-                            child: const Text("Cancelar"),
-                          ),
-                          TextButton(
-                            onPressed: () => deleteLocation(),
-                            child: const Text("Confirmar",
-                                style: TextStyle(color: Colors.red)),
-                          ),
-                        ],
+            SizedBox(
+              height: 25.0,
+              width: 25.0,
+              child: IconButton(
+                padding: const EdgeInsets.all(0.0),
+                onPressed: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text("Você tem certeza?"),
+                    content: const Text(
+                        "Tem certeza de que deseja excluir este item? Esta ação é irreversível e os dados excluídos não poderão ser recuperados."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, "Cancel"),
+                        child: const Text("Cancelar"),
                       ),
-                    ),
-                child: const Icon(Icons.delete, color: Colors.red))
+                      TextButton(
+                        onPressed: () => deleteLocation(),
+                        child: const Text("Confirmar",
+                            style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                  ),
+                ),
+                icon: const Icon(Icons.delete, size: 20.0),
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                ),
+              ),
+            )
           ],
         )));
   }

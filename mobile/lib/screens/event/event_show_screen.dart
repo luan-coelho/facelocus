@@ -55,7 +55,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                       'event': widget.eventId.toString()
                                     }).toString(),
                                 color: Colors.black,
-                                backgroundColor: AppColorsConst.white,
+                                backgroundColor: Colors.white,
                                 imageName: 'users-icon.svg',
                                 height: 100),
                             const SizedBox(width: 15),
@@ -90,7 +90,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                                         widget.eventId)),
                           ],
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 10),
                         !_controller.isLoading.value &&
                                 _controller.event != null &&
                                 _controller.event!.allowTicketRequests! == true

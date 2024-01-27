@@ -35,14 +35,6 @@ class FeatureCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 0,
-                blurRadius: 5,
-                offset: const Offset(0, 1.5), // Shadow position
-              ),
-            ],
           ),
           child: Center(
             child: Column(

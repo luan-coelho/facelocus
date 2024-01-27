@@ -26,20 +26,10 @@ class EventCodeCard extends StatelessWidget {
     }
 
     return Container(
-        padding:
-            const EdgeInsets.all(15),
-        width: 330,
+        padding: const EdgeInsets.all(15),
+        width: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 0,
-                blurRadius: 5,
-                offset: const Offset(0, 1.5),
-              ),
-            ],
-            color: Colors.white),
+            borderRadius: BorderRadius.circular(8), color: Colors.white),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +43,7 @@ class EventCodeCard extends StatelessWidget {
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
                   const SizedBox(width: 5),
                   Text(event.code!,
-                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ]),
             Row(
               children: [
