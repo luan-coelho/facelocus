@@ -9,9 +9,10 @@ class InformationField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [Text(description, style: const TextStyle(
-          fontWeight: FontWeight.w500
-        )), const SizedBox(height: 5), Text(value.toUpperCase())]);
+    return Column(children: [
+      Text(description, style: const TextStyle(fontWeight: FontWeight.w500)),
+      const SizedBox(height: 5),
+      Text(value)
+    ]);
   }
 }

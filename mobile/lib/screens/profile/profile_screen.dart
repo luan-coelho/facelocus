@@ -58,6 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     return AppLayout(
+        showBottomNavigationBar: false,
         appBarTitle: 'Perfil',
         body: Padding(
           padding: const EdgeInsets.all(29),
@@ -72,7 +73,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 15),
               InformationField(description: 'CPF', value: _user.cpf),
               const SizedBox(height: 15),
-              InformationField(description: 'Email', value: _user.email),
+              InformationField(
+                  description: 'Email', value: _user.email.toLowerCase()),
               const SizedBox(height: 25),
               AppButton(
                   text: 'Alterar senha',
