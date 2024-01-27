@@ -1,10 +1,11 @@
 import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/delegates/event_delegate.dart';
+import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/screens/point-record/widgets/event_search.dart';
 import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -31,6 +32,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   late PointModel _point;
   List<PointModel> points = [];
   HashSet<Factor> factors = HashSet();
+  EventModel? _event;
 
   _create() {
     if (faceRecognitionFactor) {
@@ -40,21 +42,13 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
       factors.add(Factor.indoorLocation);
     }
     PointRecordModel pointRecord = PointRecordModel(
-      event: _controller.event.value,
+      event: _event,
       date: _controller.date.value ?? DateTime.now(),
       points: _controller.points,
       factors: factors.toList(),
       allowableRadiusInMeters: _allowableRadiusInMeters,
     );
     _controller.create(context, pointRecord);
-  }
-
-  showEventSearch() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const EventSearch();
-        });
   }
 
   @override
@@ -88,56 +82,42 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(() {
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Evento',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        // const SizedBox(height: 5),
-                        _controller.event.value != null
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(_controller.event.value!.description!),
-                                  const SizedBox(width: 5),
-                                  AppDeleteButton(
-                                      onPressed: () =>
-                                          _controller.event.value = null),
-                                ],
-                              )
-                            : SizedBox(
-                                width: double.infinity,
-                                height: 35,
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.black12.withOpacity(0.1)),
-                                      foregroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              AppColorsConst.black),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ))),
-                                  onPressed: showEventSearch,
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text('Selecionar evento',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                      ]);
+                const Text('Evento',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Builder(builder: (context) {
+                  if (_event != null) {
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(_event!.description!),
+                              const SizedBox(width: 5),
+                              AppDeleteButton(onPressed: () {
+                                setState(() {
+                                  _event = null;
+                                });
+                              }),
+                            ],
+                          )
+                        ]);
+                  }
+                  return AppButton(
+                    text: 'Selecionar evento',
+                    onPressed: () async {
+                      var result = await showSearch(
+                        context: context,
+                        delegate: EventDelegate(),
+                      );
+                      setState(() {
+                        _event = result;
+                      });
+                    },
+                    textColor: AppColorsConst.black,
+                    backgroundColor: Colors.black12.withOpacity(0.1),
+                    height: 35,
+                  );
                 }),
                 const SizedBox(height: 10),
                 const Text('Data',
