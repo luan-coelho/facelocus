@@ -18,11 +18,9 @@ class LinckedUsersScreen extends StatefulWidget {
 
 class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
   late final UserController _controller;
-  late final TextEditingController _textEditingController;
 
   @override
   void initState() {
-    _textEditingController = TextEditingController();
     _controller = Get.find<UserController>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.fetchAllByEventId(widget.eventId);

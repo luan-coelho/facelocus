@@ -11,15 +11,13 @@ class AppLayout extends StatefulWidget {
       bool this.showAppBar = true,
       this.showBottomNavigationBar = true,
       required this.body,
-      this.floatingActionButton,
-      this.onPressLeading});
+      this.floatingActionButton});
 
   final String? appBarTitle;
   final bool? showAppBar;
   final bool? showBottomNavigationBar;
   final Widget body;
   final Widget? floatingActionButton;
-  final void Function()? onPressLeading;
 
   @override
   State<AppLayout> createState() => _AppLayoutState();

@@ -41,13 +41,6 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
       appBarTitle: 'Realizar uploud de foto',
       showAppBar: true,
       showBottomNavigationBar: false,
-      onPressLeading: _openCamera
-          ? () {
-              setState(() {
-                _openCamera = false;
-              });
-            }
-          : null,
       body: Builder(builder: (context) {
         if (!_openCamera) {
           return Padding(

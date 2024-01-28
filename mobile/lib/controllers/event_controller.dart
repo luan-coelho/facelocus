@@ -73,12 +73,12 @@ class EventController extends GetxController {
     fetchAll();
   }
 
-  Future<void> changeTicketRequestPermission(int eventId) async {
+  changeTicketRequestPermission(int eventId) async {
     await service.changeTicketRequestPermission(eventId);
     fetchById(eventId);
   }
 
-  Future<void> generateNewCode(int eventId) async {
+  generateNewCode(int eventId) async {
     await service.generateNewCode(eventId);
     fetchById(eventId);
   }

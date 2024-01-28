@@ -1,6 +1,6 @@
 package br.unitins.facelocus.model;
 
-public enum TicketRequestStatus {
+public enum EventRequestStatus {
     PENDING,
     APPROVED,
     REJECTED

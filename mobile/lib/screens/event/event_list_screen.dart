@@ -2,7 +2,7 @@ import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/widgets/event_card.dart';
-import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';
+import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
@@ -43,7 +43,7 @@ class _EventListScreenState extends State<EventListScreen> {
       );
     }
 
-    showTicketRequestCreateForm() {
+    showEventRequestCreateForm() {
       showModalBottomSheet<void>(
         isScrollControlled: true,
         isDismissible: true,
@@ -52,7 +52,7 @@ class _EventListScreenState extends State<EventListScreen> {
         builder: (BuildContext context) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
-            child: const TicketRequestCreateForm(),
+            child: const EventRequestCreateForm(),
           );
         },
       );
@@ -69,7 +69,7 @@ class _EventListScreenState extends State<EventListScreen> {
               children: [
                 Expanded(
                     child: AppButton(
-                  onPressed: showTicketRequestCreateForm,
+                  onPressed: showEventRequestCreateForm,
                   textColor: Colors.black,
                   backgroundColor: Colors.white,
                   borderColor: Colors.black.withOpacity(0.5),

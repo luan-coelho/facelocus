@@ -1,25 +1,24 @@
-import 'package:facelocus/controllers/ticket_request_controller.dart';
+import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TicketRequestCreateForm extends StatefulWidget {
-  const TicketRequestCreateForm({super.key});
+class EventRequestCreateForm extends StatefulWidget {
+  const EventRequestCreateForm({super.key});
 
   @override
-  State<TicketRequestCreateForm> createState() =>
-      _TicketRequestCreateFormState();
+  State<EventRequestCreateForm> createState() => _EventRequestCreateFormState();
 }
 
-class _TicketRequestCreateFormState extends State<TicketRequestCreateForm> {
-  late TicketRequestController _controller;
+class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
+  late EventRequestController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _codeController;
 
   @override
   void initState() {
-    _controller = Get.find<TicketRequestController>();
+    _controller = Get.find<EventRequestController>();
     _codeController = TextEditingController();
     super.initState();
   }

@@ -1,82 +1,80 @@
-import 'package:facelocus/models/ticket_request_model.dart';
-import 'package:facelocus/models/ticket_request_status_enum.dart';
+import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_status_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class TicketRequestCard extends StatefulWidget {
-  const TicketRequestCard(
-      {super.key,
-      required this.ticketRequest,
-      required this.authenticatedUser});
+class EventRequestCard extends StatefulWidget {
+  const EventRequestCard(
+      {super.key, required this.eventRequest, required this.authenticatedUser});
 
-  final TicketRequestModel ticketRequest;
+  final EventRequestModel eventRequest;
   final UserModel authenticatedUser;
 
   @override
-  State<TicketRequestCard> createState() => _TicketRequestCardState();
+  State<EventRequestCard> createState() => _EventRequestCardState();
 }
 
-enum TicketRequestType { received, sent }
+enum EventRequestType { received, sent }
 
-class _TicketRequestCardState extends State<TicketRequestCard> {
+class _EventRequestCardState extends State<EventRequestCard> {
   @override
   Widget build(BuildContext context) {
-    TicketRequestType getTicketRequestType() {
+    EventRequestType getEventRequestType() {
       UserModel authenticatedUser = widget.authenticatedUser;
-      if (widget.ticketRequest.user.id == authenticatedUser.id) {
-        return TicketRequestType.sent;
+      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
+        return EventRequestType.sent;
       }
-      return TicketRequestType.received;
+      return EventRequestType.received;
     }
 
     String getBannerText() {
-      return getTicketRequestType() == TicketRequestType.received
+      return getEventRequestType() == EventRequestType.received
           ? 'Recebida'
           : 'Enviada';
     }
 
     Color getBannerColor() {
-      return getTicketRequestType() == TicketRequestType.received
+      return getEventRequestType() == EventRequestType.received
           ? Colors.green
           : Colors.deepPurple;
     }
 
-    Color colorByStatus(TicketRequestStatus status) {
+    Color colorByStatus(EventRequestStatus status) {
       switch (status) {
-        case TicketRequestStatus.approved:
+        case EventRequestStatus.approved:
           return Colors.green;
-        case TicketRequestStatus.pending:
+        case EventRequestStatus.pending:
           return Colors.amber;
-        case TicketRequestStatus.rejected:
+        case EventRequestStatus.rejected:
           return Colors.red;
       }
     }
 
-    String descriptionByStatus(TicketRequestStatus status) {
+    String descriptionByStatus(EventRequestStatus status) {
       switch (status) {
-        case TicketRequestStatus.approved:
+        case EventRequestStatus.approved:
           return 'Aprovada';
-        case TicketRequestStatus.pending:
+        case EventRequestStatus.pending:
           return 'Pendente';
-        case TicketRequestStatus.rejected:
+        case EventRequestStatus.rejected:
           return 'Rejeitada';
       }
     }
 
-    showTicketRequest() {
-      int ticketRequestId = widget.ticketRequest.id!;
+    showEventRequest() {
+      int eventRequestId = widget.eventRequest.id!;
       context.push(Uri(
-          path: '${AppRoutes.eventTicketsRequest}/$ticketRequestId',
+          path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
-            'ticketrequest': widget.ticketRequest.id.toString()
+            'eventrequest': widget.eventRequest.id.toString()
           }).toString());
     }
 
     return GestureDetector(
-      onTap: widget.ticketRequest.requestStatus == TicketRequestStatus.pending
-          ? showTicketRequest
+      onTap: widget.eventRequest.requestStatus == EventRequestStatus.pending
+          ? showEventRequest
           : null,
       child: Stack(clipBehavior: Clip.none, children: [
         Container(
@@ -95,7 +93,7 @@ class _TicketRequestCardState extends State<TicketRequestCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.ticketRequest.event.description!.toUpperCase(),
+                Text(widget.eventRequest.event.description!.toUpperCase(),
                     style: const TextStyle(fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 5),
@@ -106,14 +104,13 @@ class _TicketRequestCardState extends State<TicketRequestCard> {
                       height: 20.0,
                       decoration: BoxDecoration(
                         color:
-                            colorByStatus(widget.ticketRequest.requestStatus!),
+                            colorByStatus(widget.eventRequest.requestStatus!),
                         shape: BoxShape.circle,
                       ),
                     ),
                     const SizedBox(width: 5),
                     Text(
-                        descriptionByStatus(
-                            widget.ticketRequest.requestStatus!),
+                        descriptionByStatus(widget.eventRequest.requestStatus!),
                         style: const TextStyle(color: Colors.black54))
                   ],
                 )

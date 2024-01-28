@@ -1,32 +1,32 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
-import 'package:facelocus/dtos/event_ticket_request_create.dart';
-import 'package:facelocus/dtos/ticket_request_create.dart';
-import 'package:facelocus/models/ticket_request_model.dart';
+import 'package:facelocus/dtos/create_ticket_request_dto.dart';
+import 'package:facelocus/dtos/event_request_create_dto.dart';
+import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/ticket_request_service.dart';
+import 'package:facelocus/services/event_request_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class TicketRequestController extends GetxController {
-  final TicketRequestService service;
-  TicketRequestModel? _ticketRequest;
-  final List<TicketRequestModel> _ticketsRequest = <TicketRequestModel>[].obs;
+class EventRequestController extends GetxController {
+  final EventRequestService service;
+  EventRequestModel? _eventRequest;
+  final List<EventRequestModel> _eventsRequest = <EventRequestModel>[].obs;
   final RxBool _isLoading = false.obs;
 
   String? error;
 
   Map<String, dynamic>? invalidFields;
 
-  TicketRequestModel get ticketRequest => _ticketRequest!;
+  EventRequestModel get eventRequest => _eventRequest!;
 
-  List<TicketRequestModel>? get ticketsRequest => _ticketsRequest;
+  List<EventRequestModel>? get eventsRequest => _eventsRequest;
 
   RxBool get isLoading => _isLoading;
 
-  TicketRequestController({required this.service});
+  EventRequestController({required this.service});
 
   fetchAll({int? eventId}) async {
     _isLoading.value = true;
@@ -35,7 +35,7 @@ class TicketRequestController extends GetxController {
       AuthController authController = Get.find<AuthController>();
       int userId = authController.authenticatedUser.value!.id!;
       var ticketsRequest = await service.fetchAll(userId, eventId: eventId);
-      _ticketsRequest.addAll(ticketsRequest);
+      _eventsRequest.addAll(ticketsRequest);
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao buscar solicitações');
       error = detail;
@@ -45,7 +45,7 @@ class TicketRequestController extends GetxController {
 
   fetchById(int userId) async {
     _isLoading.value = true;
-    _ticketRequest = await service.getById(userId);
+    _eventRequest = await service.getById(userId);
     _isLoading.value = false;
   }
 
@@ -55,11 +55,9 @@ class TicketRequestController extends GetxController {
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
-      EventTicketRequestCreate event = EventTicketRequestCreate(user: user);
-      event.code = code;
-      TicketRequestCreate ticketRequest =
-          TicketRequestCreate(event: event, user: user);
-      await service.create(ticketRequest);
+      EventWithCodeDTO event = EventWithCodeDTO(code: code);
+      var eventRequest = CreateInvitationDTO(event: event, requestOwner: user);
+      await service.create(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
         Toast.success(context, message);
@@ -74,13 +72,13 @@ class TicketRequestController extends GetxController {
     fetchAll();
   }
 
-  approve(BuildContext context, int ticketRequestId) async {
+  approve(BuildContext context, int eventRequestId) async {
     _isLoading.value = true;
 
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
-      await service.approve(ticketRequestId, user.id!);
+      await service.approve(eventRequestId, user.id!);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
@@ -90,13 +88,13 @@ class TicketRequestController extends GetxController {
     fetchAll();
   }
 
-  reject(BuildContext context, int ticketRequestId) async {
+  reject(BuildContext context, int eventRequestId) async {
     _isLoading.value = true;
 
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
-      await service.reject(ticketRequestId, user.id!);
+      await service.reject(eventRequestId, user.id!);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {

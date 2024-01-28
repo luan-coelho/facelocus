@@ -1,0 +1,1 @@
+enum EventRequestType { ticketRequest, invitation }

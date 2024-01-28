@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class TicketRequest {
+public class EventRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,10 +22,8 @@ public class TicketRequest {
     private LocalDateTime finalDateTime;
     @ManyToOne
     private Event event;
-    private TicketRequestStatus requestStatus = TicketRequestStatus.PENDING;
-    /**
-     * Usuário solicitante ou solicitado
-     */
+    private EventRequestStatus requestStatus = EventRequestStatus.PENDING;
+    private EventRequestType requestType = EventRequestType.INVITATION;
     @ManyToOne
-    private User user;
+    private User requestOwner;
 }

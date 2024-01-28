@@ -1,4 +1,4 @@
-package br.unitins.facelocus.dto.ticketrequest;
+package br.unitins.facelocus.dto.eventrequest;
 
 import br.unitins.facelocus.dto.LocationDTO;
 import br.unitins.facelocus.dto.PointDTO;

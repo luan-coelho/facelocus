@@ -1,14 +1,14 @@
 import 'package:facelocus/screens/auth/face_upload_screen.dart';
 import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/auth/register_screen.dart';
+import 'package:facelocus/screens/event/app_search.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
+import 'package:facelocus/screens/event/event_request_list_screen.dart';
+import 'package:facelocus/screens/event/event_request_show_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
-import 'package:facelocus/screens/event/ticket_request_list_screen.dart';
-import 'package:facelocus/screens/event/ticket_request_show_screen.dart';
-import 'package:facelocus/screens/event/app_search.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
@@ -28,8 +28,7 @@ class AppRoutes {
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
   static const eventUsers = '$event-users';
-  static const eventTicketsRequest = '/ticket-request';
-  static const eventTicketsRequestShow = '/ticket-request';
+  static const eventRequest = '/event-request';
   static const user = '/user';
   static const userUploadFacePhoto = '$user/uploud-face-photo';
   static const userSearch = '$user/search';
@@ -94,18 +93,18 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppRoutes.eventTicketsRequest,
+      path: AppRoutes.eventRequest,
       builder: (context, state) {
         int eventId = int.parse(state.uri.queryParameters['event']!);
-        return TicketRequestListScreen(eventId: eventId);
+        return EventRequestListScreen(eventId: eventId);
       },
     ),
     GoRoute(
-      path: '${AppRoutes.eventTicketsRequestShow}/:id',
+      path: '${AppRoutes.eventRequest}/:id',
       builder: (context, state) {
-        var queryParameter = state.uri.queryParameters['ticketrequest'];
-        int ticketRequestId = int.parse(queryParameter!);
-        return TicketRequestShowScreen(ticketRequestId: ticketRequestId);
+        var queryParameter = state.uri.queryParameters['eventrequest'];
+        int eventRequestId = int.parse(queryParameter!);
+        return EventRequestShowScreen(eventRequestId: eventRequestId);
       },
     ),
     GoRoute(

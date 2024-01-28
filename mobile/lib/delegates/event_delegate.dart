@@ -1,4 +1,3 @@
-import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -10,12 +9,13 @@ import 'package:get/get.dart';
 
 class EventDelegate extends SearchDelegate<EventModel> {
   late final EventController _controller;
-  late final AuthController _authController;
+
+  // late final AuthController _authController;
   late final Debouncer _debouncer;
 
   EventDelegate() {
     _controller = Get.find<EventController>();
-    _authController = Get.find<AuthController>();
+    // _authController = Get.find<AuthController>();
     _debouncer = Debouncer();
     // UserModel user = _authController.authenticatedUser.value!;
   }

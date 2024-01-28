@@ -3,7 +3,7 @@ package br.unitins.facelocus.resource;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.PointRecordDTO;
-import br.unitins.facelocus.dto.ticketrequest.PointRecordResponseDTO;
+import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;

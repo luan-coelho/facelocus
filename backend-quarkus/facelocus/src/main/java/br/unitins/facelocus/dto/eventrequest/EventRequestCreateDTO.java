@@ -1,13 +1,13 @@
-package br.unitins.facelocus.dto.ticketrequest;
+package br.unitins.facelocus.dto.eventrequest;
 
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.User;
 import jakarta.validation.constraints.NotNull;
 
-public record TicketRequestCreateDTO(
+public record EventRequestCreateDTO(
         @NotNull(message = "Informe o evento")
         Event event,
-        @NotNull(message = "Informe o usuário solicitado ou solicitante")
-        User user
+        @NotNull(message = "Informe o dono da solicitação")
+        User requestOwner
 ) {
 }

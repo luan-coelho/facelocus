@@ -1,5 +1,5 @@
-import 'package:facelocus/controllers/ticket_request_controller.dart';
-import 'package:facelocus/screens/event/widgets/ticket_request_create_form.dart';
+import 'package:facelocus/controllers/event_request_controller.dart';
+import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -8,23 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class TicketRequestShowScreen extends StatefulWidget {
-  const TicketRequestShowScreen({super.key, required this.ticketRequestId});
+class EventRequestShowScreen extends StatefulWidget {
+  const EventRequestShowScreen({super.key, required this.eventRequestId});
 
-  final int ticketRequestId;
+  final int eventRequestId;
 
   @override
-  State<TicketRequestShowScreen> createState() =>
-      _TicketRequestShowScreenState();
+  State<EventRequestShowScreen> createState() => _EventRequestShowScreenState();
 }
 
-class _TicketRequestShowScreenState extends State<TicketRequestShowScreen> {
-  late final TicketRequestController _controller;
+class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
+  late final EventRequestController _controller;
 
   @override
   void initState() {
-    _controller = Get.find<TicketRequestController>();
-    _controller.fetchById(widget.ticketRequestId);
+    _controller = Get.find<EventRequestController>();
+    _controller.fetchById(widget.eventRequestId);
     super.initState();
   }
 
@@ -34,7 +33,7 @@ class _TicketRequestShowScreenState extends State<TicketRequestShowScreen> {
       showDialog(
           context: context,
           builder: (context) {
-            return const TicketRequestCreateForm();
+            return const EventRequestCreateForm();
           });
     }
 
@@ -47,9 +46,10 @@ class _TicketRequestShowScreenState extends State<TicketRequestShowScreen> {
               if (_controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              String fullName = _controller.ticketRequest.user.getFullName();
-              String cpf = _controller.ticketRequest.user.cpf;
-              String email = _controller.ticketRequest.user.email;
+              String fullName =
+                  _controller.eventRequest.requestOwner.getFullName();
+              String cpf = _controller.eventRequest.requestOwner.cpf;
+              String email = _controller.eventRequest.requestOwner.email;
               return Padding(
                   padding: const EdgeInsets.all(29),
                   child: Column(
@@ -69,14 +69,14 @@ class _TicketRequestShowScreenState extends State<TicketRequestShowScreen> {
                             text: 'Aceitar',
                             onPressed: () {
                               _controller.approve(
-                                  context, widget.ticketRequestId);
+                                  context, widget.eventRequestId);
                               context.pop();
                             }),
                         const SizedBox(height: 10),
                         AppButton(
                             text: 'Rejeitar',
                             onPressed: () => _controller.reject(
-                                context, widget.ticketRequestId),
+                                context, widget.eventRequestId),
                             backgroundColor: Colors.red.shade600)
                       ]));
             },

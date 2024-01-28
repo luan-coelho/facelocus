@@ -30,5 +30,5 @@ public class Event {
     private String code;
     private boolean allowTicketRequests;
     @OneToMany(mappedBy = "event")
-    private List<TicketRequest> ticketRequests;
+    private List<EventRequest> ticketRequests;
 }

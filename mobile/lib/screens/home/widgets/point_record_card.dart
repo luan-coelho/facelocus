@@ -9,12 +9,10 @@ class PointRecordCard extends StatefulWidget {
   final PointRecordModel pointRecord;
 
   @override
-  State<PointRecordCard> createState() => _TicketRequestCardState();
+  State<PointRecordCard> createState() => _PointRecordCardState();
 }
 
-enum TicketRequestType { received, sent }
-
-class _TicketRequestCardState extends State<PointRecordCard> {
+class _PointRecordCardState extends State<PointRecordCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
