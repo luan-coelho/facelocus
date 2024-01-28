@@ -1,5 +1,8 @@
+import 'package:facelocus/controllers/ticket_request_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/shared/toast.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
 import 'package:facelocus/utils/debouncer.dart';
 import 'package:facelocus/utils/spinner.dart';
@@ -8,10 +11,12 @@ import 'package:get/get.dart';
 
 class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   late final UserController _controller;
+  late final TicketRequestController _ticketRequestController;
   late final Debouncer _debouncer;
 
   LinckedUsersDelegate() {
     _controller = Get.find<UserController>();
+    _ticketRequestController = Get.find<TicketRequestController>();
     _debouncer = Debouncer();
   }
 
@@ -77,7 +82,17 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
             UserModel user = _controller.usersSearch[index];
             return GestureDetector(
                 onTap: () => close(context, user),
-                child: AppSearchCard(description: user.getFullName()));
+                child: AppSearchCard(
+                  description: user.getFullName(),
+                  child: AppButton(
+                    onPressed: () => Toast.success(
+                        context, 'Solicitação enviada com sucesso'),
+                    text: 'Enviar',
+                    width: 80,
+                    height: 25,
+                    textFontSize: 12,
+                  ),
+                ));
           },
         );
       },

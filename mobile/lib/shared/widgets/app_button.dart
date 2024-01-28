@@ -40,6 +40,9 @@ class _AppButtonState extends State<AppButton> {
       height: widget.height ?? 40,
       child: TextButton(
         style: ButtonStyle(
+            alignment: Alignment.center,
+            padding:
+                MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
             backgroundColor: MaterialStateProperty.all<Color>(
                 widget.backgroundColor ?? AppColorsConst.purple),
             foregroundColor: MaterialStateProperty.all<Color>(
