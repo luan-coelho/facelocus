@@ -16,8 +16,8 @@ class UserService {
     return data.map((json) => UserModel.fromJson(json)).toList();
   }
 
-  getAllByNameOrCpf(String identifier) async {
-    String url = '${AppRoutes.userSearch}?identifier=$identifier';
+  getAllByNameOrCpf(int userId, String identifier) async {
+    String url = '${AppRoutes.userSearch}?user=$userId&identifier=$identifier';
     final response = await _fetchApi.get(url);
     List<dynamic> data = response.data;
     return data.map((json) => UserModel.fromJson(json)).toList();

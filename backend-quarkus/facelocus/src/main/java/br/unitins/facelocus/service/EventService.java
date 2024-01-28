@@ -50,8 +50,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         return buildPagination(dtos, pageable);
     }
 
-    public List<Event> findAllByDescription(Long userId, String description) throws InterruptedException {
-        Thread.sleep(3000);
+    public List<Event> findAllByDescription(Long userId, String description) {
         return this.repository.findAllByDescription(userId, description);
     }
 

@@ -10,6 +10,8 @@ class Spinner extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -17,7 +19,8 @@ class Spinner extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          if (label != null) Text(label!),
+          if (label != null)
+            Text(label!, style: const TextStyle(color: Colors.black)),
         ],
       ),
     );

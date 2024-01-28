@@ -88,5 +88,5 @@ class Paged<T> {
 
   void reset() => {items.clear(), page = 0, _paging = false, _hasMore = true};
 
-  void dipose() => notifier.close();
+  void dispose() => notifier.close();
 }

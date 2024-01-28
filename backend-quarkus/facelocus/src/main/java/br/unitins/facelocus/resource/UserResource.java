@@ -43,8 +43,8 @@ public class UserResource {
 
     @Path("/search")
     @GET
-    public Response findAllByNameOrCpf(@RestQuery("identifier") String identifier) {
-        List<UserResponseDTO> dtos = userService.findAllByNameOrCpf(identifier)
+    public Response findAllByNameOrCpf(@RestQuery("user") Long userId, @RestQuery("identifier") String identifier) {
+        List<UserResponseDTO> dtos = userService.findAllByNameOrCpf(userId, identifier)
                 .stream()
                 .map(location -> userMapper.toResource(location))
                 .toList();

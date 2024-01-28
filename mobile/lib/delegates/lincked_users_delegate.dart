@@ -1,6 +1,4 @@
-import 'package:facelocus/controllers/auth_controller.dart';
-import 'package:facelocus/controllers/event_controller.dart';
-import 'package:facelocus/models/event_model.dart';
+import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
 import 'package:facelocus/utils/debouncer.dart';
@@ -8,17 +6,13 @@ import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EventDelegate extends SearchDelegate<EventModel> {
-  late final EventController _controller;
-  late final AuthController _authController;
-  late final _debouncer;
+class LinckedUsersDelegate extends SearchDelegate<UserModel> {
+  late final UserController _controller;
+  late final Debouncer _debouncer;
 
-  EventDelegate() {
-    _controller = Get.find<EventController>();
-    _authController = Get.find<AuthController>();
+  LinckedUsersDelegate() {
+    _controller = Get.find<UserController>();
     _debouncer = Debouncer();
-
-    // UserModel user = _authController.authenticatedUser.value!;
   }
 
   @override
@@ -29,7 +23,7 @@ class EventDelegate extends SearchDelegate<EventModel> {
   }
 
   @override
-  String get searchFieldLabel => 'Descrição';
+  String get searchFieldLabel => 'Nome ou CPF';
 
   @override
   List<Widget> buildActions(BuildContext context) => [];
@@ -45,8 +39,7 @@ class EventDelegate extends SearchDelegate<EventModel> {
     if (query.isEmpty) {
       return const SizedBox();
     }
-    _debouncer
-        .run(() async => _controller.fetchAllByDescription(context, query));
+    _debouncer.run(() async => _controller.fetchAllByNameOrCpf(query));
     return buildSearchResults();
   }
 
@@ -56,31 +49,31 @@ class EventDelegate extends SearchDelegate<EventModel> {
         if (_controller.isLoading.value) {
           return const Center(
             child: Spinner(
-              label: 'Procurando eventos...',
+              label: 'Procurando usuários...',
             ),
           );
         }
 
-        if (_controller.events.isEmpty) {
+        if (_controller.usersSearch.isEmpty) {
           return const Center(
               child: Padding(
             padding: EdgeInsets.all(29.0),
-            child: Text('Nenhum evento encontrado',
+            child: Text('Nenhum usuário encontrado',
                 style: TextStyle(color: Colors.black)),
           ));
         }
 
         return ListView.separated(
           padding: const EdgeInsets.all(10),
-          itemCount: _controller.events.length,
+          itemCount: _controller.usersSearch.length,
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(height: 10);
           },
           itemBuilder: (BuildContext context, int index) {
-            EventModel event = _controller.events[index];
+            UserModel user = _controller.usersSearch[index];
             return GestureDetector(
-                onTap: () => close(context, event),
-                child: AppSearchCard(description: event.description!));
+                onTap: () => close(context, user),
+                child: AppSearchCard(description: user.getFullName()));
           },
         );
       },

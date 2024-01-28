@@ -75,8 +75,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                     context.replace(AppRoutes.login);
                   },
                   textColor: Colors.red,
-                  backgroundColor: Colors.red.withOpacity(0.2),
-                  borderColor: Colors.red,
+                  backgroundColor: Colors.white,
                 )
               ],
             ),

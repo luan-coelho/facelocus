@@ -29,15 +29,15 @@ public class UserRepository extends BaseRepository<User> {
         return find("SELECT u FROM User u JOIN u.events e WHERE e.id = ?1", eventId).list();
     }
 
-    public List<User> findAllByNameOrCpf(String identifier) {
+    public List<User> findAllByNameOrCpf(Long userId, String identifier) {
         String sql = """
                 FROM User
-                WHERE LOWER(name)
-                LIKE '%'||?1||'%' OR LOWER(surname)
-                LIKE '%'||?1||'%' OR LOWER(cpf)
-                LIKE '%'||?1||'%'
+                WHERE id != ?1
+                AND LOWER(name) LIKE '%'||?2||'%'
+                OR LOWER(surname) LIKE '%'||?2||'%'
+                OR LOWER(cpf) LIKE '%'||?2||'%'
                 """;
-        return find(sql, identifier).list();
+        return find(sql, userId, identifier).list();
     }
 
     public Optional<User> findByEmailOrCpf(String identifier) {

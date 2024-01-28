@@ -37,7 +37,9 @@ class UserController extends GetxController {
 
   fetchAllByNameOrCpf(String identifier) async {
     _isLoading.value = true;
-    _usersSearch = await service.getAllByNameOrCpf(identifier);
+    AuthController authController = Get.find<AuthController>();
+    UserModel user = authController.authenticatedUser.value!;
+    _usersSearch = await service.getAllByNameOrCpf(user.id!, identifier);
     _isLoading.value = false;
   }
 

@@ -28,8 +28,8 @@ public class UserService extends BaseService<User, UserRepository> {
         return this.repository.findAllByEventId(eventId);
     }
 
-    public List<User> findAllByNameOrCpf(String identifier) {
-        return this.repository.findAllByNameOrCpf(identifier);
+    public List<User> findAllByNameOrCpf(Long userId, String identifier) {
+        return this.repository.findAllByNameOrCpf(userId, identifier);
     }
 
     public Optional<User> findByEmailOrCpf(String identifier) {
