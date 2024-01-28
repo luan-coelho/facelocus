@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
-class AppSearchCard extends StatefulWidget {
-  const AppSearchCard({super.key, required this.description});
+class AppSearchCard<T> extends StatefulWidget {
+  const AppSearchCard({
+    super.key,
+    required this.description,
+    this.child,
+  });
 
   final String description;
+  final Widget? child;
 
   @override
-  State<AppSearchCard> createState() => _AppSearchCardState();
+  State<AppSearchCard<T>> createState() => _AppSearchCardState<T>();
 }
 
-class _AppSearchCardState<T> extends State<AppSearchCard> {
+class _AppSearchCardState<T> extends State<AppSearchCard<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,11 +30,12 @@ class _AppSearchCardState<T> extends State<AppSearchCard> {
             Expanded(
               child: Text(widget.description,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      color: Colors.black,
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.7),
                       fontWeight: FontWeight.w500,
                       overflow: TextOverflow.ellipsis)),
             ),
+            widget.child ?? const SizedBox()
           ],
         ));
   }

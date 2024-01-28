@@ -39,7 +39,11 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
     if (query.isEmpty) {
       return const SizedBox();
     }
-    _debouncer.run(() async => _controller.fetchAllByNameOrCpf(query));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (query.isNotEmpty && query.trim().isBlank == false) {
+        _debouncer.run(() async => _controller.fetchAllByNameOrCpf(query));
+      }
+    });
     return buildSearchResults();
   }
 
@@ -64,7 +68,7 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           itemCount: _controller.usersSearch.length,
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(height: 10);

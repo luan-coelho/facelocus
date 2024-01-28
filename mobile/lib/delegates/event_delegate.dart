@@ -1,7 +1,7 @@
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/models/event_model.dart';
-import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
 import 'package:facelocus/utils/debouncer.dart';
 import 'package:facelocus/utils/spinner.dart';
@@ -11,13 +11,12 @@ import 'package:get/get.dart';
 class EventDelegate extends SearchDelegate<EventModel> {
   late final EventController _controller;
   late final AuthController _authController;
-  late final _debouncer;
+  late final Debouncer _debouncer;
 
   EventDelegate() {
     _controller = Get.find<EventController>();
     _authController = Get.find<AuthController>();
     _debouncer = Debouncer();
-
     // UserModel user = _authController.authenticatedUser.value!;
   }
 
@@ -45,8 +44,10 @@ class EventDelegate extends SearchDelegate<EventModel> {
     if (query.isEmpty) {
       return const SizedBox();
     }
-    _debouncer
-        .run(() async => _controller.fetchAllByDescription(context, query));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _debouncer
+          .run(() async => _controller.fetchAllByDescription(context, query));
+    });
     return buildSearchResults();
   }
 
@@ -71,7 +72,7 @@ class EventDelegate extends SearchDelegate<EventModel> {
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           itemCount: _controller.events.length,
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(height: 10);
@@ -80,7 +81,23 @@ class EventDelegate extends SearchDelegate<EventModel> {
             EventModel event = _controller.events[index];
             return GestureDetector(
                 onTap: () => close(context, event),
-                child: AppSearchCard(description: event.description!));
+                child: AppSearchCard(
+                    description: event.description!,
+                    child: SizedBox(
+                      height: 30.0,
+                      width: 30.0,
+                      child: IconButton(
+                        padding: const EdgeInsets.all(0.0),
+                        onPressed: null,
+                        icon: const Icon(Icons.check, size: 18.0),
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              AppColorsConst.blue),
+                        ),
+                      ),
+                    )));
           },
         );
       },

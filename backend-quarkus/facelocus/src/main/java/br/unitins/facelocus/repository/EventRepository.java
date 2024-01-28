@@ -41,7 +41,7 @@ public class EventRepository extends BaseRepository<Event> {
         String query = """
                 FROM Event
                 WHERE administrator.id = ?1
-                AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
+                    AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
                 """;
         return find(query, userId, description).list();
     }

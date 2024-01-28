@@ -10,6 +10,7 @@ import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 class FaceUploadScreen extends StatefulWidget {
   const FaceUploadScreen({
@@ -54,6 +55,12 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Builder(builder: (context) {
+                  double width = MediaQuery.of(context).size.width * 0.50;
+                  return Lottie.asset('assets/face_recognition.json',
+                      width: width);
+                }),
+                const SizedBox(height: 15),
                 const Text(
                   'Para usar os recursos da aplicação será necessário enviar uma foto do seu rosto',
                   textAlign: TextAlign.justify,

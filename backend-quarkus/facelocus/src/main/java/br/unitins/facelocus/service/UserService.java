@@ -29,7 +29,7 @@ public class UserService extends BaseService<User, UserRepository> {
     }
 
     public List<User> findAllByNameOrCpf(Long userId, String identifier) {
-        return this.repository.findAllByNameOrCpf(userId, identifier);
+        return this.repository.findAllByNameOrCpf(userId, identifier.trim());
     }
 
     public Optional<User> findByEmailOrCpf(String identifier) {

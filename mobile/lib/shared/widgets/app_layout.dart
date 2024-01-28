@@ -48,6 +48,7 @@ class _AppLayoutState extends State<AppLayout> {
                   : null)
           : null,
       body: widget.body,
+      resizeToAvoidBottomInset: false,
       floatingActionButton: widget.showBottomNavigationBar != null &&
               widget.showBottomNavigationBar == true
           ? FloatingActionButton(

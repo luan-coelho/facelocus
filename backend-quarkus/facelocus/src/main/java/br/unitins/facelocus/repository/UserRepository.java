@@ -32,10 +32,11 @@ public class UserRepository extends BaseRepository<User> {
     public List<User> findAllByNameOrCpf(Long userId, String identifier) {
         String sql = """
                 FROM User
-                WHERE id != ?1
-                AND LOWER(name) LIKE '%'||?2||'%'
-                OR LOWER(surname) LIKE '%'||?2||'%'
-                OR LOWER(cpf) LIKE '%'||?2||'%'
+                WHERE id <> ?1
+                    AND
+                        (FUNCTION('unaccent',LOWER(name)) || ' ' ||
+                        FUNCTION('unaccent', LOWER(surname)) LIKE '%'||?2||'%'
+                    OR LOWER(cpf) LIKE '%'||?2||'%')
                 """;
         return find(sql, userId, identifier).list();
     }
@@ -44,8 +45,8 @@ public class UserRepository extends BaseRepository<User> {
         String sql = """
                 FROM User
                 WHERE
-                LOWER(email) LIKE '%'||?1||'%'
-                OR LOWER(cpf) LIKE '%'||?1||'%'
+                    LOWER(email) LIKE '%'||?1||'%'
+                    OR LOWER(cpf) LIKE '%'||?1||'%'
                 """;
         return find(sql, identifier).singleResultOptional();
     }
