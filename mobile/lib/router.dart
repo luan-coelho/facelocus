@@ -95,8 +95,8 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.eventRequest,
       builder: (context, state) {
-        int eventId = int.parse(state.uri.queryParameters['event']!);
-        return EventRequestListScreen(eventId: eventId);
+        // int eventId = int.parse(state.uri.queryParameters['event']!);
+        return const EventRequestListScreen();
       },
     ),
     GoRoute(

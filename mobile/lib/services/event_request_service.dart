@@ -7,15 +7,16 @@ class EventRequestService {
   final DioFetchApi _fetchApi = DioFetchApi();
 
   fetchAll(int userId, {int? eventId}) async {
-    var url = '${AppRoutes.eventRequest}?event=$eventId&user=$userId';
+    var url = '${AppRoutes.eventRequest}?user=$userId';
     final response = await _fetchApi.get(url);
     List data = response.data['data'];
     return data.map((json) => EventRequestModel.fromJson(json)).toList();
   }
 
-  create(CreateInvitationDTO eventRequest) async {
+  createTicketRequest(CreateInvitationDTO eventRequest) async {
     var json = eventRequest.toJson();
-    await _fetchApi.post(AppRoutes.eventRequest, data: json);
+    var url = '${AppRoutes.eventRequest}/ticket-request';
+    await _fetchApi.post(url, data: json);
   }
 
   getById(int id) async {

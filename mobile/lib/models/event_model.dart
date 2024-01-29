@@ -39,7 +39,7 @@ class EventModel {
             : (json['locations'] as List)
                 .map((e) => LocationModel.fromJson(e as Map<String, dynamic>))
                 .toList(),
-        administrator: /*UserModel.fromJson(json['administrator'])*/ null,
+        administrator: UserModel.fromJson(json['administrator']),
         users: json['users'] == null
             ? null
             : (json['users'] as List)

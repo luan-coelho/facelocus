@@ -1,7 +1,6 @@
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/screens/event/widgets/event_request_card.dart';
-import 'package:facelocus/services/event_request_service.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
@@ -11,9 +10,7 @@ import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class EventRequestListScreen extends StatefulWidget {
-  const EventRequestListScreen({super.key, required this.eventId});
-
-  final int eventId;
+  const EventRequestListScreen({super.key});
 
   @override
   State<EventRequestListScreen> createState() => _EventRequestListScreenState();
@@ -25,9 +22,9 @@ class _EventRequestListScreenState extends State<EventRequestListScreen> {
 
   @override
   void initState() {
-    _controller = EventRequestController(service: EventRequestService());
-    _controller.fetchAll(eventId: widget.eventId);
+    _controller = Get.find<EventRequestController>();
     _authController = Get.find<AuthController>();
+    _controller.fetchAll();
     super.initState();
   }
 
@@ -40,7 +37,7 @@ class _EventRequestListScreenState extends State<EventRequestListScreen> {
           child: Obx(() {
             if (!_controller.isLoading.value &&
                 _controller.eventsRequest!.isEmpty) {
-              const message = 'Nenhuma solicitação no momento';
+              const message = 'Nada no momento';
               return const EmptyData(message,
                   child: AppButton(text: 'Adicionar', onPressed: null));
             }

@@ -128,7 +128,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
         }
 
         if (eventService.linkedUser(event.getId(), requestOwner.getId())) {
-            throw new IllegalArgumentException("Usuário já vinculado ao evento");
+            throw new IllegalArgumentException("Você já está vinculado ao evento");
         }
 
         EventRequest eventRequest = eventRequestMapper.toCreateEntity(requestCreateDTO);

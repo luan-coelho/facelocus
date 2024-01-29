@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/event_request_controller.dart';
+import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
-import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
@@ -23,7 +23,9 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
   @override
   void initState() {
     _controller = Get.find<EventRequestController>();
-    _controller.fetchById(widget.eventRequestId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.fetchById(widget.eventRequestId);
+    });
     super.initState();
   }
 
@@ -46,39 +48,37 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
               if (_controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              String fullName =
-                  _controller.eventRequest.requestOwner.getFullName();
-              String cpf = _controller.eventRequest.requestOwner.cpf;
-              String email = _controller.eventRequest.requestOwner.email;
-              return Padding(
-                  padding: const EdgeInsets.all(29),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const UserFaceImage(),
-                        const SizedBox(height: 25),
-                        InformationField(
-                            description: 'Nome Completo', value: fullName),
-                        const SizedBox(height: 15),
-                        InformationField(description: 'CPF', value: cpf),
-                        const SizedBox(height: 15),
-                        InformationField(description: 'Email', value: email),
-                        const SizedBox(height: 25),
-                        AppButton(
-                            text: 'Aceitar',
-                            onPressed: () {
-                              _controller.approve(
-                                  context, widget.eventRequestId);
-                              context.pop();
-                            }),
-                        const SizedBox(height: 10),
-                        AppButton(
-                            text: 'Rejeitar',
-                            onPressed: () => _controller.reject(
-                                context, widget.eventRequestId),
-                            backgroundColor: Colors.red.shade600)
-                      ]));
+              EventRequestModel eventRequest = _controller.eventRequest;
+              String fullName = eventRequest.requestOwner.getFullName();
+              String cpf = eventRequest.requestOwner.cpf;
+              String email = eventRequest.requestOwner.email;
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // const UserFaceImage(),
+                    const SizedBox(height: 25),
+                    InformationField(
+                        description: 'Nome Completo', value: fullName),
+                    const SizedBox(height: 15),
+                    InformationField(description: 'CPF', value: cpf),
+                    const SizedBox(height: 15),
+                    InformationField(description: 'Email', value: email),
+                    const SizedBox(height: 25),
+                    AppButton(
+                        text: 'Aceitar',
+                        onPressed: () {
+                          _controller.approve(
+                              context, widget.eventRequestId);
+                          context.pop();
+                        }),
+                    const SizedBox(height: 10),
+                    AppButton(
+                        text: 'Rejeitar',
+                        onPressed: () => _controller.reject(
+                            context, widget.eventRequestId),
+                        backgroundColor: Colors.red.shade600)
+                  ]);
             },
           ),
         ),

@@ -30,12 +30,12 @@ class EventRequestController extends GetxController {
 
   fetchAll({int? eventId}) async {
     _isLoading.value = true;
-
     try {
       AuthController authController = Get.find<AuthController>();
       int userId = authController.authenticatedUser.value!.id!;
-      var ticketsRequest = await service.fetchAll(userId, eventId: eventId);
-      _eventsRequest.addAll(ticketsRequest);
+      var eventsRequest = await service.fetchAll(userId);
+      _eventsRequest.clear();
+      _eventsRequest.addAll(eventsRequest);
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao buscar solicitações');
       error = detail;
@@ -49,15 +49,14 @@ class EventRequestController extends GetxController {
     _isLoading.value = false;
   }
 
-  createByCode(BuildContext context, String code) async {
+  createTicketRequest(BuildContext context, String code) async {
     _isLoading.value = true;
-
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(code: code);
       var eventRequest = CreateInvitationDTO(event: event, requestOwner: user);
-      await service.create(eventRequest);
+      await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
         Toast.success(context, message);
@@ -74,7 +73,6 @@ class EventRequestController extends GetxController {
 
   approve(BuildContext context, int eventRequestId) async {
     _isLoading.value = true;
-
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
@@ -90,7 +88,6 @@ class EventRequestController extends GetxController {
 
   reject(BuildContext context, int eventRequestId) async {
     _isLoading.value = true;
-
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;

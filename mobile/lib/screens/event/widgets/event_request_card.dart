@@ -23,7 +23,7 @@ class _EventRequestCardState extends State<EventRequestCard> {
   Widget build(BuildContext context) {
     EventRequestType getEventRequestType() {
       UserModel authenticatedUser = widget.authenticatedUser;
-      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
+      if (widget.eventRequest.requestOwner.id != authenticatedUser.id) {
         return EventRequestType.sent;
       }
       return EventRequestType.received;
@@ -73,7 +73,9 @@ class _EventRequestCardState extends State<EventRequestCard> {
     }
 
     return GestureDetector(
-      onTap: widget.eventRequest.requestStatus == EventRequestStatus.pending
+      onTap: widget.eventRequest.event.administrator!.id !=
+                  widget.authenticatedUser.id &&
+              widget.eventRequest.requestStatus == EventRequestStatus.pending
           ? showEventRequest
           : null,
       child: Stack(clipBehavior: Clip.none, children: [

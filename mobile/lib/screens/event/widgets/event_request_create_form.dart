@@ -34,7 +34,7 @@ class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
     void request() {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState?.save();
-        _controller.createByCode(context, _codeController.text);
+        _controller.createTicketRequest(context, _codeController.text);
       }
     }
 

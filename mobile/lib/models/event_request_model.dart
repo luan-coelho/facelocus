@@ -25,10 +25,12 @@ class EventRequestModel {
       id: json['id'] as int,
       code: json['code'],
       event: EventModel.fromJson(json['event']),
-      requestStatus: EventRequestStatus.values
-          .byName((json['requestStatus'] as String).toLowerCase()),
-      requestType: EventRequestType.values
-          .byName((json['requestType'] as String).toLowerCase()),
+      requestStatus: json['requestStatus'] != null
+          ? EventRequestStatus.parse(json['requestStatus'])
+          : null,
+      requestType: json['requestType'] != null
+          ? EventRequestType.parse(json['requestType'])
+          : null,
       requestOwner: UserModel.fromJson(json['requestOwner']),
     );
   }

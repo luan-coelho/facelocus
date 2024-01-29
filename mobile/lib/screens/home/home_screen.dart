@@ -2,12 +2,16 @@ import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/home/widgets/point_record_card.dart';
 import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -82,6 +86,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const UserCardHome(),
+                  const SizedBox(height: 15),
+                  AppButton(
+                    text: 'Minhas solicitações',
+                    onPressed: () => context.push(AppRoutes.eventRequest),
+                    icon: SvgPicture.asset(
+                      'images/event-request-icon.svg',
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                  ),
                   const SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.all(5),
