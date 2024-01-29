@@ -1,6 +1,6 @@
+import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
 import 'package:facelocus/utils/debouncer.dart';
@@ -10,10 +10,13 @@ import 'package:get/get.dart';
 
 class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   late final UserController _controller;
+  late final EventRequestController _eventRequestController;
   late final Debouncer _debouncer;
+  late final int eventId;
 
-  LinckedUsersDelegate() {
+  LinckedUsersDelegate({required this.eventId}) {
     _controller = Get.find<UserController>();
+    _eventRequestController = Get.find<EventRequestController>();
     _debouncer = Debouncer();
   }
 
@@ -82,8 +85,8 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
                 child: AppSearchCard(
                   description: user.getFullName(),
                   child: AppButton(
-                    onPressed: () => Toast.success(
-                        context, 'Solicitação enviada com sucesso'),
+                    onPressed: () => _eventRequestController.createInvitation(
+                        context, eventId, user.id!),
                     text: 'Enviar',
                     width: 80,
                     height: 25,

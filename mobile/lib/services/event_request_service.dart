@@ -19,6 +19,12 @@ class EventRequestService {
     await _fetchApi.post(url, data: json);
   }
 
+  createInvitation(CreateInvitationDTO eventRequest) async {
+    var json = eventRequest.toJson();
+    var url = '${AppRoutes.eventRequest}/invitation';
+    await _fetchApi.post(url, data: json);
+  }
+
   getById(int id) async {
     final response = await _fetchApi.get('${AppRoutes.eventRequest}/$id');
     var data = response.data;

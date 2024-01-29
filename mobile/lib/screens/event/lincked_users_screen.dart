@@ -39,43 +39,48 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
           padding: const EdgeInsets.all(29.0),
           child: Column(
             children: [
+              AppButton(
+                text: 'Enviar solicitação',
+                onPressed: () async {
+                  await showSearch(
+                    context: context,
+                    delegate: LinckedUsersDelegate(eventId: widget.eventId),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
               Obx(() {
                 if (_controller.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 if (_controller.users.isEmpty) {
-                  return Center(
-                    child: EmptyData('Sem usuários vinculados',
-                        child: AppButton(
-                          text: 'Enviar solicitação',
-                          onPressed: () async {
-                            await showSearch(
-                              context: context,
-                              delegate: LinckedUsersDelegate(),
-                            );
-                          },
-                        )),
+                  return const Center(
+                    child: EmptyData('Sem usuários vinculados'),
                   );
                 }
-                return Obx(() {
-                  return Skeletonizer(
-                    enabled: _controller.isLoading.value,
-                    child: ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(height: 10);
-                      },
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: _controller.users.length,
-                      itemBuilder: (context, index) {
-                        UserModel user = _controller.users[index];
-                        return LinckedUserCard(user: user);
-                      },
-                    ),
-                  );
-                });
+                return Column(
+                  children: [
+                    Obx(() {
+                      return Skeletonizer(
+                        enabled: _controller.isLoading.value,
+                        child: ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(height: 10);
+                          },
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: _controller.users.length,
+                          itemBuilder: (context, index) {
+                            UserModel user = _controller.users[index];
+                            return LinckedUserCard(user: user);
+                          },
+                        ),
+                      );
+                    }),
+                  ],
+                );
               }),
             ],
           ),

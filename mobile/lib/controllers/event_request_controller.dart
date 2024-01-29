@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth_controller.dart';
 import 'package:facelocus/dtos/create_ticket_request_dto.dart';
 import 'package:facelocus/dtos/event_request_create_dto.dart';
+import 'package:facelocus/dtos/user_with_id_only_dto.dart';
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/event_request_service.dart';
@@ -55,9 +56,33 @@ class EventRequestController extends GetxController {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(code: code);
-      var eventRequest = CreateInvitationDTO(event: event, requestOwner: user);
+      UserWithIdOnly requestOwner = UserWithIdOnly(id: user.id);
+      var eventRequest =
+          CreateInvitationDTO(event: event, requestOwner: requestOwner);
       await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
+      if (context.mounted) {
+        Toast.success(context, message);
+        context.pop();
+      }
+    } on DioException catch (e) {
+      String detail = onError(e);
+      if (context.mounted) {
+        Toast.danger(context, detail);
+      }
+    }
+    fetchAll();
+  }
+
+  createInvitation(BuildContext context, int eventId, int userId) async {
+    _isLoading.value = true;
+    try {
+      EventWithCodeDTO event = EventWithCodeDTO(id: eventId);
+      UserWithIdOnly requestOwner = UserWithIdOnly(id: userId);
+      var eventRequest =
+          CreateInvitationDTO(event: event, requestOwner: requestOwner);
+      await service.createInvitation(eventRequest);
+      String message = 'Convite enviado com sucesso';
       if (context.mounted) {
         Toast.success(context, message);
         context.pop();

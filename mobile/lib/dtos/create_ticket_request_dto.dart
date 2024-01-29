@@ -1,10 +1,10 @@
-import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/dtos/user_with_id_only_dto.dart';
 
 import 'event_request_create_dto.dart';
 
 class CreateInvitationDTO {
   EventWithCodeDTO event;
-  UserModel requestOwner;
+  UserWithIdOnly requestOwner;
 
   CreateInvitationDTO({
     required this.event,
