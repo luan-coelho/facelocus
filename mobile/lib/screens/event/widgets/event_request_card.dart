@@ -80,17 +80,9 @@ class _EventRequestCardState extends State<EventRequestCard> {
           : null,
       child: Stack(clipBehavior: Clip.none, children: [
         Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 0,
-                    blurRadius: 5,
-                    offset: const Offset(0, 1.5),
-                  ),
-                ],
+            padding: const EdgeInsets.all(15),
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,8 +94,8 @@ class _EventRequestCardState extends State<EventRequestCard> {
                 Row(
                   children: [
                     Container(
-                      width: 20.0,
-                      height: 20.0,
+                      width: 15.0,
+                      height: 15.0,
                       decoration: BoxDecoration(
                         color:
                             colorByStatus(widget.eventRequest.requestStatus!),
@@ -119,14 +111,15 @@ class _EventRequestCardState extends State<EventRequestCard> {
               ],
             )),
         Positioned(
-            top: -10,
+            top: 10,
             right: 10,
             child: Container(
-              padding: const EdgeInsets.all(5),
+              padding:
+                  const EdgeInsets.only(top: 4, right: 8, left: 8, bottom: 4),
               decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
                   border: Border.all(color: getBannerColor()),
-                  color: getBannerColor().withOpacity(0.2)),
+                  color: getBannerColor().withOpacity(0.1)),
               child: Text(getBannerText(),
                   style: TextStyle(
                       color: getBannerColor(),
