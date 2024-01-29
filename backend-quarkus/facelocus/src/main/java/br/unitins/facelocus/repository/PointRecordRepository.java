@@ -14,11 +14,25 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
     }
 
     public List<PointRecord> findAllByUser(Long userId) {
-        return find("FROM PointRecord pr JOIN FETCH pr.event e JOIN FETCH e.administrator u WHERE u.id = ?1", userId).list();
+        // language=jpaql
+        String query = """
+                FROM PointRecord pr
+                    JOIN FETCH pr.event e
+                    JOIN FETCH e.users lu
+                    JOIN FETCH e.administrator u
+                WHERE u.id = ?1 OR lu.id = ?1
+                """;
+        return find(query, userId).list();
     }
 
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {
-        var query = "FROM PointRecord pr JOIN FETCH pr.event e JOIN FETCH e.administrator u WHERE pr.date = ?1 AND u.id = ?2";
+        // language=jpaql
+        var query = """
+                FROM PointRecord pr
+                    JOIN FETCH pr.event e
+                    JOIN FETCH e.users lu
+                    JOIN FETCH e.administrator u
+                WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
         return find(query, date, userId).list();
     }
 }
