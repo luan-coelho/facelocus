@@ -23,7 +23,9 @@ class _EventListScreenState extends State<EventListScreen> {
   @override
   void initState() {
     _controller = Get.find<EventController>();
-    _controller.fetchAll();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.fetchAll();
+    });
     super.initState();
   }
 

@@ -1,4 +1,3 @@
-import 'package:facelocus/controllers/ticket_request_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -11,12 +10,10 @@ import 'package:get/get.dart';
 
 class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   late final UserController _controller;
-  late final TicketRequestController _ticketRequestController;
   late final Debouncer _debouncer;
 
   LinckedUsersDelegate() {
     _controller = Get.find<UserController>();
-    _ticketRequestController = Get.find<TicketRequestController>();
     _debouncer = Debouncer();
   }
 
