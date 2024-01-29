@@ -1,11 +1,13 @@
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/delegates/lincked_users_delegate.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/screens/event/widgets/lincked_user_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LinckedUsersScreen extends StatefulWidget {
   const LinckedUsersScreen({super.key, required this.eventId});
@@ -32,52 +34,50 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
       appBarTitle: 'Usuários vinculados',
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(29.0),
-            child: Column(
-              children: [
-                Obx(() {
-                  if (_controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(29.0),
+          child: Column(
+            children: [
+              Obx(() {
+                if (_controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  if (_controller.users.isEmpty) {
-                    return Center(
-                      child: EmptyData('Sem usuários vinculados',
-                          child: AppButton(
-                            text: 'Enviar solicitação',
-                            onPressed: () async {
-                              await showSearch(
-                                context: context,
-                                delegate: LinckedUsersDelegate(),
-                              );
-                            },
-                          )),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            'images/users-icon.svg',
-                            width: 20,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black, BlendMode.srcIn),
-                          ),
-                          const SizedBox(width: 5),
-                          const Text('Usuários',
-                              style: TextStyle(fontWeight: FontWeight.w500)),
-                        ],
-                      )
-                    ],
+                if (_controller.users.isEmpty) {
+                  return Center(
+                    child: EmptyData('Sem usuários vinculados',
+                        child: AppButton(
+                          text: 'Enviar solicitação',
+                          onPressed: () async {
+                            await showSearch(
+                              context: context,
+                              delegate: LinckedUsersDelegate(),
+                            );
+                          },
+                        )),
                   );
-                }),
-              ],
-            ),
+                }
+                return Obx(() {
+                  return Skeletonizer(
+                    enabled: _controller.isLoading.value,
+                    child: ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: 10);
+                      },
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: _controller.users.length,
+                      itemBuilder: (context, index) {
+                        UserModel user = _controller.users[index];
+                        return LinckedUserCard(user: user);
+                      },
+                    ),
+                  );
+                });
+              }),
+            ],
           ),
         ),
       ),
