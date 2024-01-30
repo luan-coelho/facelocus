@@ -8,5 +8,6 @@ import java.util.List;
 public record EventWithoutRelationshipsDTO(Long id, String description, List<LocationDTO> locations,
                                            UserResponseDTO administrator,
                                            String code,
+                                           List<UserResponseDTO> users,
                                            boolean allowTicketRequests) {
 }

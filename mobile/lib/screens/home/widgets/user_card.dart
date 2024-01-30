@@ -63,7 +63,6 @@ class _UserCardHomeState extends State<UserCardHome> {
                         fontSize: 14,
                         fontWeight: FontWeight.w200),
                   ),
-                  const SizedBox(height: 2),
                   Text(
                     _user.name,
                     style: const TextStyle(

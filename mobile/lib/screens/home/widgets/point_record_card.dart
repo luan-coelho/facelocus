@@ -1,12 +1,17 @@
 import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/app_date_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class PointRecordCard extends StatefulWidget {
-  const PointRecordCard({super.key, required this.pointRecord});
+  const PointRecordCard(
+      {super.key, required this.pointRecord, required this.user});
 
   final PointRecordModel pointRecord;
+  final UserModel user;
 
   @override
   State<PointRecordCard> createState() => _PointRecordCardState();
@@ -16,9 +21,14 @@ class _PointRecordCardState extends State<PointRecordCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: null,
+      onTap: () {
+        if (widget.pointRecord.event!.administrator!.id == widget.user.id) {
+          context.push('${AppRoutes.pointRecord}/${widget.pointRecord.id}');
+        }
+      },
       child: Container(
-          padding: const EdgeInsets.all(15),
+          padding:
+              const EdgeInsets.only(top: 10, right: 15, left: 15, bottom: 10),
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               color: Colors.white),
@@ -26,9 +36,9 @@ class _PointRecordCardState extends State<PointRecordCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.pointRecord.event!.description!.toUpperCase(),
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.w600),
                   overflow: TextOverflow.ellipsis),
-              const SizedBox(height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

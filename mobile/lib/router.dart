@@ -12,6 +12,7 @@ import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
+import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,6 +118,13 @@ final router = GoRouter(
       path: AppRoutes.pointRecordCreate,
       builder: (context, state) {
         return const PointRecordCreateScreen();
+      },
+    ),
+    GoRoute(
+      path: '${AppRoutes.pointRecord}/:id',
+      builder: (context, state) {
+        final int pointRecordId = int.parse(state.pathParameters['id']!);
+        return PointRecordShowScreen(pointRecordId: pointRecordId);
       },
     ),
     GoRoute(

@@ -45,6 +45,14 @@ public class PointRecordResource {
         return Response.ok(dtos).build();
     }
 
+    @Path("/{id}")
+    @GET
+    public Response findById(@PathParam("id") Long pointRecordId) {
+        PointRecord pointRecord = pointRecordService.findById(pointRecordId);
+        PointRecordResponseDTO dto = pointRecordMapper.toResource(pointRecord);
+        return Response.ok(dto).build();
+    }
+
     @POST
     public Response create(@Valid PointRecordDTO pointRecordDTO) {
         PointRecord pointRecord = pointRecordMapper.toEntity(pointRecordDTO);

@@ -6,7 +6,9 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/shared/toast.dart';
+import 'package:facelocus/utils/expansion_panel_item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,14 +18,18 @@ class PointRecordController extends GetxController {
   final PointRecordService service;
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
+  final Rxn<PointRecordModel> _pointRecord = Rxn<PointRecordModel>();
   final List<PointRecordModel> _pointsRecord = <PointRecordModel>[].obs;
   final List<PointRecordModel> _pointsRecordByDate = <PointRecordModel>[].obs;
   List<PointModel> _points = <PointModel>[].obs;
   final Rx<DateTime> _firstDayCalendar = DateTime.now().obs;
   final Rx<DateTime> _lastDayCalendar = DateTime.now().obs;
+  List<Item<UserModel>> _panelItems = <Item<UserModel>>[].obs;
   final RxBool _isLoading = false.obs;
 
   Rxn<DateTime> get date => _date;
+
+  Rxn<PointRecordModel> get pointRecord => _pointRecord;
 
   List<PointRecordModel> get pointsRecord => _pointsRecord;
 
@@ -34,6 +40,8 @@ class PointRecordController extends GetxController {
   Rx<DateTime> get firstDay => _firstDayCalendar;
 
   Rx<DateTime> get lastDay => _lastDayCalendar;
+
+  List<Item<UserModel>> get panelItems => _panelItems;
 
   RxBool get isLoading => _isLoading;
 
@@ -106,5 +114,13 @@ class PointRecordController extends GetxController {
     }
     _firstDayCalendar.value = firstDay;
     _lastDayCalendar.value = pointsRecord.last.date;
+  }
+
+  fetchById(BuildContext context, int pointRecordId) async {
+    _isLoading.value = true;
+    _pointRecord.value = await service.getById(pointRecordId);
+    _panelItems =
+        Item<UserModel>().generateItems(pointRecord.value!.event!.users!);
+    _isLoading.value = false;
   }
 }
