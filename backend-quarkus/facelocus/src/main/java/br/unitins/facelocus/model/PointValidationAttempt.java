@@ -6,22 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class AttendanceRecord {
+public class PointValidationAttempt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalDateTime dateTime;
     @ManyToOne
-    private User user;
-    @OneToMany(mappedBy = "attendanceRecord")
-    private List<PointValidation> pointsValidations;
+    private UserFacePhoto userFacePhoto;
+    @ManyToOne
+    private PointValidation pointValidation;
+    private boolean validated;
 }

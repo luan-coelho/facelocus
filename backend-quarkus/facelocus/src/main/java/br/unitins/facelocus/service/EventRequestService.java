@@ -153,29 +153,54 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     }
 
     /**
+     * Responsável por aprovar um convite
+     *
+     * @param userId         Identificador do usuário solicitado
+     * @param eventRequestId Identificador da solicitação de ingresso
+     * @param requestStatus  Situação da solicitação
+     */
+    private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
+        EventRequest eventRequest = findById(eventRequestId);
+        Long administratorId = eventRequest.getEvent().getAdministrator().getId();
+        if (!administratorId.equals(userId)) {
+            throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
+        }
+        this.repository.updateStatus(eventRequestId, requestStatus);
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), administratorId);
+    }
+
+    /**
      * Responsável por aprovar uma solicitação de ingresso
      *
      * @param userId         Identificador do usuário solicitado
      * @param eventRequestId Identificador da solicitação de ingresso
      * @param requestStatus  Situação da solicitação
      */
-    private void updateStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
+    private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
         EventRequest eventRequest = findById(eventRequestId);
-        Long requestedId = eventRequest.getRequestOwner().getId();
-        if (!requestedId.equals(userId)) {
-            throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar a solicitação");
+        Long requestOwnerId = eventRequest.getRequestOwner().getId();
+        if (!requestOwnerId.equals(userId)) {
+            throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
         this.repository.updateStatus(eventRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), requestedId);
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), requestOwnerId);
     }
 
     @Transactional
-    public void approve(Long userId, Long eventRequestId) {
-        updateStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
+    public void approve(Long userId, Long eventRequestId, EventRequestType requestType) {
+        if (requestType == EventRequestType.INVITATION) {
+            updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
+            return;
+        }
+        updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
     }
 
     @Transactional
-    public void reject(Long userId, Long eventRequestId) {
-        updateStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
+    public void reject(Long userId, Long eventRequestId, EventRequestType requestType) {
+        if (requestType == EventRequestType.INVITATION) {
+            updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
+            return;
+        }
+        updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
     }
 }

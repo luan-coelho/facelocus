@@ -14,14 +14,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class AttendanceRecord {
+public class PointValidation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private LocalDateTime dateTime;
     @ManyToOne
-    private User user;
-    @OneToMany(mappedBy = "attendanceRecord")
-    private List<PointValidation> pointsValidations;
+    private Point point;
+    @ManyToOne
+    private AttendanceRecord attendanceRecord;
+    @OneToMany(mappedBy = "pointValidation")
+    private List<PointValidationAttempt> validationAttempts;
+    private LocalDateTime facialRecognitionValidationTime;
+    private LocalDateTime indoorLocationValidationTime;
 }

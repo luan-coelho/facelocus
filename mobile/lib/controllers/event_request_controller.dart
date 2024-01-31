@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 
 class EventRequestController extends GetxController {
   final EventRequestService service;
-  EventRequestModel? _eventRequest;
+  final Rxn<EventRequestModel> _eventRequest = Rxn<EventRequestModel>();
   final List<EventRequestModel> _eventsRequest = <EventRequestModel>[].obs;
   final RxBool _isLoading = false.obs;
 
@@ -21,7 +21,7 @@ class EventRequestController extends GetxController {
 
   Map<String, dynamic>? invalidFields;
 
-  EventRequestModel get eventRequest => _eventRequest!;
+  Rxn<EventRequestModel> get eventRequest => _eventRequest;
 
   List<EventRequestModel>? get eventsRequest => _eventsRequest;
 
@@ -46,7 +46,7 @@ class EventRequestController extends GetxController {
 
   fetchById(int userId) async {
     _isLoading.value = true;
-    _eventRequest = await service.getById(userId);
+    _eventRequest.value = await service.getById(userId);
     _isLoading.value = false;
   }
 

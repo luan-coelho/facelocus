@@ -18,8 +18,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
         String query = """
                 FROM PointRecord pr
                     JOIN FETCH pr.event e
-                    JOIN FETCH e.users lu
                     JOIN FETCH e.administrator u
+                    LEFT JOIN e.users lu
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;
         return find(query, userId).list();
@@ -30,8 +30,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
         var query = """
                 FROM PointRecord pr
                     JOIN FETCH pr.event e
-                    JOIN FETCH e.users lu
                     JOIN FETCH e.administrator u
+                    LEFT JOIN e.users lu
                 WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
         return find(query, date, userId).list();
     }

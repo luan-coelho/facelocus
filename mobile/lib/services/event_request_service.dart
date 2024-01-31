@@ -1,5 +1,6 @@
 import 'package:facelocus/dtos/create_ticket_request_dto.dart';
 import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
@@ -32,15 +33,17 @@ class EventRequestService {
   }
 
   approve(int eventRequestId, int userId) async {
+    String requestType = EventRequestType.toJson(EventRequestType.invitation);
     var url =
-        '${AppRoutes.eventRequest}/approve?eventrequest=$eventRequestId&user=$userId';
+        '${AppRoutes.eventRequest}/approve?eventrequest=$eventRequestId&user=$userId&requesttype=$requestType';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
 
   reject(int eventRequestId, int userId) async {
+    String requestType = EventRequestType.toJson(EventRequestType.invitation);
     var url =
-        '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId';
+        '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId&requestType=$requestType';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }

@@ -48,7 +48,7 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
               if (_controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
-              EventRequestModel eventRequest = _controller.eventRequest;
+              EventRequestModel eventRequest = _controller.eventRequest.value!;
               String fullName = eventRequest.requestOwner.getFullName();
               String cpf = eventRequest.requestOwner.cpf;
               String email = eventRequest.requestOwner.email;
@@ -68,15 +68,14 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                     AppButton(
                         text: 'Aceitar',
                         onPressed: () {
-                          _controller.approve(
-                              context, widget.eventRequestId);
+                          _controller.approve(context, widget.eventRequestId);
                           context.pop();
                         }),
                     const SizedBox(height: 10),
                     AppButton(
                         text: 'Rejeitar',
-                        onPressed: () => _controller.reject(
-                            context, widget.eventRequestId),
+                        onPressed: () =>
+                            _controller.reject(context, widget.eventRequestId),
                         backgroundColor: Colors.red.shade600)
                   ]);
             },

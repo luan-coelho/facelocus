@@ -6,6 +6,7 @@ import br.unitins.facelocus.dto.eventrequest.EventRequestCreateDTO;
 import br.unitins.facelocus.dto.eventrequest.EventRequestResponseDTO;
 import br.unitins.facelocus.mapper.EventRequestMapper;
 import br.unitins.facelocus.model.EventRequest;
+import br.unitins.facelocus.model.EventRequestType;
 import br.unitins.facelocus.service.EventRequestService;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
@@ -88,15 +89,19 @@ public class EventRequestResource {
 
     @Path("/approve")
     @PATCH
-    public Response approve(@RestQuery("user") Long userId, @RestQuery("eventrequest") Long eventRequestId) {
-        eventRequestService.approve(userId, eventRequestId);
+    public Response approve(@RestQuery("user") Long userId,
+                            @RestQuery("eventrequest") Long eventRequestId,
+                            @RestQuery("requesttype") EventRequestType requestType) {
+        eventRequestService.approve(userId, eventRequestId, requestType);
         return Response.ok().build();
     }
 
     @Path("/reject")
     @PATCH
-    public Response reject(@RestQuery("user") Long userId, @RestQuery("eventRequest") Long eventRequestId) {
-        eventRequestService.reject(userId, eventRequestId);
+    public Response reject(@RestQuery("user") Long userId,
+                           @RestQuery("eventRequest")
+                           Long eventRequestId, @RestQuery("requesttype") EventRequestType requestType) {
+        eventRequestService.reject(userId, eventRequestId, requestType);
         return Response.ok().build();
     }
 }

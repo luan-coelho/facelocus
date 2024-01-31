@@ -11,4 +11,13 @@ enum EventRequestType {
     }
     return null;
   }
+
+  static String toJson(EventRequestType requestType) {
+    switch (requestType) {
+      case EventRequestType.ticketRequest:
+        return 'TICKET_REQUEST';
+      case EventRequestType.invitation:
+        return 'INVITATION';
+    }
+  }
 }
