@@ -80,113 +80,109 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
       showAppBar: false,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Obx(
-            () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const UserCardHome(),
-                  const SizedBox(height: 15),
-                  AppButton(
-                    text: 'Minhas solicitações',
-                    onPressed: () => context.push(AppRoutes.eventRequest),
-                    icon: SvgPicture.asset(
-                      'images/event-request-icon.svg',
-                      colorFilter:
-                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                    ),
+      body: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Obx(
+          () {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const UserCardHome(),
+                const SizedBox(height: 15),
+                AppButton(
+                  text: 'Minhas solicitações',
+                  onPressed: () => context.push(AppRoutes.eventRequest),
+                  icon: SvgPicture.asset(
+                    'images/event-request-icon.svg',
+                    colorFilter:
+                        const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                   ),
-                  const SizedBox(height: 15),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: TableCalendar<PointRecordModel>(
-                      headerStyle: const HeaderStyle(
-                          titleCentered: true,
-                          formatButtonVisible: false,
-                          titleTextStyle: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500)),
-                      firstDay: _controller.firstDay.value,
-                      lastDay: _controller.lastDay.value,
-                      focusedDay: _focusedDay,
-                      selectedDayPredicate: (day) =>
-                          isSameDay(_selectedDay, day),
-                      calendarFormat: _calendarFormat,
-                      eventLoader: _getEventsForDate,
-                      startingDayOfWeek: StartingDayOfWeek.monday,
-                      locale: 'pt_br',
-                      calendarBuilders: CalendarBuilders(
-                        markerBuilder: (context, day, events) => events
-                                .isNotEmpty
-                            ? Container(
-                                width: 20,
-                                height: 20,
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                  color: AppColorsConst.blue,
-                                ),
-                                child: Text(
-                                  events.length.toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              )
-                            : null,
-                      ),
-                      calendarStyle: CalendarStyle(
-                        selectedDecoration:
-                            const BoxDecoration(color: Colors.blue),
-                        todayDecoration: BoxDecoration(
-                            color: Colors.deepPurple.withOpacity(0.3)),
-                        markersAlignment: Alignment.bottomRight,
-                        outsideDaysVisible: false,
-                      ),
-                      onDaySelected: _onDaySelected,
-                      onFormatChanged: (format) {
-                        if (_calendarFormat != format) {
-                          setState(() {
-                            _calendarFormat = format;
-                          });
-                        }
-                      },
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: TableCalendar<PointRecordModel>(
+                    headerStyle: const HeaderStyle(
+                        titleCentered: true,
+                        formatButtonVisible: false,
+                        titleTextStyle: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    firstDay: _controller.firstDay.value,
+                    lastDay: _controller.lastDay.value,
+                    focusedDay: _focusedDay,
+                    selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                    calendarFormat: _calendarFormat,
+                    eventLoader: _getEventsForDate,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    locale: 'pt_br',
+                    calendarBuilders: CalendarBuilders(
+                      markerBuilder: (context, day, events) => events.isNotEmpty
+                          ? Container(
+                              width: 20,
+                              height: 20,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: AppColorsConst.blue,
+                              ),
+                              child: Text(
+                                events.length.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            )
+                          : null,
                     ),
+                    calendarStyle: CalendarStyle(
+                      selectedDecoration:
+                          const BoxDecoration(color: Colors.blue),
+                      todayDecoration: BoxDecoration(
+                          color: Colors.deepPurple.withOpacity(0.3)),
+                      markersAlignment: Alignment.bottomRight,
+                      outsideDaysVisible: false,
+                    ),
+                    onDaySelected: _onDaySelected,
+                    onFormatChanged: (format) {
+                      if (_calendarFormat != format) {
+                        setState(() {
+                          _calendarFormat = format;
+                        });
+                      }
+                    },
+                    onPageChanged: (focusedDay) {
+                      _focusedDay = focusedDay;
+                    },
                   ),
-                  const SizedBox(height: 20),
-                  _controller.pointsRecordByDate.isNotEmpty
-                      ? const Text('Registros de ponto',
-                          style: TextStyle(fontWeight: FontWeight.w600))
-                      : const SizedBox(),
-                  const SizedBox(height: 10),
-                  Expanded(
-                      child: SingleChildScrollView(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.all(0),
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(height: 10);
-                      },
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: _controller.pointsRecordByDate.length,
-                      itemBuilder: (context, index) {
-                        var pointRecord = _controller.pointsRecordByDate[index];
-                        return PointRecordCard(
-                            pointRecord: pointRecord,
-                            user: _authController.authenticatedUser.value!);
-                      },
-                    ),
-                  ))
-                ],
-              );
-            },
-          ),
+                ),
+                const SizedBox(height: 20),
+                _controller.pointsRecordByDate.isNotEmpty
+                    ? const Text('Registros de ponto',
+                        style: TextStyle(fontWeight: FontWeight.w600))
+                    : const SizedBox(),
+                const SizedBox(height: 10),
+                Expanded(
+                    child: SingleChildScrollView(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(0),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: 10);
+                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: _controller.pointsRecordByDate.length,
+                    itemBuilder: (context, index) {
+                      var pointRecord = _controller.pointsRecordByDate[index];
+                      return PointRecordCard(
+                          pointRecord: pointRecord,
+                          user: _authController.authenticatedUser.value!);
+                    },
+                  ),
+                ))
+              ],
+            );
+          },
         ),
       ),
     );
