@@ -4,6 +4,7 @@ import 'package:facelocus/dtos/create_ticket_request_dto.dart';
 import 'package:facelocus/dtos/event_request_create_dto.dart';
 import 'package:facelocus/dtos/user_with_id_only_dto.dart';
 import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/event_request_service.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -96,12 +97,13 @@ class EventRequestController extends GetxController {
     fetchAll();
   }
 
-  approve(BuildContext context, int eventRequestId) async {
+  approve(BuildContext context, int eventRequestId,
+      EventRequestType requestType) async {
     _isLoading.value = true;
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
-      await service.approve(eventRequestId, user.id!);
+      await service.approve(eventRequestId, user.id!, requestType);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
@@ -111,12 +113,13 @@ class EventRequestController extends GetxController {
     fetchAll();
   }
 
-  reject(BuildContext context, int eventRequestId) async {
+  reject(BuildContext context, int eventRequestId,
+      EventRequestType requestType) async {
     _isLoading.value = true;
     try {
       AuthController authController = Get.find<AuthController>();
       UserModel user = authController.authenticatedUser.value!;
-      await service.reject(eventRequestId, user.id!);
+      await service.reject(eventRequestId, user.id!, requestType);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {

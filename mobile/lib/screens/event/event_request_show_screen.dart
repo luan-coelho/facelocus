@@ -1,5 +1,6 @@
 import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -9,9 +10,13 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class EventRequestShowScreen extends StatefulWidget {
-  const EventRequestShowScreen({super.key, required this.eventRequestId});
+  const EventRequestShowScreen(
+      {super.key,
+      required this.eventRequestId,
+      this.requestType = EventRequestType.invitation});
 
   final int eventRequestId;
+  final EventRequestType requestType;
 
   @override
   State<EventRequestShowScreen> createState() => _EventRequestShowScreenState();
@@ -68,14 +73,15 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                     AppButton(
                         text: 'Aceitar',
                         onPressed: () {
-                          _controller.approve(context, widget.eventRequestId);
+                          _controller.approve(context, widget.eventRequestId,
+                              widget.requestType);
                           context.pop();
                         }),
                     const SizedBox(height: 10),
                     AppButton(
                         text: 'Rejeitar',
-                        onPressed: () =>
-                            _controller.reject(context, widget.eventRequestId),
+                        onPressed: () => _controller.reject(
+                            context, widget.eventRequestId, widget.requestType),
                         backgroundColor: Colors.red.shade600)
                   ]);
             },

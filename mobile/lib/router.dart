@@ -1,3 +1,4 @@
+import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/auth/face_upload_screen.dart';
 import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/auth/register_screen.dart';
@@ -103,9 +104,12 @@ final router = GoRouter(
     GoRoute(
       path: '${AppRoutes.eventRequest}/:id',
       builder: (context, state) {
-        var queryParameter = state.uri.queryParameters['eventrequest'];
-        int eventRequestId = int.parse(queryParameter!);
-        return EventRequestShowScreen(eventRequestId: eventRequestId);
+        var eventQueryParameter = state.uri.queryParameters['eventrequest'];
+        var requestTypeQueryParam = state.uri.queryParameters['requesttype'];
+        int eventRequestId = int.parse(eventQueryParameter!);
+        var requestType = EventRequestType.parse(requestTypeQueryParam!)!;
+        return EventRequestShowScreen(
+            eventRequestId: eventRequestId, requestType: requestType);
       },
     ),
     GoRoute(

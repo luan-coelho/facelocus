@@ -32,18 +32,18 @@ class EventRequestService {
     return EventRequestModel.fromJson(data);
   }
 
-  approve(int eventRequestId, int userId) async {
-    String requestType = EventRequestType.toJson(EventRequestType.invitation);
+  approve(int eventRequestId, int userId, EventRequestType requestType) async {
+    String rType = EventRequestType.toJson(requestType);
     var url =
-        '${AppRoutes.eventRequest}/approve?eventrequest=$eventRequestId&user=$userId&requesttype=$requestType';
+        '${AppRoutes.eventRequest}/approve?eventrequest=$eventRequestId&user=$userId&requesttype=$rType';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
 
-  reject(int eventRequestId, int userId) async {
-    String requestType = EventRequestType.toJson(EventRequestType.invitation);
+  reject(int eventRequestId, int userId, EventRequestType requestType) async {
+    String rType = EventRequestType.toJson(requestType);
     var url =
-        '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId&requestType=$requestType';
+        '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId&requestType=$rType';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }

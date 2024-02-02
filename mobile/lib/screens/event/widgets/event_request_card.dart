@@ -1,5 +1,6 @@
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_status_enum.dart';
+import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
@@ -16,27 +17,27 @@ class EventRequestCard extends StatefulWidget {
   State<EventRequestCard> createState() => _EventRequestCardState();
 }
 
-enum EventRequestType { received, sent }
+enum RequestType { received, sent }
 
 class _EventRequestCardState extends State<EventRequestCard> {
   @override
   Widget build(BuildContext context) {
-    EventRequestType getEventRequestType() {
+    RequestType getEventRequestType() {
       UserModel authenticatedUser = widget.authenticatedUser;
-      if (widget.eventRequest.requestOwner.id != authenticatedUser.id) {
-        return EventRequestType.sent;
+      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
+        return RequestType.sent;
       }
-      return EventRequestType.received;
+      return RequestType.received;
     }
 
     String getBannerText() {
-      return getEventRequestType() == EventRequestType.received
+      return getEventRequestType() == RequestType.received
           ? 'Recebida'
           : 'Enviada';
     }
 
     Color getBannerColor() {
-      return getEventRequestType() == EventRequestType.received
+      return getEventRequestType() == RequestType.received
           ? Colors.green
           : Colors.deepPurple;
     }
@@ -65,15 +66,21 @@ class _EventRequestCardState extends State<EventRequestCard> {
 
     showEventRequest() {
       int eventRequestId = widget.eventRequest.id!;
+      EventRequestType requestType = EventRequestType.invitation;
+      if (widget.authenticatedUser.id ==
+          widget.eventRequest.event.administrator!.id) {
+        requestType = EventRequestType.ticketRequest;
+      }
       context.push(Uri(
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
-            'eventrequest': widget.eventRequest.id.toString()
+            'eventrequest': widget.eventRequest.id.toString(),
+            'requesttype': requestType
           }).toString());
     }
 
     return GestureDetector(
-      onTap: widget.eventRequest.event.administrator!.id !=
+      onTap: widget.eventRequest.event.administrator!.id ==
                   widget.authenticatedUser.id &&
               widget.eventRequest.requestStatus == EventRequestStatus.pending
           ? showEventRequest
