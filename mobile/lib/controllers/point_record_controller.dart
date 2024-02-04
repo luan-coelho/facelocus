@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 
 import '../models/event_model.dart';
 
-class PointRecordController extends GetxController {
+class PointRecordController extends GetxController with MessageStateMixin {
   final PointRecordService service;
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
@@ -63,14 +63,14 @@ class PointRecordController extends GetxController {
     try {
       await service.create(pointRecord);
       if (context.mounted) {
-        Toast.success(context, 'Registro de ponto criado com sucesso');
+        showSuccess('Registro de ponto criado com sucesso');
         event.value = null;
         context.pushReplacement(AppRoutes.home);
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     if (context.mounted) {
@@ -81,7 +81,7 @@ class PointRecordController extends GetxController {
 
   fetchAllByDate(BuildContext context, DateTime date) async {
     _isLoading.value = true;
-    AuthController authController = Get.find<AuthController>();
+    SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByDate(administrator.id!, date);
@@ -92,7 +92,7 @@ class PointRecordController extends GetxController {
 
   fetchAllByUser(BuildContext context) async {
     _isLoading.value = true;
-    AuthController authController = Get.find<AuthController>();
+    SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByUser(administrator.id!);

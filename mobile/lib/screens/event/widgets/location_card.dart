@@ -1,42 +1,32 @@
-import 'package:dio/dio.dart';
 import 'package:facelocus/models/location_model.dart';
-import 'package:facelocus/providers/location_provider.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+
+import '../../../controllers/location_controller.dart';
 
 class LocationCard extends StatefulWidget {
-  const LocationCard({super.key, required this.location});
+  const LocationCard(
+      {super.key, required this.location, required this.eventId});
 
   final LocationModel location;
+  final int eventId;
 
   @override
   State<LocationCard> createState() => _LocationCardState();
 }
 
 class _LocationCardState extends State<LocationCard> {
-  late LocationProvider _locationProvider;
+  late final LocationController _controller;
 
   @override
   void initState() {
-    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    _controller = Get.find<LocationController>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    deleteLocation() {
-      try {
-        Navigator.pop(context, "OK");
-        _locationProvider.deleteById(
-            widget.location.id!, _locationProvider.eventId);
-        Toast.success(context, "Localização deletada com sucesso");
-      } on DioException catch (e) {
-        Toast.danger(context, e.message!);
-      }
-    }
-
     showDeleteDialog() {
       return showDialog<String>(
         context: context,
@@ -50,7 +40,8 @@ class _LocationCardState extends State<LocationCard> {
               child: const Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () => deleteLocation(),
+              onPressed: () =>
+                  _controller.deleteById(widget.location.id!, widget.eventId),
               child:
                   const Text("Confirmar", style: TextStyle(color: Colors.red)),
             ),

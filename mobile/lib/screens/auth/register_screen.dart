@@ -1,25 +1,22 @@
-import 'package:dio/dio.dart';
+import 'package:facelocus/controllers/auth/register_controller.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/router.dart';
-import 'package:facelocus/services/auth_service.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:facelocus/utils/fields_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  LoginFormState createState() {
-    return LoginFormState();
+  RegisterScreenState createState() {
+    return RegisterScreenState();
   }
 }
 
-class LoginFormState extends State<RegisterScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
+  late final RegisterController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
@@ -27,49 +24,7 @@ class LoginFormState extends State<RegisterScreen> {
   late TextEditingController _cpfController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
-  bool _isLoading = false;
   Map<String, dynamic>? fieldErrors;
-
-  void _register() async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        AuthService service = AuthService();
-        UserModel user = UserModel(
-            name: _nameController.text,
-            surname: _surnameController.text,
-            email: _emailController.text,
-            cpf: _cpfController.text,
-            password: _passwordController.text);
-        updateLoading();
-        await service.register(user);
-        updateLoading();
-        if (context.mounted) {
-          context.replace(AppRoutes.login);
-          Toast.success(context, 'Conta criada com sucesso');
-        }
-      }
-    } on DioException catch (e) {
-      updateLoading();
-      String detail = e.response?.data['detail'];
-      if (e.response?.data['invalidFields'] != null) {
-        Map<String, dynamic> invalidFields = e.response?.data['invalidFields'];
-        setState(() {
-          if (invalidFields.isNotEmpty) {
-            fieldErrors = invalidFields;
-          }
-        });
-      }
-      if (context.mounted) {
-        Toast.danger(context, detail);
-      }
-    }
-  }
-
-  void updateLoading() {
-    setState(() {
-      _isLoading = !_isLoading;
-    });
-  }
 
   @override
   void initState() {
@@ -95,6 +50,18 @@ class LoginFormState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void register() {
+      if (_formKey.currentState!.validate()) {
+        UserModel user = UserModel(
+            name: _nameController.text,
+            surname: _surnameController.text,
+            email: _emailController.text,
+            cpf: _cpfController.text,
+            password: _passwordController.text);
+        _controller.register(context, user);
+      }
+    }
+
     return AppLayout(
       appBarTitle: null,
       showBottomNavigationBar: false,
@@ -201,10 +168,7 @@ class LoginFormState extends State<RegisterScreen> {
                           return null;
                         }),
                     const SizedBox(height: 25),
-                    AppButton(
-                        text: 'Cadastrar',
-                        onPressed: _register,
-                        isLoading: _isLoading),
+                    AppButton(text: 'Cadastrar', onPressed: register),
                   ]),
             ),
           ),

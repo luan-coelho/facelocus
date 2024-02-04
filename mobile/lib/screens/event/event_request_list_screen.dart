@@ -1,4 +1,4 @@
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/screens/event/widgets/event_request_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -18,12 +18,12 @@ class EventRequestListScreen extends StatefulWidget {
 
 class _EventRequestListScreenState extends State<EventRequestListScreen> {
   late final EventRequestController _controller;
-  late final AuthController _authController;
+  late final SessionController _authController;
 
   @override
   void initState() {
     _controller = Get.find<EventRequestController>();
-    _authController = Get.find<AuthController>();
+    _authController = Get.find<SessionController>();
     _controller.fetchAll();
     super.initState();
   }

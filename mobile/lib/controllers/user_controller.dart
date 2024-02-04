@@ -1,17 +1,18 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/user_service.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class UserController extends GetxController {
+import '../shared/toast.dart';
+
+class UserController extends GetxController with MessageStateMixin {
   final UserService service;
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
@@ -37,7 +38,7 @@ class UserController extends GetxController {
 
   fetchAllByNameOrCpf(String identifier) async {
     _isLoading.value = true;
-    AuthController authController = Get.find<AuthController>();
+    SessionController authController = Get.find<SessionController>();
     UserModel user = authController.authenticatedUser.value!;
     _usersSearch = await service.getAllByNameOrCpf(user.id!, identifier);
     _isLoading.value = false;
@@ -46,17 +47,17 @@ class UserController extends GetxController {
   facePhotoProfileUploud(BuildContext context, File file) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.facePhotoProfileUploud(file, user.id!);
       if (context.mounted) {
         context.replace(AppRoutes.home);
-        Toast.success(context, 'Uploud realizado com sucesso');
+        showSuccess('Uploud realizado com sucesso');
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     _isLoading.value = false;
@@ -65,16 +66,16 @@ class UserController extends GetxController {
   checkFace(BuildContext context, File file) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.checkFace(file, user.id!);
       if (context.mounted) {
-        Toast.success(context, 'Validação realizada com sucesso');
+        showSuccess('Validação realizada com sucesso');
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     _isLoading.value = false;
@@ -90,12 +91,12 @@ class UserController extends GetxController {
   changePassword(BuildContext context, ChangePasswordDTO credentials) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.changePassword(user.id!, credentials);
       if (context.mounted) {
         context.pop();
-        Toast.success(context, 'Senha alterada com sucesso');
+        showSuccess('Senha alterada com sucesso');
       }
     } on DioException catch (e) {
       String detail = 'Não foi possível realizar o login';
@@ -104,7 +105,7 @@ class UserController extends GetxController {
       }
 
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     _isLoading.value = false;

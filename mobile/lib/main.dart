@@ -1,22 +1,16 @@
 import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/controllers.dart';
-import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); //Add this
   await FaceCamera.initialize();
-
   AppControllers.initControllers();
-
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => LocationProvider()),
-  ], child: const FaceLocusApp()));
+  runApp(const FaceLocusApp());
 }
 
 class FaceLocusApp extends StatelessWidget {

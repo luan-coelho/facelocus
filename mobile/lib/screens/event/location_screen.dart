@@ -1,15 +1,14 @@
 import 'package:facelocus/models/location_model.dart';
-import 'package:facelocus/providers/location_provider.dart';
 import 'package:facelocus/screens/event/widgets/location_card.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../controllers/location_controller.dart';
 
 class LocationListScreen extends StatefulWidget {
   const LocationListScreen({super.key, required this.eventId});
@@ -21,20 +20,19 @@ class LocationListScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationListScreen> {
+  late final LocationController _controller;
   final _formKey = GlobalKey<FormState>();
-  late LocationProvider _locationProvider;
   late LocationModel _location;
   late TextEditingController _descriptionController;
   bool isLoading = false;
 
   @override
   void initState() {
-    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    _controller = Get.find<LocationController>();
+    _controller.newLocationInstace();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _locationProvider.fetchAllByEventId(widget.eventId);
-      _locationProvider.eventId = widget.eventId;
+      _controller.fetchAllByEventId(widget.eventId);
     });
-    _location = newLocationInstace();
     _descriptionController = TextEditingController();
     super.initState();
   }
@@ -45,22 +43,12 @@ class _LocationScreenState extends State<LocationListScreen> {
     super.dispose();
   }
 
-  LocationModel newLocationInstace() =>
-      LocationModel(description: '', latitude: 0.0, longitude: 0.0);
-
   void addLocation() {
     if (_formKey.currentState!.validate()) {
-      if (_location.latitude == 0.0 && _location.longitude == 0.0) {
-        Toast.warn(context, 'Sem localização definida');
-        return;
-      }
-
-      _formKey.currentState!.save();
-      _locationProvider.create(_location, widget.eventId);
-
+      _controller.location.value!.description = _descriptionController.text;
+      _controller.create(_controller.location.value!, widget.eventId);
       setState(() {
         _descriptionController.clear();
-        _location = newLocationInstace();
       });
     }
   }
@@ -69,9 +57,7 @@ class _LocationScreenState extends State<LocationListScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
       appBarTitle: 'Localizações vinculadas',
-      body: Consumer<LocationProvider>(builder: (context, state, child) {
-        bool showPosition =
-            _location.latitude != 0.0 && _location.longitude != 0.0;
+      body: Obx(() {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(29.0),
@@ -95,8 +81,8 @@ class _LocationScreenState extends State<LocationListScreen> {
                         const SizedBox(height: 10),
                         AppButton(
                             text: 'Pegar localização',
-                            onPressed: () => _savePosition(),
-                            icon: isLoading
+                            onPressed: () => _controller.savePosition(context),
+                            icon: _controller.isLoading.value
                                 ? const SizedBox(
                                     width: 17,
                                     height: 17,
@@ -112,8 +98,7 @@ class _LocationScreenState extends State<LocationListScreen> {
                         const SizedBox(height: 10),
                         Builder(
                           builder: (context) {
-                            if (_location.latitude != 0.0 &&
-                                _location.longitude != 0.0) {
+                            if (_controller.showPosition.value) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -136,9 +121,11 @@ class _LocationScreenState extends State<LocationListScreen> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       const SizedBox(width: 5),
-                                      Text(_location.latitude.toString()),
+                                      Text(_controller.location.value!.latitude
+                                          .toString()),
                                       const SizedBox(width: 10),
-                                      Text(_location.longitude.toString()),
+                                      Text(_controller.location.value!.latitude
+                                          .toString()),
                                     ],
                                   ),
                                 ],
@@ -148,16 +135,15 @@ class _LocationScreenState extends State<LocationListScreen> {
                           },
                         ),
                         const SizedBox(height: 5),
-                        showPosition
+                        _controller.showPosition.value
                             ? AppButton(
-                                text: 'Adicionar',
-                                onPressed: () => addLocation())
+                                text: 'Adicionar', onPressed: addLocation)
                             : const SizedBox()
                       ]),
                 ),
-                SizedBox(height: showPosition ? 15 : 0),
+                SizedBox(height: _controller.showPosition.value ? 15 : 0),
                 Builder(builder: (context) {
-                  if (state.locations.isEmpty) {
+                  if (_controller.locations.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
@@ -168,7 +154,7 @@ class _LocationScreenState extends State<LocationListScreen> {
                     );
                   }
                   return Skeletonizer(
-                    enabled: state.isLoading,
+                    enabled: _controller.isLoading.value,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -182,10 +168,11 @@ class _LocationScreenState extends State<LocationListScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: state.locations.length,
+                          itemCount: _controller.locations.length,
                           itemBuilder: (context, index) {
-                            LocationModel location = state.locations[index];
-                            return LocationCard(location: location);
+                            var location = _controller.locations[index];
+                            return LocationCard(
+                                location: location, eventId: widget.eventId);
                           },
                         ),
                       ],
@@ -198,49 +185,5 @@ class _LocationScreenState extends State<LocationListScreen> {
         );
       }),
     );
-  }
-
-  void _savePosition() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      Position position = await _determinePosition();
-      setState(() {
-        _location.latitude = position.latitude;
-        _location.longitude = position.longitude;
-      });
-    } on Exception catch (e) {
-      if (context.mounted) {
-        Toast.danger(context, e.toString());
-      }
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Os serviços de localização estão desativados.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('As permissões de localização foram negadas');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'As permissões de localização foram negadas permanentemente, não é possivel solicitar permissões.');
-    }
-    return await Geolocator.getCurrentPosition();
   }
 }

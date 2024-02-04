@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -23,14 +23,14 @@ class FaceUploadScreen extends StatefulWidget {
 
 class FaceUploadScreenState extends State<FaceUploadScreen> {
   late final UserController _controller;
-  late final AuthController _authController;
+  late final SessionController _authController;
   File? _capturedImage;
   late bool _openCamera;
 
   @override
   void initState() {
     _controller = Get.find<UserController>();
-    _authController = Get.find<AuthController>();
+    _authController = Get.find<SessionController>();
     _openCamera = false;
     super.initState();
   }

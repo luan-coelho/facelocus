@@ -1,30 +1,28 @@
-import 'package:dio/dio.dart';
+import 'package:facelocus/controllers/location_controller.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class UserCard extends StatefulWidget {
-  const UserCard({super.key, required this.user});
+class LocationCard extends StatefulWidget {
+  const LocationCard({super.key, required this.user});
 
   final UserModel user;
 
   @override
-  State<UserCard> createState() => _UserCardState();
+  State<LocationCard> createState() => _LocationCardState();
 }
 
-class _UserCardState extends State<UserCard> {
+class _LocationCardState extends State<LocationCard> {
+  late final LocationController _controller;
+
+  @override
+  void initState() {
+    _controller = Get.find<LocationController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    removeUser() {
-      try {
-        Navigator.pop(context, "OK");
-        // _userProvider.deleteById(widget.user.id, _userProvider.eventId);
-        Toast.success(context, "Localização deletada com sucesso");
-      } on DioException catch (e) {
-        Toast.danger(context, e.message!);
-      }
-    }
-
     return Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         width: 330,
@@ -62,7 +60,7 @@ class _UserCardState extends State<UserCard> {
                             child: const Text("Cancelar"),
                           ),
                           TextButton(
-                            onPressed: () => removeUser(),
+                            onPressed: () => _controller.removeUser(context),
                             child: const Text("Confirmar",
                                 style: TextStyle(color: Colors.red)),
                           ),

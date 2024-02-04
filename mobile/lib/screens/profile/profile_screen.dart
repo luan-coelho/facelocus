@@ -1,4 +1,4 @@
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
@@ -18,12 +18,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final AuthController _controller;
+  late final SessionController _controller;
   late final UserModel _user;
 
   @override
   void initState() {
-    _controller = Get.find<AuthController>();
+    _controller = Get.find<SessionController>();
     _user = _controller.authenticatedUser.value!;
     super.initState();
   }

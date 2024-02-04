@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/event_service.dart';
@@ -8,15 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class EventController extends GetxController {
+class EventController extends GetxController with MessageStateMixin {
   final EventService service;
-
   final List<EventModel> _events = <EventModel>[].obs;
   EventModel? _event;
-
   Map<String, dynamic>? invalidFields;
-
   final RxBool _isLoading = false.obs;
+
+  EventController({required this.service});
 
   RxBool get isLoading => _isLoading;
 
@@ -24,11 +23,9 @@ class EventController extends GetxController {
 
   List<EventModel> get events => _events;
 
-  EventController({required this.service});
-
   fetchAll() async {
     _isLoading.value = true;
-    AuthController authController = Get.find<AuthController>();
+    SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<EventModel> events = await service.getAllByUser(administrator.id!);
     _events.clear();
@@ -38,7 +35,7 @@ class EventController extends GetxController {
 
   fetchAllByDescription(BuildContext context, String description) async {
     _isLoading.value = true;
-    AuthController authController = Get.find<AuthController>();
+    SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<EventModel> events;
     events = await service.getAllByDescription(administrator.id!, description);
@@ -56,18 +53,18 @@ class EventController extends GetxController {
   Future<void> create(BuildContext context, EventModel event) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel administrator = authController.authenticatedUser.value!;
       event.administrator = administrator;
       await service.create(event);
       if (context.mounted) {
-        Toast.success(context, 'Evento criado com sucesso');
+        showSuccess('Evento criado com sucesso');
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao criar evento');
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     fetchAll();

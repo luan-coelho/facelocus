@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/dtos/create_ticket_request_dto.dart';
 import 'package:facelocus/dtos/event_request_create_dto.dart';
 import 'package:facelocus/dtos/user_with_id_only_dto.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class EventRequestController extends GetxController {
+class EventRequestController extends GetxController with MessageStateMixin {
   final EventRequestService service;
   final Rxn<EventRequestModel> _eventRequest = Rxn<EventRequestModel>();
   final List<EventRequestModel> _eventsRequest = <EventRequestModel>[].obs;
@@ -33,7 +33,7 @@ class EventRequestController extends GetxController {
   fetchAll({int? eventId}) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       int userId = authController.authenticatedUser.value!.id!;
       var eventsRequest = await service.fetchAll(userId);
       _eventsRequest.clear();
@@ -54,7 +54,7 @@ class EventRequestController extends GetxController {
   createTicketRequest(BuildContext context, String code) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(code: code);
       UserWithIdOnly requestOwner = UserWithIdOnly(id: user.id);
@@ -63,13 +63,13 @@ class EventRequestController extends GetxController {
       await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
-        Toast.success(context, message);
+        showSuccess(message);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     fetchAll();
@@ -85,13 +85,13 @@ class EventRequestController extends GetxController {
       await service.createInvitation(eventRequest);
       String message = 'Convite enviado com sucesso';
       if (context.mounted) {
-        Toast.success(context, message);
+        showSuccess(message);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     fetchAll();
@@ -101,13 +101,13 @@ class EventRequestController extends GetxController {
       EventRequestType requestType) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.approve(eventRequestId, user.id!, requestType);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     fetchAll();
@@ -117,13 +117,13 @@ class EventRequestController extends GetxController {
       EventRequestType requestType) async {
     _isLoading.value = true;
     try {
-      AuthController authController = Get.find<AuthController>();
+      SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.reject(eventRequestId, user.id!, requestType);
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        Toast.danger(context, detail);
+        showError(detail);
       }
     }
     fetchAll();

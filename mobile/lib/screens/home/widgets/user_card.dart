@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:facelocus/controllers/auth_controller.dart';
+import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -19,14 +19,14 @@ class UserCardHome extends StatefulWidget {
 }
 
 class _UserCardHomeState extends State<UserCardHome> {
-  late final AuthController _authController;
+  late final SessionController _authController;
   late final UserModel _user;
   late final Map<String, String> _httpHeaders;
   bool _isLoading = true;
 
   @override
   void initState() {
-    _authController = Get.find<AuthController>();
+    _authController = Get.find<SessionController>();
     _user = _authController.authenticatedUser.value!;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       String? token = await DioFetchApi().getToken();

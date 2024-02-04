@@ -429,6 +429,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  loading_animation_widget:
+    dependency: "direct main"
+    description:
+      name: loading_animation_widget
+      sha256: "1901682600273a966c34cf44a85fc5355da92a8d08a8a43c11adc4e471993e3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0+4"
   logging:
     dependency: transitive
     description:
@@ -685,6 +693,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  signals_core:
+    dependency: transitive
+    description:
+      name: signals_core
+      sha256: "79ca5a5ebca67eba54f6b271f8ac7adf1250717fb5d947295e77dd34610cabac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  signals_flutter:
+    dependency: "direct main"
+    description:
+      name: signals_flutter
+      sha256: "85b15c10a042da332d11ca989b8b038802fe2effe2c6dc29ecbd02becec1bba5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   simple_gesture_detector:
     dependency: transitive
     description:
