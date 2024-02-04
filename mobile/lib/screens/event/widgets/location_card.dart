@@ -40,8 +40,8 @@ class _LocationCardState extends State<LocationCard> {
               child: const Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () =>
-                  _controller.deleteById(widget.location.id!, widget.eventId),
+              onPressed: () => _controller.deleteById(
+                  context, widget.location.id!, widget.eventId),
               child:
                   const Text("Confirmar", style: TextStyle(color: Colors.red)),
             ),

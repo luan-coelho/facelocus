@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import '../shared/toast.dart';
 
-class UserController extends GetxController with MessageStateMixin {
+class UserController extends GetxController {
   final UserService service;
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
@@ -52,12 +52,12 @@ class UserController extends GetxController with MessageStateMixin {
       await service.facePhotoProfileUploud(file, user.id!);
       if (context.mounted) {
         context.replace(AppRoutes.home);
-        showSuccess('Uploud realizado com sucesso');
+        Toast.showSuccess('Uploud realizado com sucesso', context);
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     _isLoading.value = false;
@@ -70,12 +70,12 @@ class UserController extends GetxController with MessageStateMixin {
       UserModel user = authController.authenticatedUser.value!;
       await service.checkFace(file, user.id!);
       if (context.mounted) {
-        showSuccess('Validação realizada com sucesso');
+        Toast.showSuccess('Validação realizada com sucesso', context);
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     _isLoading.value = false;
@@ -96,7 +96,7 @@ class UserController extends GetxController with MessageStateMixin {
       await service.changePassword(user.id!, credentials);
       if (context.mounted) {
         context.pop();
-        showSuccess('Senha alterada com sucesso');
+        Toast.showSuccess('Senha alterada com sucesso', context);
       }
     } on DioException catch (e) {
       String detail = 'Não foi possível realizar o login';
@@ -105,7 +105,7 @@ class UserController extends GetxController with MessageStateMixin {
       }
 
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     _isLoading.value = false;

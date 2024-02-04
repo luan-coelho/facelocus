@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class EventRequestController extends GetxController with MessageStateMixin {
+class EventRequestController extends GetxController {
   final EventRequestService service;
   final Rxn<EventRequestModel> _eventRequest = Rxn<EventRequestModel>();
   final List<EventRequestModel> _eventsRequest = <EventRequestModel>[].obs;
@@ -63,13 +63,13 @@ class EventRequestController extends GetxController with MessageStateMixin {
       await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
-        showSuccess(message);
+        Toast.showSuccess(message, context);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     fetchAll();
@@ -85,13 +85,13 @@ class EventRequestController extends GetxController with MessageStateMixin {
       await service.createInvitation(eventRequest);
       String message = 'Convite enviado com sucesso';
       if (context.mounted) {
-        showSuccess(message);
+        Toast.showSuccess(message, context);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     fetchAll();
@@ -107,7 +107,7 @@ class EventRequestController extends GetxController with MessageStateMixin {
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     fetchAll();
@@ -123,7 +123,7 @@ class EventRequestController extends GetxController with MessageStateMixin {
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     fetchAll();

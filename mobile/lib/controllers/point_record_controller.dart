@@ -5,7 +5,6 @@ import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/point_record_service.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/utils/expansion_panel_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,9 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import '../models/event_model.dart';
+import '../shared/toast.dart';
 
-class PointRecordController extends GetxController with MessageStateMixin {
+class PointRecordController extends GetxController {
   final PointRecordService service;
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
@@ -63,14 +63,14 @@ class PointRecordController extends GetxController with MessageStateMixin {
     try {
       await service.create(pointRecord);
       if (context.mounted) {
-        showSuccess('Registro de ponto criado com sucesso');
+        Toast.showSuccess('Registro de ponto criado com sucesso', context);
         event.value = null;
         context.pushReplacement(AppRoutes.home);
       }
     } on DioException catch (e) {
       String detail = onError(e);
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     if (context.mounted) {

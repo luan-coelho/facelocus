@@ -2,7 +2,6 @@ import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/dtos/login_request_dto.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginFormState extends State<LoginScreen> with MessageViewMixin {
+class LoginFormState extends State<LoginScreen> {
   late final SessionController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _loginController;
@@ -37,7 +36,6 @@ class LoginFormState extends State<LoginScreen> with MessageViewMixin {
   @override
   void initState() {
     _controller = Get.find<SessionController>();
-    messageListener(_controller);
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();

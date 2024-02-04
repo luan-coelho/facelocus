@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterController extends GetxController with MessageStateMixin {
+class RegisterController extends GetxController {
   final AuthService service;
   final Rxn<Map<String, dynamic>> invalidFields = Rxn<Map<String, dynamic>>();
 
@@ -18,7 +18,7 @@ class RegisterController extends GetxController with MessageStateMixin {
       await service.register(user);
       if (context.mounted) {
         context.replace(AppRoutes.login);
-        showSuccess('Conta criada com sucesso');
+        Toast.showSuccess('Conta criada com sucesso', context);
       }
     } on DioException catch (e) {
       String detail = e.response?.data['detail'];
@@ -29,7 +29,7 @@ class RegisterController extends GetxController with MessageStateMixin {
         }
       }
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
   }

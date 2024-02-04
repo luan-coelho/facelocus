@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/services/location_service.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import '../models/location_model.dart';
+import '../shared/toast.dart';
 
-class LocationController extends GetxController with MessageStateMixin {
+class LocationController extends GetxController {
   final LocationService service;
   late int eventId;
   final Rxn<LocationModel> _location = Rxn<LocationModel>();
@@ -49,12 +49,12 @@ class LocationController extends GetxController with MessageStateMixin {
     fetchAllByEventId(eventId);
   }
 
-  Future<void> deleteById(int locationId, int eventId) async {
+  deleteById(BuildContext context, int locationId, int eventId) async {
     _isLoading.value = true;
     try {
       await service.deleteById(locationId);
     } on DioException catch (e) {
-      showError(e.message!);
+      Toast.showError(e.message!, context);
     }
     fetchAllByEventId(eventId);
   }
@@ -63,10 +63,10 @@ class LocationController extends GetxController with MessageStateMixin {
     _auxLocation.value = location;
   }
 
-  void addLocation(LocationModel location, int eventId) {
+  void addLocation(BuildContext context, LocationModel location, int eventId) {
     _isLoading.value = true;
     if (_location.value?.latitude == 0.0 && _location.value?.longitude == 0.0) {
-      showAlert('Sem localização definida');
+      Toast.showAlert('Sem localização definida', context);
       return;
     }
     service.create(location, eventId);
@@ -77,10 +77,10 @@ class LocationController extends GetxController with MessageStateMixin {
   void removeUser(BuildContext context) {
     _isLoading.value = true;
     try {
-      Navigator.pop(context, "OK");
-      showSuccess("Localização deletada com sucesso");
+      Navigator.pop(context, 'OK');
+      Toast.showSuccess('Localização deletada com sucesso', context);
     } on DioException catch (e) {
-      showError(e.message!);
+      Toast.showError(e.message!, context);
     }
     _isLoading.value = true;
   }
@@ -88,13 +88,13 @@ class LocationController extends GetxController with MessageStateMixin {
   void savePosition(BuildContext context) async {
     _isLoading.value = true;
     try {
-      Position position = await determinePosition();
+      Position position = await determinePosition(context);
       _location.value?.latitude = position.latitude;
       _location.value?.longitude = position.longitude;
       _showPosition.value = true;
     } on Exception catch (e) {
       if (context.mounted) {
-        showError(e.toString());
+        Toast.showError(e.toString(), context);
       }
     }
     _isLoading.value = false;
@@ -106,14 +106,14 @@ class LocationController extends GetxController with MessageStateMixin {
     _location.value = location;
   }
 
-  Future<Position> determinePosition() async {
+  Future<Position> determinePosition(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       var error = 'Os serviços de localização estão desativados.';
-      showAlert(error);
+      Toast.showAlert(error, context);
       return Future.error(error);
     }
 
@@ -122,7 +122,7 @@ class LocationController extends GetxController with MessageStateMixin {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         var error = 'As permissões de localização foram negadas';
-        showAlert(error);
+        Toast.showAlert(error, context);
         return Future.error(error);
       }
     }
@@ -130,7 +130,7 @@ class LocationController extends GetxController with MessageStateMixin {
     if (permission == LocationPermission.deniedForever) {
       var error =
           'As permissões de localização foram negadas permanentemente, não é possivel solicitar permissões.';
-      showAlert(error);
+      Toast.showAlert(error, context);
       return Future.error(error);
     }
     return await Geolocator.getCurrentPosition();

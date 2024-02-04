@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class EventController extends GetxController with MessageStateMixin {
+class EventController extends GetxController {
   final EventService service;
   final List<EventModel> _events = <EventModel>[].obs;
   EventModel? _event;
@@ -58,13 +58,13 @@ class EventController extends GetxController with MessageStateMixin {
       event.administrator = administrator;
       await service.create(event);
       if (context.mounted) {
-        showSuccess('Evento criado com sucesso');
+        Toast.showSuccess('Evento criado com sucesso', context);
         context.pop();
       }
     } on DioException catch (e) {
       String detail = onError(e, message: 'Falha ao criar evento');
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
     fetchAll();

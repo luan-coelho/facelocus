@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SessionController extends GetxController with MessageStateMixin {
+class SessionController extends GetxController {
   final AuthService service;
   late final UserService _userService;
   late final FlutterSecureStorage _storage;
@@ -56,7 +56,7 @@ class SessionController extends GetxController with MessageStateMixin {
         detail = e.response?.data['detail'];
       }
       if (context.mounted) {
-        showError(detail);
+        Toast.showError(detail, context);
       }
     }
   }
@@ -85,12 +85,12 @@ class SessionController extends GetxController with MessageStateMixin {
     } on DioException catch (e) {
       if (e.response?.statusCode == 401 && context.mounted) {
         context.replace(AppRoutes.login);
-        showAlert('Sua sessão expirou');
+        Toast.showAlert('Sua sessão expirou', context);
       }
       var detail = e.response?.data['detail'];
       String message = 'Não foi possível realizar o login';
       if (context.mounted) {
-        showError(detail ?? message);
+        Toast.showError(detail ?? message, context);
       }
     }
   }
