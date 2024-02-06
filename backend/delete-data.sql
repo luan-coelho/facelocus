@@ -11,7 +11,7 @@ DELETE
 FROM location;
 
 DELETE
-FROM ticketrequest;
+FROM eventrequest;
 
 DELETE
 FROM userfacephoto;
@@ -30,8 +30,3 @@ FROM event;
 
 DELETE
 FROM tb_user;
-
-SELECT *
-FROM Event
-WHERE administrator.id = ?1
-  AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%' ||? 2 || '%'))

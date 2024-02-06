@@ -17,27 +17,29 @@ class EventRequestCard extends StatefulWidget {
   State<EventRequestCard> createState() => _EventRequestCardState();
 }
 
-enum RequestType { received, sent }
-
 class _EventRequestCardState extends State<EventRequestCard> {
   @override
   Widget build(BuildContext context) {
-    RequestType getEventRequestType() {
+    String getBannerText(EventRequestType requestType) {
       UserModel authenticatedUser = widget.authenticatedUser;
       if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
-        return RequestType.sent;
+        return requestType == EventRequestType.invitation
+            ? 'Recebida'
+            : 'Enviada';
       }
-      return RequestType.received;
+      return requestType == EventRequestType.invitation
+          ? 'Enviada'
+          : 'Recebida';
     }
 
-    String getBannerText() {
-      return getEventRequestType() == RequestType.received
-          ? 'Recebida'
-          : 'Enviada';
-    }
-
-    Color getBannerColor() {
-      return getEventRequestType() == RequestType.received
+    Color getBannerColor(EventRequestType requestType) {
+      UserModel authenticatedUser = widget.authenticatedUser;
+      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
+        return requestType == EventRequestType.invitation
+            ? Colors.deepPurple
+            : Colors.green;
+      }
+      return requestType == EventRequestType.invitation
           ? Colors.green
           : Colors.deepPurple;
     }
@@ -98,6 +100,8 @@ class _EventRequestCardState extends State<EventRequestCard> {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 5),
+                Text(widget.eventRequest.event.description!),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     Container(
@@ -125,11 +129,13 @@ class _EventRequestCardState extends State<EventRequestCard> {
                   const EdgeInsets.only(top: 4, right: 8, left: 8, bottom: 4),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(color: getBannerColor()),
-                  color: getBannerColor().withOpacity(0.1)),
-              child: Text(getBannerText(),
+                  border: Border.all(
+                      color: getBannerColor(widget.eventRequest.requestType!)),
+                  color: getBannerColor(widget.eventRequest.requestType!)
+                      .withOpacity(0.1)),
+              child: Text(getBannerText(widget.eventRequest.requestType!),
                   style: TextStyle(
-                      color: getBannerColor(),
+                      color: getBannerColor(widget.eventRequest.requestType!),
                       fontSize: 10,
                       fontWeight: FontWeight.w500)),
             ))

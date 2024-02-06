@@ -33,7 +33,7 @@ class _EventRequestListScreenState extends State<EventRequestListScreen> {
     return AppLayout(
         appBarTitle: 'Solicitações',
         body: Padding(
-          padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+          padding: const EdgeInsets.all(29),
           child: Obx(() {
             if (!_controller.isLoading.value &&
                 _controller.eventsRequest!.isEmpty) {
@@ -50,7 +50,6 @@ class _EventRequestListScreenState extends State<EventRequestListScreen> {
               child: Skeletonizer(
                 enabled: _controller.isLoading.value,
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(height: 20);
                   },
