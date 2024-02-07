@@ -34,11 +34,9 @@ class _EventRequestCardState extends State<EventRequestCard> {
     }
 
     Color getBannerColor(EventRequestType requestType) {
-      bool isInitiator =
-          widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
-      return isInitiator && requestType == EventRequestType.invitation
-          ? Colors.deepPurple
-          : Colors.green;
+      return requestType == EventRequestType.invitation
+          ? Colors.green
+          : Colors.deepPurple;
     }
 
     Color colorByStatus(EventRequestStatus? status) {
