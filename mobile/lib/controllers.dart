@@ -1,3 +1,4 @@
+import 'package:facelocus/controllers/auth/register_controller.dart';
 import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/event_controller.dart';
 import 'package:facelocus/controllers/location_controller.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 class AppControllers {
   static void initControllers() {
     Get.put(SessionController(service: AuthService()));
+    Get.put(RegisterController(service: AuthService()));
     Get.put(EventController(service: EventService()));
     Get.put(EventRequestController(service: EventRequestService()));
     Get.put(UserController(service: UserService()));

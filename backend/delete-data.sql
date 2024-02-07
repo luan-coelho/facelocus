@@ -30,3 +30,5 @@ FROM event;
 
 DELETE
 FROM tb_user;
+
+-- CREATE EXTENSION unaccent;

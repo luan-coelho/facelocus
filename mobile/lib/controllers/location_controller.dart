@@ -97,12 +97,11 @@ class LocationController extends GetxController {
         Toast.showError(e.toString(), context);
       }
     }
-    _isLoading.value = false;
   }
 
   void newLocationInstace() {
     var location =
-        LocationModel(description: '', latitude: 0.0, longitude: 0.0);
+    LocationModel(description: '', latitude: 0.0, longitude: 0.0);
     _location.value = location;
   }
 
@@ -113,6 +112,7 @@ class LocationController extends GetxController {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       var error = 'Os serviços de localização estão desativados.';
+      _isLoading.value = false;
       Toast.showAlert(error, context);
       return Future.error(error);
     }
@@ -122,6 +122,7 @@ class LocationController extends GetxController {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         var error = 'As permissões de localização foram negadas';
+        _isLoading.value = false;
         Toast.showAlert(error, context);
         return Future.error(error);
       }
@@ -130,9 +131,11 @@ class LocationController extends GetxController {
     if (permission == LocationPermission.deniedForever) {
       var error =
           'As permissões de localização foram negadas permanentemente, não é possivel solicitar permissões.';
+      _isLoading.value = false;
       Toast.showAlert(error, context);
       return Future.error(error);
     }
+    _isLoading.value = false;
     return await Geolocator.getCurrentPosition();
   }
 }

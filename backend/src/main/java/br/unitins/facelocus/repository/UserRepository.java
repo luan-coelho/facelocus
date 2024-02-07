@@ -45,7 +45,7 @@ public class UserRepository extends BaseRepository<User> {
         String sql = """
                 FROM User
                 WHERE
-                    LOWER(email) LIKE '%'||?1||'%'
+                    FUNCTION('unaccent',LOWER(email)) LIKE '%'||?1||'%'
                     OR LOWER(cpf) LIKE '%'||?1||'%'
                 """;
         return find(sql, identifier).singleResultOptional();

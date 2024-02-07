@@ -5,6 +5,7 @@ import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:facelocus/utils/fields_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -28,6 +29,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
+    _controller = Get.find<RegisterController>();
     _nameController = TextEditingController();
     _surnameController = TextEditingController();
     _emailController = TextEditingController();

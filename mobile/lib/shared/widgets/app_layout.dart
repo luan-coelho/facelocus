@@ -39,7 +39,7 @@ class _AppLayoutState extends State<AppLayout> {
                         widget.appBarTitle!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             color: widget.appBarTitle != null
                                 ? Colors.white
                                 : Colors.black),

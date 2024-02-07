@@ -14,20 +14,34 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
     }
 
     public List<EventRequest> findAllByEventId(Long eventId) {
-        return find("FROM EventRequest WHERE event.id = ?1", eventId).list();
+        return find("""
+                FROM EventRequest
+                WHERE event.id = ?1
+                """, eventId).list();
     }
 
     public List<EventRequest> findAllByUserId(Long userId) {
-        String sql = "FROM EventRequest WHERE event.administrator.id = ?1 OR requestOwner.id = ?1";
+        String sql = """
+                FROM EventRequest
+                WHERE event.administrator.id = ?1
+                OR initiatorUser.id = ?1
+                OR targetUser.id = ?1
+                """;
         return find(sql, userId).list();
     }
 
     public List<EventRequest> findAllReceivedByUser(Long userId) {
-        return find("FROM EventRequest WHERE event.administrator.id = ?1", userId).list();
+        return find("""
+                FROM EventRequest
+                WHERE event.administrator.id = ?1
+                """, userId).list();
     }
 
     public List<EventRequest> findAllSentByUser(Long userId) {
-        return find("FROM EventRequest WHERE requestOwner.id = ?1", userId).list();
+        return find("""
+                FROM EventRequest
+                WHERE initiatorUser.id = ?1
+                """, userId).list();
     }
 
     public void updateStatus(Long eventRequestId, EventRequestStatus requestStatus) {

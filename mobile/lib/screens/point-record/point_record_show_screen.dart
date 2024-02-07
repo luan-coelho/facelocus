@@ -1,18 +1,16 @@
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:facelocus/router.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:facelocus/utils/expansion_panel_item.dart';
-import 'package:facelocus/delegates/lincked_users_delegate.dart';
-import 'package:facelocus/controllers/point_record_controller.dart';
-import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PointRecordShowScreen extends StatefulWidget {
   const PointRecordShowScreen({super.key, required this.pointRecordId});
@@ -72,11 +70,13 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(_controller.pointRecord.value!.event!.description!,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis)),
+                    Expanded(
+                      child: Text(_controller.pointRecord.value!.event!.description!,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis)),
+                    ),
                     const SizedBox(height: 10),
                     Builder(builder: (context) {
                       DateTime date = _controller.pointRecord.value!.date;
