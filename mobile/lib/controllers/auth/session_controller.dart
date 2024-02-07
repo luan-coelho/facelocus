@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/dtos/login_request_dto.dart';
-import 'package:facelocus/dtos/token_response_dto.dart';
-import 'package:facelocus/models/user_model.dart';
+import 'package:get/get.dart';
 import 'package:facelocus/router.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+import 'package:facelocus/shared/toast.dart';
+import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/auth_service.dart';
 import 'package:facelocus/services/user_service.dart';
-import 'package:facelocus/shared/toast.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+import 'package:facelocus/dtos/login_request_dto.dart';
+import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SessionController extends GetxController {
   final AuthService service;
@@ -87,10 +87,14 @@ class SessionController extends GetxController {
         context.replace(AppRoutes.login);
         Toast.showAlert('Sua sessão expirou', context);
       }
-      var detail = e.response?.data['detail'];
+
       String message = 'Não foi possível realizar o login';
+      if (e.response?.data['detail'] != null) {
+        message = e.response?.data['detail'];
+      }
+
       if (context.mounted) {
-        Toast.showError(detail ?? message, context);
+        Toast.showError(message, context);
       }
     }
   }

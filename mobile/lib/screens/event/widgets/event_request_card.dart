@@ -1,10 +1,10 @@
-import 'package:facelocus/models/event_request_model.dart';
-import 'package:facelocus/models/event_request_status_enum.dart';
-import 'package:facelocus/models/event_request_type_enum.dart';
-import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_type_enum.dart';
+import 'package:facelocus/models/event_request_status_enum.dart';
 
 class EventRequestCard extends StatefulWidget {
   const EventRequestCard(
@@ -77,69 +77,95 @@ class _EventRequestCardState extends State<EventRequestCard> {
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
             'eventrequest': widget.eventRequest.id.toString(),
-            'requesttype': requestType
+            'requesttype': EventRequestType.toJson(requestType)
           }).toString());
     }
 
-    return GestureDetector(
-      onTap: widget.eventRequest.event.administrator!.id ==
-                  widget.authenticatedUser.id &&
-              widget.eventRequest.requestStatus == EventRequestStatus.pending
-          ? showEventRequest
-          : null,
-      child: Stack(clipBehavior: Clip.none, children: [
-        Container(
-            padding: const EdgeInsets.all(15),
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.white),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.eventRequest.event.description!.toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 5),
-                Text(widget.eventRequest.event.description!),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    Container(
-                      width: 15.0,
-                      height: 15.0,
-                      decoration: BoxDecoration(
-                        color:
-                            colorByStatus(widget.eventRequest.requestStatus!),
-                        shape: BoxShape.circle,
+    return Builder(builder: (context) {
+      bool isRequestOwner = widget.eventRequest.event.administrator!.id ==
+          widget.authenticatedUser.id;
+      return GestureDetector(
+        onTap: !isRequestOwner &&
+                widget.eventRequest.requestStatus == EventRequestStatus.pending
+            ? showEventRequest
+            : null,
+        child: Stack(clipBehavior: Clip.none, children: [
+          Container(
+              padding: const EdgeInsets.all(15),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.eventRequest.event.description!.toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Text(
+                        isRequestOwner ? 'Para:' : 'De:',
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                        descriptionByStatus(widget.eventRequest.requestStatus!),
-                        style: const TextStyle(color: Colors.black54))
-                  ],
-                )
-              ],
-            )),
-        Positioned(
-            top: 10,
-            right: 10,
-            child: Container(
-              padding:
-                  const EdgeInsets.only(top: 4, right: 8, left: 8, bottom: 4),
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(
-                      color: getBannerColor(widget.eventRequest.requestType!)),
-                  color: getBannerColor(widget.eventRequest.requestType!)
-                      .withOpacity(0.1)),
-              child: Text(getBannerText(widget.eventRequest.requestType!),
-                  style: TextStyle(
-                      color: getBannerColor(widget.eventRequest.requestType!),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500)),
-            ))
-      ]),
-    );
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                          isRequestOwner
+                              ? widget.eventRequest.requestOwner
+                                  .getFullName()
+                                  .toUpperCase()
+                              : widget.eventRequest.event.administrator!
+                                  .getFullName(),
+                          style: const TextStyle(
+                              fontSize: 12, overflow: TextOverflow.ellipsis)),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 15.0,
+                        height: 15.0,
+                        decoration: BoxDecoration(
+                          color:
+                              colorByStatus(widget.eventRequest.requestStatus!),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                          descriptionByStatus(
+                              widget.eventRequest.requestStatus!),
+                          style: const TextStyle(color: Colors.black54))
+                    ],
+                  )
+                ],
+              )),
+          Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                padding:
+                    const EdgeInsets.only(top: 4, right: 8, left: 8, bottom: 4),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(
+                        color:
+                            getBannerColor(widget.eventRequest.requestType!)),
+                    color: getBannerColor(widget.eventRequest.requestType!)
+                        .withOpacity(0.1)),
+                child: Text(getBannerText(widget.eventRequest.requestType!),
+                    style: TextStyle(
+                        color: getBannerColor(widget.eventRequest.requestType!),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500)),
+              ))
+        ]),
+      );
+    });
   }
 }
