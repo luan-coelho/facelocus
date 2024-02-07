@@ -54,9 +54,9 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               EventRequestModel eventRequest = _controller.eventRequest.value!;
-              String fullName = eventRequest.requestOwner.getFullName();
-              String cpf = eventRequest.requestOwner.cpf;
-              String email = eventRequest.requestOwner.email;
+              String fullName = eventRequest.initiatorUser.getFullName();
+              String cpf = eventRequest.initiatorUser.cpf;
+              String email = eventRequest.initiatorUser.email;
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

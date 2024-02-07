@@ -19,7 +19,8 @@ public interface EventRequestMapper {
     @Mapping(target = "id", ignore = true)
     EventRequest toUpdateEntity(EventRequestResponseDTO eventRequest);
 
-    @Mapping(source = "requestOwner", target = "requestOwner", qualifiedByName = "toResource")
+    @Mapping(source = "initiatorUser", target = "initiatorUser", qualifiedByName = "toResource")
+    @Mapping(source = "targetUser", target = "targetUser", qualifiedByName = "toResource")
     EventRequestResponseDTO toResource(EventRequest eventRequest);
 
     @Mapping(target = "id", ignore = true)

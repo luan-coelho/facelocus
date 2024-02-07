@@ -7,7 +7,8 @@ import jakarta.validation.constraints.NotNull;
 public record EventRequestCreateDTO(
         @NotNull(message = "Informe o evento")
         Event event,
-        @NotNull(message = "Informe o dono da solicitação")
-        User requestOwner
+        @NotNull(message = "Informe o usuário que está solicitando")
+        User initiatorUser,
+        User targetUser
 ) {
 }

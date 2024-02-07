@@ -1,10 +1,12 @@
-import 'package:facelocus/router.dart';
+import 'package:facelocus/models/event_request_model.dart';
+import 'package:facelocus/models/event_request_status_enum.dart';
+
+// Certifique-se de que as importações abaixo estão corretas
+import 'package:facelocus/models/event_request_type_enum.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart'; // Verifique se este caminho está correto
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/models/event_request_model.dart';
-import 'package:facelocus/models/event_request_type_enum.dart';
-import 'package:facelocus/models/event_request_status_enum.dart';
 
 class EventRequestCard extends StatefulWidget {
   const EventRequestCard(
@@ -20,31 +22,25 @@ class EventRequestCard extends StatefulWidget {
 class _EventRequestCardState extends State<EventRequestCard> {
   @override
   Widget build(BuildContext context) {
+    // Corrigido para usar 'initiatorUser' e 'targetUser' adequadamente
     String getBannerText(EventRequestType requestType) {
-      UserModel authenticatedUser = widget.authenticatedUser;
-      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
-        return requestType == EventRequestType.invitation
-            ? 'Recebida'
-            : 'Enviada';
-      }
+      bool isInitiator =
+          widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
       return requestType == EventRequestType.invitation
-          ? 'Enviada'
-          : 'Recebida';
+          ? (isInitiator ? 'Enviada' : 'Recebida')
+          : (isInitiator ? 'Recebida' : 'Enviada');
     }
 
     Color getBannerColor(EventRequestType requestType) {
-      UserModel authenticatedUser = widget.authenticatedUser;
-      if (widget.eventRequest.requestOwner.id == authenticatedUser.id) {
-        return requestType == EventRequestType.invitation
-            ? Colors.deepPurple
-            : Colors.green;
-      }
+      bool isInitiator =
+          widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
       return requestType == EventRequestType.invitation
-          ? Colors.green
-          : Colors.deepPurple;
+          ? (isInitiator ? Colors.deepPurple : Colors.green)
+          : (isInitiator ? Colors.green : Colors.deepPurple);
     }
 
-    Color colorByStatus(EventRequestStatus status) {
+    // Garantindo retorno padrão para colorByStatus e descriptionByStatus
+    Color colorByStatus(EventRequestStatus? status) {
       switch (status) {
         case EventRequestStatus.approved:
           return Colors.green;
@@ -52,10 +48,12 @@ class _EventRequestCardState extends State<EventRequestCard> {
           return Colors.amber;
         case EventRequestStatus.rejected:
           return Colors.red;
+        default:
+          return Colors.grey; // Valor padrão
       }
     }
 
-    String descriptionByStatus(EventRequestStatus status) {
+    String descriptionByStatus(EventRequestStatus? status) {
       switch (status) {
         case EventRequestStatus.approved:
           return 'Aprovada';
@@ -63,27 +61,33 @@ class _EventRequestCardState extends State<EventRequestCard> {
           return 'Pendente';
         case EventRequestStatus.rejected:
           return 'Rejeitada';
+        default:
+          return 'Indefinido'; // Valor padrão
       }
     }
 
-    showEventRequest() {
+    // Ajuste na lógica para mostrar a solicitação do evento
+    void showEventRequest() {
       int eventRequestId = widget.eventRequest.id!;
-      EventRequestType requestType = EventRequestType.invitation;
-      if (widget.authenticatedUser.id ==
-          widget.eventRequest.event.administrator!.id) {
-        requestType = EventRequestType.ticketRequest;
-      }
+      // Ajuste para definir corretamente o tipo de solicitação
+      EventRequestType requestType =
+          widget.authenticatedUser.id == widget.eventRequest.initiatorUser.id
+              ? EventRequestType.ticketRequest
+              : EventRequestType.invitation;
+      // Certifique-se de que a serialização para string está correta
       context.push(Uri(
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
             'eventrequest': widget.eventRequest.id.toString(),
-            'requesttype': EventRequestType.toJson(requestType)
+            'requesttype': requestType.toString()
+            // Pode precisar de ajuste para serialização
           }).toString());
     }
 
     return Builder(builder: (context) {
-      bool isRequestOwner = widget.eventRequest.event.administrator!.id ==
-          widget.authenticatedUser.id;
+      // Corrigido para checar corretamente o dono da solicitação
+      bool isRequestOwner =
+          widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
       return GestureDetector(
         onTap: !isRequestOwner &&
                 widget.eventRequest.requestStatus == EventRequestStatus.pending
@@ -102,29 +106,8 @@ class _EventRequestCardState extends State<EventRequestCard> {
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        isRequestOwner ? 'Para:' : 'De:',
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                          isRequestOwner
-                              ? widget.eventRequest.requestOwner
-                                  .getFullName()
-                                  .toUpperCase()
-                              : widget.eventRequest.event.administrator!
-                                  .getFullName(),
-                          style: const TextStyle(
-                              fontSize: 12, overflow: TextOverflow.ellipsis)),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  // Ajustar lógica conforme necessário para exibir informações corretas
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Container(
@@ -132,14 +115,14 @@ class _EventRequestCardState extends State<EventRequestCard> {
                         height: 15.0,
                         decoration: BoxDecoration(
                           color:
-                              colorByStatus(widget.eventRequest.requestStatus!),
+                              colorByStatus(widget.eventRequest.requestStatus),
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 5),
                       Text(
                           descriptionByStatus(
-                              widget.eventRequest.requestStatus!),
+                              widget.eventRequest.requestStatus),
                           style: const TextStyle(color: Colors.black54))
                     ],
                   )

@@ -25,5 +25,7 @@ public class EventRequest {
     private EventRequestStatus requestStatus = EventRequestStatus.PENDING;
     private EventRequestType requestType = EventRequestType.INVITATION;
     @ManyToOne
-    private User requestOwner;
+    private User initiatorUser; // Usuário que inicia o convite ou solicitação
+    @ManyToOne
+    private User targetUser; // Usuário que recebe o convite ou a solicitação
 }

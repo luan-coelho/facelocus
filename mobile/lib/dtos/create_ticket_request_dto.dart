@@ -4,13 +4,18 @@ import 'event_request_create_dto.dart';
 
 class CreateInvitationDTO {
   EventWithCodeDTO event;
-  UserWithIdOnly requestOwner;
+  UserWithIdOnly initiatorUser;
+  UserWithIdOnly? targetUser;
 
   CreateInvitationDTO({
     required this.event,
-    required this.requestOwner,
+    required this.initiatorUser,
+    this.targetUser,
   });
 
-  Map<String, dynamic> toJson() =>
-      {'event': event.toJson(), 'requestOwner': requestOwner.toJson()};
+  Map<String, dynamic> toJson() => {
+        'event': event.toJson(),
+        'initiatorUser': initiatorUser.toJson(),
+        'targetUser': targetUser?.toJson()
+      };
 }

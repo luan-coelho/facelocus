@@ -11,6 +11,7 @@ public record EventRequestResponseDTO(
         EventDTO event,
         EventRequestStatus requestStatus,
         EventRequestType requestType,
-        UserResponseDTO requestOwner
+        UserResponseDTO initiatorUser,
+        UserResponseDTO targetUser
 ) {
 }

@@ -97,21 +97,22 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     public void createInvitation(EventRequestCreateDTO requestCreateDTO) {
         Event event = eventService.findByIdOptional(requestCreateDTO.event().getId())
                 .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
-        User requestOwner = userService.findByIdOptional(requestCreateDTO.requestOwner().getId())
+        User targetUser = userService.findByIdOptional(requestCreateDTO.targetUser().getId())
                 .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
 
-        User requestor = event.getAdministrator();
-        if (requestor.getId().equals(requestCreateDTO.requestOwner().getId())) {
+        User initialUser = event.getAdministrator();
+        if (initialUser.getId().equals(targetUser.getId())) {
             throw new IllegalArgumentException("O usuário solicitador não pode ser o mesmo solicitado");
         }
 
-        if (eventService.linkedUser(event.getId(), requestOwner.getId())) {
+        if (eventService.linkedUser(event.getId(), targetUser.getId())) {
             throw new IllegalArgumentException("Usuário já vinculado ao evento");
         }
 
         EventRequest eventRequest = eventRequestMapper.toCreateEntity(requestCreateDTO);
         eventRequest.setEvent(event);
-        eventRequest.setRequestOwner(requestOwner);
+        eventRequest.setInitiatorUser(initialUser);
+        eventRequest.setTargetUser(targetUser);
         super.create(eventRequest);
     }
 
@@ -119,21 +120,22 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     public void createTicketRequest(EventRequestCreateDTO requestCreateDTO) {
         Event event = eventService.findByCodeOptional(requestCreateDTO.event().getCode())
                 .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
-        User requestOwner = userService.findByIdOptional(requestCreateDTO.requestOwner().getId())
+        User initiatorUser = userService.findByIdOptional(requestCreateDTO.initiatorUser().getId())
                 .orElseThrow(() -> new NotFoundException("Usuário solicitador não encontrado pelo id"));
 
         User administrator = event.getAdministrator();
-        if (administrator.getId().equals(requestOwner.getId())) {
+        if (administrator.getId().equals(initiatorUser.getId())) {
             throw new IllegalArgumentException("Você é o administrador do evento");
         }
 
-        if (eventService.linkedUser(event.getId(), requestOwner.getId())) {
+        if (eventService.linkedUser(event.getId(), initiatorUser.getId())) {
             throw new IllegalArgumentException("Você já está vinculado ao evento");
         }
 
         EventRequest eventRequest = eventRequestMapper.toCreateEntity(requestCreateDTO);
         eventRequest.setEvent(event);
-        eventRequest.setRequestOwner(requestOwner);
+        eventRequest.setInitiatorUser(initiatorUser);
+        eventRequest.setTargetUser(event.getAdministrator());
         eventRequest.setRequestType(EventRequestType.TICKET_REQUEST);
         super.create(eventRequest);
     }
@@ -162,11 +164,11 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
         EventRequest eventRequest = findById(eventRequestId);
         Long administratorId = eventRequest.getEvent().getAdministrator().getId();
-        if (administratorId.equals(userId)) {
+        if (!administratorId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
         this.repository.updateStatus(eventRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), eventRequest.getRequestOwner().getId());
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), administratorId);
     }
 
     /**
@@ -178,12 +180,12 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      */
     private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
         EventRequest eventRequest = findById(eventRequestId);
-        Long requestOwnerId = eventRequest.getRequestOwner().getId();
-        if (!requestOwnerId.equals(userId)) {
+        Long targetUSerId = eventRequest.getTargetUser().getId();
+        if (!targetUSerId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
         this.repository.updateStatus(eventRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), requestOwnerId);
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), targetUSerId);
     }
 
     @Transactional

@@ -9,7 +9,8 @@ class EventRequestModel {
   EventModel event;
   EventRequestStatus? requestStatus;
   EventRequestType? requestType;
-  UserModel requestOwner;
+  UserModel initiatorUser;
+  UserModel targetUser;
 
   EventRequestModel({
     this.id,
@@ -17,7 +18,8 @@ class EventRequestModel {
     required this.event,
     this.requestStatus,
     this.requestType,
-    required this.requestOwner,
+    required this.initiatorUser,
+    required this.targetUser,
   });
 
   factory EventRequestModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +33,8 @@ class EventRequestModel {
       requestType: json['requestType'] != null
           ? EventRequestType.parse(json['requestType'])
           : null,
-      requestOwner: UserModel.fromJson(json['requestOwner']),
+      initiatorUser: UserModel.fromJson(json['initiatorUser']),
+      targetUser: UserModel.fromJson(json['targetUser']),
     );
   }
 }

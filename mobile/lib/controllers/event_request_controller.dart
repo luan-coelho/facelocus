@@ -57,9 +57,9 @@ class EventRequestController extends GetxController {
       SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(code: code);
-      UserWithIdOnly requestOwner = UserWithIdOnly(id: user.id);
-      var eventRequest =
-          CreateInvitationDTO(event: event, requestOwner: requestOwner);
+      UserWithIdOnly initiatorUser = UserWithIdOnly(id: user.id);
+      var eventRequest = CreateInvitationDTO(
+          event: event, initiatorUser: initiatorUser);
       await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {
@@ -78,10 +78,13 @@ class EventRequestController extends GetxController {
   createInvitation(BuildContext context, int eventId, int userId) async {
     _isLoading.value = true;
     try {
+      SessionController authController = Get.find<SessionController>();
+      UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(id: eventId);
-      UserWithIdOnly requestOwner = UserWithIdOnly(id: userId);
-      var eventRequest =
-          CreateInvitationDTO(event: event, requestOwner: requestOwner);
+      UserWithIdOnly initiatorUser = UserWithIdOnly(id: user.id);
+      UserWithIdOnly targetUser = UserWithIdOnly(id: userId);
+      var eventRequest = CreateInvitationDTO(
+          event: event, initiatorUser: initiatorUser, targetUser: targetUser);
       await service.createInvitation(eventRequest);
       String message = 'Convite enviado com sucesso';
       if (context.mounted) {
