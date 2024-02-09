@@ -67,10 +67,7 @@ class _EventRequestCardState extends State<EventRequestCard> {
 
     void showEventRequest() {
       int eventRequestId = widget.eventRequest.id!;
-      EventRequestType requestType =
-          widget.authenticatedUser.id == widget.eventRequest.initiatorUser.id
-              ? EventRequestType.ticketRequest
-              : EventRequestType.invitation;
+      EventRequestType requestType = widget.eventRequest.requestType!;
       context.push(Uri(
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {

@@ -13,8 +13,8 @@ FROM location;
 DELETE
 FROM eventrequest;
 
-DELETE
-FROM userfacephoto;
+-- DELETE
+-- FROM userfacephoto;
 
 DELETE
 FROM point;
@@ -28,7 +28,7 @@ FROM pointrecord;
 DELETE
 FROM event;
 
-DELETE
-FROM tb_user;
+/*DELETE
+FROM tb_user;*/
 
 -- CREATE EXTENSION unaccent;

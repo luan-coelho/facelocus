@@ -164,11 +164,12 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
         EventRequest eventRequest = findById(eventRequestId);
         Long administratorId = eventRequest.getEvent().getAdministrator().getId();
-        if (administratorId.equals(userId)) {
+        Long targetUserId = eventRequest.getTargetUser().getId();
+        if (administratorId.equals(userId) || !targetUserId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
         this.repository.updateStatus(eventRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), administratorId);
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), targetUserId);
     }
 
     /**
@@ -181,11 +182,12 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
         EventRequest eventRequest = findById(eventRequestId);
         Long targetUSerId = eventRequest.getTargetUser().getId();
+        Long initialUSerId = eventRequest.getInitiatorUser().getId();
         if (!targetUSerId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
         this.repository.updateStatus(eventRequestId, requestStatus);
-        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), targetUSerId);
+        eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), initialUSerId);
     }
 
     @Transactional
