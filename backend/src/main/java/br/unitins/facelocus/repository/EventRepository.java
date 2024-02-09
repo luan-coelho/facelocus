@@ -17,6 +17,10 @@ public class EventRepository extends BaseRepository<Event> {
         return find("FROM Event WHERE administrator.id = ?1", userId).list();
     }
 
+    public Event findFirst() {
+        return find("FROM Event WHERE id != null").firstResult();
+    }
+
     public Optional<Event> findByCodeOptional(String code) {
         return find("FROM Event WHERE code = ?1", code).singleResultOptional();
     }

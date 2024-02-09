@@ -46,6 +46,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Override
     public PointRecord create(PointRecord pointRecord) {
         PointRecord pr = super.create(pointRecord);
+        if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
+            throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
+        }
+
         for (Point point : pointRecord.getPoints()) {
             point.setPointRecord(pr);
         }
