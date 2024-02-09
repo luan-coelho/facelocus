@@ -51,6 +51,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
 
         for (Point point : pointRecord.getPoints()) {
+            if (!point.getInitialDate().isBefore(point.getFinalDate())) {
+                throw new IllegalArgumentException("A data inicial de um ponto deve ser superior a final");
+            }
             point.setPointRecord(pr);
         }
         pointService.persistAll(pr.getPoints());
