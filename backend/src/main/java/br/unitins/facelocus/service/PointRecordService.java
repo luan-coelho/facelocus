@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ApplicationScoped
@@ -50,11 +51,16 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
 
+        LocalDateTime lastDatetime = null;
         for (Point point : pointRecord.getPoints()) {
             if (!point.getInitialDate().isBefore(point.getFinalDate())) {
                 throw new IllegalArgumentException("A data inicial de um ponto deve ser superior a final");
             }
+            if (lastDatetime != null && !point.getInitialDate().isAfter(lastDatetime)) {
+                throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
+            }
             point.setPointRecord(pr);
+            lastDatetime = point.getFinalDate();
         }
         pointService.persistAll(pr.getPoints());
         return pr;

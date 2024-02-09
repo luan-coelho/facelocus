@@ -63,6 +63,7 @@ class PointRecordServiceTest {
         assert pointRecord.getDate() != null && pointRecord.getDate().isEqual(today);
         assert pointRecord.getFactors() != null && pointRecord.getFactors().size() == 2;
         assert pointRecord.getPoints() != null && !pointRecord.getPoints().isEmpty();
+        assert !pointRecord.isInProgress();
     }
 
     @Test
@@ -125,5 +126,34 @@ class PointRecordServiceTest {
                 () -> pointRecordService.create(pointRecord)
         );
         assertEquals("A data inicial de um ponto deve ser superior a final", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando for informado um ponto com intervalo inferior ao anterior")
+    void throwExceptionIfIntervalIsLessThanPrevious() {
+        PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(event);
+        pointRecord.setDate(today);
+        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setInProgress(false);
+        Point point1 = new Point(
+                null,
+                now,
+                now.plusMinutes(15),
+                false,
+                pointRecord);
+        Point point2 = new Point(
+                null,
+                now.minusMinutes(30),
+                now.minusMinutes(15),
+                false,
+                pointRecord);
+        pointRecord.setPoints(List.of(point1, point2));
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+        assertEquals("Cada intervalo de ponto deve ser superior ao inferior", exception.getMessage());
     }
 }
