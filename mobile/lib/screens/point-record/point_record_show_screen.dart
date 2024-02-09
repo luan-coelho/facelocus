@@ -71,7 +71,8 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text(_controller.pointRecord.value!.event!.description!,
+                      child: Text(
+                          _controller.pointRecord.value!.event!.description!,
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -130,16 +131,23 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                                                     TextOverflow.ellipsis)),
                                       ],
                                     ),
-                                    subtitle: const Row(children: [
-                                      SizedBox(width: 30),
-                                      AttendanceRecordIndicator(),
-                                      SizedBox(width: 5),
-                                      AttendanceRecordIndicator(),
-                                      SizedBox(width: 5),
-                                      AttendanceRecordIndicator(),
-                                      SizedBox(width: 5),
-                                      AttendanceRecordIndicator(),
-                                    ]),
+                                    subtitle: Builder(builder: (context) {
+                                      var points =
+                                          _controller.pointRecord.value!.points;
+                                      List<Widget> list = [];
+                                      for (var i = 0; i < points.length; i++) {
+                                        list.add(AttendanceRecordIndicator(
+                                            point: points[i]));
+                                        // Último da lista
+                                        if (points.indexOf(points.last) != i) {
+                                          list.add(const SizedBox(width: 5));
+                                        }
+                                      }
+                                      return Row(children: [
+                                        const SizedBox(width: 30),
+                                        ...list
+                                      ]);
+                                    }),
                                   );
                                 },
                                 body: ListTile(

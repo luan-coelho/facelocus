@@ -1,7 +1,10 @@
+import 'package:facelocus/models/point_model.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceRecordIndicator extends StatelessWidget {
-  const AttendanceRecordIndicator({super.key});
+  const AttendanceRecordIndicator({super.key, required this.point});
+
+  final PointModel point;
 
   @override
   Widget build(BuildContext context) {
