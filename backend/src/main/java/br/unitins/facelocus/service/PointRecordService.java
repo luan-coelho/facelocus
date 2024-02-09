@@ -47,6 +47,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Override
     public PointRecord create(PointRecord pointRecord) {
         PointRecord pr = super.create(pointRecord);
+
+        if (pointRecord.getDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("A data deve ser igual ou posterior ao dia de hoje");
+        }
+
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }

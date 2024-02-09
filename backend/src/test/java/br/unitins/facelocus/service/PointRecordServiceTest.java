@@ -68,6 +68,20 @@ class PointRecordServiceTest {
 
     @Test
     @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando a data for anterior ao dia de hoje")
+    void throwExceptionIfDateIsBeforeToday() {
+        PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(event);
+        pointRecord.setDate(today.minusDays(1));
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+        assertEquals("A data deve ser igual ou posterior ao dia de hoje", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
     @DisplayName("Deve lançar uma exceção quando não for informado nenhum ponto")
     void throwExceptionIfNoPointsProvided() {
         PointRecord pointRecord = new PointRecord();
