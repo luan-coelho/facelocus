@@ -12,16 +12,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class PointRecordShowScreen extends StatefulWidget {
-  const PointRecordShowScreen({super.key, required this.pointRecordId});
+class PointRecordAdminShowScreen extends StatefulWidget {
+  const PointRecordAdminShowScreen({super.key, required this.pointRecordId});
 
   final int pointRecordId;
 
   @override
-  State<PointRecordShowScreen> createState() => _PointRecordShowScreenState();
+  State<PointRecordAdminShowScreen> createState() =>
+      _PointRecordAdminShowScreenState();
 }
 
-class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
+class _PointRecordAdminShowScreenState
+    extends State<PointRecordAdminShowScreen> {
   late final PointRecordController _controller;
 
   @override
@@ -41,6 +43,27 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
           child: Obx(() {
             if (_controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (_controller.pointRecord.value!.event!.users!.isEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const EmptyData('Sem usuários vinculados ao evento'),
+                  const SizedBox(height: 15),
+                  AppButton(
+                    text: 'Enviar solicitação',
+                    onPressed: () async {
+                      await showSearch(
+                        context: context,
+                        delegate: LinckedUsersDelegate(
+                            eventId: _controller.pointRecord.value!.event!.id!),
+                      );
+                    },
+                  )
+                ],
+              );
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

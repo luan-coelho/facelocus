@@ -22,9 +22,12 @@ class _PointRecordCardState extends State<PointRecordCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        String url = '${AppRoutes.pointRecord}/${widget.pointRecord.id}';
         if (widget.pointRecord.event!.administrator!.id == widget.user.id) {
-          context.push('${AppRoutes.pointRecord}/${widget.pointRecord.id}');
+          context.push('/admin$url');
+          return;
         }
+        context.push(url);
       },
       child: Container(
           padding:
