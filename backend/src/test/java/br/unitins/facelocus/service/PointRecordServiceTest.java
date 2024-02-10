@@ -189,22 +189,6 @@ class PointRecordServiceTest {
         assertEquals(2, pagination.getTotalItems());
     }
 
-    private PointRecord getPointRecord() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
-        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
-        pointRecord.setInProgress(false);
-        Point point = new Point(
-                null,
-                now,
-                now.plusMinutes(15),
-                false,
-                pointRecord);
-        pointRecord.setPoints(List.of(point));
-        return pointRecord;
-    }
-
     @Test
     @TestTransaction
     @DisplayName("Deve validar um ponto quando o dados forem corretos")
@@ -235,5 +219,21 @@ class PointRecordServiceTest {
         event.setAdministrator(user1);
         em.persist(event);
         return event;
+    }
+
+    private PointRecord getPointRecord() {
+        PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(event1);
+        pointRecord.setDate(today);
+        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setInProgress(false);
+        Point point = new Point(
+                null,
+                now,
+                now.plusMinutes(15),
+                false,
+                pointRecord);
+        pointRecord.setPoints(List.of(point));
+        return pointRecord;
     }
 }
