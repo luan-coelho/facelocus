@@ -21,6 +21,10 @@ public class EventRepository extends BaseRepository<Event> {
         return find("FROM Event WHERE id != null").firstResult();
     }
 
+    public Event findWithDifferenId(Long id) {
+        return find("FROM Event WHERE id != null AND id <> ?1", id).firstResult();
+    }
+
     public Optional<Event> findByCodeOptional(String code) {
         return find("FROM Event WHERE code = ?1", code).singleResultOptional();
     }

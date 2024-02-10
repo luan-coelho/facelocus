@@ -74,4 +74,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         pointService.persistAll(pr.getPoints());
         return pr;
     }
+
+    public void validatePoint(Long pointId) {
+        Point point = pointService.findByIdOptional(pointId)
+                .orElseThrow(() -> new IllegalArgumentException("Ponto não encontrado pelo id"));
+
+    }
 }

@@ -1,10 +1,10 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.model.Event;
-import br.unitins.facelocus.model.Factor;
-import br.unitins.facelocus.model.Point;
-import br.unitins.facelocus.model.PointRecord;
+import br.unitins.facelocus.commons.pagination.DataPagination;
+import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.EventRepository;
+import br.unitins.facelocus.repository.UserRepository;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @QuarkusTest
 class PointRecordServiceTest {
 
-    private Event event;
+    private Event event1;
+    private Event event2;
     private LocalDate today;
     private LocalDateTime now;
 
@@ -32,9 +33,13 @@ class PointRecordServiceTest {
     @Inject
     EventRepository eventRepository;
 
+    @Inject
+    UserRepository userRepository;
+
     @BeforeEach
     public void setup() {
-        event = eventRepository.findFirst();
+        event1 = eventRepository.findFirst();
+        event2 = eventRepository.findWithDifferenId(event1.getId());
         today = LocalDate.now();
         now = LocalDateTime.now();
     }
@@ -43,18 +48,7 @@ class PointRecordServiceTest {
     @TestTransaction
     @DisplayName("Deve criar um registro de ponto com sucesso quandos os dados forem válidos")
     void mustCreatePointRecordSuccessfullyWhenDataAreValid() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
-        pointRecord.setDate(today);
-        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
-        pointRecord.setInProgress(false);
-        Point point = new Point(
-                null,
-                now,
-                now.plusMinutes(15),
-                false,
-                pointRecord);
-        pointRecord.setPoints(List.of(point));
+        PointRecord pointRecord = getPointRecord();
 
         pointRecordService.create(pointRecord);
 
@@ -66,12 +60,28 @@ class PointRecordServiceTest {
         assert !pointRecord.isInProgress();
     }
 
+    private PointRecord getPointRecord() {
+        PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(event1);
+        pointRecord.setDate(today);
+        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setInProgress(false);
+        Point point = new Point(
+                null,
+                now,
+                now.plusMinutes(15),
+                false,
+                pointRecord);
+        pointRecord.setPoints(List.of(point));
+        return pointRecord;
+    }
+
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando a data for anterior ao dia de hoje")
     void throwExceptionIfDateIsBeforeToday() {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
+        pointRecord.setEvent(event1);
         pointRecord.setDate(today.minusDays(1));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
@@ -85,7 +95,7 @@ class PointRecordServiceTest {
     @DisplayName("Deve lançar uma exceção quando não for informado nenhum ponto")
     void throwExceptionIfNoPointsProvided() {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
+        pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
@@ -101,7 +111,7 @@ class PointRecordServiceTest {
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial inferior a final")
     void throwExceptionIfStartDateIsGreaterThanEndDate() {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
+        pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
@@ -124,7 +134,7 @@ class PointRecordServiceTest {
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial igual a final")
     void throwExceptionIfStartDateEqualsEndDate() {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
+        pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
@@ -147,7 +157,7 @@ class PointRecordServiceTest {
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com intervalo inferior ao anterior")
     void throwExceptionIfIntervalIsLessThanPrevious() {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event);
+        pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
@@ -169,5 +179,50 @@ class PointRecordServiceTest {
                 () -> pointRecordService.create(pointRecord)
         );
         assertEquals("Cada intervalo de ponto deve ser superior ao inferior", exception.getMessage());
+    }
+
+   /* @Test
+    @TestTransaction
+    @DisplayName("Deve retornar todos os registros de ponto vinculados a um usuário")
+    void shouldReturnAllPointRecordsLinkedToAUser() {
+        User user = getUser();
+        userRepository.persistAndFlush(user);
+
+        PointRecord pointRecord1 = getPointRecord();
+        event1.setAdministrator(user);
+        pointRecord1.setEvent(event1);
+
+        PointRecord pointRecord2 = getPointRecord();
+        event2.getUsers().add(user);
+        pointRecord2.setEvent(event2);
+
+        pointRecordService.create(pointRecord1);
+        pointRecordService.create(pointRecord2);
+
+        Pageable pageable = new Pageable();
+        DataPagination<?> pagination = pointRecordService.findAllByUser(pageable, user.getId());
+        List<?> data = pagination.getData();
+
+        assert data.size() == 2;
+    }*/
+
+    private User getUser() {
+        User user = new User();
+        user.setName("Joao");
+        user.setSurname("Silva");
+        user.setCpf("01534043020");
+        user.setEmail("joao@gmail.com");
+        user.setPassword("12345");
+        return user;
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve validar um ponto quando o dados forem corretos")
+    void validatePointDataWhenCorrect() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecordService.create(pointRecord);
+        Point point = pointRecord.getPoints().getFirst();
+        pointRecordService.validatePoint(point.getId());
     }
 }
