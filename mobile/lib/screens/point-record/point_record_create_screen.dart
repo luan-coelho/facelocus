@@ -40,6 +40,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     }
     if (indoorLocationFactor) {
       factors.add(Factor.indoorLocation);
+      _controller.cleanPoint();
     }
     PointRecordModel pointRecord = PointRecordModel(
       event: _event,
@@ -55,13 +56,12 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   void initState() {
     _controller = Get.find<PointRecordController>();
     _date = RestorableDateTime(DateTime.now());
-    _point = PointModel(initialDate: DateTime.now(), finalDate: DateTime.now());
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.cleanPoints();
+    _controller.cleanPointsList();
     super.dispose();
   }
 
@@ -70,8 +70,11 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     newPoint() {
       DateTime initialDate = DateTime.now();
       DateTime finalDate = DateTime.now();
+      PointModel pointSaved = PointModel(
+          initialDate: _controller.initialDate.value.copyWith(),
+          finalDate: _controller.finalDate.value.copyWith());
       _point = PointModel(initialDate: initialDate, finalDate: finalDate);
-      _controller.points.add(_point);
+      _controller.points.add(pointSaved);
     }
 
     return AppLayout(
@@ -245,78 +248,5 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             ),
           ),
         ));
-  }
-}
-
-class TimePickerCard extends StatefulWidget {
-  const TimePickerCard(
-      {super.key, required this.dateTime, required this.borderPosition});
-
-  final DateTime dateTime;
-  final AxisDirection borderPosition;
-
-  @override
-  State<TimePickerCard> createState() => _TimePickerCardState();
-}
-
-class _TimePickerCardState extends State<TimePickerCard> {
-  TimeOfDay? selectedTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: GestureDetector(
-        onTap: () async {
-          final TimeOfDay? time = await showTimePicker(
-            context: context,
-            initialTime: selectedTime ?? TimeOfDay.now(),
-            initialEntryMode: TimePickerEntryMode.dial,
-            orientation: Orientation.portrait,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: Theme.of(context).copyWith(
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                ),
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: MediaQuery(
-                    data: MediaQuery.of(context).copyWith(
-                      alwaysUse24HourFormat: false,
-                    ),
-                    child: child!,
-                  ),
-                ),
-              );
-            },
-          );
-          setState(() {
-            selectedTime = time;
-          });
-        },
-        child: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                width: 110,
-                height: 35,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      selectedTime != null
-                          ? selectedTime!.format(context)
-                          : '---',
-                      style: const TextStyle(fontSize: 18),
-                    )
-                  ],
-                )),
-          ],
-        ),
-      ),
-    );
   }
 }

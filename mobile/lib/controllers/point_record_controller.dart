@@ -25,6 +25,9 @@ class PointRecordController extends GetxController {
   final Rx<DateTime> _firstDayCalendar = DateTime.now().obs;
   final Rx<DateTime> _lastDayCalendar = DateTime.now().obs;
   List<Item<UserModel>> _panelItems = <Item<UserModel>>[].obs;
+  final Rx<DateTime> _initialDate = DateTime.now().obs;
+  final Rx<DateTime> _finalDate = DateTime.now().obs;
+
   final RxBool _isLoading = false.obs;
 
   Rxn<DateTime> get date => _date;
@@ -43,12 +46,22 @@ class PointRecordController extends GetxController {
 
   List<Item<UserModel>> get panelItems => _panelItems;
 
+  Rx<DateTime> get initialDate => _initialDate;
+
+  Rx<DateTime> get finalDate => _finalDate;
+
   RxBool get isLoading => _isLoading;
 
   PointRecordController({required this.service});
 
-  cleanPoints() {
+  cleanPointsList() {
     _points = <PointModel>[].obs;
+    cleanPoint();
+  }
+
+  cleanPoint() {
+    initialDate.value = DateTime.now();
+    finalDate.value = DateTime.now();
   }
 
   String onError(DioException e, {String? message}) {

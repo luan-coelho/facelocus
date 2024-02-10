@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/models/point_model.dart';
-import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
+import 'package:facelocus/screens/point-record/widgets/point_time_picker_card.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,9 +32,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TimePickerCard(
-            dateTime: widget.point.initialDate,
-            borderPosition: AxisDirection.left),
+        const PointTimePickerCard(borderPosition: AxisDirection.left),
         const SizedBox(
           width: 10,
         ),
@@ -42,9 +40,7 @@ class _PointTimePickerState extends State<PointTimePicker> {
         const SizedBox(
           width: 10,
         ),
-        TimePickerCard(
-            dateTime: widget.point.finalDate,
-            borderPosition: AxisDirection.right)
+        const PointTimePickerCard(borderPosition: AxisDirection.right)
       ],
     );
   }

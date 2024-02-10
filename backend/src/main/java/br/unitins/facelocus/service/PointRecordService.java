@@ -58,14 +58,18 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         LocalDateTime lastDatetime = null;
         for (Point point : pointRecord.getPoints()) {
-            if (!point.getInitialDate().isBefore(point.getFinalDate())) {
+            LocalDateTime initialDateStartOfMinute = point.getInitialDate().withSecond(0).withNano(0);
+            LocalDateTime finalDateStartOfMinute = point.getFinalDate().withSecond(0).withNano(0);
+
+            if (!initialDateStartOfMinute.isBefore(finalDateStartOfMinute)) {
                 throw new IllegalArgumentException("A data inicial de um ponto deve ser superior a final");
             }
-            if (lastDatetime != null && !point.getInitialDate().isAfter(lastDatetime)) {
+
+            if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
             point.setPointRecord(pr);
-            lastDatetime = point.getFinalDate();
+            lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
         pointService.persistAll(pr.getPoints());
         return pr;
