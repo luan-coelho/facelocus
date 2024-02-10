@@ -1,6 +1,9 @@
 package br.unitins.facelocus.repository;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
+import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.model.PointRecord;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDate;
@@ -13,16 +16,18 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
         super(PointRecord.class);
     }
 
-    public List<PointRecord> findAllByUser(Long userId) {
+    public DataPagination<PointRecord> findAllByUser(Pageable pageable, Long userId) {
         // language=jpaql
         String query = """
                 FROM PointRecord pr
-                    JOIN FETCH pr.event e
-                    JOIN FETCH e.administrator u
+                    JOIN pr.event e
+                    JOIN e.administrator u
                     LEFT JOIN e.users lu
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;
-        return find(query, userId).list();
+        PanacheQuery<PointRecord> panacheQuery = find(query, userId);
+        List<PointRecord> pointRecordList = panacheQuery.list();
+        return buildDataPagination(pageable, pointRecordList, panacheQuery);
     }
 
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {

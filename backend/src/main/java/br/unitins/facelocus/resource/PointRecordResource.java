@@ -30,7 +30,7 @@ public class PointRecordResource {
 
     @GET
     public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) {
-        DataPagination<?> dataPagination = pointRecordService.findAllByUser(pageable, userId);
+        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 

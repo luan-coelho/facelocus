@@ -7,12 +7,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@NoArgsConstructor
+@Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class DataPagination<T> {
 
-    @Setter
     private List<T> data;
     private Pagination pagination = new Pagination();
 }

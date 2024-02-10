@@ -2,12 +2,14 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.commons.pagination.Pagination;
+import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
-import br.unitins.facelocus.repository.EventRepository;
-import br.unitins.facelocus.repository.UserRepository;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,31 +17,30 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class PointRecordServiceTest {
 
+    private User user1;
     private Event event1;
     private Event event2;
     private LocalDate today;
     private LocalDateTime now;
 
     @Inject
+    EntityManager em;
+
+    @Inject
     PointRecordService pointRecordService;
-
-    @Inject
-    EventRepository eventRepository;
-
-    @Inject
-    UserRepository userRepository;
 
     @BeforeEach
     public void setup() {
-        event1 = eventRepository.findFirst();
-        event2 = eventRepository.findWithDifferenId(event1.getId());
+        user1 = getUser();
+        event1 = getEvent();
+        event2 = getEvent();
         today = LocalDate.now();
         now = LocalDateTime.now();
     }
@@ -49,31 +50,14 @@ class PointRecordServiceTest {
     @DisplayName("Deve criar um registro de ponto com sucesso quandos os dados forem válidos")
     void mustCreatePointRecordSuccessfullyWhenDataAreValid() {
         PointRecord pointRecord = getPointRecord();
-
         pointRecordService.create(pointRecord);
 
-        assert pointRecord.getId() != null;
-        assert pointRecord.getEvent() != null && pointRecord.getEvent().getId() != null;
-        assert pointRecord.getDate() != null && pointRecord.getDate().isEqual(today);
-        assert pointRecord.getFactors() != null && pointRecord.getFactors().size() == 2;
-        assert pointRecord.getPoints() != null && !pointRecord.getPoints().isEmpty();
-        assert !pointRecord.isInProgress();
-    }
-
-    private PointRecord getPointRecord() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
-        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
-        pointRecord.setInProgress(false);
-        Point point = new Point(
-                null,
-                now,
-                now.plusMinutes(15),
-                false,
-                pointRecord);
-        pointRecord.setPoints(List.of(point));
-        return pointRecord;
+        assertNotNull(pointRecord.getId());
+        assertNotNull(pointRecord.getEvent().getId());
+        assertTrue(pointRecord.getDate().isEqual(today));
+        assertEquals(2, pointRecord.getFactors().size());
+        assertFalse(pointRecord.getPoints().isEmpty());
+        assertFalse(pointRecord.isInProgress());
     }
 
     @Test
@@ -181,39 +165,44 @@ class PointRecordServiceTest {
         assertEquals("Cada intervalo de ponto deve ser superior ao inferior", exception.getMessage());
     }
 
-   /* @Test
+    @Test
     @TestTransaction
     @DisplayName("Deve retornar todos os registros de ponto vinculados a um usuário")
     void shouldReturnAllPointRecordsLinkedToAUser() {
-        User user = getUser();
-        userRepository.persistAndFlush(user);
-
         PointRecord pointRecord1 = getPointRecord();
-        event1.setAdministrator(user);
+        event1.setAdministrator(user1);
         pointRecord1.setEvent(event1);
 
         PointRecord pointRecord2 = getPointRecord();
-        event2.getUsers().add(user);
+        event2.getUsers().add(user1);
         pointRecord2.setEvent(event2);
 
         pointRecordService.create(pointRecord1);
         pointRecordService.create(pointRecord2);
 
         Pageable pageable = new Pageable();
-        DataPagination<?> pagination = pointRecordService.findAllByUser(pageable, user.getId());
-        List<?> data = pagination.getData();
+        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, user1.getId());
+        Pagination pagination = dataPagination.getPagination();
+        List<PointRecordResponseDTO> data = dataPagination.getData();
 
-        assert data.size() == 2;
-    }*/
+        assertEquals(2, data.size());
+        assertEquals(2, pagination.getTotalItems());
+    }
 
-    private User getUser() {
-        User user = new User();
-        user.setName("Joao");
-        user.setSurname("Silva");
-        user.setCpf("01534043020");
-        user.setEmail("joao@gmail.com");
-        user.setPassword("12345");
-        return user;
+    private PointRecord getPointRecord() {
+        PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(event1);
+        pointRecord.setDate(today);
+        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setInProgress(false);
+        Point point = new Point(
+                null,
+                now,
+                now.plusMinutes(15),
+                false,
+                pointRecord);
+        pointRecord.setPoints(List.of(point));
+        return pointRecord;
     }
 
     @Test
@@ -224,5 +213,27 @@ class PointRecordServiceTest {
         pointRecordService.create(pointRecord);
         Point point = pointRecord.getPoints().getFirst();
         pointRecordService.validatePoint(point.getId());
+    }
+
+    @Transactional
+    User getUser() {
+        User user = new User();
+        user.setName("Joao");
+        user.setSurname("Silva");
+        user.setCpf("01534043020");
+        user.setEmail("joao@gmail.com");
+        user.setPassword("12345");
+        em.persist(user);
+        return user;
+    }
+
+    @Transactional
+    Event getEvent() {
+        Event event = new Event();
+        event.setDescription("Evento " + new Random().nextInt(1000));
+        event.setCode("ABC123");
+        event.setAdministrator(user1);
+        em.persist(event);
+        return event;
     }
 }

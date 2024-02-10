@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,7 +27,7 @@ public class Event {
     @ManyToOne
     private User administrator;
     @ManyToMany
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
     private String code;
     private boolean allowTicketRequests;
     @OneToMany(mappedBy = "event")

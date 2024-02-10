@@ -1,12 +1,16 @@
 package br.unitins.facelocus.repository;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 public abstract class BaseRepository<T> implements PanacheRepositoryBase<T, Long> {
 
@@ -37,6 +41,17 @@ public abstract class BaseRepository<T> implements PanacheRepositoryBase<T, Long
         long numberOfRecords = count();
         long totalPages = numberOfRecords / pageable.getSize();
         return new Pagination(pageable.getPage(), totalPages, numberOfRecords);
+    }
+
+    public Pagination buildPaginationFromPageable(Pageable pageable, PanacheQuery<T> panacheQuery) {
+        long numberOfRecords = panacheQuery.count();
+        long totalPages = numberOfRecords / pageable.getSize();
+        return new Pagination(pageable.getPage(), totalPages, numberOfRecords);
+    }
+
+    protected DataPagination<T> buildDataPagination(Pageable pageable, List<T> data, PanacheQuery<T> panacheQuery) {
+        Pagination pagination = buildPaginationFromPageable(pageable, panacheQuery);
+        return new DataPagination<>(data, pagination);
     }
 
     public boolean existsById(Long id) {

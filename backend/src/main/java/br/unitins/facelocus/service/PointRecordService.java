@@ -31,12 +31,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      * @param userId   Identificador do usuário
      * @return Objeto paginável de registros de ponto
      */
-    public DataPagination<?> findAllByUser(Pageable pageable, Long userId) {
-        List<PointRecordResponseDTO> dtos = this.repository.findAllByUser(userId)
-                .stream()
-                .map(t -> pointRecordMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<PointRecordResponseDTO> findAllByUser(Pageable pageable, Long userId) {
+        DataPagination<PointRecord> dataPagination = this.repository.findAllByUser(pageable, userId);
+        return pointRecordMapper.toResource(dataPagination);
     }
 
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {
