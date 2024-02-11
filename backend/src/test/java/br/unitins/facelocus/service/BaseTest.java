@@ -40,6 +40,8 @@ public abstract class BaseTest {
         event.setCode("ABC123");
         event.setAdministrator(user1);
         em.persist(event);
+        event.setLocations(List.of(new Location(null, "Casa", "23231232", "123232332", event)));
+        em.persist(event);
         return event;
     }
 

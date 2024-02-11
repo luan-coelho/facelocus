@@ -17,9 +17,10 @@ public class EventRepository extends BaseRepository<Event> {
     }
 
     public DataPagination<Event> findAllByUser(Pageable pageable, Long userId) {
+        // language=jpaql
         String query = """
                 FROM Event e
-                JOIN Location l ON l.event.id = e.id
+                    LEFT JOIN e.locations
                 WHERE e.administrator.id = ?1
                 """;
         PanacheQuery<Event> panacheQuery = find(query, userId);

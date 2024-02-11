@@ -17,27 +17,7 @@ public class Pageable {
     @QueryParam("sort")
     private String sort;
 
-    /**
-     * Campo para ser ordenado
-     *
-     * @return Campo
-     */
-    public String getByOrder() {
-        if (this.sort != null) {
-            if (this.sort.contains(",")) {
-                String[] properties = this.sort.split(",");
-                return properties[0];
-            }
-        }
-        return "id";
-    }
-
-    /**
-     * Campo para ser ordenado
-     *
-     * @return Campo
-     */
-    public String getByOrder(Class<?> clazz) {
+    public String getFieldColumn(Class<?> clazz) {
         if (this.sort != null) {
             if (this.sort.contains(",")) {
                 String[] properties = this.sort.split(",");
@@ -50,12 +30,8 @@ public class Pageable {
         return sort;
     }
 
-    /**
-     * Ordem para paginação
-     *
-     * @return Ordem
-     */
-    public String getOrder() {
+
+    public String getDirection() {
         if (this.sort != null) {
             if (this.sort.contains(",")) {
                 String[] propriedades = this.sort.split(",");
@@ -84,19 +60,19 @@ public class Pageable {
     }
 
     /**
-     * Pega um nome de qualquer campo da classe
+     * Pega qualquer campo da classe
      *
      * @param clazz Classe
      * @return Campo aleatorio da classe
      */
     String getRandomFieldName(Class<?> clazz) {
-        Field[] campos = clazz.getDeclaredFields();
-        for (Field campo : campos) {
-            if (campo.getType().isArray()) {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getType().isArray()) {
                 continue;
             }
-            return campo.getName();
+            return field.getName();
         }
-        return "";
+        return "id";
     }
 }

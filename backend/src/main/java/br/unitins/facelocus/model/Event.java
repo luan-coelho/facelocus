@@ -23,7 +23,7 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private List<PointRecord> pointRecords;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Location> locations;
+    private List<Location> locations = new ArrayList<>();
     @ManyToOne
     private User administrator;
     @ManyToMany
