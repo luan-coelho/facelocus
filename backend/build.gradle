@@ -27,12 +27,13 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
-    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'com.h2database:h2:2.2.224'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkus:quarkus-junit5'
 }
 
 group 'br.unitins.facelocus'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

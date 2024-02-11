@@ -2,6 +2,7 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.Pageable;
 import io.quarkus.test.TestTransaction;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@QuarkusTest
 class EventServiceTest extends BaseTest {
 
     @Inject
