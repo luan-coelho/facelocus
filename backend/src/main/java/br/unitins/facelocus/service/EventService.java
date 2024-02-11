@@ -30,24 +30,9 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Inject
     UserService userService;
 
-    public DataPagination<?> findAllPaginated(Pageable pageable) {
-        List<Event> events = repository.listAll();
-        for (Event event : events) {
-            List<Location> locations = locationService.findAllByEventId(event.getId());
-            event.setLocations(locations);
-        }
-        List<EventDTO> dtos = events.stream().map(event -> eventMapper.toResource(event)).toList();
-        return buildPagination(dtos, pageable);
-    }
-
-    public DataPagination<?> findAllPaginatedByUser(Pageable pageable, Long userId) {
-        List<Event> events = repository.findAllByUser(userId);
-        for (Event event : events) {
-            List<Location> locations = locationService.findAllByEventId(event.getId());
-            event.setLocations(locations);
-        }
-        List<EventDTO> dtos = events.stream().map(event -> eventMapper.toResource(event)).toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventDTO> findAllPaginatedByUser(Pageable pageable, Long userId) {
+        DataPagination<Event> dataPagination = repository.findAllByUser(pageable, userId);
+        return eventMapper.toResource(dataPagination);
     }
 
     public List<Event> findAllByDescription(Long userId, String description) {
@@ -71,10 +56,6 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     public Optional<Event> findByCodeOptional(String code) {
         return this.repository.findByCodeOptional(code);
-    }
-
-    public boolean existsByCode(String code) {
-        return this.repository.existsByCode(code);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package br.unitins.facelocus.mapper;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.dto.eventrequest.EventRequestCreateDTO;
 import br.unitins.facelocus.dto.eventrequest.EventRequestResponseDTO;
 import br.unitins.facelocus.model.EventRequest;
@@ -22,6 +23,8 @@ public interface EventRequestMapper {
     @Mapping(source = "initiatorUser", target = "initiatorUser", qualifiedByName = "toResource")
     @Mapping(source = "targetUser", target = "targetUser", qualifiedByName = "toResource")
     EventRequestResponseDTO toResource(EventRequest eventRequest);
+
+    DataPagination<EventRequestResponseDTO> toCreateEntity(DataPagination<EventRequest> dataPagination);
 
     @Mapping(target = "id", ignore = true)
     EventRequest copyProperties(EventRequest eventRequest, @MappingTarget EventRequest existingTicketRequest);

@@ -2,7 +2,6 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.repository.BaseRepository;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,7 @@ import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"CdiInjectionPointsInspection", "UnusedReturnValue", "rawtypes", "unchecked"})
+@SuppressWarnings({"CdiInjectionPointsInspection", "UnusedReturnValue"})
 public abstract class BaseService<T, R extends BaseRepository<T>> {
 
     @Inject
@@ -21,9 +20,8 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return this.repository.listAll();
     }
 
-    public DataPagination findAllPaginated(Pageable pageable) {
-        List list = repository.listAll();
-        return buildPagination(list, pageable);
+    public DataPagination<T> findAllPaginated(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public boolean existsById(Long id) {
@@ -79,10 +77,5 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected DataPagination buildPagination(List data, Pageable pageable) {
-        Pagination pagination = repository.buildPagination(pageable);
-        return new DataPagination<>(data, pagination);
     }
 }

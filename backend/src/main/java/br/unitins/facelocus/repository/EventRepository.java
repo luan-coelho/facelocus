@@ -1,6 +1,9 @@
 package br.unitins.facelocus.repository;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
+import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.model.Event;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -13,16 +16,14 @@ public class EventRepository extends BaseRepository<Event> {
         super(Event.class);
     }
 
-    public List<Event> findAllByUser(Long userId) {
-        return find("FROM Event WHERE administrator.id = ?1", userId).list();
-    }
-
-    public Event findFirst() {
-        return find("FROM Event WHERE id != null").firstResult();
-    }
-
-    public Event findWithDifferenId(Long id) {
-        return find("FROM Event WHERE id != null AND id <> ?1", id).firstResult();
+    public DataPagination<Event> findAllByUser(Pageable pageable, Long userId) {
+        String query = """
+                FROM Event e
+                JOIN Location l ON l.event.id = e.id
+                WHERE e.administrator.id = ?1
+                """;
+        PanacheQuery<Event> panacheQuery = find(query, userId);
+        return buildDataPagination(pageable, panacheQuery);
     }
 
     public Optional<Event> findByCodeOptional(String code) {

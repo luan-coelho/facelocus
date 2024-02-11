@@ -1,10 +1,11 @@
 package br.unitins.facelocus.repository;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
+import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.model.EventRequest;
 import br.unitins.facelocus.model.EventRequestStatus;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.List;
 
 @ApplicationScoped
 public class EventRequestRepository extends BaseRepository<EventRequest> {
@@ -13,43 +14,60 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
         super(EventRequest.class);
     }
 
-    public List<EventRequest> findAllByEventId(Long eventId) {
-        return find("""
+    public DataPagination<EventRequest> findAllByEventId(Pageable pageable, Long eventId) {
+        // language=jpaql
+        String query = """
                 FROM EventRequest
                 WHERE event.id = ?1
-                """, eventId).list();
-    }
-
-    public List<EventRequest> findAllByUserId(Long userId) {
-        String sql = """
-                FROM EventRequest
-                WHERE event.administrator.id = ?1
-                OR initiatorUser.id = ?1
-                OR targetUser.id = ?1
                 """;
-        return find(sql, userId).list();
+        PanacheQuery<EventRequest> panacheQuery = find(query, eventId);
+        return buildDataPagination(pageable, panacheQuery);
     }
 
-    public List<EventRequest> findAllReceivedByUser(Long userId) {
-        return find("""
+    public DataPagination<EventRequest> findAllByUserId(Pageable pageable, Long userId) {
+        // language=jpaql
+        String query = """
                 FROM EventRequest
                 WHERE event.administrator.id = ?1
-                """, userId).list();
+                    OR initiatorUser.id = ?1
+                    OR targetUser.id = ?1
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        return buildDataPagination(pageable, panacheQuery);
     }
 
-    public List<EventRequest> findAllSentByUser(Long userId) {
-        return find("""
+    public DataPagination<EventRequest> findAllReceivedByUser(Pageable pageable, Long userId) {
+        // language=jpaql
+        String query = """
+                FROM EventRequest
+                WHERE event.administrator.id = ?1
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        return buildDataPagination(pageable, panacheQuery);
+    }
+
+    public DataPagination<EventRequest> findAllSentByUser(Pageable pageable, Long userId) {
+        // language=jpaql
+        String query = """
                 FROM EventRequest
                 WHERE initiatorUser.id = ?1
-                """, userId).list();
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        return buildDataPagination(pageable, panacheQuery);
+    }
+
+    public DataPagination<EventRequest> findAllByEventAndUser(Pageable pageable, Long eventId, Long userId) {
+        // language=jpaql
+        String query = """
+                FROM EventRequest
+                WHERE event.id = ?1
+                    AND event.administrator.id = ?2
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, eventId, userId);
+        return buildDataPagination(pageable, panacheQuery);
     }
 
     public void updateStatus(Long eventRequestId, EventRequestStatus requestStatus) {
         update("UPDATE EventRequest SET requestStatus = ?2 WHERE id = ?1", eventRequestId, requestStatus);
-    }
-
-    public List<EventRequest> findAllByEventAndUser(Long eventId, Long userId) {
-        String sql = "FROM EventRequest WHERE event.id = ?1 AND event.administrator.id = ?2";
-        return find(sql, eventId, userId).list();
     }
 }

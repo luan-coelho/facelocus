@@ -21,10 +21,6 @@ public class UserRepository extends BaseRepository<User> {
         return count("FROM User WHERE email = ?1", email) > 0;
     }
 
-    public Optional<User> findByCredentials(String email, String senha) {
-        return find("FROM User WHERE email = ?1 AND password = ?2", email, senha).firstResultOptional();
-    }
-
     public List<User> findAllByEventId(Long eventId) {
         return find("SELECT u FROM User u JOIN u.events e WHERE e.id = ?1", eventId).list();
     }

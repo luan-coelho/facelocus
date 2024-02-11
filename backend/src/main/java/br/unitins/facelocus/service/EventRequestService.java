@@ -12,8 +12,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.List;
-
 @ApplicationScoped
 public class EventRequestService extends BaseService<EventRequest, EventRequestRepository> {
 
@@ -32,12 +30,9 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      * @param pageable Informações de paginação
      * @return Objeto paginável de solicitações de ingresso
      */
-    public DataPagination<?> findAllByEventAndUser(Pageable pageable, Long eventId, Long userId) {
-        List<EventRequestResponseDTO> dtos = this.repository.findAllByEventAndUser(eventId, userId)
-                .stream()
-                .map(t -> eventRequestMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventRequestResponseDTO> findAllByEventAndUser(Pageable pageable, Long eventId, Long userId) {
+        DataPagination<EventRequest> dataPagination = this.repository.findAllByEventAndUser(pageable, eventId, userId);
+        return eventRequestMapper.toCreateEntity(dataPagination);
     }
 
     /**
@@ -47,12 +42,9 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      * @param eventId  Identificador do evento
      * @return Objeto paginável de solicitações de ingresso
      */
-    public DataPagination<?> findAllByEvent(Pageable pageable, Long eventId) {
-        List<EventRequestResponseDTO> dtos = this.repository.findAllByEventId(eventId)
-                .stream()
-                .map(t -> eventRequestMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventRequestResponseDTO> findAllByEvent(Pageable pageable, Long eventId) {
+        DataPagination<EventRequest> dataPagination = this.repository.findAllByEventId(pageable, eventId);
+        return eventRequestMapper.toCreateEntity(dataPagination);
     }
 
     /**
@@ -62,29 +54,19 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      * @param userId   Identificador do usuário
      * @return Objeto paginável de solicitações de ingresso
      */
-    public DataPagination<?> findAllByUser(Pageable pageable, Long userId) {
-        List<EventRequestResponseDTO> dtos = this.repository.findAllByUserId(userId)
-                .stream()
-                .map(t -> eventRequestMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventRequestResponseDTO> findAllByUser(Pageable pageable, Long userId) {
+        DataPagination<EventRequest> dataPagination = this.repository.findAllByUserId(pageable, userId);
+        return eventRequestMapper.toCreateEntity(dataPagination);
     }
 
-    public DataPagination<?> findAllReceivedByUser(Pageable pageable, Long userId) {
-        List<EventRequestResponseDTO> dtos = this.repository.findAllReceivedByUser(userId)
-                .stream()
-                .map(t -> eventRequestMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventRequestResponseDTO> findAllReceivedByUser(Pageable pageable, Long userId) {
+        DataPagination<EventRequest> dataPagination = this.repository.findAllReceivedByUser(pageable, userId);
+        return eventRequestMapper.toCreateEntity(dataPagination);
     }
 
-    public DataPagination<?> findAllSentByUser(Pageable pageable, Long userId) {
-        List<EventRequestResponseDTO> dtos = this.repository
-                .findAllSentByUser(userId)
-                .stream()
-                .map(t -> eventRequestMapper.toResource(t))
-                .toList();
-        return buildPagination(dtos, pageable);
+    public DataPagination<EventRequestResponseDTO> findAllSentByUser(Pageable pageable, Long userId) {
+        DataPagination<EventRequest> dataPagination = this.repository.findAllSentByUser(pageable, userId);
+        return eventRequestMapper.toCreateEntity(dataPagination);
     }
 
     public EventRequest findById(Long id) {

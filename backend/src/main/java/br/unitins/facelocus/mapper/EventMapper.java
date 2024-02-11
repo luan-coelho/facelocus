@@ -1,5 +1,6 @@
 package br.unitins.facelocus.mapper;
 
+import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.dto.EventDTO;
 import br.unitins.facelocus.model.Event;
 import org.mapstruct.*;
@@ -21,6 +22,8 @@ public interface EventMapper {
     @Named("toResource")
     @Mapping(source = "administrator", target = "administrator", qualifiedByName = "toResource")
     EventDTO toResource(Event event);
+
+    DataPagination<EventDTO> toResource(DataPagination<Event> events);
 
     @Mapping(target = "id", ignore = true)
     Event toUpdateEntity(Event event, @MappingTarget Event existingEvent);

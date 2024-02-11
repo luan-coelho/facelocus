@@ -26,8 +26,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;
         PanacheQuery<PointRecord> panacheQuery = find(query, userId);
-        List<PointRecord> pointRecordList = panacheQuery.list();
-        return buildDataPagination(pageable, pointRecordList, panacheQuery);
+        panacheQuery.page(pageable.getPage(), pageable.getSize());
+        return buildDataPagination(pageable, panacheQuery);
     }
 
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {

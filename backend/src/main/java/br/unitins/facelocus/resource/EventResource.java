@@ -28,7 +28,7 @@ public class EventResource {
 
     @GET
     public Response findAll(Pageable pageable, @RestQuery("user") Long userId) {
-        DataPagination<?> dataPagination = eventService.findAllPaginatedByUser(pageable, userId);
+        DataPagination<EventDTO> dataPagination = eventService.findAllPaginatedByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 

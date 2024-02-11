@@ -30,7 +30,7 @@ public class EventRequestResource {
     public Response findAll(Pageable pageable,
                             @RestQuery("event") Long eventId,
                             @RestQuery("user") Long userId) {
-        DataPagination<?> dataPagination;
+        DataPagination<EventRequestResponseDTO> dataPagination;
         if (eventId != null && userId != null) {
             dataPagination = eventRequestService.findAllByEventAndUser(pageable, eventId, userId);
             return Response.ok(dataPagination).build();
@@ -55,14 +55,14 @@ public class EventRequestResource {
     @Path("/sent")
     @GET
     public Response findAllSent(Pageable pageable, @RestQuery("user") @Valid Long userId) {
-        DataPagination<?> dataPagination = eventRequestService.findAllSentByUser(pageable, userId);
+        DataPagination<EventRequestResponseDTO> dataPagination = eventRequestService.findAllSentByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 
     @Path("/received")
     @GET
     public Response findAllReceived(Pageable pageable, @RestQuery("user") Long userId) {
-        DataPagination<?> dataPagination = eventRequestService.findAllReceivedByUser(pageable, userId);
+        DataPagination<EventRequestResponseDTO> dataPagination = eventRequestService.findAllReceivedByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
 

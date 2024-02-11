@@ -4,12 +4,12 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
-import br.unitins.facelocus.model.*;
+import br.unitins.facelocus.model.Factor;
+import br.unitins.facelocus.model.Point;
+import br.unitins.facelocus.model.PointRecord;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,21 +17,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class PointRecordServiceTest {
-
-    private User user1;
-    private Event event1;
-    private Event event2;
-    private LocalDate today;
-    private LocalDateTime now;
-
-    @Inject
-    EntityManager em;
+class PointRecordServiceTest extends BaseTest {
 
     @Inject
     PointRecordService pointRecordService;
@@ -187,6 +177,7 @@ class PointRecordServiceTest {
 
         assertEquals(2, data.size());
         assertEquals(2, pagination.getTotalItems());
+        assertEquals(0, pagination.getCurrentPage());
     }
 
     @Test
@@ -197,43 +188,5 @@ class PointRecordServiceTest {
         pointRecordService.create(pointRecord);
         Point point = pointRecord.getPoints().getFirst();
         pointRecordService.validatePoint(point.getId());
-    }
-
-    @Transactional
-    User getUser() {
-        User user = new User();
-        user.setName("Joao");
-        user.setSurname("Silva");
-        user.setCpf("01534043020");
-        user.setEmail("joao@gmail.com");
-        user.setPassword("12345");
-        em.persist(user);
-        return user;
-    }
-
-    @Transactional
-    Event getEvent() {
-        Event event = new Event();
-        event.setDescription("Evento " + new Random().nextInt(1000));
-        event.setCode("ABC123");
-        event.setAdministrator(user1);
-        em.persist(event);
-        return event;
-    }
-
-    private PointRecord getPointRecord() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
-        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
-        pointRecord.setInProgress(false);
-        Point point = new Point(
-                null,
-                now,
-                now.plusMinutes(15),
-                false,
-                pointRecord);
-        pointRecord.setPoints(List.of(point));
-        return pointRecord;
     }
 }
