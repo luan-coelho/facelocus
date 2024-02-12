@@ -16,6 +16,7 @@ import jakarta.ws.rs.NotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
@@ -69,6 +70,15 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             }
             point.setPointRecord(pr);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
+        }
+
+        Set<Factor> factors = pointRecord.getFactors();
+        if (factors != null && !factors.isEmpty() && factors.contains(Factor.INDOOR_LOCATION)) {
+            if (pointRecord.getAllowableRadiusInMeters() == null || pointRecord.getAllowableRadiusInMeters() == 0) {
+                throw new IllegalArgumentException("Informe o raio permitido em metros");
+            }
+        } else {
+            pointRecord.setAllowableRadiusInMeters(null);
         }
         pointService.persistAll(pr.getPoints());
         return pr;

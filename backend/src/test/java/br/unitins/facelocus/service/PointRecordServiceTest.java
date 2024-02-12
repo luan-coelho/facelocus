@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -166,6 +165,36 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando for informado um fator de localização indoor sem raio permitido")
+    void throwExceptionIfIndoorLocationFactorWithoutAllowedRadius() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecordService.create(pointRecord);
+        pointRecord.setAllowableRadiusInMeters(null);
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+
+        assertEquals("Informe o raio permitido em metros", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando for informado um fator de localização indoor com raio permitido zero")
+    void throwExceptionIfIndoorLocationFactorWithZeroAllowedRadius() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecordService.create(pointRecord);
+        pointRecord.setAllowableRadiusInMeters(0d);
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+
+        assertEquals("Informe o raio permitido em metros", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
     @DisplayName("Deve retornar todos os registros de ponto vinculados a um usuário")
     void shouldReturnAllPointRecordsLinkedToAUser() {
         PointRecord pointRecord1 = getPointRecord();
@@ -177,6 +206,7 @@ class PointRecordServiceTest extends BaseTest {
 
         pointRecordService.create(pointRecord1);
         pointRecordService.create(pointRecord2);
+
         Pageable pageable = new Pageable();
         DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, user1.getId());
         Pagination pagination = dataPagination.getPagination();
@@ -292,14 +322,4 @@ class PointRecordServiceTest extends BaseTest {
 
         assertIterableEquals(Set.of(), actualFactorSet);
     }
-
-   /* @Test
-    @TestTransaction
-    @DisplayName("Deve validar um ponto quando o dados forem corretos")
-    void validatePointDataWhenCorrect() {
-        PointRecord pointRecord = getPointRecord();
-        pointRecordService.create(pointRecord);
-        Point point = pointRecord.getPoints().getFirst();
-        pointRecordService.validatePoint(point.getId());
-    }*/
 }
