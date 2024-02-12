@@ -5,6 +5,7 @@ import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.Factor;
+import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -27,6 +28,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Inject
     PointRecordMapper pointRecordMapper;
 
+    @Inject
+    LocationService locationService;
+
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
      *
@@ -46,7 +50,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     @Override
     public PointRecord create(PointRecord pointRecord) {
-        PointRecord pr = super.create(pointRecord);
+        if (pointRecord.getEvent() == null || pointRecord.getEvent().getId() == null) {
+            throw new IllegalArgumentException("Informe o evento");
+        }
 
         if (pointRecord.getDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("A data deve ser igual ou posterior ao dia de hoje");
@@ -56,6 +62,36 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
 
+        validatePoints(pointRecord);
+        validateFactors(pointRecord);
+
+        return super.create(pointRecord);
+    }
+
+    private void validateFactors(PointRecord pointRecord) {
+        Set<Factor> factors = pointRecord.getFactors();
+
+        if (factors == null || factors.isEmpty()) {
+            return;
+        }
+
+        if (factors.contains(Factor.INDOOR_LOCATION)) {
+            if (pointRecord.getAllowableRadiusInMeters() == null || pointRecord.getAllowableRadiusInMeters() == 0) {
+                throw new IllegalArgumentException("Informe o raio permitido em metros");
+            }
+
+            if (pointRecord.getLocation() == null || pointRecord.getLocation().getId() == null) {
+                throw new IllegalArgumentException("Informe a localização");
+            }
+            Location location = locationService.findByIdOptional(pointRecord.getLocation().getId())
+                    .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+            pointRecord.setLocation(location);
+        } else {
+            pointRecord.setAllowableRadiusInMeters(null);
+        }
+    }
+
+    private void validatePoints(PointRecord pointRecord) {
         LocalDateTime lastDatetime = null;
         for (Point point : pointRecord.getPoints()) {
             LocalDateTime initialDateStartOfMinute = point.getInitialDate().withSecond(0).withNano(0);
@@ -68,20 +104,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
-            point.setPointRecord(pr);
+            point.setPointRecord(pointRecord);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
-
-        Set<Factor> factors = pointRecord.getFactors();
-        if (factors != null && !factors.isEmpty() && factors.contains(Factor.INDOOR_LOCATION)) {
-            if (pointRecord.getAllowableRadiusInMeters() == null || pointRecord.getAllowableRadiusInMeters() == 0) {
-                throw new IllegalArgumentException("Informe o raio permitido em metros");
-            }
-        } else {
-            pointRecord.setAllowableRadiusInMeters(null);
-        }
-        pointService.persistAll(pr.getPoints());
-        return pr;
     }
 
     @Transactional

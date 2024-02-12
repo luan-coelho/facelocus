@@ -32,6 +32,7 @@ class PointRecordServiceTest extends BaseTest {
     @BeforeEach
     public void setup() {
         user1 = getUser();
+        location = getLocation();
         event1 = getEvent();
         event2 = getEvent();
         today = LocalDate.now();
@@ -41,7 +42,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve criar um registro de ponto com sucesso quandos os dados forem válidos")
-    void mustCreatePointRecordSuccessfullyWhenDataAreValid() {
+    void shouldCreatePointRecordSuccessfullyWhenDataIsValid() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
 
@@ -55,8 +56,21 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
+    @DisplayName("Deve lançar quando não for informado um evento")
+    void shouldThrowWhenEventIsNotProvided() {
+        PointRecord pointRecord = new PointRecord();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+
+        assertEquals("Informe o evento", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
     @DisplayName("Deve lançar uma exceção quando a data for anterior ao dia de hoje")
-    void throwExceptionIfDateIsBeforeToday() {
+    void shouldThrowExceptionWhenDateIsBeforeToday() {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today.minusDays(1));
@@ -71,7 +85,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando não for informado nenhum ponto")
-    void throwExceptionIfNoPointsProvided() {
+    void shouldThrowExceptionWhenNoPointRecordIsProvided() {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
@@ -88,7 +102,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial inferior a final")
-    void throwExceptionIfStartDateIsGreaterThanEndDate() {
+    void shouldThrowExceptionWhenStartDateIsBeforeEndDate() {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
@@ -112,7 +126,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial igual a final")
-    void throwExceptionIfStartDateEqualsEndDate() {
+    void shouldThrowExceptionWhenStartDateIsEqualToEndDate() {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
@@ -136,7 +150,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com intervalo inferior ao anterior")
-    void throwExceptionIfIntervalIsLessThanPrevious() {
+    void shouldThrowExceptionWhenIntervalIsShorterThanPrevious() {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
@@ -166,7 +180,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um fator de localização indoor sem raio permitido")
-    void throwExceptionIfIndoorLocationFactorWithoutAllowedRadius() {
+    void shouldThrowExceptionWhenIndoorLocationFactorIsProvidedWithoutAllowedRadius() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
         pointRecord.setAllowableRadiusInMeters(null);
@@ -181,7 +195,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um fator de localização indoor com raio permitido zero")
-    void throwExceptionIfIndoorLocationFactorWithZeroAllowedRadius() {
+    void shouldThrowExceptionWhenIndoorLocationFactorIsProvidedWithZeroAllowedRadius() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
         pointRecord.setAllowableRadiusInMeters(0d);
@@ -220,7 +234,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve iniciar ou parar um registro de ponto")
-    void startOrStopPointRecord() {
+    void shouldStartOrStopAnPointRecord() {
         PointRecord pointRecord = getPointRecord();
         boolean inProgress = false;
         pointRecord.setInProgress(inProgress);
@@ -236,7 +250,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve adicionar um fator a um registro de ponto que não possui fatores")
-    void enableOrDisablePointRecordFactor() {
+    void shouldAddFactorToAnPointRecordWithoutFactors() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of());
         em.merge(pointRecord);
@@ -251,7 +265,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve adicionar um fator a um registro de ponto que já possui o fator informado")
-    void addFactorToPointRecordWithExistingFactors() {
+    void shouldAddFactorToAnPointRecordThatAlreadyHasTheProvidedFactor() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION));
         em.merge(pointRecord);
@@ -266,7 +280,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve adicionar outro fator a um registro de ponto que já possui um fator")
-    void addFactorToPointRecordWithExistingFactor() {
+    void shouldAddAnotherFactorToAnPointRecordThatAlreadyHasOneFactor() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.INDOOR_LOCATION));
         em.merge(pointRecord);
@@ -281,7 +295,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve remover um fator de um registro de ponto")
-    void removeFactorFromPointRecord() {
+    void shouldRemoveFactorFromAnPointRecord() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION));
         em.merge(pointRecord);
@@ -296,7 +310,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve remover um fator de um registro de ponto que já possui outro fator")
-    void removeFactorFromTimeRecordWithExistingFactor() {
+    void shouldRemoveFactorFromAnPointRecordThatAlreadyHasAnotherFactor() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         em.merge(pointRecord);
@@ -311,7 +325,7 @@ class PointRecordServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Não deve fazer nada ao remover um fator de um registro de ponto que não possui fatores")
-    void doNothingWhenRemovingFactorFromPointRecordWithoutFactors() {
+    void shouldDoNothingWhenRemovingFactorFromAnPointRecordWithNoFactors() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of());
         em.merge(pointRecord);

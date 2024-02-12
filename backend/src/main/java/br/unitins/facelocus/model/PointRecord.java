@@ -30,6 +30,8 @@ public class PointRecord {
     @ElementCollection
     @CollectionTable(name = "factors")
     private Set<Factor> factors = new HashSet<>();
+    @ManyToOne
+    private Location location;
     private Double allowableRadiusInMeters;
     private boolean inProgress;
 }
