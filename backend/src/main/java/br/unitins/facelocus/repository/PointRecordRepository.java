@@ -26,7 +26,6 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;
         PanacheQuery<PointRecord> panacheQuery = find(query, userId);
-        panacheQuery.page(pageable.getPage(), pageable.getSize());
         return buildDataPagination(pageable, panacheQuery);
     }
 
