@@ -13,9 +13,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class EventServiceTest extends BaseTest {
@@ -26,6 +29,8 @@ class EventServiceTest extends BaseTest {
     @BeforeEach
     public void setup() {
         user1 = getUser();
+        user2 = getUser();
+        location = getLocation();
         event1 = getEvent();
         event2 = getEvent();
         today = LocalDate.now();
@@ -35,7 +40,7 @@ class EventServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve retornar eventos paginados por usuário")
-    void getPaginatedEvents() {
+    void shouldReturnPaginatedEventsByUser() {
         Pageable pageable = new Pageable();
         pageable.setSize(1);
         DataPagination<EventDTO> dataPagination = eventService.findAllPaginatedByUser(pageable, user1.getId());
@@ -45,6 +50,19 @@ class EventServiceTest extends BaseTest {
         assertEquals(2, pagination.getTotalItems());
         assertEquals(2, pagination.getTotalPages());
         assertEquals(1, eventList.size());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um usuário vinculado")
+    void shouldRemoveLinkedUser() {
+        event1.setUsers(List.of(user2));
+        em.merge(event1);
+
+        eventService.removeUser(event1.getId(), user2.getId());
+        event1 = eventService.findById(event1.getId());
+
+        assertTrue(event1.getUsers().isEmpty());
     }
 
     // Banco H2 não suporta a função UNACCENT
