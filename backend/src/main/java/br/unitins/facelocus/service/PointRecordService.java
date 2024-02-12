@@ -89,4 +89,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         pointRecord.getFactors().add(factor);
         update(pointRecord);
     }
+
+    @Transactional
+    public void removeFactor(Long pointRecordId, Factor factor) {
+        PointRecord pointRecord = findByIdOptional(pointRecordId)
+                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        pointRecord.getFactors().remove(factor);
+        update(pointRecord);
+    }
 }

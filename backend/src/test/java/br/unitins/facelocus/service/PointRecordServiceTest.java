@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -187,7 +189,7 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve iniciar ou Parar um registro de ponto")
+    @DisplayName("Deve iniciar ou parar um registro de ponto")
     void startOrStopPointRecord() {
         PointRecord pointRecord = getPointRecord();
         boolean inProgress = false;
@@ -203,7 +205,7 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve adicionar um fator a um registro de ponto")
+    @DisplayName("Deve adicionar um fator a um registro de ponto que não possui fatores")
     void enableOrDisablePointRecordFactor() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of());
@@ -211,11 +213,9 @@ class PointRecordServiceTest extends BaseTest {
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
-        List<Factor> expectedFactorList = List.of(Factor.FACIAL_RECOGNITION);
-        List<Factor> actualFactorList = new ArrayList<>(pointRecord.getFactors());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
 
-        assertEquals(1, pointRecord.getFactors().size());
-        assertIterableEquals(expectedFactorList, actualFactorList);
+        assertIterableEquals(Set.of(Factor.FACIAL_RECOGNITION), actualFactorSet);
     }
 
     @Test
@@ -228,16 +228,14 @@ class PointRecordServiceTest extends BaseTest {
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
-        List<Factor> expectedFactorList = List.of(Factor.FACIAL_RECOGNITION);
-        List<Factor> actualFactorList = new ArrayList<>(pointRecord.getFactors());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
 
-        assertEquals(1, pointRecord.getFactors().size());
-        assertIterableEquals(expectedFactorList, actualFactorList);
+        assertIterableEquals(Set.of(Factor.FACIAL_RECOGNITION), actualFactorSet);
     }
 
     @Test
     @TestTransaction
-    @DisplayName("Deve adicionar um fator a um registro de ponto que já possui um fator")
+    @DisplayName("Deve adicionar outro fator a um registro de ponto que já possui um fator")
     void addFactorToPointRecordWithExistingFactor() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.INDOOR_LOCATION));
@@ -245,11 +243,54 @@ class PointRecordServiceTest extends BaseTest {
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
-        List<Factor> expectedFactorList = List.of(Factor.INDOOR_LOCATION, Factor.FACIAL_RECOGNITION);
-        List<Factor> actualFactorList = new ArrayList<>(pointRecord.getFactors());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
 
-        assertEquals(2, pointRecord.getFactors().size());
-        assertIterableEquals(expectedFactorList, actualFactorList);
+        assertThat(actualFactorSet, containsInAnyOrder(Factor.INDOOR_LOCATION, Factor.FACIAL_RECOGNITION));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um fator de um registro de ponto")
+    void removeFactorFromPointRecord() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION));
+        em.merge(pointRecord);
+
+        pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
+
+        assertIterableEquals(Set.of(), actualFactorSet);
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um fator de um registro de ponto que já possui outro fator")
+    void removeFactorFromTimeRecordWithExistingFactor() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        em.merge(pointRecord);
+
+        pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
+
+        assertEquals(Set.of(Factor.INDOOR_LOCATION), actualFactorSet);
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Não deve fazer nada ao remover um fator de um registro de ponto que não possui fatores")
+    void doNothingWhenRemovingFactorFromPointRecordWithoutFactors() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setFactors(Set.of());
+        em.merge(pointRecord);
+
+        pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+        Set<Factor> actualFactorSet = pointRecord.getFactors();
+
+        assertIterableEquals(Set.of(), actualFactorSet);
     }
 
    /* @Test
