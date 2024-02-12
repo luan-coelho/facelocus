@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,9 +26,10 @@ public class PointRecord {
     @ManyToOne
     private Event event;
     @OneToMany(mappedBy = "pointRecord", cascade = CascadeType.ALL)
-    private List<Point> points;
+    private List<Point> points = new ArrayList<>();
     @ElementCollection
-    private List<Factor> factors;
+    @CollectionTable(name = "factors")
+    private Set<Factor> factors = new HashSet<>();
     private Double allowableRadiusInMeters;
     private boolean inProgress;
 }

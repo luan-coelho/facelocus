@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class BaseTest {
 
@@ -50,7 +51,7 @@ public abstract class BaseTest {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
-        pointRecord.setFactors(List.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
         Point point = new Point(
                 null,

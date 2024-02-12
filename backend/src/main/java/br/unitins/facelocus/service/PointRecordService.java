@@ -4,6 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
+import br.unitins.facelocus.model.Factor;
 import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -73,17 +74,19 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         return pr;
     }
 
-    public void validatePoint(Long pointId) {
-        Point point = pointService.findByIdOptional(pointId)
-                .orElseThrow(() -> new IllegalArgumentException("Ponto não encontrado pelo id"));
-
-    }
-
     @Transactional
-    public PointRecord toggleActivity(Long pointRecordId) {
+    public void toggleActivity(Long pointRecordId) {
         PointRecord pointRecord = findByIdOptional(pointRecordId)
                 .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
         pointRecord.setInProgress(!pointRecord.isInProgress());
-        return update(pointRecord);
+        update(pointRecord);
+    }
+
+    @Transactional
+    public void addFactor(Long pointRecordId, Factor factor) {
+        PointRecord pointRecord = findByIdOptional(pointRecordId)
+                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        pointRecord.getFactors().add(factor);
+        update(pointRecord);
     }
 }
