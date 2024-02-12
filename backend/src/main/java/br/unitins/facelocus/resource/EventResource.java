@@ -13,8 +13,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
-import java.util.List;
-
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Authenticated
 @Path("/event")
@@ -34,10 +32,11 @@ public class EventResource {
 
     @Path("/search")
     @GET
-    public Response findAllByDescription(@RestQuery("user") Long userId, @RestQuery("description") String description) {
-        List<Event> events = eventService.findAllByDescription(userId, description);
-        List<EventDTO> dtos = events.stream().map(e -> eventMapper.toResource(e)).toList();
-        return Response.ok(dtos).build();
+    public Response findAllByDescription(Pageable pageable,
+                                         @RestQuery("user") Long userId,
+                                         @RestQuery("description") String description) {
+        DataPagination<EventDTO> dataPagination = eventService.findAllByDescription(pageable, userId, description);
+        return Response.ok(dataPagination).build();
     }
 
     @Path("/{id}")

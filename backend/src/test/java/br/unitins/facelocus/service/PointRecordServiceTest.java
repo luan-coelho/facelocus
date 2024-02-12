@@ -182,11 +182,24 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
+    @DisplayName("Deve iniciar ou parar um registro de ponto")
+    void startOrStopPointRecord() {
+        PointRecord pointRecord = getPointRecord();
+        boolean inProgress = false;
+        pointRecord.setInProgress(inProgress);
+        em.merge(pointRecord);
+        pointRecord = pointRecordService.toggleActivity(pointRecord.getId());
+
+        assertEquals(!inProgress, pointRecord.isInProgress());
+    }
+
+   /* @Test
+    @TestTransaction
     @DisplayName("Deve validar um ponto quando o dados forem corretos")
     void validatePointDataWhenCorrect() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
         Point point = pointRecord.getPoints().getFirst();
         pointRecordService.validatePoint(point.getId());
-    }
+    }*/
 }

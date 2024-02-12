@@ -10,6 +10,7 @@ import br.unitins.facelocus.repository.PointRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,5 +77,13 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         Point point = pointService.findByIdOptional(pointId)
                 .orElseThrow(() -> new IllegalArgumentException("Ponto não encontrado pelo id"));
 
+    }
+
+    @Transactional
+    public PointRecord toggleActivity(Long pointRecordId) {
+        PointRecord pointRecord = findByIdOptional(pointRecordId)
+                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        pointRecord.setInProgress(!pointRecord.isInProgress());
+        return update(pointRecord);
     }
 }

@@ -40,4 +40,14 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
         return find(query, date, userId).list();
     }
+
+    /*public void toggleActivity(Long pointRecordId) {
+        // language=jpaql
+        String query = """
+                UPDATE PointRecord pr
+                SET inProgress = true
+                WHERE pr.id = ?1
+                 """;
+        update(query, pointRecordId);
+    }*/
 }

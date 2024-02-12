@@ -46,4 +46,22 @@ class EventServiceTest extends BaseTest {
         assertEquals(2, pagination.getTotalPages());
         assertEquals(1, eventList.size());
     }
+
+    // Banco H2 não suporta a função UNACCENT
+    /*@Test
+    @TestTransaction
+    @DisplayName("Deve retornar eventos paginados por descrição com acentuação")
+    void getPaginatedEventsByDescriptionWithAccents() {
+        event1.setDescription("Atenção");
+        em.merge(event1);
+
+        Pageable pageable = new Pageable();
+        DataPagination<EventDTO> dataPagination = eventService.findAllByDescription(pageable, user1.getId(), "Atenção");
+        Pagination pagination = dataPagination.getPagination();
+        List<EventDTO> eventList = dataPagination.getData();
+
+        assertEquals(1, pagination.getTotalItems());
+        assertEquals(1, pagination.getTotalPages());
+        assertEquals(1, eventList.size());
+    }*/
 }

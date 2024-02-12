@@ -13,6 +13,7 @@ import java.util.Random;
 public abstract class BaseTest {
 
     protected User user1;
+    protected User user2;
     protected Event event1;
     protected Event event2;
     protected LocalDate today;

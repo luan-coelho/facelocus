@@ -31,12 +31,13 @@ public class EventService extends BaseService<Event, EventRepository> {
     UserService userService;
 
     public DataPagination<EventDTO> findAllPaginatedByUser(Pageable pageable, Long userId) {
-        DataPagination<Event> dataPagination = repository.findAllByUser(pageable, userId);
+        DataPagination<Event> dataPagination = this.repository.findAllByUser(pageable, userId);
         return eventMapper.toResource(dataPagination);
     }
 
-    public List<Event> findAllByDescription(Long userId, String description) {
-        return this.repository.findAllByDescription(userId, description);
+    public DataPagination<EventDTO> findAllByDescription(Pageable pageable, Long userId, String description) {
+        DataPagination<Event> dataPagination = this.repository.findAllByDescription(pageable, userId, description);
+        return eventMapper.toResource(dataPagination);
     }
 
     @Override
