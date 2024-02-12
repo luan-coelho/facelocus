@@ -14,7 +14,7 @@ class EventService {
   getAllByDescription(int userId, String description) async {
     var url = '${AppRoutes.event}/search?user=$userId&description=$description';
     final response = await _fetchApi.get(url);
-    List data = response.data;
+    List data = response.data['data'];
     return data.map((json) => EventModel.fromJson(json)).toList();
   }
 
