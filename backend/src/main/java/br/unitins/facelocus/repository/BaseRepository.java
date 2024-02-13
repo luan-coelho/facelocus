@@ -36,9 +36,9 @@ public abstract class BaseRepository<T> implements PanacheRepositoryBase<T, Long
     }
 
     private Pagination buildPaginationFromPageable(Pageable pageable, PanacheQuery<T> panacheQuery) {
-        long numberOfRecords = panacheQuery.count();
-        long totalPages = numberOfRecords / pageable.getSize();
-        return new Pagination(pageable.getPage(), totalPages, numberOfRecords);
+        long totalItems = panacheQuery.count();
+        long totalPages = totalItems / pageable.getSize();
+        return new Pagination(pageable.getPage(), totalPages, totalItems);
     }
 
     protected DataPagination<T> buildDataPagination(Pageable pageable, PanacheQuery<T> panacheQuery) {
@@ -49,6 +49,7 @@ public abstract class BaseRepository<T> implements PanacheRepositoryBase<T, Long
     }
 
     public boolean existsById(Long id) {
+        // language=jpaql
         String query = String.format("FROM %s WHERE id = ?1", entitySimpleName);
         return count(query, id) > 0;
     }

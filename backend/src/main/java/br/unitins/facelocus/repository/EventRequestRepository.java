@@ -67,7 +67,7 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
         return buildDataPagination(pageable, panacheQuery);
     }
 
-    public void updateStatus(Long eventRequestId, EventRequestStatus requestStatus) {
-        update("UPDATE EventRequest SET requestStatus = ?2 WHERE id = ?1", eventRequestId, requestStatus);
+    public void updateStatus(Long eventRequestId, EventRequestStatus status) {
+        update("UPDATE EventRequest SET status = ?2 WHERE id = ?1", eventRequestId, status);
     }
 }

@@ -9,7 +9,7 @@ public record EventRequestResponseDTO(
         Long id,
         String code,
         EventDTO event,
-        EventRequestStatus requestStatus,
+        EventRequestStatus status,
         EventRequestType requestType,
         UserResponseDTO initiatorUser,
         UserResponseDTO targetUser

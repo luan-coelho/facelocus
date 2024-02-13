@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,11 +18,11 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private LocalDateTime initialDate;
+
     private LocalDateTime finalDate;
-    @OneToMany(mappedBy = "point")
-    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-    private boolean validated;
+
     @ManyToOne
     private PointRecord pointRecord;
 }

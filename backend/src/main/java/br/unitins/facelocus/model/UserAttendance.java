@@ -6,23 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Location {
+public class UserAttendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String description;
+    @ManyToOne
+    private User user;
 
-    private String latitude;
-
-    private String longitude;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
     @ManyToOne
-    private Event event;
+    private PointRecord pointRecord;
 }

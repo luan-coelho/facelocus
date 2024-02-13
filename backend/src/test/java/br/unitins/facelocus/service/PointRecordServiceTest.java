@@ -53,17 +53,15 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve criar um registro de ponto com sucesso quandos os dados forem válidos")
     void shouldCreatePointRecordSuccessfullyWhenDataIsValid() {
         PointRecord pointRecord = getPointRecord();
-//        pointRecord.setPoints(List.of(user1, user2, user3, user4, user5));
         pointRecordService.create(pointRecord);
 
         assertNotNull(pointRecord.getId());
         assertNotNull(pointRecord.getEvent().getId());
         assertTrue(pointRecord.getDate().isEqual(today));
+        assertEquals(1, pointRecord.getPoints().size());
         assertEquals(2, pointRecord.getFactors().size());
-        assertFalse(pointRecord.getPoints().isEmpty());
-        for (Point point : pointRecord.getPoints()) {
-            assertEquals(1, point.getAttendanceRecords().size());
-        }
+        assertEquals(1, pointRecord.getUsersAttendances().size());
+        assertTrue(pointRecord.getUsersAttendances().stream().allMatch(ua -> ua.getAttendanceRecords().size() == 1));
         assertFalse(pointRecord.isInProgress());
     }
 
@@ -125,8 +123,6 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.minusMinutes(15),
-                null,
-                false,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -150,8 +146,6 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now,
-                null,
-                false,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -175,15 +169,11 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
-                null,
-                false,
                 pointRecord);
         Point point2 = new Point(
                 null,
                 now.minusMinutes(30),
                 now.minusMinutes(15),
-                null,
-                false,
                 pointRecord);
         pointRecord.setPoints(List.of(point1, point2));
 

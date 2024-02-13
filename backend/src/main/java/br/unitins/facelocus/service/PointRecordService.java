@@ -58,6 +58,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
 
         validatePoints(pointRecord);
+        createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
 
         return super.create(pointRecord);
@@ -99,20 +100,38 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
-
-            List<AttendanceRecord> attendanceRecords = createAttendanceRecords(pointRecord, point);
-            point.setAttendanceRecords(attendanceRecords);
             point.setPointRecord(pointRecord);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
     }
 
-    private List<AttendanceRecord> createAttendanceRecords(PointRecord pointRecord, Point point) {
-        ArrayList<AttendanceRecord> attendanceRecords = new ArrayList<>();
+    /**
+     * Cria registros de presença para cada usuário cadastrado no evento, conforme o número de pontos.
+     *
+     * @param pointRecord Registro de Ponto
+     */
+    private void createUsersAttendances(PointRecord pointRecord) {
+        List<UserAttendance> usersAttendances = new ArrayList<>();
         for (User user : pointRecord.getEvent().getUsers()) {
-            attendanceRecords.add(new AttendanceRecord(null, user, new ArrayList<>(), point));
+            List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+            for (Point point : pointRecord.getPoints()) {
+                AttendanceRecord attendanceRecord = new AttendanceRecord(
+                        null,
+                        null,
+                        AttendanceRecordStatus.PENDING,
+                        point
+                );
+                attendanceRecords.add(attendanceRecord);
+            }
+            UserAttendance userAttendance = new UserAttendance(
+                    null,
+                    user,
+                    attendanceRecords,
+                    pointRecord
+            );
+            usersAttendances.add(userAttendance);
         }
-        return attendanceRecords;
+        pointRecord.setUsersAttendances(usersAttendances);
     }
 
     @Transactional

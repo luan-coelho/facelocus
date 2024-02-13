@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,10 +19,13 @@ public class AttendanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @ManyToOne
-    private User user;
-    @OneToMany(mappedBy = "attendanceRecord")
-    private List<ValidationAttempt> validationAttempts;
+
+    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
+    private List<ValidationAttempt> validationAttempts = new ArrayList<>();
+
+    @Transient
+    private AttendanceRecordStatus status;
+
     @ManyToOne
     private Point point;
 }

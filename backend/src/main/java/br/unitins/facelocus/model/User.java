@@ -19,15 +19,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String name;
+
     private String surname;
+
     private String email;
+
     private String cpf;
+
     private String password;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserFacePhoto facePhoto;
+
     @OneToMany(mappedBy = "user")
     private List<Device> devices;
+
     @ManyToMany(mappedBy = "users")
     private List<Event> events;
 }

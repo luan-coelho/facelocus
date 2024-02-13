@@ -19,9 +19,12 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
     public DataPagination<PointRecord> findAllByUser(Pageable pageable, Long userId) {
         // language=jpaql
         String query = """
+                SELECT DISTINCT pr
                 FROM PointRecord pr
                     JOIN pr.event e
                     JOIN e.administrator u
+                    JOIN pr.usersAttendances ua
+                    JOIN ua.attendanceRecords ar
                     LEFT JOIN e.users lu
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;
@@ -32,6 +35,7 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {
         // language=jpaql
         var query = """
+                SELECT DISTINCT pr
                 FROM PointRecord pr
                     JOIN FETCH pr.event e
                     JOIN FETCH e.administrator u
@@ -39,14 +43,4 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
         return find(query, date, userId).list();
     }
-
-    /*public void toggleActivity(Long pointRecordId) {
-        // language=jpaql
-        String query = """
-                UPDATE PointRecord pr
-                SET inProgress = true
-                WHERE pr.id = ?1
-                 """;
-        update(query, pointRecordId);
-    }*/
 }

@@ -19,17 +19,25 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String description;
+
     @OneToMany(mappedBy = "event")
     private List<PointRecord> pointRecords;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Location> locations = new ArrayList<>();
+
     @ManyToOne
     private User administrator;
+
     @ManyToMany
     private List<User> users = new ArrayList<>();
+
     private String code;
+
     private boolean allowTicketRequests;
+
     @OneToMany(mappedBy = "event")
     private List<EventRequest> ticketRequests;
 }

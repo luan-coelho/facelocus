@@ -128,7 +128,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     public void deleteById(Long eventRequestId) {
         EventRequest eventRequest = findByIdOptional(eventRequestId)
                 .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
-        EventRequestStatus status = eventRequest.getRequestStatus();
+        EventRequestStatus status = eventRequest.getStatus();
         if (status != EventRequestStatus.PENDING) {
             String message = "A solicitação não está mais pendente. Desta forma, ela não pode ser apagada";
             throw new IllegalArgumentException(message);
@@ -141,16 +141,16 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      *
      * @param userId         Identificador do usuário solicitado
      * @param eventRequestId Identificador da solicitação de ingresso
-     * @param requestStatus  Situação da solicitação
+     * @param status  Situação da solicitação
      */
-    private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
+    private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus status) {
         EventRequest eventRequest = findById(eventRequestId);
         Long administratorId = eventRequest.getEvent().getAdministrator().getId();
         Long targetUserId = eventRequest.getTargetUser().getId();
         if (administratorId.equals(userId) || !targetUserId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
-        this.repository.updateStatus(eventRequestId, requestStatus);
+        this.repository.updateStatus(eventRequestId, status);
         eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), targetUserId);
     }
 
@@ -159,16 +159,16 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      *
      * @param userId         Identificador do usuário solicitado
      * @param eventRequestId Identificador da solicitação de ingresso
-     * @param requestStatus  Situação da solicitação
+     * @param status  Situação da solicitação
      */
-    private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus requestStatus) {
+    private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus status) {
         EventRequest eventRequest = findById(eventRequestId);
         Long targetUSerId = eventRequest.getTargetUser().getId();
         Long initialUSerId = eventRequest.getInitiatorUser().getId();
         if (!targetUSerId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
-        this.repository.updateStatus(eventRequestId, requestStatus);
+        this.repository.updateStatus(eventRequestId, status);
         eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), initialUSerId);
     }
 

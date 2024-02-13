@@ -19,9 +19,13 @@ public class UserFacePhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String fileName;
+
     private LocalDate uploadDate;
+
     private String filePath;
+
     @OneToOne
     private User user;
 
