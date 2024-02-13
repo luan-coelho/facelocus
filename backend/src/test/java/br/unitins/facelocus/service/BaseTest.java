@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -42,6 +43,7 @@ public abstract class BaseTest {
         event.setDescription("Evento " + new Random().nextInt(1000));
         event.setCode("ABC123");
         event.setAdministrator(user1);
+        event.setUsers(new ArrayList<>(List.of(user2)));
         event.setLocations(List.of(location));
         em.merge(event);
         return event;
@@ -64,6 +66,7 @@ public abstract class BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
+                null,
                 false,
                 pointRecord);
         pointRecord.setPoints(List.of(point));

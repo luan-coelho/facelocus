@@ -22,4 +22,6 @@ public class AttendanceRecord {
     private User user;
     @OneToMany(mappedBy = "attendanceRecord")
     private List<ValidationAttempt> validationAttempts;
+    @ManyToOne
+    private Point point;
 }

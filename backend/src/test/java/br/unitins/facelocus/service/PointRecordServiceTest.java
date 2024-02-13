@@ -7,6 +7,7 @@ import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.model.Factor;
 import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
+import br.unitins.facelocus.model.User;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -26,12 +27,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class PointRecordServiceTest extends BaseTest {
 
+    User user3;
+    User user4;
+    User user5;
+
     @Inject
     PointRecordService pointRecordService;
 
     @BeforeEach
     public void setup() {
         user1 = getUser();
+        user2 = getUser();
+        user3 = getUser();
+        user4 = getUser();
+        user5 = getUser();
         location = getLocation();
         event1 = getEvent();
         event2 = getEvent();
@@ -44,6 +53,7 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve criar um registro de ponto com sucesso quandos os dados forem válidos")
     void shouldCreatePointRecordSuccessfullyWhenDataIsValid() {
         PointRecord pointRecord = getPointRecord();
+//        pointRecord.setPoints(List.of(user1, user2, user3, user4, user5));
         pointRecordService.create(pointRecord);
 
         assertNotNull(pointRecord.getId());
@@ -51,6 +61,9 @@ class PointRecordServiceTest extends BaseTest {
         assertTrue(pointRecord.getDate().isEqual(today));
         assertEquals(2, pointRecord.getFactors().size());
         assertFalse(pointRecord.getPoints().isEmpty());
+        for (Point point : pointRecord.getPoints()) {
+            assertEquals(1, point.getAttendanceRecords().size());
+        }
         assertFalse(pointRecord.isInProgress());
     }
 
@@ -112,6 +125,7 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.minusMinutes(15),
+                null,
                 false,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
@@ -136,6 +150,7 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now,
+                null,
                 false,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
@@ -160,12 +175,14 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
+                null,
                 false,
                 pointRecord);
         Point point2 = new Point(
                 null,
                 now.minusMinutes(30),
                 now.minusMinutes(15),
+                null,
                 false,
                 pointRecord);
         pointRecord.setPoints(List.of(point1, point2));

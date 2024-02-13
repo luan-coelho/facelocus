@@ -4,10 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
-import br.unitins.facelocus.model.Factor;
-import br.unitins.facelocus.model.Location;
-import br.unitins.facelocus.model.Point;
-import br.unitins.facelocus.model.PointRecord;
+import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,14 +13,12 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @ApplicationScoped
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
-
-    @Inject
-    PointService pointService;
 
     @Inject
     PointRecordMapper pointRecordMapper;
@@ -104,9 +99,20 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
+
+            List<AttendanceRecord> attendanceRecords = createAttendanceRecords(pointRecord, point);
+            point.setAttendanceRecords(attendanceRecords);
             point.setPointRecord(pointRecord);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
+    }
+
+    private List<AttendanceRecord> createAttendanceRecords(PointRecord pointRecord, Point point) {
+        ArrayList<AttendanceRecord> attendanceRecords = new ArrayList<>();
+        for (User user : pointRecord.getEvent().getUsers()) {
+            attendanceRecords.add(new AttendanceRecord(null, user, new ArrayList<>(), point));
+        }
+        return attendanceRecords;
     }
 
     @Transactional

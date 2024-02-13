@@ -23,7 +23,7 @@ public class Point {
     private Long id;
     private LocalDateTime initialDate;
     private LocalDateTime finalDate;
-    @OneToMany
+    @OneToMany(mappedBy = "point")
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
     private boolean validated;
     @ManyToOne
