@@ -11,14 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PointValidationAttempt {
+public class FaceIdentificationAttempt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @ManyToOne
-    private UserFacePhoto userFacePhoto;
-    @ManyToOne
-    private PointValidation pointValidation;
+
     private boolean validated;
 }

@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +23,8 @@ public class Point {
     private Long id;
     private LocalDateTime initialDate;
     private LocalDateTime finalDate;
+    @OneToMany
+    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
     private boolean validated;
     @ManyToOne
     private PointRecord pointRecord;

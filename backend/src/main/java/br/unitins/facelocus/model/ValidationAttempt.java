@@ -14,17 +14,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PointValidation {
+public class ValidationAttempt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne
-    private Point point;
-    @ManyToOne
-    private AttendanceRecord attendanceRecord;
-    @OneToMany(mappedBy = "pointValidation")
-    private List<PointValidationAttempt> validationAttempts;
+    private UserFacePhoto userFacePhoto;
+    private Double distanceInMeters;
     private LocalDateTime facialRecognitionValidationTime;
     private LocalDateTime indoorLocationValidationTime;
+    @ManyToOne
+    private AttendanceRecord attendanceRecord;
 }
