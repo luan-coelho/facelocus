@@ -1,6 +1,7 @@
 package br.unitins.facelocus.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +12,11 @@ import java.nio.file.Paths;
 @ApplicationScoped
 public class ImageFileService {
 
-    static final String USER_HOME = System.getProperty("user.home");
+    @ConfigProperty(name = "files.users.facephoto.basepath")
+    String USER_HOME;
     static final String SEPARATOR = File.separator; // "\" ou "/"
-    static final String RESOURCES_DIRECTORY = "Imagens";
+    @ConfigProperty(name = "files.users.facephoto.resources")
+    String RESOURCES_DIRECTORY;
 
 
     public String buildResourcePathAndCreate(String... subdirectories) throws IOException {
