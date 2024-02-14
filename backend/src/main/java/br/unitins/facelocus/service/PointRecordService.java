@@ -58,7 +58,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
 
         validatePoints(pointRecord);
-        createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
 
         return super.create(pointRecord);
@@ -101,6 +100,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
             point.setPointRecord(pointRecord);
+            createUsersAttendances(pointRecord, point);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
     }
@@ -110,28 +110,25 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      *
      * @param pointRecord Registro de Ponto
      */
-    private void createUsersAttendances(PointRecord pointRecord) {
+    private void createUsersAttendances(PointRecord pointRecord, Point point) {
         List<UserAttendance> usersAttendances = new ArrayList<>();
         for (User user : pointRecord.getEvent().getUsers()) {
             List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-            for (Point point : pointRecord.getPoints()) {
-                AttendanceRecord attendanceRecord = new AttendanceRecord(
-                        null,
-                        null,
-                        AttendanceRecordStatus.PENDING,
-                        point
-                );
-                attendanceRecords.add(attendanceRecord);
-            }
+            AttendanceRecord attendanceRecord = new AttendanceRecord(
+                    null,
+                    null,
+                    AttendanceRecordStatus.PENDING
+            );
+            attendanceRecords.add(attendanceRecord);
             UserAttendance userAttendance = new UserAttendance(
                     null,
                     user,
                     attendanceRecords,
-                    pointRecord
+                    point
             );
             usersAttendances.add(userAttendance);
         }
-        pointRecord.setUsersAttendances(usersAttendances);
+        point.setUsersAttendances(usersAttendances);
     }
 
     @Transactional

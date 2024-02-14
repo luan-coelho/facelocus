@@ -38,7 +38,4 @@ public class PointRecord {
     private Double allowableRadiusInMeters;
 
     private boolean inProgress;
-
-    @OneToMany(mappedBy = "pointRecord", cascade = CascadeType.ALL)
-    private List<UserAttendance> usersAttendances = new ArrayList<>();
 }

@@ -27,5 +27,5 @@ public class UserAttendance {
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
     @ManyToOne
-    private PointRecord pointRecord;
+    private Point point;
 }

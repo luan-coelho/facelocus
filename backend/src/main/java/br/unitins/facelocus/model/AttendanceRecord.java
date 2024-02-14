@@ -25,7 +25,4 @@ public class AttendanceRecord {
 
     @Transient
     private AttendanceRecordStatus status;
-
-    @ManyToOne
-    private Point point;
 }
