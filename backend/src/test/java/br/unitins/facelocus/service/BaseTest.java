@@ -66,6 +66,7 @@ public abstract class BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
+                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
         return pointRecord;

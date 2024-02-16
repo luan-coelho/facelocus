@@ -59,9 +59,8 @@ class PointRecordServiceTest extends BaseTest {
         assertNotNull(pointRecord.getEvent().getId());
         assertTrue(pointRecord.getDate().isEqual(today));
         assertEquals(1, pointRecord.getPoints().size());
+        assertTrue(pointRecord.getPoints().stream().allMatch(p -> p.getUsersAttendances().size() == 1));
         assertEquals(2, pointRecord.getFactors().size());
-        assertEquals(1, pointRecord.getUsersAttendances().size());
-        assertTrue(pointRecord.getUsersAttendances().stream().allMatch(ua -> ua.getAttendanceRecords().size() == 1));
         assertFalse(pointRecord.isInProgress());
     }
 
@@ -123,6 +122,7 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.minusMinutes(15),
+                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -146,6 +146,7 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now,
+                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -169,11 +170,13 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
+                null,
                 pointRecord);
         Point point2 = new Point(
                 null,
                 now.minusMinutes(30),
                 now.minusMinutes(15),
+                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point1, point2));
 

@@ -68,7 +68,7 @@ public class FaceRecognitionService {
         }
     }
 
-    private UserFacePhoto saveFileAndBuildFacePhoto(String fileName, InputStream file, String... subdirectories) {
+    public UserFacePhoto saveFileAndBuildFacePhoto(String fileName, InputStream file, String... subdirectories) {
         try {
             Path filePath = buildFilePath(fileName, subdirectories);
             Files.copy(file, filePath, StandardCopyOption.REPLACE_EXISTING);
