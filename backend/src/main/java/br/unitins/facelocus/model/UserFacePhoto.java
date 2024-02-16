@@ -6,15 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class UserFacePhoto {
+public class UserFacePhoto extends DefaultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,15 +19,8 @@ public class UserFacePhoto {
 
     private String fileName;
 
-    private LocalDate uploadDate;
-
     private String filePath;
 
     @OneToOne
     private User user;
-
-    @PrePersist
-    public void generateUploudDate() {
-        this.uploadDate = LocalDate.now();
-    }
 }

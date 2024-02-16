@@ -31,7 +31,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      *
      * @param pageable Informações de paginação
      * @param userId   Identificador do usuário
-     * @return Objeto paginável de registros de ponto
+     * @return Dados paginados de registros de ponto
      */
     public DataPagination<PointRecordResponseDTO> findAllByUser(Pageable pageable, Long userId) {
         DataPagination<PointRecord> dataPagination = this.repository.findAllByUser(pageable, userId);
@@ -69,6 +69,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         return super.create(pointRecord);
     }
 
+    /**
+     * Responsável por validar os fatores de um registro de ponto
+     *
+     * @param pointRecord Registro de ponto
+     */
     private void validateFactors(PointRecord pointRecord) {
         Set<Factor> factors = pointRecord.getFactors();
 
@@ -93,6 +98,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
+    /**
+     * Responsável por validar os pontos de um registro de ponto
+     *
+     * @param pointRecord Registro de ponto
+     */
     private void validatePoints(PointRecord pointRecord) {
         LocalDateTime lastDatetime = null;
 
@@ -142,6 +152,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         point.setUsersAttendances(usersAttendances);
     }
 
+    /**
+     * Alterna o status de atividade de um registro de ponto para iniciado 'true' ou parado 'false'
+     *
+     * @param pointRecordId Identificador do registro de ponto
+     */
     @Transactional
     public void toggleActivity(Long pointRecordId) {
         PointRecord pointRecord = findById(pointRecordId);
@@ -149,6 +164,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         update(pointRecord);
     }
 
+    /**
+     * Adiciona um fator a um registro de ponto
+     *
+     * @param pointRecordId Identificador do registro de ponto
+     * @param factor        Fator que será adicionado
+     */
     @Transactional
     public void addFactor(Long pointRecordId, Factor factor) {
         PointRecord pointRecord = findById(pointRecordId);
@@ -156,6 +177,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         update(pointRecord);
     }
 
+    /**
+     * Remove um fator de um registro de ponto
+     *
+     * @param pointRecordId Identificador do registro de ponto
+     * @param factor        Fator que será removido
+     */
     @Transactional
     public void removeFactor(Long pointRecordId, Factor factor) {
         PointRecord pointRecord = findById(pointRecordId);

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Event {
+public class Event extends DefaultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

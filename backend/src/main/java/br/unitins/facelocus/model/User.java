@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
-public class User {
+public class User extends DefaultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

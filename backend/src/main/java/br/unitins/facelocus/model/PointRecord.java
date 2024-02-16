@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PointRecord {
+public class PointRecord extends DefaultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

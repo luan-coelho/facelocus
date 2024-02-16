@@ -97,7 +97,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     }
 
     @Transactional
-    public void createTicketRequest(EventRequestCreateDTO requestCreateDTO) {
+    public EventRequest createTicketRequest(EventRequestCreateDTO requestCreateDTO) {
         Event event = eventService.findByCode(requestCreateDTO.event().getCode());
         User initiatorUser = userService.findById(requestCreateDTO.initiatorUser().getId());
         User administrator = event.getAdministrator();
@@ -112,10 +112,11 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
 
         EventRequest eventRequest = eventRequestMapper.toCreateEntity(requestCreateDTO);
         eventRequest.setEvent(event);
+        eventRequest.setCode(event.getCode());
         eventRequest.setInitiatorUser(initiatorUser);
         eventRequest.setTargetUser(event.getAdministrator());
         eventRequest.setRequestType(EventRequestType.TICKET_REQUEST);
-        super.create(eventRequest);
+        return super.create(eventRequest);
     }
 
 

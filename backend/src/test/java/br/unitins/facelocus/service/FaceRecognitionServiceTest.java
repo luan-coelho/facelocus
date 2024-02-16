@@ -1,7 +1,6 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.model.UserFacePhoto;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -26,9 +25,6 @@ class FaceRecognitionServiceTest extends BaseTest {
     FaceRecognitionService faceRecognitionService;
 
     @Inject
-    ImageFileService imageFileService;
-
-    @Inject
     UserService userService;
 
     @BeforeEach
@@ -47,6 +43,7 @@ class FaceRecognitionServiceTest extends BaseTest {
         user1 = userService.findById(user1.getId());
         String filePath = user1.getFacePhoto().getFilePath();
         File image = null;
+
         try {
             image = new File(filePath);
         } catch (Exception e) {
@@ -116,9 +113,11 @@ class FaceRecognitionServiceTest extends BaseTest {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             InputStream imageStream = classLoader.getResourceAsStream("images/user1.jpg");
+
             if (imageStream == null) {
                 return null;
             }
+
             BufferedImage image = ImageIO.read(imageStream);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
