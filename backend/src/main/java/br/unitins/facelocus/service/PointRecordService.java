@@ -42,6 +42,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         return this.repository.findAllByDate(userId, date);
     }
 
+    @Override
+    public PointRecord findById(Long pointRecordId) {
+        return findByIdOptional(pointRecordId)
+                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+    }
+
     @Transactional
     @Override
     public PointRecord create(PointRecord pointRecord) {
@@ -133,24 +139,21 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Transactional
     public void toggleActivity(Long pointRecordId) {
-        PointRecord pointRecord = findByIdOptional(pointRecordId)
-                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        PointRecord pointRecord = findById(pointRecordId);
         pointRecord.setInProgress(!pointRecord.isInProgress());
         update(pointRecord);
     }
 
     @Transactional
     public void addFactor(Long pointRecordId, Factor factor) {
-        PointRecord pointRecord = findByIdOptional(pointRecordId)
-                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        PointRecord pointRecord = findById(pointRecordId);
         pointRecord.getFactors().add(factor);
         update(pointRecord);
     }
 
     @Transactional
     public void removeFactor(Long pointRecordId, Factor factor) {
-        PointRecord pointRecord = findByIdOptional(pointRecordId)
-                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        PointRecord pointRecord = findById(pointRecordId);
         pointRecord.getFactors().remove(factor);
         update(pointRecord);
     }
