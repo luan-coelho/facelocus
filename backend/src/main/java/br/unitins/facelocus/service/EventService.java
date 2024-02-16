@@ -15,7 +15,6 @@ import jakarta.ws.rs.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -23,9 +22,6 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Inject
     EventMapper eventMapper;
-
-    @Inject
-    LocationService locationService;
 
     @Inject
     UserService userService;
@@ -42,12 +38,8 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Override
     public Event findById(Long eventId) {
-        Event event = super.findById(eventId);
-        List<Location> locations = locationService.findAllByEventId(eventId);
-        List<User> users = userService.findAllByEventId(eventId);
-        event.setLocations(locations);
-        event.setUsers(users);
-        return event;
+        return super.findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
     }
 
     @Override
@@ -55,8 +47,9 @@ public class EventService extends BaseService<Event, EventRepository> {
         return Optional.ofNullable(findById(eventId));
     }
 
-    public Optional<Event> findByCodeOptional(String code) {
-        return this.repository.findByCodeOptional(code);
+    public Event findByCode(String code) {
+        return this.repository.findByCodeOptional(code)
+                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
     }
 
     @Transactional
@@ -65,11 +58,13 @@ public class EventService extends BaseService<Event, EventRepository> {
         if (event.isAllowTicketRequests()) {
             event.setCode(generateUniqueCode());
         }
+
         if (event.getLocations() != null) {
             for (Location location : event.getLocations()) {
                 location.setEvent(event);
             }
         }
+
         return super.create(event);
     }
 
@@ -84,8 +79,7 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Override
     public void deleteById(Long eventId) {
         try {
-            findByIdOptional(eventId)
-                    .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+            findById(eventId);
             this.repository.deleteEntityById(eventId);
         } catch (ConstraintViolationException e) {
             throw new IllegalArgumentException("O evento não pode ser deletado pois está vinculado a outros registros");
@@ -113,6 +107,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         if (this.repository.existsByCode(code.toString())) {
             return generateUniqueCode();
         }
+
         return code.toString();
     }
 
@@ -124,11 +119,12 @@ public class EventService extends BaseService<Event, EventRepository> {
      */
     @Transactional
     public void changeTicketRequestPermissionByEventId(Long eventId) {
-        Event event = findByIdOptional(eventId)
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        Event event = findById(eventId);
+
         if (event.getCode() == null) {
             event.setCode(generateUniqueCode());
         }
+
         this.repository.changeTicketRequestPermissionByEventId(eventId);
     }
 
@@ -152,10 +148,8 @@ public class EventService extends BaseService<Event, EventRepository> {
      */
     @Transactional
     public void addUserByEventIdAndUserId(Long eventId, Long userId) {
-        User user = userService.findByIdOptional(userId)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
-        Event event = findByIdOptional(eventId)
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        User user = userService.findById(userId);
+        Event event = findById(eventId);
         event.getUsers().forEach(u -> {
             if (u.getId().equals(userId))
                 throw new IllegalArgumentException("Usuário já vinculado ao evento");
@@ -171,8 +165,7 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Transactional
     public void removeUser(Long eventId, Long userId) {
         userService.existsByIdWithThrows(userId);
-        Event event = findByIdOptional(eventId)
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        Event event = findById(eventId);
         event.getUsers().removeIf(user -> user.getId().equals(userId));
         update(event);
     }

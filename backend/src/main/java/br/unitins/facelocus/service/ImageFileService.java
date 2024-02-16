@@ -21,15 +21,19 @@ public class ImageFileService {
 
     public String buildResourcePathAndCreate(String... subdirectories) throws IOException {
         String outputPath = SEPARATOR.concat(RESOURCES_DIRECTORY);
+
         for (String subdirectory : subdirectories) {
             outputPath = outputPath.concat(SEPARATOR).concat(subdirectory);
         }
+
         String pathBuilt = USER_HOME + outputPath;
         Path path = Paths.get(pathBuilt);
+
         // Cria o diretório caso não exista
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
+
         return pathBuilt;
     }
 
@@ -44,6 +48,7 @@ public class ImageFileService {
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
             return fileName.substring(dotIndex + 1);
         }
+
         return null;
     }
 }

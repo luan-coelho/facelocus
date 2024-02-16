@@ -32,6 +32,12 @@ public class UserService extends BaseService<User, UserRepository> {
         return this.repository.findAllByNameOrCpf(userId, identifier.trim());
     }
 
+    @Override
+    public User findById(Long userId) {
+        return super.findByIdOptional(userId)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
+    }
+
     public Optional<User> findByEmailOrCpf(String identifier) {
         return this.repository.findByEmailOrCpf(identifier);
     }
@@ -57,8 +63,7 @@ public class UserService extends BaseService<User, UserRepository> {
      * @param changePasswordDTO Informações sobre as credênciais
      */
     public void changePassword(Long userId, ChangePasswordDTO changePasswordDTO) {
-        User user = findByIdOptional(userId)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
+        User user = findById(userId);
 
         if (!passwordHandlerService.checkPassword(changePasswordDTO.currentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("A senha atual informada está incorreta");
@@ -68,8 +73,8 @@ public class UserService extends BaseService<User, UserRepository> {
     }
 
     public ByteArrayInputStream getUserFacePhoto(Long userId) {
-        User user = findByIdOptional(userId)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado pelo id"));
+        User user = findById(userId);
+
         try {
             File file = new File(user.getFacePhoto().getFilePath());
             String extension = FilenameUtils.getExtension(file.getAbsolutePath());

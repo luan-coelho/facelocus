@@ -30,6 +30,7 @@ public class OAuthAuthenticationService {
                     String message = "Não existe nenhuma conta associada a este email";
                     return new AuthenticationException(message);
                 });
+
         if (!passwordHandlerService.checkPassword(loginRequest.password(), user.getPassword())) {
             throw new UnauthorizedException("Verifique seu email ou senha");
         }

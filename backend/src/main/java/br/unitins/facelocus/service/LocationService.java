@@ -25,10 +25,15 @@ public class LocationService extends BaseService<Location, LocationRepository> {
         return this.repository.findAllByEventId(eventId);
     }
 
+    @Override
+    public Location findById(Long locationId) {
+        return super.findByIdOptional(locationId)
+                .orElseThrow(() -> new NotFoundException("Localização não encontrada pelo id"));
+    }
+
     @Transactional
     public Location create(Long locationId, Location location) {
-        Event event = eventService.findByIdOptional(locationId)
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        Event event = eventService.findById(locationId);
         location.setEvent(event);
         return super.create(location);
     }

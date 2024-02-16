@@ -72,17 +72,15 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     public EventRequest findById(Long id) {
         return repository
                 .findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
+                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada pelo id"));
     }
 
     @Transactional
     public void createInvitation(EventRequestCreateDTO requestCreateDTO) {
-        Event event = eventService.findByIdOptional(requestCreateDTO.event().getId())
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
-        User targetUser = userService.findByIdOptional(requestCreateDTO.targetUser().getId())
-                .orElseThrow(() -> new NotFoundException("Usuário solicitado não encontrado pelo id"));
-
+        Event event = eventService.findById(requestCreateDTO.event().getId());
+        User targetUser = userService.findById(requestCreateDTO.targetUser().getId());
         User initialUser = event.getAdministrator();
+
         if (initialUser.getId().equals(targetUser.getId())) {
             throw new IllegalArgumentException("O usuário solicitador não pode ser o mesmo solicitado");
         }
@@ -100,12 +98,10 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
 
     @Transactional
     public void createTicketRequest(EventRequestCreateDTO requestCreateDTO) {
-        Event event = eventService.findByCodeOptional(requestCreateDTO.event().getCode())
-                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
-        User initiatorUser = userService.findByIdOptional(requestCreateDTO.initiatorUser().getId())
-                .orElseThrow(() -> new NotFoundException("Usuário solicitador não encontrado pelo id"));
-
+        Event event = eventService.findByCode(requestCreateDTO.event().getCode());
+        User initiatorUser = userService.findById(requestCreateDTO.initiatorUser().getId());
         User administrator = event.getAdministrator();
+
         if (administrator.getId().equals(initiatorUser.getId())) {
             throw new IllegalArgumentException("Você é o administrador do evento");
         }
@@ -126,13 +122,14 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     @Transactional
     @Override
     public void deleteById(Long eventRequestId) {
-        EventRequest eventRequest = findByIdOptional(eventRequestId)
-                .orElseThrow(() -> new NotFoundException("Solicitação de ingresso não encontrada pelo id"));
+        EventRequest eventRequest = findById(eventRequestId);
         EventRequestStatus status = eventRequest.getStatus();
+
         if (status != EventRequestStatus.PENDING) {
             String message = "A solicitação não está mais pendente. Desta forma, ela não pode ser apagada";
             throw new IllegalArgumentException(message);
         }
+
         super.deleteById(eventRequestId);
     }
 
@@ -147,9 +144,11 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
         EventRequest eventRequest = findById(eventRequestId);
         Long administratorId = eventRequest.getEvent().getAdministrator().getId();
         Long targetUserId = eventRequest.getTargetUser().getId();
+
         if (administratorId.equals(userId) || !targetUserId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
+
         this.repository.updateStatus(eventRequestId, status);
         eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), targetUserId);
     }
@@ -165,9 +164,11 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
         EventRequest eventRequest = findById(eventRequestId);
         Long targetUSerId = eventRequest.getTargetUser().getId();
         Long initialUSerId = eventRequest.getInitiatorUser().getId();
+
         if (!targetUSerId.equals(userId)) {
             throw new IllegalArgumentException("Você não tem permissão para aceitar ou rejeitar esta solicitação");
         }
+
         this.repository.updateStatus(eventRequestId, status);
         eventService.addUserByEventIdAndUserId(eventRequest.getEvent().getId(), initialUSerId);
     }
@@ -178,6 +179,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
             updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
             return;
         }
+
         updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
     }
 
@@ -187,6 +189,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
             updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
             return;
         }
+
         updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
     }
 }

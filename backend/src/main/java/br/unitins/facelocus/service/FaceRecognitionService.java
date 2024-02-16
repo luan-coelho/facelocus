@@ -6,7 +6,6 @@ import br.unitins.facelocus.model.UserFacePhoto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,16 +29,15 @@ public class FaceRecognitionService {
 
     @Transactional
     public void facePhotoProfileUploud(Long userId, MultipartData multipartBody) {
-        User user = userService.findByIdOptional(userId).orElseThrow(() -> {
-            String UserNotFoundMessage = "Usuário não encontrado pelo id";
-            return new NotFoundException(UserNotFoundMessage);
-        });
+        User user = userService.findById(userId);
         String[] subdirectories = {user.getId().toString(), "profile"};
         String fileName = "profile.".concat(imageFileService.getFileExtension(multipartBody.fileName));
         UserFacePhoto facePhoto = saveFileAndBuildFacePhoto(fileName, multipartBody.inputStream, subdirectories);
+
         if (user.getFacePhoto() == null) {
             user.setFacePhoto(new UserFacePhoto());
         }
+
         UserFacePhoto originalFacePhoto = user.getFacePhoto();
         originalFacePhoto.setFileName(multipartBody.fileName);
         originalFacePhoto.setFilePath(facePhoto.getFilePath());
@@ -49,13 +47,12 @@ public class FaceRecognitionService {
 
     @Transactional
     public void facePhotoValidation(Long userId, MultipartData multipartBody) {
-        User user = userService.findByIdOptional(userId).orElseThrow(() -> {
-            String UserNotFoundMessage = "Usuário não encontrado pelo id";
-            return new NotFoundException(UserNotFoundMessage);
-        });
+        User user = userService.findById(userId);
+
         if (user.getFacePhoto() == null) {
             throw new IllegalArgumentException("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.");
         }
+
         String[] subdirectories = {userId.toString(), UUID.randomUUID().toString()};
         String fileName = String.join("-", userId.toString(), "facephoto").concat(".");
         fileName = fileName.concat(imageFileService.getFileExtension(multipartBody.fileName));
@@ -63,6 +60,7 @@ public class FaceRecognitionService {
         String photoFaceDirectory = facePhoto.getFilePath().replace("/".concat(fileName), "");
         String profilePhotoFacePath = user.getFacePhoto().getFilePath();
         boolean faceDetected = faceDetected(photoFaceDirectory, profilePhotoFacePath);
+
         if (!faceDetected) {
             throw new IllegalArgumentException("Rosto não detectado");
         }

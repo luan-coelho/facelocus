@@ -44,7 +44,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Override
     public PointRecord findById(Long pointRecordId) {
-        return findByIdOptional(pointRecordId)
+        return super.findByIdOptional(pointRecordId)
                 .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
     }
 
@@ -84,8 +84,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             if (pointRecord.getLocation() == null || pointRecord.getLocation().getId() == null) {
                 throw new IllegalArgumentException("Informe a localização");
             }
+
             Location location = locationService.findByIdOptional(pointRecord.getLocation().getId())
-                    .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+                    .orElseThrow(() -> new NotFoundException("Localização não encontrada pelo id"));
             pointRecord.setLocation(location);
         } else {
             pointRecord.setAllowableRadiusInMeters(null);
@@ -94,6 +95,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     private void validatePoints(PointRecord pointRecord) {
         LocalDateTime lastDatetime = null;
+
         for (Point point : pointRecord.getPoints()) {
             LocalDateTime initialDateStartOfMinute = point.getInitialDate().withSecond(0).withNano(0);
             LocalDateTime finalDateStartOfMinute = point.getFinalDate().withSecond(0).withNano(0);
@@ -105,6 +107,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
             }
+
             point.setPointRecord(pointRecord);
             createUsersAttendances(pointRecord, point);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
@@ -118,6 +121,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      */
     private void createUsersAttendances(PointRecord pointRecord, Point point) {
         List<UserAttendance> usersAttendances = new ArrayList<>();
+
         for (User user : pointRecord.getEvent().getUsers()) {
             List<AttendanceRecord> attendanceRecords = new ArrayList<>();
             AttendanceRecord attendanceRecord = new AttendanceRecord(
@@ -134,6 +138,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             );
             usersAttendances.add(userAttendance);
         }
+
         point.setUsersAttendances(usersAttendances);
     }
 
