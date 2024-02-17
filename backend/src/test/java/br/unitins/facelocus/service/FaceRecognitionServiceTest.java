@@ -4,8 +4,11 @@ import br.unitins.facelocus.commons.MultipartData;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.*;
+import org.eclipse.microprofile.config.ConfigProvider;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -23,13 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class FaceRecognitionServiceTest extends BaseTest {
 
-    @ConfigProperty(name = "files.users.facephoto.basepath")
-    String USER_HOME;
-
-    @ConfigProperty(name = "files.users.facephoto.resources")
-    String RESOURCES_DIRECTORY;
-
-    static final String SEPARATOR = File.separator; // "\" ou "/"
+    private static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath", String.class);
+    private static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig().getValue("files.users.facephoto.resources", String.class);
+    private static final String SEPARATOR = File.separator; // "\" ou "/"
 
     @Inject
     FaceRecognitionService faceRecognitionService;
@@ -42,8 +41,8 @@ class FaceRecognitionServiceTest extends BaseTest {
         user1 = getUser();
     }
 
-    @AfterEach
-    public void after() {
+    @AfterAll
+    public static void after() {
         String resourcesPath = USER_HOME + SEPARATOR + RESOURCES_DIRECTORY;
         removeImageFolder(resourcesPath);
     }

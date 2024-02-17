@@ -22,7 +22,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class FaceRecognitionService {
 
-    @ConfigProperty(name = "facerecognition.lib.path")
+    @ConfigProperty(name = "face-recognition.lib.path")
     String FACE_RECOGNITION_PATH;
 
     @Inject
