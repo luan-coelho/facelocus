@@ -1,8 +1,10 @@
-package br.unitins.facelocus.dto.eventrequest;
+package br.unitins.facelocus.dto.pointrecord;
 
 import br.unitins.facelocus.dto.LocationDTO;
 import br.unitins.facelocus.dto.PointDTO;
+import br.unitins.facelocus.dto.eventrequest.EventWithoutRelationshipsDTO;
 import br.unitins.facelocus.model.Factor;
+import br.unitins.facelocus.model.UserAttendance;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,5 +17,7 @@ public record PointRecordResponseDTO(Long id,
                                      List<PointDTO> points,
                                      Set<Factor> factors,
                                      Double allowableRadiusInMeters,
-                                     boolean inProgress) {
+                                     boolean inProgress,
+                                     List<UserAttendanceResponseDTO> usersAttendances
+) {
 }

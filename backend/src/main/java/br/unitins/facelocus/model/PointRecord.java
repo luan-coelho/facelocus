@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -41,4 +38,7 @@ public class PointRecord extends DefaultEntity {
     private Double allowableRadiusInMeters;
 
     private boolean inProgress;
+
+    @OneToMany(mappedBy = "pointRecord", cascade = CascadeType.ALL)
+    private List<UserAttendance> usersAttendances = new ArrayList<>();
 }

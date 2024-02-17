@@ -4,6 +4,5 @@ import java.time.LocalDateTime;
 
 public record PointDTO(Long id,
                        LocalDateTime initialDate,
-                       LocalDateTime finalDate,
-                       boolean validated) {
+                       LocalDateTime finalDate) {
 }

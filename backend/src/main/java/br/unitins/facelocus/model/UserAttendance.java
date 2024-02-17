@@ -23,9 +23,9 @@ public class UserAttendance {
     @ManyToOne
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userAttendance", cascade = CascadeType.ALL)
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
     @ManyToOne
-    private Point point;
+    private PointRecord pointRecord;
 }

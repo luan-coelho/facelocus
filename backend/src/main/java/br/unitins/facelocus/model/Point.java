@@ -25,9 +25,6 @@ public class Point {
 
     private LocalDateTime finalDate;
 
-    @OneToMany(mappedBy = "point", cascade = CascadeType.ALL)
-    private List<UserAttendance> usersAttendances = new ArrayList<>();
-
     @ManyToOne
     private PointRecord pointRecord;
 }

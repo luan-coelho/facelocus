@@ -3,7 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
-import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
+import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.Factor;
 import br.unitins.facelocus.model.Point;
 import br.unitins.facelocus.model.PointRecord;
@@ -57,16 +57,17 @@ class PointRecordServiceTest extends BaseTest {
 
         assertNotNull(pointRecord.getId());
         assertNotNull(pointRecord.getEvent().getId());
+        assertEquals(1, pointRecord.getEvent().getUsers().size());
         assertTrue(pointRecord.getDate().isEqual(today));
-        assertEquals(1, pointRecord.getPoints().size());
-        assertTrue(pointRecord.getPoints().stream().allMatch(p -> p.getUsersAttendances().size() == 1));
+        assertEquals(3, pointRecord.getPoints().size());
+        assertTrue(pointRecord.getUsersAttendances().stream().allMatch(a -> a.getAttendanceRecords().size() == 3));
         assertEquals(2, pointRecord.getFactors().size());
         assertFalse(pointRecord.isInProgress());
     }
 
     @Test
     @TestTransaction
-    @DisplayName("Deve lançar quando não for informado um evento")
+    @DisplayName("Deve lançar uma exceção quando não for informado um evento")
     void shouldThrowWhenEventIsNotProvided() {
         PointRecord pointRecord = new PointRecord();
 
@@ -76,6 +77,19 @@ class PointRecordServiceTest extends BaseTest {
 
         assertEquals("Informe o evento", exception.getMessage());
     }
+
+  /*  @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando o registro de ponto estiver ativo e o evento não tiver usuários vinculados")
+    void shouldThrowExceptionWhenTimeRecordIsActiveAndEventHasNoLinkedUsers() {
+        PointRecord pointRecord = new PointRecord();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord)
+        );
+
+        assertEquals("O evento não possui n", exception.getMessage());
+    }*/
 
     @Test
     @TestTransaction
@@ -122,7 +136,6 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.minusMinutes(15),
-                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -130,7 +143,7 @@ class PointRecordServiceTest extends BaseTest {
                 () -> pointRecordService.create(pointRecord)
         );
 
-        assertEquals("A data inicial de um ponto deve ser superior a final", exception.getMessage());
+        assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
 
     @Test
@@ -146,7 +159,6 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now,
-                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point));
 
@@ -154,7 +166,7 @@ class PointRecordServiceTest extends BaseTest {
                 () -> pointRecordService.create(pointRecord)
         );
 
-        assertEquals("A data inicial de um ponto deve ser superior a final", exception.getMessage());
+        assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
 
     @Test
@@ -170,13 +182,11 @@ class PointRecordServiceTest extends BaseTest {
                 null,
                 now,
                 now.plusMinutes(15),
-                null,
                 pointRecord);
         Point point2 = new Point(
                 null,
                 now.minusMinutes(30),
                 now.minusMinutes(15),
-                null,
                 pointRecord);
         pointRecord.setPoints(List.of(point1, point2));
 
@@ -184,7 +194,7 @@ class PointRecordServiceTest extends BaseTest {
                 () -> pointRecordService.create(pointRecord)
         );
 
-        assertEquals("Cada intervalo de ponto deve ser superior ao inferior", exception.getMessage());
+        assertEquals("Cada intervalo de ponto deve ter a hora superior ao anterior", exception.getMessage());
     }
 
     @Test

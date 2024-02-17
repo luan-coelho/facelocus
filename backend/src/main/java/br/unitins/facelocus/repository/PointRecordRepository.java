@@ -23,8 +23,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 FROM PointRecord pr
                     JOIN pr.event e
                     JOIN e.administrator u
-                    JOIN pr.points p
-                    JOIN p.usersAttendances ua
+                    JOIN pr.points
+                    JOIN pr.usersAttendances ua
                     LEFT JOIN e.users lu
                 WHERE u.id = ?1 OR lu.id = ?1
                 """;

@@ -62,13 +62,22 @@ public abstract class BaseTest {
         pointRecord.setLocation(location);
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
-        Point point = new Point(
+        Point point1 = new Point(
                 null,
                 now,
-                now.plusMinutes(15),
-                null,
+                now.plusMinutes(10),
                 pointRecord);
-        pointRecord.setPoints(List.of(point));
+        Point point2 = new Point(
+                null,
+                now.plusMinutes(20),
+                now.plusMinutes(30),
+                pointRecord);
+        Point point3 = new Point(
+                null,
+                now.plusMinutes(40),
+                now.plusMinutes(50),
+                pointRecord);
+        pointRecord.setPoints(List.of(point1, point2, point3));
         return pointRecord;
     }
 }

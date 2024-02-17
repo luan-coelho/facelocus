@@ -1,13 +1,11 @@
 package br.unitins.facelocus.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,8 +31,8 @@ public class User extends DefaultEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserFacePhoto facePhoto;
 
-    @OneToMany(mappedBy = "user")
-    private List<Device> devices;
+  /*  @OneToMany(mappedBy = "user")
+    private List<Device> devices;*/
 
     @ManyToMany(mappedBy = "users")
     private List<Event> events;

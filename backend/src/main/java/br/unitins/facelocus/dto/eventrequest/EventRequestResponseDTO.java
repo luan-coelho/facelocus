@@ -5,6 +5,8 @@ import br.unitins.facelocus.dto.UserResponseDTO;
 import br.unitins.facelocus.model.EventRequestStatus;
 import br.unitins.facelocus.model.EventRequestType;
 
+import java.time.LocalDateTime;
+
 public record EventRequestResponseDTO(
         Long id,
         String code,
@@ -12,6 +14,8 @@ public record EventRequestResponseDTO(
         EventRequestStatus status,
         EventRequestType requestType,
         UserResponseDTO initiatorUser,
-        UserResponseDTO targetUser
+        UserResponseDTO targetUser,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }

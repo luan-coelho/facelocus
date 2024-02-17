@@ -23,6 +23,11 @@ public class AttendanceRecord {
     @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
     private List<ValidationAttempt> validationAttempts = new ArrayList<>();
 
-    @Transient
-    private AttendanceRecordStatus status;
+    private AttendanceRecordStatus status = AttendanceRecordStatus.PENDING;
+
+    @ManyToOne
+    private Point point;
+
+    @ManyToOne
+    UserAttendance userAttendance;
 }

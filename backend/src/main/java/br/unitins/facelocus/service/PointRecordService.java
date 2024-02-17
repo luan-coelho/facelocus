@@ -2,7 +2,7 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.eventrequest.PointRecordResponseDTO;
+import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -22,6 +22,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     PointRecordMapper pointRecordMapper;
+
+    @Inject
+    EventService eventService;
 
     @Inject
     LocationService locationService;
@@ -63,7 +66,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
 
+        Event event = eventService.findById(pointRecord.getEvent().getId());
+        pointRecord.setEvent(event);
+
         validatePoints(pointRecord);
+        createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
 
         return super.create(pointRecord);
@@ -111,15 +118,14 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             LocalDateTime finalDateStartOfMinute = point.getFinalDate().withSecond(0).withNano(0);
 
             if (!initialDateStartOfMinute.isBefore(finalDateStartOfMinute)) {
-                throw new IllegalArgumentException("A data inicial de um ponto deve ser superior a final");
+                throw new IllegalArgumentException("A hora inicial de um ponto deve ser antes da final");
             }
 
             if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
-                throw new IllegalArgumentException("Cada intervalo de ponto deve ser superior ao inferior");
+                throw new IllegalArgumentException("Cada intervalo de ponto deve ter a hora superior ao anterior");
             }
 
             point.setPointRecord(pointRecord);
-            createUsersAttendances(pointRecord, point);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
     }
@@ -129,31 +135,38 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      *
      * @param pointRecord Registro de Ponto
      */
-    private void createUsersAttendances(PointRecord pointRecord, Point point) {
+    private void createUsersAttendances(PointRecord pointRecord) {
+        if (pointRecord.getEvent().getUsers() == null || pointRecord.getEvent().getUsers().isEmpty()) {
+            return;
+        }
+
         List<UserAttendance> usersAttendances = new ArrayList<>();
 
         for (User user : pointRecord.getEvent().getUsers()) {
             List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-            AttendanceRecord attendanceRecord = new AttendanceRecord(
-                    null,
-                    null,
-                    AttendanceRecordStatus.PENDING
-            );
-            attendanceRecords.add(attendanceRecord);
             UserAttendance userAttendance = new UserAttendance(
                     null,
                     user,
                     attendanceRecords,
-                    point
+                    pointRecord
             );
+            for (Point point : pointRecord.getPoints()) {
+                AttendanceRecord attendanceRecord = new AttendanceRecord(
+                        null,
+                        null,
+                        AttendanceRecordStatus.PENDING,
+                        point,
+                        userAttendance
+                );
+                attendanceRecords.add(attendanceRecord);
+            }
             usersAttendances.add(userAttendance);
         }
-
-        point.setUsersAttendances(usersAttendances);
+        pointRecord.setUsersAttendances(usersAttendances);
     }
 
     /**
-     * Alterna o status de atividade de um registro de ponto para iniciado 'true' ou parado 'false'
+     * Alterna a situação de um registro de ponto para iniciado 'true' ou parado 'false'
      *
      * @param pointRecordId Identificador do registro de ponto
      */

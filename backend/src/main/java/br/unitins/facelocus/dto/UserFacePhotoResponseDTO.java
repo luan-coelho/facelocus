@@ -1,11 +1,12 @@
 package br.unitins.facelocus.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record UserFacePhotoResponseDTO(
         Long id,
         String fileName,
-        LocalDate uploadDate,
-        String filePath
+        String filePath,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }
