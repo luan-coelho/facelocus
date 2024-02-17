@@ -25,9 +25,6 @@ class FaceRecognitionServiceTest extends BaseTest {
     FaceRecognitionService faceRecognitionService;
 
     @Inject
-    ImageFileService imageFileService;
-
-    @Inject
     UserService userService;
 
     @BeforeEach
