@@ -6,6 +6,7 @@ import br.unitins.facelocus.model.UserFacePhoto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +21,9 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class FaceRecognitionService {
+
+    @ConfigProperty(name = "facerecognition.lib.path")
+    String FACE_RECOGNITION_PATH;
 
     @Inject
     UserService userService;
@@ -90,26 +94,14 @@ public class FaceRecognitionService {
             output = requestCall(photoFaceDirectoryPath, profilePhotoFacePath);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
-        } /*finally {
-            try {
-                Files.walk(dirImageOutputPath)
-                        .sorted(Comparator.reverseOrder())
-                        .forEach(path -> {
-                            try {
-                                Files.delete(path);
-                            } catch (IOException ignored) {
-                            }
-                        });
-            } catch (IOException ignored) {
-            }
-        }*/
+        }
         return !(output.contains("unknown_person") || output.contains("no_persons_found"));
     }
 
     private String requestCall(String photoFaceDirectoryPath, String profilePhotoFacePath) throws IOException, InterruptedException {
         StringBuilder output = new StringBuilder();
         // É necessário adicionar face_recognition as variáveis de ambiente, caso contrário o java não encontra
-        String[] args = {"/home/luan/.local/bin/face_recognition", photoFaceDirectoryPath, profilePhotoFacePath};
+        String[] args = {FACE_RECOGNITION_PATH, photoFaceDirectoryPath, profilePhotoFacePath};
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
