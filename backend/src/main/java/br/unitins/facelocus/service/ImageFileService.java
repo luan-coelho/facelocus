@@ -14,10 +14,11 @@ public class ImageFileService {
 
     @ConfigProperty(name = "files.users.facephoto.basepath")
     String USER_HOME;
-    static final String SEPARATOR = File.separator; // "\" ou "/"
+
     @ConfigProperty(name = "files.users.facephoto.resources")
     String RESOURCES_DIRECTORY;
 
+    static final String SEPARATOR = File.separator; // "\" ou "/"
 
     public String buildResourcePathAndCreate(String... subdirectories) throws IOException {
         String outputPath = SEPARATOR.concat(RESOURCES_DIRECTORY);
