@@ -62,7 +62,7 @@ public class FaceRecognitionService {
         boolean faceDetected = faceDetected(photoFaceDirectory, profilePhotoFacePath);
 
         if (!faceDetected) {
-            throw new IllegalArgumentException("Rosto não detectado");
+            throw new IllegalArgumentException("Rosto não identificado");
         }
     }
 
@@ -109,7 +109,7 @@ public class FaceRecognitionService {
     private String requestCall(String photoFaceDirectoryPath, String profilePhotoFacePath) throws IOException, InterruptedException {
         StringBuilder output = new StringBuilder();
         // É necessário adicionar face_recognition as variáveis de ambiente, caso contrário o java não encontra
-        String[] args = {"/home/luan/.pyenv/shims/face_recognition", photoFaceDirectoryPath, profilePhotoFacePath};
+        String[] args = {"/home/luan/.local/bin/face_recognition", photoFaceDirectoryPath, profilePhotoFacePath};
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
