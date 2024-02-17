@@ -68,12 +68,12 @@ class FaceRecognitionServiceTest extends BaseTest {
     @DisplayName("Deve detectar um rosto com sucesso")
     void shouldDetectFaceSuccessfully() {
         MultipartData uploudProfilePhoto = new MultipartData();
-        uploudProfilePhoto.fileName = "images/user1.jpg";
+        uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
         faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
 
         MultipartData validationPhotoUpload = new MultipartData();
-        validationPhotoUpload.fileName = "images/user1_2.jpg";
+        validationPhotoUpload.fileName = "user1_2.jpg";
         validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
 
         assertDoesNotThrow(() -> faceRecognitionService.facePhotoValidation(user1.getId(), validationPhotoUpload));
@@ -84,7 +84,7 @@ class FaceRecognitionServiceTest extends BaseTest {
     @DisplayName("Deve lançar uma exceção quando rosto não for identificado")
     void shouldThrowExceptionWhenUserNotDetected() {
         MultipartData uploudProfilePhoto = new MultipartData();
-        uploudProfilePhoto.fileName = "images/user1.jpg";
+        uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
         faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
 
@@ -143,24 +143,18 @@ class FaceRecognitionServiceTest extends BaseTest {
         Matcher matcher = pattern.matcher(path);
 
         path = matcher.replaceFirst("$1");
-        File imageFolder = null;
+        File imageFolder = new File(path);
 
-        try {
-            imageFolder = new File(path);
-        } catch (Exception e) {
-            fail();
-        } finally {
-            if (imageFolder != null) {
-                Path folder = Paths.get(imageFolder.getAbsolutePath());
+        if (imageFolder.exists()) {
+            Path folder = Paths.get(imageFolder.getAbsolutePath());
 
-                try {
-                    Files.walk(folder)
-                            .sorted(Comparator.reverseOrder())
-                            .map(Path::toFile)
-                            .forEach(File::delete);
-                } catch (IOException e) {
-                    fail("Pasta não deletada");
-                }
+            try {
+                Files.walk(folder)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException e) {
+                fail("Pasta não deletada");
             }
         }
     }
