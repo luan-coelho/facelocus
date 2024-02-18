@@ -15,6 +15,7 @@ import jakarta.ws.rs.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -158,15 +159,51 @@ public class EventService extends BaseService<Event, EventRepository> {
         update(event);
     }
 
+    /**
+     * Verifica se o usuário está vinculado ao evento
+     *
+     * @param eventId Identificador do evento
+     * @param userId  Identificador do usuário
+     * @return Verdadeiro caso o usuário estiver vinculado e falso caso não
+     */
     public boolean linkedUser(Long eventId, Long userId) {
         return this.repository.linkedUser(eventId, userId);
     }
 
+    /**
+     * Remove um usuário de um evento
+     *
+     * @param eventId Identificador do evento
+     * @param userId  Identificador do usuário
+     */
     @Transactional
     public void removeUser(Long eventId, Long userId) {
         userService.existsByIdWithThrows(userId);
         Event event = findById(eventId);
         event.getUsers().removeIf(user -> user.getId().equals(userId));
         update(event);
+    }
+
+    /**
+     * Remove o usuário de todos os eventos que ele está vinculado
+     *
+     * @param userId Identificador do usuário
+     */
+    @Transactional
+    public void unlinkUserFromAll(Long userId) {
+        List<Event> events = this.repository.findAllByUser(userId);
+        forFather:
+        for (Event event : events) {
+            for (User user : event.getUsers()) {
+                if (user.getId().equals(userId)) {
+                    this.update(event);
+                    break forFather;
+                }
+            }
+        }
+    }
+
+    public List<Event> findAllByUser(Long userId) {
+        return this.repository.findAllByUser(userId);
     }
 }

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +55,7 @@ class PointRecordServiceTest extends BaseTest {
     void shouldCreatePointRecordSuccessfullyWhenDataIsValid() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         assertNotNull(pointRecord.getId());
         assertNotNull(pointRecord.getEvent().getId());
@@ -258,7 +260,8 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = getPointRecord();
         boolean inProgress = false;
         pointRecord.setInProgress(inProgress);
-        em.merge(pointRecord);
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.toggleActivity(pointRecord.getId());
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -272,8 +275,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve adicionar um fator a um registro de ponto que não possui fatores")
     void shouldAddFactorToAnPointRecordWithoutFactors() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of());
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>(Set.of()));
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -287,8 +291,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve adicionar um fator a um registro de ponto que já possui o fator informado")
     void shouldAddFactorToAnPointRecordThatAlreadyHasTheProvidedFactor() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION));
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION)));
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -302,8 +307,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve adicionar outro fator a um registro de ponto que já possui um fator")
     void shouldAddAnotherFactorToAnPointRecordThatAlreadyHasOneFactor() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of(Factor.INDOOR_LOCATION));
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.INDOOR_LOCATION)));
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.addFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -317,8 +323,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve remover um fator de um registro de ponto")
     void shouldRemoveFactorFromAnPointRecord() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION));
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION)));
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -332,8 +339,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve remover um fator de um registro de ponto que já possui outro fator")
     void shouldRemoveFactorFromAnPointRecordThatAlreadyHasAnotherFactor() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());
@@ -347,8 +355,9 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Não deve fazer nada ao remover um fator de um registro de ponto que não possui fatores")
     void shouldDoNothingWhenRemovingFactorFromAnPointRecordWithNoFactors() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setFactors(Set.of());
-        em.merge(pointRecord);
+        pointRecord.setFactors(new HashSet<>());
+        em.persist(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
 
         pointRecordService.removeFactor(pointRecord.getId(), Factor.FACIAL_RECOGNITION);
         pointRecord = pointRecordService.findById(pointRecord.getId());

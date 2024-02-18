@@ -7,10 +7,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseTest {
 
@@ -44,7 +41,7 @@ public abstract class BaseTest {
         event.setCode("ABC123");
         event.setAdministrator(user1);
         event.setUsers(new ArrayList<>(List.of(user2)));
-        event.setLocations(List.of(location));
+        event.setLocations(new ArrayList<>(List.of(location)));
         em.merge(event);
         return event;
     }
@@ -58,7 +55,7 @@ public abstract class BaseTest {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
-        pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
         pointRecord.setLocation(location);
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
@@ -77,7 +74,7 @@ public abstract class BaseTest {
                 now.plusMinutes(40),
                 now.plusMinutes(50),
                 pointRecord);
-        pointRecord.setPoints(List.of(point1, point2, point3));
+        pointRecord.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
         return pointRecord;
     }
 }

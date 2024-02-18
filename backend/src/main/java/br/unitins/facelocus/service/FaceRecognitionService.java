@@ -31,6 +31,12 @@ public class FaceRecognitionService {
     @Inject
     ImageFileService imageFileService;
 
+    @Inject
+    EventService eventService;
+
+    @Inject
+    PointRecordService pointRecordService;
+
     @Transactional
     public void facePhotoProfileUploud(Long userId, MultipartData multipartBody) {
         User user = userService.findById(userId);
@@ -46,6 +52,10 @@ public class FaceRecognitionService {
         originalFacePhoto.setFileName(multipartBody.fileName);
         originalFacePhoto.setFilePath(facePhoto.getFilePath());
         originalFacePhoto.setUser(user);
+
+        eventService.unlinkUserFromAll(userId); // Remove o usuário de todos os eventos que ele está vinculado
+        pointRecordService.unlinkUserFromAll(userId); // Remove o usuário de todos os registros de ponto que ele está vinculado
+
         userService.update(user);
     }
 

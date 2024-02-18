@@ -41,6 +41,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         return pointRecordMapper.toResource(dataPagination);
     }
 
+    public List<PointRecord> findAllByUser(Long userId) {
+        return this.repository.findAllByUser(userId);
+    }
+
     public List<PointRecord> findAllByDate(Long userId, LocalDate date) {
         return this.repository.findAllByDate(userId, date);
     }
@@ -201,5 +205,19 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         PointRecord pointRecord = findById(pointRecordId);
         pointRecord.getFactors().remove(factor);
         update(pointRecord);
+    }
+
+    @Transactional
+    public void unlinkUserFromAll(Long userId) {
+        List<PointRecord> pointsRecord = this.repository.findAllByUser(userId);
+        forFather:
+        for (PointRecord pointRecord : pointsRecord) {
+            for (UserAttendance usersAttendance : pointRecord.getUsersAttendances()) {
+                if (usersAttendance.getUser().getId().equals(userId)) {
+                    update(pointRecord);
+                    break forFather;
+                }
+            }
+        }
     }
 }

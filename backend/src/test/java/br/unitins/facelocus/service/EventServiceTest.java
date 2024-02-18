@@ -4,6 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.EventDTO;
+import br.unitins.facelocus.model.User;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -13,13 +14,15 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class EventServiceTest extends BaseTest {
+
+    private User user3;
 
     @Inject
     EventService eventService;
@@ -28,6 +31,7 @@ class EventServiceTest extends BaseTest {
     public void setup() {
         user1 = getUser();
         user2 = getUser();
+        user3 = getUser();
         location = getLocation();
         event1 = getEvent();
         event2 = getEvent();
@@ -61,6 +65,24 @@ class EventServiceTest extends BaseTest {
         event1 = eventService.findById(event1.getId());
 
         assertTrue(event1.getUsers().isEmpty());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um usuário de todos os eventos que ele está vinculado")
+    void shouldRemoveUserFromAllLinkedEvents() {
+        event1.setUsers(List.of(user2, user3));
+        event2.setUsers(List.of(user2, user3));
+        em.merge(event1);
+        em.merge(event2);
+
+        eventService.unlinkUserFromAll(user2.getId());
+
+        event1 = eventService.findById(event1.getId());
+        event2 = eventService.findById(event2.getId());
+
+        assertIterableEquals(new ArrayList<>(List.of(user3)), event1.getUsers());
+        assertIterableEquals(new ArrayList<>(List.of(user3)), event2.getUsers());
     }
 
     // Banco H2 não suporta a função UNACCENT

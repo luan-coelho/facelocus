@@ -43,4 +43,17 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
         return find(query, date, userId).list();
     }
+
+    public List<PointRecord> findAllByUser(Long userId) {
+        String query = """
+                SELECT DISTINCT pr
+                FROM PointRecord pr
+                    JOIN pr.event e
+                    JOIN pr.points
+                    JOIN pr.usersAttendances ua
+                    LEFT JOIN e.users lu
+                WHERE lu.id = ?1
+                """;
+        return find(query, userId).list();
+    }
 }

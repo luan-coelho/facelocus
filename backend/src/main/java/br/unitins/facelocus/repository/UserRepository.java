@@ -38,12 +38,12 @@ public class UserRepository extends BaseRepository<User> {
     }
 
     public Optional<User> findByEmailOrCpf(String identifier) {
-        String sql = """
+        String query = """
                 FROM User
                 WHERE
                     FUNCTION('unaccent',LOWER(email)) LIKE '%'||?1||'%'
                     OR LOWER(cpf) LIKE '%'||?1||'%'
                 """;
-        return find(sql, identifier).singleResultOptional();
+        return find(query, identifier).singleResultOptional();
     }
 }

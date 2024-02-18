@@ -1,6 +1,8 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.model.Event;
+import br.unitins.facelocus.model.PointRecord;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -17,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +39,12 @@ class FaceRecognitionServiceTest extends BaseTest {
     @Inject
     UserService userService;
 
+    @Inject
+    EventService eventService;
+
+    @Inject
+    PointRecordService pointRecordService;
+
     @BeforeEach
     public void setup() {
         user1 = getUser();
@@ -49,7 +58,7 @@ class FaceRecognitionServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve realizar o uploud de uma foto de rosto de um usuário corretamente")
+    @DisplayName("Deve realizar o uploud de uma foto de perfil de um usuário corretamente")
     void shouldCorrectlyUploadAUserFacePhoto() {
         MultipartData multipartData = new MultipartData();
         multipartData.fileName = "user1.jpg";
@@ -57,6 +66,23 @@ class FaceRecognitionServiceTest extends BaseTest {
         user1 = userService.findById(user1.getId());
 
         assertDoesNotThrow(() -> faceRecognitionService.facePhotoProfileUploud(user1.getId(), multipartData));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve realizar a troca de uma foto de perfil de um usuário corretamente")
+    void shouldCorrectlyChangeUserProfilePicture() {
+        MultipartData multipartData = new MultipartData();
+        multipartData.fileName = "user2.jpg";
+        multipartData.inputStream = getImageAsInputStream("user2.jpg");
+        user1 = userService.findById(user1.getId());
+
+        List<Event> events = eventService.findAllByUser(user1.getId());
+        List<PointRecord> pointsRecord = pointRecordService.findAllByUser(user1.getId());
+
+        assertDoesNotThrow(() -> faceRecognitionService.facePhotoProfileUploud(user1.getId(), multipartData));
+        assertEquals(0, events.size()); // Deve ter desvinculado o usuário de todos os eventos
+        assertEquals(0, pointsRecord.size()); // Deve ter desvinculado o usuário de todos os registros de ponto
     }
 
     @Test

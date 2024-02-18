@@ -6,6 +6,7 @@ import br.unitins.facelocus.model.Event;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -24,6 +25,16 @@ public class EventRepository extends BaseRepository<Event> {
                 """;
         PanacheQuery<Event> panacheQuery = find(query, userId);
         return buildDataPagination(pageable, panacheQuery);
+    }
+
+    public List<Event> findAllByUser(Long userId) {
+        // language=jpaql
+        String query = """
+                FROM Event e
+                    LEFT JOIN e.users u
+                WHERE u.id = ?1
+                """;
+        return find(query, userId).list();
     }
 
     public DataPagination<Event> findAllByDescription(Pageable pageable, Long userId, String description) {
