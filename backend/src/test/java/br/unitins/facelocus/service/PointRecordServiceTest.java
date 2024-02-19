@@ -103,7 +103,7 @@ class PointRecordServiceTest extends BaseTest {
                 () -> pointRecordService.create(pointRecord)
         );
 
-        assertEquals("A data deve ser igual ou posterior ao dia de hoje", exception.getMessage());
+        assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
     }
 
     @Test
@@ -380,5 +380,38 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());
         assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
         assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(AttendanceRecord::isValidatedByAdministrator));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve alterar a data de um registro de ponto corretamente")
+    void shouldCorrectlyChangeTimeRecordDate() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setDate(LocalDate.now().plusDays(1));
+        pointRecordService.create(pointRecord);
+
+        LocalDate afterTenDays = LocalDate.now().plusDays(10);
+        pointRecordService.changeDate(pointRecord.getId(), afterTenDays);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+
+        assertEquals(afterTenDays, pointRecord.getDate());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando for informada uma data anterior ao dia de hoje ao tentar alterar a data")
+    void shouldThrowExceptionWhenChangingToDateBeforeToday() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setDate(LocalDate.now().plusDays(1));
+        pointRecordService.create(pointRecord);
+
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.changeDate(pointRecord.getId(), yesterday)
+
+        );
+
+        assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
     }
 }

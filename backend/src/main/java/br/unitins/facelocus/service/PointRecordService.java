@@ -66,9 +66,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("Informe o evento");
         }
 
-        if (pointRecord.getDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("A data deve ser igual ou posterior ao dia de hoje");
-        }
+        validateDate(pointRecord.getDate());
 
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
@@ -82,6 +80,17 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validateFactors(pointRecord);
 
         return super.create(pointRecord);
+    }
+
+    /**
+     * Valida se uma data é igual ou depois de hoje
+     *
+     * @param date Data
+     */
+    private void validateDate(LocalDate date) {
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("A data deve ser igual ou depois do dia de hoje");
+        }
     }
 
     /**
@@ -105,8 +114,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                 throw new IllegalArgumentException("Informe a localização");
             }
 
-            Location location = locationService.findByIdOptional(pointRecord.getLocation().getId())
-                    .orElseThrow(() -> new NotFoundException("Localização não encontrada pelo id"));
+            Location location = locationService.findById(pointRecord.getLocation().getId());
             pointRecord.setLocation(location);
         } else {
             pointRecord.setAllowableRadiusInMeters(null);
@@ -233,5 +241,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             attendanceRecord.setValidatedByAdministrator(true);
             attendanceRecordService.update(attendanceRecord);
         }
+    }
+
+    @Transactional
+    public void changeDate(Long pointRecordId, LocalDate newDate) {
+        validateDate(newDate);
+        PointRecord pointRecord = findById(pointRecordId);
+        pointRecord.setDate(newDate);
     }
 }
