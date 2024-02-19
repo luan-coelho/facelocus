@@ -28,6 +28,8 @@ public class AttendanceRecord {
     @ManyToOne
     private Point point;
 
+    private boolean validatedByAdministrator;
+
     @ManyToOne
     UserAttendance userAttendance;
 }

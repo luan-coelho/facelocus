@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
+import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -28,6 +29,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     LocationService locationService;
+
+    @Inject
+    AttendanceRecordService attendanceRecordService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -160,6 +164,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                         null,
                         AttendanceRecordStatus.PENDING,
                         point,
+                        false,
                         userAttendance
                 );
                 attendanceRecords.add(attendanceRecord);
@@ -218,6 +223,15 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                     break forFather;
                 }
             }
+        }
+    }
+
+    @Transactional
+    public void validatePoints(PointRecordValidatePointDTO dto) {
+        for (AttendanceRecord attendanceRecord : dto.attendancesRecord()) {
+            attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
+            attendanceRecord.setValidatedByAdministrator(true);
+            attendanceRecordService.update(attendanceRecord);
         }
     }
 }

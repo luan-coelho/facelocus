@@ -4,10 +4,8 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
-import br.unitins.facelocus.model.Factor;
-import br.unitins.facelocus.model.Point;
-import br.unitins.facelocus.model.PointRecord;
-import br.unitins.facelocus.model.User;
+import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
+import br.unitins.facelocus.model.*;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -364,5 +362,23 @@ class PointRecordServiceTest extends BaseTest {
         Set<Factor> actualFactorSet = pointRecord.getFactors();
 
         assertIterableEquals(Set.of(), actualFactorSet);
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve validar um ou mais pontos de um registro de ponto de um usuário")
+    void shouldValidateUserPointRecordPoint() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecordService.create(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+
+        List<AttendanceRecord> attendancesRecord = pointRecord.getUsersAttendances().get(0).getAttendanceRecords();
+        PointRecordValidatePointDTO dto = new PointRecordValidatePointDTO(attendancesRecord);
+        pointRecordService.validatePoints(dto);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+
+        assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(AttendanceRecord::isValidatedByAdministrator));
     }
 }
