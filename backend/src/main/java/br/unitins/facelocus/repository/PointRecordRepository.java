@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class PointRecordRepository extends BaseRepository<PointRecord> {
@@ -45,6 +46,7 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
     }
 
     public List<PointRecord> findAllByUser(Long userId) {
+        // language=jpaql
         String query = """
                 SELECT DISTINCT pr
                 FROM PointRecord pr
@@ -55,5 +57,19 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 WHERE lu.id = ?1
                 """;
         return find(query, userId).list();
+    }
+
+    @Override
+    public Optional<PointRecord> findByIdOptional(Long pointRecordId) {
+        // language=jpaql
+        String query = """
+                FROM PointRecord pr
+                    JOIN pr.event e
+                    JOIN e.locations
+                    JOIN pr.points
+                    LEFT JOIN pr.usersAttendances
+                WHERE pr.id = ?1
+                """;
+        return find(query, pointRecordId).singleResultOptional();
     }
 }

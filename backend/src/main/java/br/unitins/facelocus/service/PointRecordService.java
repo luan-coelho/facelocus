@@ -2,6 +2,7 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
@@ -84,12 +85,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validatePoints(pointRecord);
         createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
-        validateLocation(pointRecord);
+        validateLocation(pointRecord, pointRecord.getLocation());
     }
 
-    private void validateLocation(PointRecord pointRecord) {
+    private void validateLocation(PointRecord pointRecord, Location location) {
         List<Location> locations = pointRecord.getEvent().getLocations();
-        if (!locations.contains(pointRecord.getLocation())) {
+        if (!locations.contains(location)) {
             throw new IllegalArgumentException("Informe uma localização do evento");
         }
     }
@@ -267,6 +268,17 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         PointRecord pointRecord = findById(pointRecordId);
         if (pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
             pointRecord.setAllowableRadiusInMeters(dto.allowableRadiusInMeters());
+            update(pointRecord);
+        }
+    }
+
+    @Transactional
+    public void changeLocation(Long pointRecordId, PointRecordChangeLocation dto) {
+        PointRecord pointRecord = findById(pointRecordId);
+        Location location = locationService.findById(dto.location().getId());
+        validateLocation(pointRecord, location);
+        if (!pointRecord.getLocation().equals(location)) {
+            pointRecord.setLocation(location);
             update(pointRecord);
         }
     }

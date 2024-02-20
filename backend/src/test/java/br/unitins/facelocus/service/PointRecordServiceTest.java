@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
+import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +42,8 @@ class PointRecordServiceTest extends BaseTest {
         user3 = getUser();
         user4 = getUser();
         user5 = getUser();
-        location = getLocation();
+        location1 = getLocation();
+        location2 = getLocation();
         event1 = getEvent();
         event2 = getEvent();
         today = LocalDate.now();
@@ -411,7 +412,7 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve alterar o número do raio permitido em metros")
+    @DisplayName("Deve alterar o número do raio permitido em metros corretamente")
     void shouldChangeAllowedRadiusInMeters() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setDate(LocalDate.now().plusDays(1));
@@ -424,5 +425,21 @@ class PointRecordServiceTest extends BaseTest {
 
         assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
         assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve alterar a localização corretamente")
+    void shouldCorrectlyChangeLocation() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setLocation(location1);
+        pointRecord = pointRecordService.create(pointRecord);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+
+        PointRecordChangeLocation dto = new PointRecordChangeLocation(location2);
+
+        PointRecord finalPointRecord = pointRecord;
+        assertDoesNotThrow(() -> pointRecordService.changeLocation(finalPointRecord.getId(), dto));
+        assertEquals(location2.getId(), pointRecord.getLocation().getId());
     }
 }

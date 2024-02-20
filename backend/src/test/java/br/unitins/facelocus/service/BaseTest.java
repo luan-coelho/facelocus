@@ -15,7 +15,8 @@ public abstract class BaseTest {
     protected User user2;
     protected Event event1;
     protected Event event2;
-    protected Location location;
+    protected Location location1;
+    protected Location location2;
     protected LocalDate today;
     protected LocalDateTime now;
 
@@ -41,7 +42,7 @@ public abstract class BaseTest {
         event.setCode("ABC123");
         event.setAdministrator(user1);
         event.setUsers(new ArrayList<>(List.of(user2)));
-        event.setLocations(new ArrayList<>(List.of(location)));
+        event.setLocations(new ArrayList<>(List.of(location1, location2)));
         em.merge(event);
         return event;
     }
@@ -56,7 +57,7 @@ public abstract class BaseTest {
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
-        pointRecord.setLocation(event1.getLocations().getFirst());
+        pointRecord.setLocation(location1);
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
         Point point1 = new Point(
