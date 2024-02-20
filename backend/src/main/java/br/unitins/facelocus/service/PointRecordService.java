@@ -2,6 +2,7 @@ package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
@@ -62,24 +63,35 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     @Override
     public PointRecord create(PointRecord pointRecord) {
+        validations(pointRecord);
+
+        Event event = eventService.findById(pointRecord.getEvent().getId());
+        pointRecord.setEvent(event);
+
+        return super.create(pointRecord);
+    }
+
+    private void validations(PointRecord pointRecord) {
         if (pointRecord.getEvent() == null || pointRecord.getEvent().getId() == null) {
             throw new IllegalArgumentException("Informe o evento");
         }
-
-        validateDate(pointRecord.getDate());
 
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
 
-        Event event = eventService.findById(pointRecord.getEvent().getId());
-        pointRecord.setEvent(event);
-
+        validateDate(pointRecord.getDate());
         validatePoints(pointRecord);
         createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
+        validateLocation(pointRecord);
+    }
 
-        return super.create(pointRecord);
+    private void validateLocation(PointRecord pointRecord) {
+        List<Location> locations = pointRecord.getEvent().getLocations();
+        if (!locations.contains(pointRecord.getLocation())) {
+            throw new IllegalArgumentException("Informe uma localização do evento");
+        }
     }
 
     /**
@@ -248,5 +260,14 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validateDate(newDate);
         PointRecord pointRecord = findById(pointRecordId);
         pointRecord.setDate(newDate);
+    }
+
+    @Transactional
+    public void changeAllowedRadiusInMeters(Long pointRecordId, PointRecordChangeRadiusMeters dto) {
+        PointRecord pointRecord = findById(pointRecordId);
+        if (pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
+            pointRecord.setAllowableRadiusInMeters(dto.allowableRadiusInMeters());
+            update(pointRecord);
+        }
     }
 }

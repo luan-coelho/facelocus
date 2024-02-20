@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
+import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.model.*;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,8 +97,7 @@ class PointRecordServiceTest extends BaseTest {
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando a data for anterior ao dia de hoje")
     void shouldThrowExceptionWhenDateIsBeforeToday() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
+        PointRecord pointRecord = getPointRecord();
         pointRecord.setDate(today.minusDays(1));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
@@ -110,9 +111,8 @@ class PointRecordServiceTest extends BaseTest {
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando não for informado nenhum ponto")
     void shouldThrowExceptionWhenNoPointRecordIsProvided() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setPoints(List.of());
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
 
@@ -127,9 +127,7 @@ class PointRecordServiceTest extends BaseTest {
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial inferior a final")
     void shouldThrowExceptionWhenStartDateIsBeforeEndDate() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
+        PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
         Point point = new Point(
@@ -150,9 +148,7 @@ class PointRecordServiceTest extends BaseTest {
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com data inicial igual a final")
     void shouldThrowExceptionWhenStartDateIsEqualToEndDate() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
+        PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
         Point point = new Point(
@@ -173,9 +169,7 @@ class PointRecordServiceTest extends BaseTest {
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando for informado um ponto com intervalo inferior ao anterior")
     void shouldThrowExceptionWhenIntervalIsShorterThanPrevious() {
-        PointRecord pointRecord = new PointRecord();
-        pointRecord.setEvent(event1);
-        pointRecord.setDate(today);
+        PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
         Point point1 = new Point(
@@ -413,5 +407,22 @@ class PointRecordServiceTest extends BaseTest {
         );
 
         assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve alterar o número do raio permitido em metros")
+    void shouldChangeAllowedRadiusInMeters() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setDate(LocalDate.now().plusDays(1));
+        pointRecordService.create(pointRecord);
+
+        PointRecordChangeRadiusMeters dto = new PointRecordChangeRadiusMeters(1d);
+
+        pointRecordService.changeAllowedRadiusInMeters(pointRecord.getId(), dto);
+        pointRecord = pointRecordService.findById(pointRecord.getId());
+
+        assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
+        assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));
     }
 }

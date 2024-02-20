@@ -56,7 +56,7 @@ public abstract class BaseTest {
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
-        pointRecord.setLocation(location);
+        pointRecord.setLocation(event1.getLocations().getFirst());
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
         Point point1 = new Point(
