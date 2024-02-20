@@ -57,7 +57,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Override
     public PointRecord findById(Long pointRecordId) {
-        return super.findByIdOptional(pointRecordId)
+        return this.repository.findByIdOptional(pointRecordId)
                 .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
     }
 

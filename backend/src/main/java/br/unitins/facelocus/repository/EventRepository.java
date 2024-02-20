@@ -19,6 +19,7 @@ public class EventRepository extends BaseRepository<Event> {
     public DataPagination<Event> findAllByUser(Pageable pageable, Long userId) {
         // language=jpaql
         String query = """
+                SELECT DISTINCT e
                 FROM Event e
                     LEFT JOIN e.locations
                 WHERE e.administrator.id = ?1
@@ -30,6 +31,7 @@ public class EventRepository extends BaseRepository<Event> {
     public List<Event> findAllByUser(Long userId) {
         // language=jpaql
         String query = """
+                SELECT DISTINCT e
                 FROM Event e
                     LEFT JOIN e.users u
                 WHERE u.id = ?1
@@ -38,32 +40,76 @@ public class EventRepository extends BaseRepository<Event> {
     }
 
     public DataPagination<Event> findAllByDescription(Pageable pageable, Long userId, String description) {
+        // language=jpaql
         String query = """
-                FROM Event
-                WHERE administrator.id = ?1
+                SELECT DISTINCT e
+                FROM Event e
+                WHERE e.administrator.id = ?1
                     AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
                 """;
         PanacheQuery<Event> panacheQuery = find(query, userId, description);
         return buildDataPagination(pageable, panacheQuery);
     }
 
+    @Override
+    public Optional<Event> findByIdOptional(Long pointRecordId) {
+        // language=jpaql
+        String query = """
+                SELECT DISTINCT e
+                FROM Event e
+                    LEFT JOIN e.locations l
+                WHERE e.id = ?1
+                """;
+        return find(query, pointRecordId).singleResultOptional();
+    }
+
     public Optional<Event> findByCodeOptional(String code) {
-        return find("FROM Event WHERE code = ?1", code).singleResultOptional();
+        // language=jpaql
+        String query = """
+                FROM Event
+                WHERE code = ?1
+                """;
+        return find(query, code).singleResultOptional();
     }
 
     public boolean existsByCode(String code) {
-        return count("FROM Event WHERE code = ?1", code) > 0;
+        // language=jpaql
+        String query = """
+                FROM Event
+                WHERE code = ?1
+                """;
+        return count(query, code) > 0;
     }
 
     public void changeTicketRequestPermissionByEventId(Long eventId) {
-        update("UPDATE Event SET allowTicketRequests = (NOT allowTicketRequests) WHERE id = ?1", eventId);
+        // language=jpaql
+        String query = """
+                UPDATE Event
+                SET allowTicketRequests = (NOT allowTicketRequests)
+                WHERE id = ?1
+                """;
+        update(query, eventId);
     }
 
     public void updateCodeById(Long eventId, String code) {
-        update("UPDATE Event SET code = ?1 WHERE id = ?2", code, eventId);
+        // language=jpaql
+        String query = """
+                UPDATE Event
+                SET code = ?1
+                WHERE id = ?2
+                """;
+        update(query, code, eventId);
     }
 
     public boolean linkedUser(Long eventId, Long userId) {
-        return count("FROM Event e JOIN e.users u WHERE e.id = ?1 AND u.id = ?2", eventId, userId) > 0;
+        // language=jpaql
+        String query = """
+                SELECT DISTINCT e
+                FROM Event e
+                    JOIN e.users u
+                WHERE e.id = ?1
+                AND u.id = ?2
+                """;
+        return count(query, eventId, userId) > 0;
     }
 }

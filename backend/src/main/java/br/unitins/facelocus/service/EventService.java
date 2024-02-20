@@ -39,7 +39,7 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Override
     public Event findById(Long eventId) {
-        return super.findByIdOptional(eventId)
+        return this.repository.findByIdOptional(eventId)
                 .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
     }
 
