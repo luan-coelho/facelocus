@@ -304,5 +304,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         Set<Factor> factors = pointRecord.getFactors();
 
         AttendanceRecord attendanceRecord = attendanceRecordService.findByUserAndPoint(user.getId(), point.getId());
+        attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
     }
 }

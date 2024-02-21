@@ -450,11 +450,8 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
 
-        System.out.println("Fuso horário padrão: " + TimeZone.getDefault().getID());
-
-        // Point point = pointRecord.getPoints().getFirst();
         Point point = pointRecord.getPoints().get(0);
-        pointRecordService.validatePointByUser(user1.getId(), point.getId());
+        pointRecordService.validatePointByUser(user2.getId(), point.getId());
 
         assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
         assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));

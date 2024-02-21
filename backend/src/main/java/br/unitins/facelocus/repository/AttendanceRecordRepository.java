@@ -17,7 +17,7 @@ public class AttendanceRecordRepository extends BaseRepository<AttendanceRecord>
         String query = """
                 FROM AttendanceRecord ar
                 WHERE ar.point.id = ?2
-                AND ar.userAttendance.user = ?1
+                AND ar.userAttendance.user.id = ?1
                 """;
         return find(query, userId, pointId).singleResultOptional();
     }
