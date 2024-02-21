@@ -1,11 +1,5 @@
 package br.unitins.facelocus.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
@@ -13,20 +7,18 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
-import br.unitins.facelocus.model.AttendanceRecord;
-import br.unitins.facelocus.model.AttendanceRecordStatus;
-import br.unitins.facelocus.model.Event;
-import br.unitins.facelocus.model.Factor;
-import br.unitins.facelocus.model.Location;
-import br.unitins.facelocus.model.Point;
-import br.unitins.facelocus.model.PointRecord;
-import br.unitins.facelocus.model.User;
-import br.unitins.facelocus.model.UserAttendance;
+import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
@@ -48,6 +40,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     PointService pointService;
+
+    @Inject
+    UserAttendanceService userAttendanceService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -296,14 +291,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
-    public void validatePointByUser(Long userId, Long pointId) {
-        User user = userService.findById(userId);
-        Point point = pointService.findById(pointId);
-
-        PointRecord pointRecord = point.getPointRecord();
-        Set<Factor> factors = pointRecord.getFactors();
-
-        AttendanceRecord attendanceRecord = attendanceRecordService.findByUserAndPoint(user.getId(), point.getId());
-        attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
+    public void validatePointByUser(Long userAttendanceId) {
+        UserAttendance userAttendance = userAttendanceService.findById(userAttendanceId);
     }
 }
