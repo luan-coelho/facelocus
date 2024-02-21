@@ -291,7 +291,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
-    public void validatePointByUser(Long userAttendanceId) {
-        UserAttendance userAttendance = userAttendanceService.findById(userAttendanceId);
+    public void validatePointByUser(Long attendanceRecordId) {
+        AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
     }
 }

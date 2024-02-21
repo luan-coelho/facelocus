@@ -452,11 +452,11 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
 
-        ZonedDateTime now = ZonedDateTime.now();
-        System.out.println("Data e hora atual: " + now.format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
+        List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
+        UserAttendance userAttendance = usersAttendance.getFirst();
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
 
-        Point point = pointRecord.getPoints().get(0);
-        pointRecordService.validatePointByUser(user2.getId(), point.getId());
+        pointRecordService.validatePointByUser(attendanceRecord.getId());
 
         assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
         assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));
