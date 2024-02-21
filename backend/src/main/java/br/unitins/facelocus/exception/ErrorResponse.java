@@ -1,10 +1,11 @@
 package br.unitins.facelocus.exception;
 
-import lombok.*;
-
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Setter
 @Getter

@@ -1,5 +1,10 @@
 package br.unitins.facelocus.service.auth;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
+
 import br.unitins.facelocus.dto.JwtDTO;
 import br.unitins.facelocus.dto.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
@@ -8,13 +13,6 @@ import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.Set;
 
 @ApplicationScoped
 public class JWTService {

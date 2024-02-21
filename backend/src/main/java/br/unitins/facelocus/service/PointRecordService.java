@@ -1,5 +1,11 @@
 package br.unitins.facelocus.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
@@ -7,18 +13,20 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
-import br.unitins.facelocus.model.*;
+import br.unitins.facelocus.model.AttendanceRecord;
+import br.unitins.facelocus.model.AttendanceRecordStatus;
+import br.unitins.facelocus.model.Event;
+import br.unitins.facelocus.model.Factor;
+import br.unitins.facelocus.model.Location;
+import br.unitins.facelocus.model.Point;
+import br.unitins.facelocus.model.PointRecord;
+import br.unitins.facelocus.model.User;
+import br.unitins.facelocus.model.UserAttendance;
 import br.unitins.facelocus.repository.PointRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @ApplicationScoped
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
@@ -34,6 +42,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     AttendanceRecordService attendanceRecordService;
+
+    @Inject
+    UserService userService;
+
+    @Inject
+    PointService pointService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -160,7 +174,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     }
 
     /**
-     * Cria registros de presença para cada usuário cadastrado no evento, conforme o número de pontos.
+     * Cria registros de presença para cada usuário cadastrado no evento, conforme o
+     * número de pontos.
      *
      * @param pointRecord Registro de Ponto
      */
@@ -177,8 +192,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                     null,
                     user,
                     attendanceRecords,
-                    pointRecord
-            );
+                    pointRecord);
             for (Point point : pointRecord.getPoints()) {
                 AttendanceRecord attendanceRecord = new AttendanceRecord(
                         null,
@@ -186,8 +200,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                         AttendanceRecordStatus.PENDING,
                         point,
                         false,
-                        userAttendance
-                );
+                        userAttendance);
                 attendanceRecords.add(attendanceRecord);
             }
             usersAttendances.add(userAttendance);
@@ -196,7 +209,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     }
 
     /**
-     * Alterna a situação de um registro de ponto para iniciado 'true' ou parado 'false'
+     * Alterna a situação de um registro de ponto para iniciado 'true' ou parado
+     * 'false'
      *
      * @param pointRecordId Identificador do registro de ponto
      */
@@ -236,8 +250,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void unlinkUserFromAll(Long userId) {
         List<PointRecord> pointsRecord = this.repository.findAllByUser(userId);
-        forFather:
-        for (PointRecord pointRecord : pointsRecord) {
+        forFather: for (PointRecord pointRecord : pointsRecord) {
             for (UserAttendance usersAttendance : pointRecord.getUsersAttendances()) {
                 if (usersAttendance.getUser().getId().equals(userId)) {
                     update(pointRecord);
@@ -281,5 +294,15 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             pointRecord.setLocation(location);
             update(pointRecord);
         }
+    }
+
+    public void validatePointByUser(Long userId, Long pointId) {
+        User user = userService.findById(userId);
+        Point point = pointService.findById(pointId);
+
+        PointRecord pointRecord = point.getPointRecord();
+        Set<Factor> factors = pointRecord.getFactors();
+
+        AttendanceRecord attendanceRecord = attendanceRecordService.findByUserAndPoint(user.getId(), point.getId());
     }
 }

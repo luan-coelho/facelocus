@@ -1,18 +1,23 @@
 package br.unitins.facelocus.resource;
 
+import java.util.List;
+
+import org.jboss.resteasy.reactive.RestQuery;
+
 import br.unitins.facelocus.dto.LocationDTO;
 import br.unitins.facelocus.mapper.LocationMapper;
 import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.service.LocationService;
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.RestQuery;
-
-import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Authenticated

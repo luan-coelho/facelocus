@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -75,24 +76,28 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = new PointRecord();
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o evento", exception.getMessage());
     }
 
-  /*  @Test
-    @TestTransaction
-    @DisplayName("Deve lançar uma exceção quando o registro de ponto estiver ativo e o evento não tiver usuários vinculados")
-    void shouldThrowExceptionWhenTimeRecordIsActiveAndEventHasNoLinkedUsers() {
-        PointRecord pointRecord = new PointRecord();
-
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
-
-        assertEquals("O evento não possui n", exception.getMessage());
-    }*/
+    /*
+     * @Test
+     * 
+     * @TestTransaction
+     * 
+     * @DisplayName("Deve lançar uma exceção quando o registro de ponto estiver ativo e o evento não tiver usuários vinculados"
+     * )
+     * void shouldThrowExceptionWhenTimeRecordIsActiveAndEventHasNoLinkedUsers() {
+     * PointRecord pointRecord = new PointRecord();
+     * 
+     * Exception exception = assertThrows(IllegalArgumentException.class,
+     * () -> pointRecordService.create(pointRecord)
+     * );
+     * 
+     * assertEquals("O evento não possui n", exception.getMessage());
+     * }
+     */
 
     @Test
     @TestTransaction
@@ -102,8 +107,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setDate(today.minusDays(1));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
     }
@@ -118,8 +122,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setInProgress(false);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("É necessário informar pelo menos um intervalo de ponto", exception.getMessage());
     }
@@ -139,8 +142,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setPoints(List.of(point));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
@@ -160,8 +162,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setPoints(List.of(point));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
@@ -186,8 +187,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setPoints(List.of(point1, point2));
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Cada intervalo de ponto deve ter a hora superior ao anterior", exception.getMessage());
     }
@@ -201,8 +201,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setAllowableRadiusInMeters(null);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o raio permitido em metros", exception.getMessage());
     }
@@ -216,8 +215,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setAllowableRadiusInMeters(0d);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.create(pointRecord)
-        );
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o raio permitido em metros", exception.getMessage());
     }
@@ -237,7 +235,8 @@ class PointRecordServiceTest extends BaseTest {
         pointRecordService.create(pointRecord2);
 
         Pageable pageable = new Pageable();
-        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, user1.getId());
+        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable,
+                user1.getId());
         Pagination pagination = dataPagination.getPagination();
         List<PointRecordResponseDTO> data = dataPagination.getData();
 
@@ -261,7 +260,6 @@ class PointRecordServiceTest extends BaseTest {
 
         assertEquals(!inProgress, pointRecord.isInProgress());
     }
-
 
     @Test
     @TestTransaction
@@ -373,8 +371,10 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord = pointRecordService.findById(pointRecord.getId());
 
         assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(AttendanceRecord::isValidatedByAdministrator));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+                .allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+                .allMatch(AttendanceRecord::isValidatedByAdministrator));
     }
 
     @Test
@@ -441,5 +441,22 @@ class PointRecordServiceTest extends BaseTest {
         final Long pointRecordId = pointRecord.getId();
         assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, dto));
         assertEquals(location2.getId(), pointRecord.getLocation().getId());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve validar um ponto corretamente por um usuário")
+    void shouldCorrectlyValidatePointByUser() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecordService.create(pointRecord);
+
+        System.out.println("Fuso horário padrão: " + TimeZone.getDefault().getID());
+
+        // Point point = pointRecord.getPoints().getFirst();
+        Point point = pointRecord.getPoints().get(0);
+        pointRecordService.validatePointByUser(user1.getId(), point.getId());
+
+        assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
+        assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));
     }
 }
