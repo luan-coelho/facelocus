@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -449,6 +451,9 @@ class PointRecordServiceTest extends BaseTest {
     void shouldCorrectlyValidatePointByUser() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
+
+        ZonedDateTime now = ZonedDateTime.now();
+        System.out.println("Data e hora atual: " + now.format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
 
         Point point = pointRecord.getPoints().get(0);
         pointRecordService.validatePointByUser(user2.getId(), point.getId());
