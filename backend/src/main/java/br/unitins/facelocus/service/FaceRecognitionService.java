@@ -72,7 +72,7 @@ public class FaceRecognitionService {
 
     public UserFacePhotoValidation generateFacePhotoValidation(User user, MultipartData multipartBody) {
         if (user.getFacePhoto() == null) {
-            throw new IllegalArgumentException("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.");
+            throw new IllegalArgumentException("Sem foto de perfil não há como prosseguir com a validação");
         }
 
         String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
@@ -114,7 +114,8 @@ public class FaceRecognitionService {
         try {
             output = requestCall(photoFaceDirectoryPath, profilePhotoFacePath);
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            String message = "Falha ao executar a biblioteca face_recognition. Verifique se ela está instalada";
+            throw new RuntimeException(message);
         }
         return !(output.contains("unknown_person") || output.contains("no_persons_found"));
     }

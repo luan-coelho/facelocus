@@ -1,5 +1,6 @@
 package br.unitins.facelocus.service;
 
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
@@ -11,18 +12,16 @@ import br.unitins.facelocus.model.*;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -37,6 +36,15 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     PointRecordService pointRecordService;
+
+    @Inject
+    FaceRecognitionService faceRecognitionService;
+
+    @AfterAll
+    public static void after() {
+        String resourcesPath = USER_HOME + SEPARATOR + RESOURCES_DIRECTORY;
+        removeImageFolder(resourcesPath);
+    }
 
     @BeforeEach
     public void setup() {
@@ -416,18 +424,27 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve validar um ponto corretamente por um usuário")
+    @DisplayName("Deve validar um ponto corretamente por um usuário através do fator de reconhecimento facial")
     void shouldCorrectlyValidatePointByUser() {
         PointRecord pointRecord = getPointRecord();
         pointRecordService.create(pointRecord);
+
+        MultipartData uploudProfilePhoto = new MultipartData();
+        uploudProfilePhoto.fileName = "user1.jpg";
+        uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
+
+        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.getFirst();
         AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
 
-//        pointRecordService.validatePointByUser(attendanceRecord.getId());
+        MultipartData validationPhotoUpload = new MultipartData();
+        validationPhotoUpload.fileName = "user1_2.jpg";
+        validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
 
-        assertEquals(1d, pointRecord.getAllowableRadiusInMeters());
-        assertTrue(pointRecord.getFactors().contains(Factor.INDOOR_LOCATION));
+        assertDoesNotThrow(() -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+        assertEquals(AttendanceRecordStatus.VALIDATED, attendanceRecord.getStatus());
+        assertTrue(attendanceRecord.getValidationAttempts().stream().allMatch(ValidationAttempt::isValidatedSuccessfully));
     }
 }

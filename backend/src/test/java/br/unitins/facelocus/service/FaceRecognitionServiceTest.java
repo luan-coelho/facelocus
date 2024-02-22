@@ -12,26 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
+import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings({"resource", "ResultOfMethodCallIgnored"})
 @QuarkusTest
 class FaceRecognitionServiceTest extends BaseTest {
-
-    private static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath", String.class);
-    private static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig().getValue("files.users.facephoto.resources", String.class);
-    private static final String SEPARATOR = File.separator; // "\" ou "/"
 
     @Inject
     FaceRecognitionService faceRecognitionService;
@@ -134,50 +121,5 @@ class FaceRecognitionServiceTest extends BaseTest {
         );
 
         assertEquals("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.", exception.getMessage());
-    }
-
-    private InputStream getImageAsInputStream(String imageName) {
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            InputStream imageStream = classLoader.getResourceAsStream("images/" + imageName);
-
-            if (imageStream == null) {
-                return null;
-            }
-
-            BufferedImage image = ImageIO.read(imageStream);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", baos);
-
-            byte[] bytes = baos.toByteArray();
-
-            return new ByteArrayInputStream(bytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static void removeImageFolder(String path) {
-        String patternString = "(.*/users/)\\d+/.*";
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(path);
-
-        path = matcher.replaceFirst("$1");
-        File imageFolder = new File(path);
-
-        if (imageFolder.exists()) {
-            Path folder = Paths.get(imageFolder.getAbsolutePath());
-
-            try {
-                Files.walk(folder)
-                        .sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            } catch (IOException e) {
-                fail("Pasta não deletada");
-            }
-        }
     }
 }

@@ -301,6 +301,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
         validatePointRecordHasFacialRecognitionFactor(pointRecord);
         User user = attendanceRecord.getUserAttendance().getUser();
+        user = userService.findById(user.getId());
 
         UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
 
@@ -309,6 +310,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validationAttempt.setAttendanceRecord(attendanceRecord);
         attendanceRecord.getValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();
+        if(faceDetected){
+            validationAttempt.setValidatedSuccessfully(true);
+            validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
+        }
         attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
 
         attendanceRecordService.update(attendanceRecord);
