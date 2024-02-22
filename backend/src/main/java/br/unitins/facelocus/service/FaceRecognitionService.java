@@ -1,6 +1,7 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.dto.UserFacePhotoValidation;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.model.UserFacePhoto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -59,25 +60,35 @@ public class FaceRecognitionService {
         userService.update(user);
     }
 
-    @Transactional
     public void facePhotoValidation(Long userId, MultipartData multipartBody) {
         User user = userService.findById(userId);
 
+        UserFacePhotoValidation validation = generateFacePhotoValidation(user, multipartBody);
+
+        if (!validation.isFaceDetected()) {
+            throw new IllegalArgumentException("Rosto não identificado");
+        }
+    }
+
+    public UserFacePhotoValidation generateFacePhotoValidation(User user, MultipartData multipartBody) {
         if (user.getFacePhoto() == null) {
             throw new IllegalArgumentException("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.");
         }
 
-        String[] subdirectories = {userId.toString(), UUID.randomUUID().toString()};
-        String fileName = String.join("-", userId.toString(), "facephoto").concat(".");
+        String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
+        String fileName = String.join("-", user.getId().toString(), "facephoto").concat(".");
         fileName = fileName.concat(imageFileService.getFileExtension(multipartBody.fileName));
         UserFacePhoto facePhoto = saveFileAndBuildFacePhoto(fileName, multipartBody.inputStream, subdirectories);
         String photoFaceDirectory = facePhoto.getFilePath().replace("/".concat(fileName), "");
         String profilePhotoFacePath = user.getFacePhoto().getFilePath();
-        boolean faceDetected = faceDetected(photoFaceDirectory, profilePhotoFacePath);
 
-        if (!faceDetected) {
-            throw new IllegalArgumentException("Rosto não identificado");
-        }
+        boolean facedDetected = faceDetected(photoFaceDirectory, profilePhotoFacePath);
+
+        UserFacePhotoValidation validation = new UserFacePhotoValidation();
+        validation.setUserFacePhoto(facePhoto);
+        validation.setFaceDetected(facedDetected);
+
+        return validation;
     }
 
     public UserFacePhoto saveFileAndBuildFacePhoto(String fileName, InputStream file, String... subdirectories) {
@@ -98,7 +109,7 @@ public class FaceRecognitionService {
         return Paths.get(pathInput, fileName);
     }
 
-    public boolean faceDetected(String photoFaceDirectoryPath, String profilePhotoFacePath) {
+    private boolean faceDetected(String photoFaceDirectoryPath, String profilePhotoFacePath) {
         String output;
         try {
             output = requestCall(photoFaceDirectoryPath, profilePhotoFacePath);

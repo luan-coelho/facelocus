@@ -1,7 +1,9 @@
 package br.unitins.facelocus.service;
 
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.dto.UserFacePhotoValidation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
@@ -44,6 +46,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Inject
     UserAttendanceService userAttendanceService;
 
+    @Inject
+    FaceRecognitionService faceRecognitionService;
+
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
      *
@@ -66,8 +71,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Override
     public PointRecord findById(Long pointRecordId) {
-        return this.repository.findByIdOptional(pointRecordId)
-                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        return this.repository.findByIdOptional(pointRecordId).orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
     }
 
     @Transactional
@@ -183,19 +187,18 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         for (User user : pointRecord.getEvent().getUsers()) {
             List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-            UserAttendance userAttendance = new UserAttendance(
-                    null,
-                    user,
-                    attendanceRecords,
-                    pointRecord);
+
+            UserAttendance userAttendance = new UserAttendance();
+            userAttendance.setUser(user);
+            userAttendance.setAttendanceRecords(attendanceRecords);
+            userAttendance.setPointRecord(pointRecord);
+
             for (Point point : pointRecord.getPoints()) {
-                AttendanceRecord attendanceRecord = new AttendanceRecord(
-                        null,
-                        null,
-                        AttendanceRecordStatus.PENDING,
-                        point,
-                        false,
-                        userAttendance);
+                AttendanceRecord attendanceRecord = new AttendanceRecord();
+                attendanceRecord.setStatus(AttendanceRecordStatus.PENDING);
+                attendanceRecord.setPoint(point);
+                attendanceRecord.setUserAttendance(userAttendance);
+
                 attendanceRecords.add(attendanceRecord);
             }
             usersAttendances.add(userAttendance);
@@ -245,7 +248,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void unlinkUserFromAll(Long userId) {
         List<PointRecord> pointsRecord = this.repository.findAllByUser(userId);
-        forFather: for (PointRecord pointRecord : pointsRecord) {
+        forFather:
+        for (PointRecord pointRecord : pointsRecord) {
             for (UserAttendance usersAttendance : pointRecord.getUsersAttendances()) {
                 if (usersAttendance.getUser().getId().equals(userId)) {
                     update(pointRecord);
@@ -291,7 +295,34 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
-    public void validatePointByUser(Long attendanceRecordId) {
+    @Transactional
+    public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
+        PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
+        validatePointRecordHasFacialRecognitionFactor(pointRecord);
+        User user = attendanceRecord.getUserAttendance().getUser();
+
+        UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
+
+        ValidationAttempt validationAttempt = new ValidationAttempt();
+        validationAttempt.setUserFacePhoto(validation.getUserFacePhoto());
+        validationAttempt.setAttendanceRecord(attendanceRecord);
+        attendanceRecord.getValidationAttempts().add(validationAttempt);
+        boolean faceDetected = validation.isFaceDetected();
+        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
+
+        attendanceRecordService.update(attendanceRecord);
+    }
+
+    private void validatePointRecordHasFacialRecognitionFactor(PointRecord pointRecord) {
+        if (!pointRecord.getFactors().contains(Factor.FACIAL_RECOGNITION)) {
+            throw new IllegalArgumentException("O registro de ponto não possui o fator de reconhecimento facial ativo");
+        }
+    }
+
+    private void validatePointRecordHasIndoorLocation(PointRecord pointRecord) {
+        if (!pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
+            throw new IllegalArgumentException("O registro de ponto não possui o fator de localização indoor ativo");
+        }
     }
 }
