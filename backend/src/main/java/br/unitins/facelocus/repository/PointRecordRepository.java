@@ -65,7 +65,7 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
         String query = """
                 FROM PointRecord pr
                     JOIN pr.event e
-                    LEFT JOIN e.locations
+                    LEFT JOIN FETCH e.locations
                     JOIN pr.points
                     LEFT JOIN pr.usersAttendances
                 WHERE pr.id = ?1

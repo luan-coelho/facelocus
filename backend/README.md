@@ -1,16 +1,27 @@
+```shell
 sudo pacman -Syu base-devel cmake
+```
 
-pip install --upgrade pip setuptools wheel
+```shell
+sudo pacman -S python-pip
+```
 
-pip install dlib
+```shell
+pip install --upgrade pip setuptools wheel --break-system-packages
+```
 
-sudo pacman -S yay
+```shell
+pip install dlib --break-system-packages
+```
 
-yay -S python-dlib
+```shell
+pip install face_recognition --break-system-packages
+```
 
 Python 3.11.6
 
-pip 24.0 from /usr/lib/python3.11/site-packages/pip (python 3.11)
+caminho: 
+```pip 24.0 from /usr/lib/python3.11/site-packages/pip (python 3.11)```
 
 .env
 ```

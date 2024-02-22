@@ -114,7 +114,7 @@ public class FaceRecognitionService {
         try {
             output = requestCall(photoFaceDirectoryPath, profilePhotoFacePath);
         } catch (IOException | InterruptedException e) {
-            String message = "Falha ao executar a biblioteca face_recognition. Verifique se ela está instalada";
+            String message = "Falha ao executar a biblioteca face_recognition. Verifique se ela está instalada corretamente";
             throw new RuntimeException(message);
         }
         return !(output.contains("unknown_person") || output.contains("no_persons_found"));

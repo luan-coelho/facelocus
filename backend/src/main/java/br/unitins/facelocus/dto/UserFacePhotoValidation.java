@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserFacePhotoValidation {
 
-    UserFacePhoto userFacePhoto;
-    boolean faceDetected;
+    private UserFacePhoto userFacePhoto;
+    private boolean faceDetected;
+    private String errorMessage;
 }
