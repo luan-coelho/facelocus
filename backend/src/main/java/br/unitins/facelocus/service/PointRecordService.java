@@ -299,7 +299,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
         PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
-        validatePointRecordHasFacialRecognitionFactor(pointRecord);
+        validatePointRecordHasFacialRecognitionFactor(pointRecord, attendanceRecord);
+
         User user = attendanceRecord.getUserAttendance().getUser();
         user = userService.findById(user.getId());
 
@@ -310,7 +311,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validationAttempt.setAttendanceRecord(attendanceRecord);
         attendanceRecord.getValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();
-        if(faceDetected){
+        if (faceDetected) {
             validationAttempt.setValidatedSuccessfully(true);
             validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
         }
@@ -319,9 +320,43 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         attendanceRecordService.update(attendanceRecord);
     }
 
-    private void validatePointRecordHasFacialRecognitionFactor(PointRecord pointRecord) {
+    @Transactional
+    public void validateIndoorFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
+        AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
+        PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
+        validatePointRecordHasIndoorLocation(pointRecord);
+
+        User user = attendanceRecord.getUserAttendance().getUser();
+        user = userService.findById(user.getId());
+
+        UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
+
+        ValidationAttempt validationAttempt = new ValidationAttempt();
+        validationAttempt.setUserFacePhoto(validation.getUserFacePhoto());
+        validationAttempt.setAttendanceRecord(attendanceRecord);
+        attendanceRecord.getValidationAttempts().add(validationAttempt);
+        boolean faceDetected = validation.isFaceDetected();
+        if (faceDetected) {
+            validationAttempt.setValidatedSuccessfully(true);
+            validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
+        }
+        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
+
+        attendanceRecordService.update(attendanceRecord);
+    }
+
+    private void validatePointRecordHasFacialRecognitionFactor(PointRecord pointRecord, AttendanceRecord attendanceRecord) {
         if (!pointRecord.getFactors().contains(Factor.FACIAL_RECOGNITION)) {
             throw new IllegalArgumentException("O registro de ponto não possui o fator de reconhecimento facial ativo");
+        }
+
+        if (pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
+            for (ValidationAttempt validationAttempt : attendanceRecord.getValidationAttempts()) {
+                if (validationAttempt.getIndoorLocationValidationTime() != null && validationAttempt.isValidatedSuccessfully()) {
+                    return;
+                }
+            }
+            throw new IllegalArgumentException("É necessário validar o fator de localização indoor");
         }
     }
 
