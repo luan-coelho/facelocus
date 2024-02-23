@@ -53,8 +53,6 @@ class PointRecordServiceTest extends BaseTest {
         user3 = getUser();
         user4 = getUser();
         user5 = getUser();
-        location1 = getLocation();
-        location2 = getLocation();
         event1 = getEvent();
         event2 = getEvent();
         today = LocalDate.now();
@@ -216,6 +214,7 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord2 = getPointRecord();
         event2.getUsers().add(user1);
         pointRecord2.setEvent(event2);
+        pointRecord2.setLocation(event2.getLocations().getFirst());
 
         pointRecordService.create(pointRecord1);
         pointRecordService.create(pointRecord2);
@@ -411,15 +410,15 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve alterar a localização corretamente")
     void shouldCorrectlyChangeLocation() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setLocation(location1);
+        pointRecord.setLocation(event1.getLocations().getFirst());
         pointRecordService.create(pointRecord);
         pointRecord = pointRecordService.findById(pointRecord.getId());
-
-        PointRecordChangeLocation dto = new PointRecordChangeLocation(location2);
+        Location location = pointRecord.getEvent().getLocations().getLast();
+        PointRecordChangeLocation dto = new PointRecordChangeLocation(location);
 
         final Long pointRecordId = pointRecord.getId();
         assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, dto));
-        assertEquals(location2.getId(), pointRecord.getLocation().getId());
+        assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
     @Test

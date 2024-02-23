@@ -27,7 +27,6 @@ class EventRequestServiceTest extends BaseTest {
     public void setup() {
         user1 = getUser();
         user2 = getUser();
-        location1 = getLocation();
         event1 = getEvent();
         event2 = getEvent();
         today = LocalDate.now();

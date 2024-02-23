@@ -69,7 +69,7 @@ public class UserResource {
     @Path("/uploud-face-photo")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response facePhotoProfileUploud(@RestQuery("user") Long userId, MultipartData multipartBody) {
+    public Response facePhotoProfileUploud(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
         faceRecognitionService.facePhotoProfileUploud(userId, multipartBody);
         return Response.ok().build();
     }
@@ -77,7 +77,7 @@ public class UserResource {
     @Path("/check-face")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response checkFace(@RestQuery("user") Long userId, MultipartData multipartBody) {
+    public Response checkFace(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
         faceRecognitionService.facePhotoValidation(userId, multipartBody);
         return Response.ok().build();
     }

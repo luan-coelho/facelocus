@@ -58,18 +58,4 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 """;
         return find(query, userId).list();
     }
-
-    @Override
-    public Optional<PointRecord> findByIdOptional(Long pointRecordId) {
-        // language=jpaql
-        String query = """
-                FROM PointRecord pr
-                    JOIN pr.event e
-                    LEFT JOIN FETCH e.locations
-                    JOIN pr.points
-                    LEFT JOIN pr.usersAttendances
-                WHERE pr.id = ?1
-                """;
-        return find(query, pointRecordId).singleResultOptional();
-    }
 }
