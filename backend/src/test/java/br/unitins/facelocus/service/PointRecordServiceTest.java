@@ -446,4 +446,31 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(AttendanceRecordStatus.VALIDATED, attendanceRecord.getStatus());
         assertTrue(attendanceRecord.getValidationAttempts().stream().allMatch(ValidationAttempt::isValidatedSuccessfully));
     }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando um registro de ponto não tiver o fator de reconhecimento facial, mas é solicitado")
+    void shouldThrowExceptionWhenTimeRecordLacksFacialRecognitionFactorButIsRequested() {
+        PointRecord pointRecord = getPointRecord();
+        pointRecord.setFactors(new HashSet<>(Set.of(Factor.INDOOR_LOCATION)));
+        pointRecordService.create(pointRecord);
+
+        MultipartData uploudProfilePhoto = new MultipartData();
+        uploudProfilePhoto.fileName = "user1.jpg";
+        uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
+
+        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
+
+        List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
+        UserAttendance userAttendance = usersAttendance.getFirst();
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
+
+        MultipartData validationPhotoUpload = new MultipartData();
+        validationPhotoUpload.fileName = "user1_2.jpg";
+        validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+
+        assertEquals("O registro de ponto não possui o fator de reconhecimento facial ativo", exception.getMessage());
+    }
 }
