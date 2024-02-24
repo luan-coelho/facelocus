@@ -311,13 +311,16 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validationAttempt.setAttendanceRecord(attendanceRecord);
         attendanceRecord.getValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();
+        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
+
         if (faceDetected) {
             validationAttempt.setValidatedSuccessfully(true);
             validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
+            attendanceRecordService.update(attendanceRecord);
+        } else {
+            attendanceRecordService.update(attendanceRecord);
+            throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
         }
-        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
-
-        attendanceRecordService.update(attendanceRecord);
     }
 
     @Transactional
