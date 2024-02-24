@@ -520,7 +520,7 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve lançar uma exceção quando for validar um ponto por reconhecimento facial e face não for reconhecida")
+    @DisplayName("Deve lançar uma exceção quando for validar um ponto por reconhecimento facial e a face não for reconhecida")
     void shouldThrowExceptionWhenValidatingPointByFacialRecognitionAndFaceIsNotRecognized() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
