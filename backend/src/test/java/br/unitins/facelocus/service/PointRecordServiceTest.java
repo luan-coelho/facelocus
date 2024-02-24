@@ -83,7 +83,8 @@ class PointRecordServiceTest extends BaseTest {
     void shouldThrowWhenEventIsNotProvided() {
         PointRecord pointRecord = new PointRecord();
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o evento", exception.getMessage());
     }
@@ -113,7 +114,8 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setDate(today.minusDays(1));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
     }
@@ -127,7 +129,8 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setFactors(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION));
         pointRecord.setInProgress(false);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("É necessário informar pelo menos um intervalo de ponto", exception.getMessage());
     }
@@ -142,7 +145,8 @@ class PointRecordServiceTest extends BaseTest {
         Point point = new Point(null, now, now.minusMinutes(15), pointRecord);
         pointRecord.setPoints(List.of(point));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
@@ -157,7 +161,8 @@ class PointRecordServiceTest extends BaseTest {
         Point point = new Point(null, now, now, pointRecord);
         pointRecord.setPoints(List.of(point));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("A hora inicial de um ponto deve ser antes da final", exception.getMessage());
     }
@@ -173,7 +178,8 @@ class PointRecordServiceTest extends BaseTest {
         Point point2 = new Point(null, now.minusMinutes(30), now.minusMinutes(15), pointRecord);
         pointRecord.setPoints(List.of(point1, point2));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Cada intervalo de ponto deve ter a hora superior ao anterior", exception.getMessage());
     }
@@ -186,7 +192,8 @@ class PointRecordServiceTest extends BaseTest {
         pointRecordService.create(pointRecord);
         pointRecord.setAllowableRadiusInMeters(null);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o raio permitido em metros", exception.getMessage());
     }
@@ -199,7 +206,8 @@ class PointRecordServiceTest extends BaseTest {
         pointRecordService.create(pointRecord);
         pointRecord.setAllowableRadiusInMeters(0d);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.create(pointRecord));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.create(pointRecord));
 
         assertEquals("Informe o raio permitido em metros", exception.getMessage());
     }
@@ -214,13 +222,14 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord2 = getPointRecord();
         event2.getUsers().add(user1);
         pointRecord2.setEvent(event2);
-        pointRecord2.setLocation(event2.getLocations().getFirst());
+        pointRecord2.setLocation(event2.getLocations().get(0));
 
         pointRecordService.create(pointRecord1);
         pointRecordService.create(pointRecord2);
 
         Pageable pageable = new Pageable();
-        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, user1.getId());
+        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable,
+                user1.getId());
         Pagination pagination = dataPagination.getPagination();
         List<PointRecordResponseDTO> data = dataPagination.getData();
 
@@ -355,8 +364,10 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord = pointRecordService.findById(pointRecord.getId());
 
         assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(AttendanceRecord::isValidatedByAdministrator));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+                .allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+                .allMatch(AttendanceRecord::isValidatedByAdministrator));
     }
 
     @Test
@@ -383,7 +394,8 @@ class PointRecordServiceTest extends BaseTest {
         pointRecordService.create(pointRecord);
 
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.changeDate(pointRecord.getId(), yesterday));
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.changeDate(pointRecord.getId(), yesterday));
 
         assertEquals("A data deve ser igual ou depois do dia de hoje", exception.getMessage());
     }
@@ -410,10 +422,10 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve alterar a localização corretamente")
     void shouldCorrectlyChangeLocation() {
         PointRecord pointRecord = getPointRecord();
-        pointRecord.setLocation(event1.getLocations().getFirst());
+        pointRecord.setLocation(event1.getLocations().get(0));
         pointRecordService.create(pointRecord);
         pointRecord = pointRecordService.findById(pointRecord.getId());
-        Location location = pointRecord.getEvent().getLocations().getLast();
+        Location location = pointRecord.getEvent().getLocations().get(1);
         PointRecordChangeLocation dto = new PointRecordChangeLocation(location);
 
         final Long pointRecordId = pointRecord.getId();
@@ -436,16 +448,18 @@ class PointRecordServiceTest extends BaseTest {
         faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
-        UserAttendance userAttendance = usersAttendance.getFirst();
-        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
+        UserAttendance userAttendance = usersAttendance.get(0);
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().get(0);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user1_2.jpg";
         validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
 
-        assertDoesNotThrow(() -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+        assertDoesNotThrow(() -> pointRecordService
+                .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
         assertEquals(AttendanceRecordStatus.VALIDATED, attendanceRecord.getStatus());
-        assertTrue(attendanceRecord.getValidationAttempts().stream().allMatch(ValidationAttempt::isValidatedSuccessfully));
+        assertTrue(
+                attendanceRecord.getValidationAttempts().stream().allMatch(ValidationAttempt::isValidatedSuccessfully));
     }
 
     @Test
@@ -463,14 +477,15 @@ class PointRecordServiceTest extends BaseTest {
         faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
-        UserAttendance userAttendance = usersAttendance.getFirst();
-        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
+        UserAttendance userAttendance = usersAttendance.get(0);
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().get(0);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user1_2.jpg";
         validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService
+                .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
 
         assertEquals("O registro de ponto não possui o fator de reconhecimento facial ativo", exception.getMessage());
     }
@@ -490,14 +505,15 @@ class PointRecordServiceTest extends BaseTest {
         faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
-        UserAttendance userAttendance = usersAttendance.getFirst();
-        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
+        UserAttendance userAttendance = usersAttendance.get(0);
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().get(0);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user1_2.jpg";
         validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService
+                .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
 
         assertEquals("É necessário validar o fator de localização indoor", exception.getMessage());
     }
@@ -517,8 +533,8 @@ class PointRecordServiceTest extends BaseTest {
         faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
-        UserAttendance userAttendance = usersAttendance.getFirst();
-        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().getFirst();
+        UserAttendance userAttendance = usersAttendance.get(0);
+        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().get(1);
         ValidationAttempt validationAttempt = new ValidationAttempt();
         validationAttempt.setDistanceInMeters(5d);
         validationAttempt.setIndoorLocationValidationTime(LocalDateTime.now());
@@ -531,7 +547,8 @@ class PointRecordServiceTest extends BaseTest {
         validationPhotoUpload.fileName = "user2.jpg";
         validationPhotoUpload.inputStream = getImageAsInputStream("user2.jpg");
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> pointRecordService
+                .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
 
         assertEquals("Face não reconhecida. Tente novamente", exception.getMessage());
     }

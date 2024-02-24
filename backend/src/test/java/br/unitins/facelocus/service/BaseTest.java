@@ -22,8 +22,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BaseTest {
 
-    protected static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath", String.class);
-    protected static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig().getValue("files.users.facephoto.resources", String.class);
+    protected static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath",
+            String.class);
+    protected static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig()
+            .getValue("files.users.facephoto.resources", String.class);
     protected static final String SEPARATOR = File.separator; // "\" ou "/"
 
     protected User user1;
@@ -75,7 +77,7 @@ public abstract class BaseTest {
         pointRecord.setEvent(event1);
         pointRecord.setDate(today);
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
-        pointRecord.setLocation(event1.getLocations().getFirst());
+        pointRecord.setLocation(event1.getLocations().get(0));
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
         Point point1 = new Point(

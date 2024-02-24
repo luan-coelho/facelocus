@@ -6,13 +6,11 @@ import br.unitins.facelocus.model.PointRecord;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,6 +118,6 @@ class FaceRecognitionServiceTest extends BaseTest {
                 () -> faceRecognitionService.facePhotoValidation(user1.getId(), multipartData)
         );
 
-        assertEquals("O usuário ainda não há nenhuma foto de perfil. Realize o uploud.", exception.getMessage());
+        assertEquals("Sem foto de perfil não há como prosseguir com a validação", exception.getMessage());
     }
 }

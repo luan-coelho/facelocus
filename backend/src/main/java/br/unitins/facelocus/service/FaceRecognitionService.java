@@ -1,18 +1,25 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.dto.FaceDetectionResult;
 import br.unitins.facelocus.dto.UserFacePhotoValidation;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.model.UserFacePhoto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lombok.SneakyThrows;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +32,9 @@ public class FaceRecognitionService {
 
     @ConfigProperty(name = "face-recognition.lib.path")
     String FACE_RECOGNITION_PATH;
+
+    @ConfigProperty(name = "face-recognition.service.url")
+    String FACE_RECOGNITION_SERVICE_URL;
 
     @Inject
     UserService userService;
@@ -82,7 +92,7 @@ public class FaceRecognitionService {
         String photoFaceDirectory = facePhoto.getFilePath().replace("/".concat(fileName), "");
         String profilePhotoFacePath = user.getFacePhoto().getFilePath();
 
-        boolean facedDetected = faceDetected(photoFaceDirectory, profilePhotoFacePath);
+        boolean facedDetected = faceDetected(facePhoto.getFilePath(), profilePhotoFacePath);
 
         UserFacePhotoValidation validation = new UserFacePhotoValidation();
         validation.setUserFacePhoto(facePhoto);
@@ -109,7 +119,7 @@ public class FaceRecognitionService {
         return Paths.get(pathInput, fileName);
     }
 
-    private boolean faceDetected(String photoFaceDirectoryPath, String profilePhotoFacePath) {
+    /*private boolean faceDetected(String photoFaceDirectoryPath, String profilePhotoFacePath) {
         String output;
         try {
             output = requestCall(photoFaceDirectoryPath, profilePhotoFacePath);
@@ -118,6 +128,25 @@ public class FaceRecognitionService {
             throw new RuntimeException(message);
         }
         return !(output.contains("unknown_person") || output.contains("no_persons_found"));
+    }*/
+
+    @SneakyThrows
+    private boolean faceDetected(String photoFacePath, String profilePhotoFacePath) {
+        HttpClient client = HttpClient.newHttpClient();
+        String url = String.format("%s?photoFacePath=%s&profilePhotoFacePath=%s", FACE_RECOGNITION_SERVICE_URL, photoFacePath, profilePhotoFacePath);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Falha ao acessar serviço de reconhecimento facial");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        FaceDetectionResult result = mapper.readValue(response.body(), FaceDetectionResult.class);
+        return result.isFaceDetected();
     }
 
     private String requestCall(String photoFaceDirectoryPath, String profilePhotoFacePath) throws IOException, InterruptedException {
