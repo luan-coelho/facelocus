@@ -1,7 +1,7 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.dto.FaceDetectionResult;
+import br.unitins.facelocus.dto.FaceRecognitionResponse;
 import br.unitins.facelocus.dto.UserFacePhotoValidation;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.model.UserFacePhoto;
@@ -145,7 +145,13 @@ public class FaceRecognitionService {
             throw new RuntimeException("Falha ao acessar serviço de reconhecimento facial");
         }
         ObjectMapper mapper = new ObjectMapper();
-        FaceDetectionResult result = mapper.readValue(response.body(), FaceDetectionResult.class);
+
+        FaceRecognitionResponse result = mapper.readValue(response.body(), FaceRecognitionResponse.class);
+
+        if (response.statusCode() == 400) {
+            throw new IllegalArgumentException(result.getError());
+        }
+
         return result.isFaceDetected();
     }
 

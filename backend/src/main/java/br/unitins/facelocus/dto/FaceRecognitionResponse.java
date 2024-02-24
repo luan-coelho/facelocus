@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FaceDetectionResult {
+public class FaceRecognitionResponse {
 
     private boolean faceDetected;
+    private String error;
 }

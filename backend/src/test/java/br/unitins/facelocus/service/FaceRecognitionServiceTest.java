@@ -108,6 +108,26 @@ class FaceRecognitionServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
+    @DisplayName("Deve lançar uma exceção quando for detectado mais de um rosto")
+    void shouldThrowExceptionWhenMultipleFacesDetected() {
+        MultipartData uploudProfilePhoto = new MultipartData();
+        uploudProfilePhoto.fileName = "user1.jpg";
+        uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
+        faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
+
+        MultipartData validationPhotoUpload = new MultipartData();
+        validationPhotoUpload.fileName = "user1_3.jpeg";
+        validationPhotoUpload.inputStream = getImageAsInputStream("user1_3.jpeg");
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> faceRecognitionService.facePhotoValidation(user1.getId(), validationPhotoUpload)
+        );
+
+        assertEquals("Cada foto deve conter apenas um rosto", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
     @DisplayName("Deve lançar uma exceção quando o usuário ainda não tiver foto de rosto cadastrada")
     void shouldThrowExceptionWhenUserHasNoProfilePictureRegistered() {
         MultipartData multipartData = new MultipartData();
