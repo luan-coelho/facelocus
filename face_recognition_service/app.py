@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/check-faces', methods=['GET'])
 def compare_photos():
-    # Verifica se duas imagens foram enviadas
+    # Verifica se o caminho das duas imagens foram enviadas
     photo_face_path = request.args.get('photoFacePath')
     profile_photo_face_path = request.args.get('profilePhotoFacePath')
 
@@ -19,8 +19,15 @@ def compare_photos():
     encoding1 = face_recognition.face_encodings(photo_face)
     encoding2 = face_recognition.face_encodings(profile_photo)
 
+    # Validações
+    if len(encoding1) == 0:
+        return jsonify({'error': 'A foto do caminho {} não possui nenhum rosto'.format(photo_face_path)})
+    
+    if len(encoding2) == 0:
+        return jsonify({'error': 'A foto do caminho {} não possui nenhum rosto'.format(profile_photo_face_path)})
+
     # Garante que cada imagem tenha exatamente um rosto
-    if len(encoding1) != 1 or len(encoding2) != 1:
+    if len(encoding1) > 1 or len(encoding2) > 1:
         return jsonify({'error': 'Cada foto deve conter apenas um rosto'}), 400
 
     # Compara as codificações faciais das duas imagens
