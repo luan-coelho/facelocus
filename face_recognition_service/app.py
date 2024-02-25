@@ -11,25 +11,22 @@ def compare_photos():
     profile_photo_face_path = request.args.get('profilePhotoFacePath')
 
     if photo_face_path is None or profile_photo_face_path is None:
-        return jsonify({'error': 'Two paths must be sent.'}), 400
+        return jsonify({'error': 'Dois caminhos devem ser enviados'}), 400
 
     # Carrega as fotos e obtém codificações faciais
-    image1 = face_recognition.load_image_file(photo_face_path)
-    image2 = face_recognition.load_image_file(profile_photo_face_path)
-    encoding1 = face_recognition.face_encodings(image1)
-    encoding2 = face_recognition.face_encodings(image2)
+    photo_face = face_recognition.load_image_file(photo_face_path)
+    profile_photo = face_recognition.load_image_file(profile_photo_face_path)
+    encoding1 = face_recognition.face_encodings(photo_face)
+    encoding2 = face_recognition.face_encodings(profile_photo)
 
     # Garante que cada imagem tenha exatamente um rosto
     if len(encoding1) != 1 or len(encoding2) != 1:
-        return jsonify({'error': 'Cada foto deve conter um e apenas um rosto'}), 400
+        return jsonify({'error': 'Cada foto deve conter apenas um rosto'}), 400
 
     # Compara as codificações faciais das duas imagens
     results = face_recognition.compare_faces(encoding1, encoding2[0])
 
-    if results[0]:
-        return jsonify({'faceDetected': True})
-    else:
-        return jsonify({'faceDetected': False})
+    return jsonify({'faceDetected': (True if results[0] else False)})
 
 
 if __name__ == '__main__':
