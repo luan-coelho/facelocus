@@ -1,7 +1,8 @@
-package br.unitins.facelocus.dto;
+package br.unitins.facelocus.dto.auth;
 
 import java.util.Set;
 
+import br.unitins.facelocus.dto.user.UserResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package br.unitins.facelocus.mapper;
 
-import br.unitins.facelocus.dto.UserDTO;
-import br.unitins.facelocus.dto.UserResponseDTO;
+import br.unitins.facelocus.dto.user.UserDTO;
+import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

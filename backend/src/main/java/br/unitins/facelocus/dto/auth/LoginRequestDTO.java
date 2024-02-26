@@ -1,4 +1,4 @@
-package br.unitins.facelocus.dto;
+package br.unitins.facelocus.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 

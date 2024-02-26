@@ -1,7 +1,7 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.dto.JwtDTO;
-import br.unitins.facelocus.dto.LoginRequestDTO;
+import br.unitins.facelocus.dto.auth.JwtDTO;
+import br.unitins.facelocus.dto.auth.LoginRequestDTO;
 import br.unitins.facelocus.handle.restresponse.AuthenticationException;
 import br.unitins.facelocus.handle.restresponse.UnauthorizedException;
 import br.unitins.facelocus.model.User;

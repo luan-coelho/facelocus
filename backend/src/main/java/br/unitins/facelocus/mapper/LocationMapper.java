@@ -1,6 +1,6 @@
 package br.unitins.facelocus.mapper;
 
-import br.unitins.facelocus.dto.LocationDTO;
+import br.unitins.facelocus.dto.event.LocationDTO;
 import br.unitins.facelocus.model.Location;
 import org.mapstruct.*;
 

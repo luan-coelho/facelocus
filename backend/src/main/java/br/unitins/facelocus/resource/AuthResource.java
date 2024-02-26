@@ -1,9 +1,9 @@
 package br.unitins.facelocus.resource;
 
-import br.unitins.facelocus.dto.JwtDTO;
-import br.unitins.facelocus.dto.LoginRequestDTO;
-import br.unitins.facelocus.dto.UserDTO;
-import br.unitins.facelocus.dto.UserResponseDTO;
+import br.unitins.facelocus.dto.auth.JwtDTO;
+import br.unitins.facelocus.dto.auth.LoginRequestDTO;
+import br.unitins.facelocus.dto.user.UserDTO;
+import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.OAuthAuthenticationService;

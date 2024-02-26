@@ -1,8 +1,8 @@
 package br.unitins.facelocus.dto.pointrecord;
 
-import br.unitins.facelocus.dto.EventDTO;
-import br.unitins.facelocus.dto.LocationDTO;
-import br.unitins.facelocus.dto.PointDTO;
+import br.unitins.facelocus.dto.eventrequest.EventDTO;
+import br.unitins.facelocus.dto.event.LocationDTO;
+import br.unitins.facelocus.dto.event.PointDTO;
 import br.unitins.facelocus.model.Factor;
 
 import java.time.LocalDate;

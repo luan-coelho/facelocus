@@ -1,8 +1,8 @@
 package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.dto.ChangePasswordDTO;
-import br.unitins.facelocus.dto.UserResponseDTO;
+import br.unitins.facelocus.dto.user.ChangePasswordDTO;
+import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.FacePhotoService;

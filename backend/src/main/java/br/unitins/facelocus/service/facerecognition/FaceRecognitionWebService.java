@@ -1,6 +1,6 @@
 package br.unitins.facelocus.service.facerecognition;
 
-import br.unitins.facelocus.dto.FaceRecognitionServiceResponse;
+import br.unitins.facelocus.dto.webservice.FaceRecognitionServiceResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;

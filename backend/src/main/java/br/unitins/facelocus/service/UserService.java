@@ -1,6 +1,6 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.dto.ChangePasswordDTO;
+import br.unitins.facelocus.dto.user.ChangePasswordDTO;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.UserRepository;
 import br.unitins.facelocus.service.auth.PasswordHandlerService;

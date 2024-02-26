@@ -1,4 +1,4 @@
-package br.unitins.facelocus.dto;
+package br.unitins.facelocus.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

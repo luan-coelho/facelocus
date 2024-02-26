@@ -1,4 +1,4 @@
-package br.unitins.facelocus.dto;
+package br.unitins.facelocus.dto.user;
 
 import br.unitins.facelocus.constraintvalidator.PasswordsEqualConstraint;
 import jakarta.validation.constraints.NotBlank;

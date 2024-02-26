@@ -5,8 +5,8 @@ import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.unitins.facelocus.dto.JwtDTO;
-import br.unitins.facelocus.dto.UserResponseDTO;
+import br.unitins.facelocus.dto.auth.JwtDTO;
+import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
 import io.smallrye.jwt.build.Jwt;

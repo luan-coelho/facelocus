@@ -1,7 +1,7 @@
 package br.unitins.facelocus.mapper;
 
 import br.unitins.facelocus.commons.pagination.DataPagination;
-import br.unitins.facelocus.dto.EventDTO;
+import br.unitins.facelocus.dto.eventrequest.EventDTO;
 import br.unitins.facelocus.model.Event;
 import org.mapstruct.*;
 

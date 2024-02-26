@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jboss.resteasy.reactive.RestQuery;
 
-import br.unitins.facelocus.dto.LocationDTO;
+import br.unitins.facelocus.dto.event.LocationDTO;
 import br.unitins.facelocus.mapper.LocationMapper;
 import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.service.LocationService;

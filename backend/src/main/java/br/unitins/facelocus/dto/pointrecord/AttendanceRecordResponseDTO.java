@@ -1,6 +1,6 @@
 package br.unitins.facelocus.dto.pointrecord;
 
-import br.unitins.facelocus.dto.PointDTO;
+import br.unitins.facelocus.dto.event.PointDTO;
 import br.unitins.facelocus.model.AttendanceRecordStatus;
 
 public record AttendanceRecordResponseDTO(

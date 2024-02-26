@@ -1,7 +1,7 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.dto.UserFacePhotoValidation;
+import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.model.UserFacePhoto;
 import br.unitins.facelocus.service.facerecognition.FaceRecognitionService;

@@ -1,6 +1,6 @@
 package br.unitins.facelocus.constraintvalidator;
 
-import br.unitins.facelocus.dto.ChangePasswordDTO;
+import br.unitins.facelocus.dto.user.ChangePasswordDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

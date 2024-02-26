@@ -1,6 +1,5 @@
-package br.unitins.facelocus.dto;
+package br.unitins.facelocus.dto.webservice;
 
-import br.unitins.facelocus.model.UserFacePhoto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserFacePhotoValidation {
+public class FaceRecognitionServiceResponse {
 
-    private UserFacePhoto userFacePhoto;
     private boolean faceDetected;
-    private String errorMessage;
+    private String error;
 }
