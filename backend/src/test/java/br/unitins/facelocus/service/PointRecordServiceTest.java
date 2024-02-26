@@ -38,7 +38,7 @@ class PointRecordServiceTest extends BaseTest {
     PointRecordService pointRecordService;
 
     @Inject
-    FaceRecognitionService faceRecognitionService;
+    FacePhotoService faceRecognitionService;
 
     @AfterAll
     public static void after() {

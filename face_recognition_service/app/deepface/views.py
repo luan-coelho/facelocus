@@ -6,7 +6,7 @@ deepface_bp = Blueprint('deepface', __name__, url_prefix='/deepface')
 
 # https://github.com/serengil/deepface
 @deepface_bp.route('/check-faces', methods=['GET'])
-def df_check_faces():
+def check_faces():
     # Verifica se o caminho das duas imagens foram enviadas
     photo_face_path = request.args.get('photoFacePath')
     profile_photo_face_path = request.args.get('profilePhotoFacePath')

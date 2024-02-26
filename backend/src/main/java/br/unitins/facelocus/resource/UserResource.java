@@ -5,7 +5,7 @@ import br.unitins.facelocus.dto.ChangePasswordDTO;
 import br.unitins.facelocus.dto.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
-import br.unitins.facelocus.service.FaceRecognitionService;
+import br.unitins.facelocus.service.FacePhotoService;
 import br.unitins.facelocus.service.UserService;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
@@ -27,7 +27,7 @@ public class UserResource {
     UserService userService;
 
     @Inject
-    FaceRecognitionService faceRecognitionService;
+    FacePhotoService faceRecognitionService;
 
     @Inject
     UserMapper userMapper;

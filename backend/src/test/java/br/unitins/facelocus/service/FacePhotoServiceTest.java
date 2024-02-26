@@ -16,10 +16,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class FaceRecognitionServiceTest extends BaseTest {
+class FacePhotoServiceTest extends BaseTest {
 
     @Inject
-    FaceRecognitionService faceRecognitionService;
+    FacePhotoService faceRecognitionService;
 
     @Inject
     UserService userService;

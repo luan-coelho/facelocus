@@ -47,7 +47,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     UserAttendanceService userAttendanceService;
 
     @Inject
-    FaceRecognitionService faceRecognitionService;
+    FacePhotoService faceRecognitionService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
