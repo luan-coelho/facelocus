@@ -22,10 +22,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BaseTest {
 
-    protected static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath",
-            String.class);
-    protected static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig()
-            .getValue("files.users.facephoto.resources", String.class);
+    protected static final String USER_HOME = ConfigProvider.getConfig().getValue("files.users.facephoto.basepath", String.class);
+    protected static final String RESOURCES_DIRECTORY = ConfigProvider.getConfig().getValue("files.users.facephoto.resources", String.class);
     protected static final String SEPARATOR = File.separator; // "\" ou "/"
 
     protected User user1;
@@ -80,21 +78,9 @@ public abstract class BaseTest {
         pointRecord.setLocation(event1.getLocations().get(0));
         pointRecord.setAllowableRadiusInMeters(5d);
         pointRecord.setInProgress(false);
-        Point point1 = new Point(
-                null,
-                now,
-                now.plusMinutes(10),
-                pointRecord);
-        Point point2 = new Point(
-                null,
-                now.plusMinutes(20),
-                now.plusMinutes(30),
-                pointRecord);
-        Point point3 = new Point(
-                null,
-                now.plusMinutes(40),
-                now.plusMinutes(50),
-                pointRecord);
+        Point point1 = new Point(null, now, now.plusMinutes(10), pointRecord);
+        Point point2 = new Point(null, now.plusMinutes(20), now.plusMinutes(30), pointRecord);
+        Point point3 = new Point(null, now.plusMinutes(40), now.plusMinutes(50), pointRecord);
         pointRecord.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
         return pointRecord;
     }
@@ -134,10 +120,7 @@ public abstract class BaseTest {
             Path folder = Paths.get(imageFolder.getAbsolutePath());
 
             try {
-                Files.walk(folder)
-                        .sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
+                Files.walk(folder).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
             } catch (IOException e) {
                 fail("Pasta não deletada");
             }
