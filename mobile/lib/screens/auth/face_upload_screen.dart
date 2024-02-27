@@ -124,6 +124,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
             autoDisableCaptureControl: true,
             autoCapture: false,
             defaultCameraLens: CameraLens.front,
+            orientation: CameraOrientation.portraitUp,
             onCapture: (File? image) {
               setState(() => _capturedImage = image);
             },

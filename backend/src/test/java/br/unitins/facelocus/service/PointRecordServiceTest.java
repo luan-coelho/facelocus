@@ -82,6 +82,7 @@ class PointRecordServiceTest extends BaseTest {
     @DisplayName("Deve lançar uma exceção quando não for informado um evento")
     void shouldThrowWhenEventIsNotProvided() {
         PointRecord pointRecord = new PointRecord();
+        pointRecord.setEvent(null);
 
         Exception exception = assertThrows(IllegalArgumentException.class,
                 () -> pointRecordService.create(pointRecord));

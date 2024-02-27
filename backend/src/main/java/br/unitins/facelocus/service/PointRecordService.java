@@ -3,11 +3,11 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
+import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -39,12 +39,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     UserService userService;
-
-    @Inject
-    PointService pointService;
-
-    @Inject
-    UserAttendanceService userAttendanceService;
 
     @Inject
     FacePhotoService faceRecognitionService;
@@ -79,9 +73,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     public PointRecord create(PointRecord pointRecord) {
         validations(pointRecord);
 
-        Event event = eventService.findById(pointRecord.getEvent().getId());
-        pointRecord.setEvent(event);
-
         return super.create(pointRecord);
     }
 
@@ -93,6 +84,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
+
+        Event event = eventService.findById(pointRecord.getEvent().getId());
+        pointRecord.setEvent(event);
 
         validateDate(pointRecord.getDate());
         validatePoints(pointRecord);

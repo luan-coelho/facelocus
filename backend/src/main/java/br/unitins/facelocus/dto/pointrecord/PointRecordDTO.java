@@ -13,7 +13,7 @@ import java.util.Set;
 public record PointRecordDTO(Long id,
                              EventDTO event,
                              LocalDate date,
-                             LocationDTO locationDTO,
+                             LocationDTO location,
                              List<PointDTO> points,
                              Set<Factor> factors,
                              Double allowableRadiusInMeters,

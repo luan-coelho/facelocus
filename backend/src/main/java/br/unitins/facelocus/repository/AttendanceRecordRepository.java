@@ -21,4 +21,8 @@ public class AttendanceRecordRepository extends BaseRepository<AttendanceRecord>
                 """;
         return find(query, userId, pointId).singleResultOptional();
     }
+
+    public Optional<Object> findAllAttendanceByPointRecordAndUser(Long pointRecordId, Long userId) {
+        return null;
+    }
 }
