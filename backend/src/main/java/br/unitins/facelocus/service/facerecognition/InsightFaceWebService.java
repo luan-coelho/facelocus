@@ -3,7 +3,6 @@ package br.unitins.facelocus.service.facerecognition;
 import br.unitins.facelocus.dto.webservice.FaceRecognitionServiceResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 import lombok.SneakyThrows;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -13,7 +12,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-@Named("insight-face-web")
 @ApplicationScoped
 public class InsightFaceWebService implements FaceRecognitionService {
 

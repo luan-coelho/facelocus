@@ -5,7 +5,7 @@ import br.unitins.facelocus.dto.user.ChangePasswordDTO;
 import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
-import br.unitins.facelocus.service.FacePhotoService;
+import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import br.unitins.facelocus.service.UserService;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
@@ -27,7 +27,7 @@ public class UserResource {
     UserService userService;
 
     @Inject
-    FacePhotoService faceRecognitionService;
+    FacePhotoLocalDiskService faceRecognitionService;
 
     @Inject
     UserMapper userMapper;
@@ -70,7 +70,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response facePhotoProfileUploud(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
-        faceRecognitionService.facePhotoProfileUploud(userId, multipartBody);
+        faceRecognitionService.profileUploud(userId, multipartBody);
         return Response.ok().build();
     }
 

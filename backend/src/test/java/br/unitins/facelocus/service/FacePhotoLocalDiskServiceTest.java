@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.PointRecord;
+import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -16,10 +17,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class FacePhotoServiceTest extends BaseTest {
+class FacePhotoLocalDiskServiceTest extends BaseTest {
 
     @Inject
-    FacePhotoService faceRecognitionService;
+    FacePhotoLocalDiskService faceRecognitionService;
 
     @Inject
     UserService userService;
@@ -50,7 +51,7 @@ class FacePhotoServiceTest extends BaseTest {
         multipartData.inputStream = getImageAsInputStream("user1.jpg");
         user1 = userService.findById(user1.getId());
 
-        assertDoesNotThrow(() -> faceRecognitionService.facePhotoProfileUploud(user1.getId(), multipartData));
+        assertDoesNotThrow(() -> faceRecognitionService.profileUploud(user1.getId(), multipartData));
     }
 
     @Test
@@ -65,7 +66,7 @@ class FacePhotoServiceTest extends BaseTest {
         List<Event> events = eventService.findAllByUser(user1.getId());
         List<PointRecord> pointsRecord = pointRecordService.findAllByUser(user1.getId());
 
-        assertDoesNotThrow(() -> faceRecognitionService.facePhotoProfileUploud(user1.getId(), multipartData));
+        assertDoesNotThrow(() -> faceRecognitionService.profileUploud(user1.getId(), multipartData));
         assertEquals(0, events.size()); // Deve ter desvinculado o usuário de todos os eventos
         assertEquals(0, pointsRecord.size()); // Deve ter desvinculado o usuário de todos os registros de ponto
     }
@@ -77,7 +78,7 @@ class FacePhotoServiceTest extends BaseTest {
         MultipartData uploudProfilePhoto = new MultipartData();
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
-        faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user1.getId(), uploudProfilePhoto);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user1_2.jpg";
@@ -93,7 +94,7 @@ class FacePhotoServiceTest extends BaseTest {
         MultipartData uploudProfilePhoto = new MultipartData();
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
-        faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user1.getId(), uploudProfilePhoto);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user2.jpg";
@@ -113,7 +114,7 @@ class FacePhotoServiceTest extends BaseTest {
         MultipartData uploudProfilePhoto = new MultipartData();
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
-        faceRecognitionService.facePhotoProfileUploud(user1.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user1.getId(), uploudProfilePhoto);
 
         MultipartData validationPhotoUpload = new MultipartData();
         validationPhotoUpload.fileName = "user1_3.jpeg";

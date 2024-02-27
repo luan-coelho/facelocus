@@ -11,6 +11,7 @@ import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
+import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -41,7 +42,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     UserService userService;
 
     @Inject
-    FacePhotoService faceRecognitionService;
+    FacePhotoLocalDiskService faceRecognitionService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -300,7 +301,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
 
         ValidationAttempt validationAttempt = new ValidationAttempt();
-        validationAttempt.setUserFacePhoto(validation.getUserFacePhoto());
+        validationAttempt.setFacePhoto(validation.getFacePhoto());
         validationAttempt.setAttendanceRecord(attendanceRecord);
         attendanceRecord.getValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();
@@ -328,7 +329,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
 
         ValidationAttempt validationAttempt = new ValidationAttempt();
-        validationAttempt.setUserFacePhoto(validation.getUserFacePhoto());
+        validationAttempt.setFacePhoto(validation.getFacePhoto());
         validationAttempt.setAttendanceRecord(attendanceRecord);
         attendanceRecord.getValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();

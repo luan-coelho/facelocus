@@ -9,6 +9,7 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.model.*;
+import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -38,7 +39,7 @@ class PointRecordServiceTest extends BaseTest {
     PointRecordService pointRecordService;
 
     @Inject
-    FacePhotoService faceRecognitionService;
+    FacePhotoLocalDiskService faceRecognitionService;
 
     @AfterAll
     public static void after() {
@@ -446,7 +447,7 @@ class PointRecordServiceTest extends BaseTest {
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
 
-        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
@@ -475,7 +476,7 @@ class PointRecordServiceTest extends BaseTest {
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
 
-        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
@@ -503,7 +504,7 @@ class PointRecordServiceTest extends BaseTest {
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
 
-        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
@@ -531,7 +532,7 @@ class PointRecordServiceTest extends BaseTest {
         uploudProfilePhoto.fileName = "user1.jpg";
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
 
-        faceRecognitionService.facePhotoProfileUploud(user2.getId(), uploudProfilePhoto);
+        faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);

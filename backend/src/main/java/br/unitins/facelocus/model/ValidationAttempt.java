@@ -20,7 +20,7 @@ public class ValidationAttempt {
     private Long id;
 
     @ManyToOne
-    private UserFacePhoto userFacePhoto;
+    private FacePhoto facePhoto;
 
     private Double distanceInMeters;
 

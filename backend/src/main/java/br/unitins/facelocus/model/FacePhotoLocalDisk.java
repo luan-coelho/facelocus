@@ -11,16 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class UserFacePhoto extends DefaultEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    private String fileName;
+public class FacePhotoLocalDisk extends FacePhoto {
 
     private String filePath;
-
-    @OneToOne
-    private User user;
 }

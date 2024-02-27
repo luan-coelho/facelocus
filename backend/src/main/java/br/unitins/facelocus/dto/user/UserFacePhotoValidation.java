@@ -1,6 +1,6 @@
 package br.unitins.facelocus.dto.user;
 
-import br.unitins.facelocus.model.UserFacePhoto;
+import br.unitins.facelocus.model.FacePhoto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserFacePhotoValidation {
 
-    private UserFacePhoto userFacePhoto;
+    private FacePhoto facePhoto;
     private boolean faceDetected;
     private String errorMessage;
 }

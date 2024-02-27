@@ -1,4 +1,5 @@
 Flask~=3.0.2
+dlib
 face_recognition
 openface
 deepface~=0.0.85
@@ -10,3 +11,4 @@ scikit-image~=0.22.0
 distance
 insightface
 onnxruntime
+cmake

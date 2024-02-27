@@ -29,7 +29,7 @@ public class User extends DefaultEntity {
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserFacePhoto facePhoto;
+    private FacePhoto facePhoto;
 
   /*  @OneToMany(mappedBy = "user")
     private List<Device> devices;*/

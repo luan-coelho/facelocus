@@ -10,11 +10,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-@Named("face-recognition-cli")
+//@Named("face-recognition-cli")
 @ApplicationScoped
 public class FaceRecognitionCliService implements FaceRecognitionService {
 
-    @ConfigProperty(name = "face-recognition.lib.path")
+//    @ConfigProperty(name = "face-recognition.lib.path")
     String FACE_RECOGNITION_PATH;
 
     @Override
