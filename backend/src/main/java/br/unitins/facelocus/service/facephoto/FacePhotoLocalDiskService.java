@@ -14,10 +14,14 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import org.apache.commons.io.FilenameUtils;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,15 +52,14 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
         User user = userService.findById(userId);
 
         String[] subdirectories = {user.getId().toString(), "profile"};
-        String fileName = "profile.".concat(imageFileService.getFileExtension(multipartData.fileName));
-        FacePhotoLocalDisk facePhoto = saveFileAndBuildFacePhoto(fileName, multipartData.inputStream, subdirectories);
+        FacePhotoLocalDisk facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
 
         if (user.getFacePhoto() == null) {
             user.setFacePhoto(new FacePhotoLocalDisk());
         }
 
         FacePhotoLocalDisk originalFacePhoto = (FacePhotoLocalDisk) user.getFacePhoto();
-        originalFacePhoto.setFileName(multipartData.fileName);
+        originalFacePhoto.setFileName(multipartData.file.fileName());
         originalFacePhoto.setFilePath(facePhoto.getFilePath());
         originalFacePhoto.setUser(user);
 
@@ -100,9 +103,7 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
         }
 
         String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
-        String fileName = String.join("-", user.getId().toString(), "facephoto").concat(".");
-        fileName = fileName.concat(imageFileService.getFileExtension(multipartData.fileName));
-        FacePhotoLocalDisk facePhoto = saveFileAndBuildFacePhoto(fileName, multipartData.inputStream, subdirectories);
+        FacePhotoLocalDisk facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
         String profilePhotoFacePath = ((FacePhotoLocalDisk) user.getFacePhoto()).getFilePath();
 
         boolean facedDetected = faceRecognitionService.faceDetected(facePhoto.getFilePath(), profilePhotoFacePath);
@@ -114,12 +115,12 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
         return validation;
     }
 
-    public FacePhotoLocalDisk saveFileAndBuildFacePhoto(String fileName, InputStream file, String... subdirectories) {
+    public FacePhotoLocalDisk saveFileAndBuildFacePhoto(FileUpload fileUpload, String... subdirectories) {
         try {
-            Path filePath = buildFilePath(fileName, subdirectories);
-            Files.copy(file, filePath, StandardCopyOption.REPLACE_EXISTING);
+            Path filePath = buildFilePath(fileUpload.fileName(), subdirectories);
+            Files.copy(fileUpload.uploadedFile().toAbsolutePath(), filePath, StandardCopyOption.REPLACE_EXISTING);
             FacePhotoLocalDisk facePhoto = new FacePhotoLocalDisk();
-            facePhoto.setFileName(fileName);
+            facePhoto.setFileName(fileUpload.fileName());
             facePhoto.setFilePath(filePath.toString());
             return facePhoto;
         } catch (IOException e) {
