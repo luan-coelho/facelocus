@@ -72,7 +72,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Override
     public PointRecord create(PointRecord pointRecord) {
         validations(pointRecord);
-
         return super.create(pointRecord);
     }
 
