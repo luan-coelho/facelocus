@@ -9,4 +9,6 @@ public interface FacePhotoService {
     void profileUploud(Long userId, MultipartData multipartData);
 
     ByteArrayInputStream getByteArrayInputStreamByUser(Long userId);
+
+    void facePhotoValidation(Long userId, MultipartData multipartBody);
 }

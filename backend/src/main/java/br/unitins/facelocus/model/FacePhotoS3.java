@@ -14,5 +14,6 @@ import lombok.Setter;
 public class FacePhotoS3 extends FacePhoto {
 
     private String objectKey;
+    private Long size;
     private String bucket;
 }

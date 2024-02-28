@@ -7,6 +7,7 @@ import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import br.unitins.facelocus.service.UserService;
+import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class UserResource {
     UserService userService;
 
     @Inject
-    FacePhotoLocalDiskService faceRecognitionService;
+    FacePhotoS3Service faceRecognitionService;
 
     @Inject
     UserMapper userMapper;
