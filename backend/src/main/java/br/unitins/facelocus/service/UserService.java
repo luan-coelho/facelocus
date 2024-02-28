@@ -10,7 +10,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,9 +68,5 @@ public class UserService extends BaseService<User, UserRepository> {
         }
         user.setPassword(passwordHandlerService.passwordHash(changePasswordDTO.confirmPassword()));
         this.update(user);
-    }
-
-    public ByteArrayInputStream getUserFacePhoto(Long userId) {
-        return facePhotoService.getByteArrayInputStreamByUser(userId);
     }
 }

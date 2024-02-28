@@ -28,12 +28,11 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return repository.existsById(id);
     }
 
-    public boolean existsByIdWithThrows(Long id) {
+    public void existsByIdWithThrows(Long id) {
         boolean exists = repository.existsById(id);
         if (!exists) {
-            throw new NotFoundException("Recurso não encontrado pelo id");
+            throw new IllegalArgumentException("Não encontrado por id");
         }
-        return true;
     }
 
     public boolean existsByIdWithThrows(Long id, String throwsMessage) {

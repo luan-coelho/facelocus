@@ -18,7 +18,6 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +69,7 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
     }
 
     @Override
-    public ByteArrayInputStream getByteArrayInputStreamByUser(Long userId) {
+    public byte[] getFacePhotoByUser(Long userId) {
         User user = userService.findById(userId);
 
         try {
@@ -80,8 +79,7 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
             BufferedImage image = ImageIO.read(file);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, extension, baos);
-            byte[] byteArray = baos.toByteArray();
-            return new ByteArrayInputStream(byteArray);
+            return baos.toByteArray();
         } catch (Exception e) {
             throw new NotFoundException("Arquivo de foto não encontrado");
         }

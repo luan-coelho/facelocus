@@ -5,7 +5,6 @@ import br.unitins.facelocus.dto.user.ChangePasswordDTO;
 import br.unitins.facelocus.dto.user.UserResponseDTO;
 import br.unitins.facelocus.mapper.UserMapper;
 import br.unitins.facelocus.model.User;
-import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import br.unitins.facelocus.service.UserService;
 import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import io.quarkus.security.Authenticated;
@@ -16,7 +15,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
@@ -28,7 +26,7 @@ public class UserResource {
     UserService userService;
 
     @Inject
-    FacePhotoS3Service faceRecognitionService;
+    FacePhotoS3Service facePhotoService;
 
     @Inject
     UserMapper userMapper;
@@ -71,7 +69,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response facePhotoProfileUploud(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
-        faceRecognitionService.profileUploud(userId, multipartBody);
+        facePhotoService.profileUploud(userId, multipartBody);
         return Response.ok().build();
     }
 
@@ -79,7 +77,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response checkFace(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
-        faceRecognitionService.facePhotoValidation(userId, multipartBody);
+        facePhotoService.facePhotoValidation(userId, multipartBody);
         return Response.ok().build();
     }
 
@@ -87,7 +85,7 @@ public class UserResource {
     @GET
     @Produces({"image/png", "image/jpeg"})
     public Response getUserFacePhoto(@RestQuery("user") Long userId) {
-        ByteArrayInputStream inputStream = userService.getUserFacePhoto(userId);
-        return Response.ok(inputStream).build();
+        byte[] facePhotoBytes = facePhotoService.getFacePhotoByUser(userId);
+        return Response.ok(facePhotoBytes).build();
     }
 }
