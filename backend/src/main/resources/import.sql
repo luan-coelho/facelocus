@@ -14,3 +14,8 @@ VALUES (1, 1, 'Minha casa', '-10.179463618961364', '-48.361939849308065');
 
 INSERT INTO public.event_tb_user (events_id, users_id)
 VALUES (1, 2);
+
+INSERT INTO public.facephoto (active, createdat, id, size, updatedat, user_id, dtype, bucket, filename, filepath,
+                              objectkey)
+VALUES (true, '2024-02-29 13:47:58.757759', 1, null, null, 1, 'FacePhotoS3', 'facelocus', 'luan.jpg', null,
+        '1/luan.jpg');

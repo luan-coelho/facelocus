@@ -62,6 +62,20 @@ class _PointTimePickerCardState extends State<PointTimePickerCard> {
           }
           setState(() {
             selectedTime = time;
+            final now = DateTime.now();
+            if (selectedTime != null &&
+                widget.borderPosition == AxisDirection.left) {
+              DateTime initialDate = DateTime(
+                  now.year, now.month, now.day, time.hour, time.minute);
+              _controller.initialDate.value = initialDate;
+            }
+
+            if (selectedTime != null &&
+                widget.borderPosition == AxisDirection.right) {
+              DateTime finalDate = DateTime(
+                  now.year, now.month, now.day, time.hour, time.minute);
+              _controller.finalDate.value = finalDate;
+            }
           });
         },
         child: Column(

@@ -13,10 +13,14 @@ import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import org.jboss.resteasy.reactive.server.core.multipart.DefaultFileUpload;
+import org.jboss.resteasy.reactive.server.multipart.FormValue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -444,7 +448,11 @@ class PointRecordServiceTest extends BaseTest {
         pointRecordService.create(pointRecord);
 
         MultipartData uploudProfilePhoto = new MultipartData();
-        uploudProfilePhoto.fileName = "user1.jpg";
+        FileUpload mockFileUpload = Mockito.mock(FileUpload.class);
+        Mockito.when(mockFileUpload.fileName()).thenReturn("example.txt");
+        Mockito.when(mockFileUpload.contentType()).thenReturn("text/plain");
+        FormValue formValue = new FormValue();
+        uploudProfilePhoto.file = new DefaultFileUpload();
         uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
 
         faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);

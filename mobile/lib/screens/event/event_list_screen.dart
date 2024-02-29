@@ -61,7 +61,7 @@ class _EventListScreenState extends State<EventListScreen> {
     }
 
     return AppLayout(
-      appBarTitle: 'Eventos',
+      appBarTitle: 'Meus eventos',
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(

@@ -41,6 +41,18 @@ class EventServiceTest extends BaseTest {
     @Test
     @TestTransaction
     @DisplayName("Deve retornar eventos paginados por usuário")
+    void DeveCriarUmEventoCorretamente() {
+        event1.setId(null);
+
+        eventService.create(event1);
+
+        assertNotNull(event1.getId());
+        assertNotNull(event1.getDescription());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve retornar eventos paginados por usuário")
     void shouldReturnPaginatedEventsByUser() {
         Pageable pageable = new Pageable();
         pageable.setSize(1);

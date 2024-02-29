@@ -31,7 +31,7 @@ class LocationController extends GetxController {
   Future<void> fetchAllByEventId(int eventId) async {
     _isLoading.value = true;
     var locations = await service.getAllByEventId(eventId);
-    locations.clear();
+    _locations.clear();
     _locations.addAll(locations);
     _isLoading.value = false;
   }
@@ -53,6 +53,7 @@ class LocationController extends GetxController {
     _isLoading.value = true;
     try {
       await service.deleteById(locationId);
+      Navigator.pop(context, "Ok");
     } on DioException catch (e) {
       Toast.showError(e.message!, context);
     }
@@ -101,7 +102,7 @@ class LocationController extends GetxController {
 
   void newLocationInstace() {
     var location =
-    LocationModel(description: '', latitude: 0.0, longitude: 0.0);
+        LocationModel(description: '', latitude: 0.0, longitude: 0.0);
     _location.value = location;
   }
 

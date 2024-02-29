@@ -68,11 +68,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   @override
   Widget build(BuildContext context) {
     newPoint() {
-      DateTime initialDate = DateTime.now();
-      DateTime finalDate = DateTime.now();
+      DateTime initialDate = _controller.initialDate.value ?? DateTime.now();
+      DateTime finalDate = _controller.finalDate.value ?? DateTime.now();
       PointModel pointSaved = PointModel(
-          initialDate: _controller.initialDate.value.copyWith(),
-          finalDate: _controller.finalDate.value.copyWith());
+          initialDate: initialDate.copyWith(), finalDate: finalDate.copyWith());
       _point = PointModel(initialDate: initialDate, finalDate: finalDate);
       _controller.points.add(pointSaved);
     }
@@ -125,7 +124,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const SizedBox(height: 10),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                AppDatePicker(date: _date),
+                // AppDatePicker(date: _date),
+                const MultiTimePicker(),
                 const SizedBox(height: 15),
                 const Text('Fatores de validação',
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -248,5 +248,71 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             ),
           ),
         ));
+  }
+}
+
+class MultiTimePicker extends StatefulWidget {
+  const MultiTimePicker({super.key});
+
+  @override
+  _MultiTimePickerState createState() => _MultiTimePickerState();
+}
+
+class _MultiTimePickerState extends State<MultiTimePicker> {
+  DateTime dateTime = DateTime.now();
+  late TimeOfDay _startTime;
+  late TimeOfDay _endTime;
+
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isStartTime ? _startTime : _endTime,
+    );
+
+    if (picked != null) {
+      setState(() {
+        if (isStartTime) {
+          _startTime = picked;
+        } else {
+          _endTime = picked;
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _startTime = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+    DateTime endTime = dateTime.add(const Duration(minutes: 15));
+    _endTime = TimeOfDay(hour: dateTime.hour, minute: endTime.minute);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => _selectTime(context, true),
+                child: Text('${_startTime?.format(context)}'),
+              ),
+              const SizedBox(width: 10),
+              const AppDeleteButton(onPressed: null),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () => _selectTime(context, false),
+                child: Text('${_endTime?.format(context)}'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

@@ -4,7 +4,6 @@ import br.unitins.facelocus.dto.user.ChangePasswordDTO;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.UserRepository;
 import br.unitins.facelocus.service.auth.PasswordHandlerService;
-import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -18,9 +17,6 @@ public class UserService extends BaseService<User, UserRepository> {
 
     @Inject
     PasswordHandlerService passwordHandlerService;
-
-    @Inject
-    FacePhotoLocalDiskService facePhotoService;
 
     public List<User> findAllByEventId(Long eventId) {
         return this.repository.findAllByEventId(eventId);

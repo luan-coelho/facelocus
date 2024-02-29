@@ -104,7 +104,6 @@ public class EventRepository extends BaseRepository<Event> {
     public boolean linkedUser(Long eventId, Long userId) {
         // language=jpaql
         String query = """
-                SELECT DISTINCT e
                 FROM Event e
                     JOIN e.users u
                 WHERE e.id = ?1

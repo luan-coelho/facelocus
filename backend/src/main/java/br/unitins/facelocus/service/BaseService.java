@@ -69,10 +69,12 @@ public abstract class BaseService<T, R extends BaseRepository<T>> {
         return repository.getEntityManager().merge(entity);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         existsByIdWithThrows(id);
         try {
-            repository.deleteEntityById(id);
+//            repository.deleteEntityById(id);
+            repository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
