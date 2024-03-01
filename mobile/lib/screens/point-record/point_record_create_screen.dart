@@ -4,6 +4,7 @@ import 'package:facelocus/controllers/point_record_controller.dart';
 import 'package:facelocus/delegates/event_delegate.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -32,6 +33,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   List<PointModel> points = [];
   HashSet<Factor> factors = HashSet();
   EventModel? _event;
+  LocationModel? _location;
 
   _create() {
     if (faceRecognitionFactor) {
@@ -43,6 +45,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     }
     PointRecordModel pointRecord = PointRecordModel(
       event: _event,
+      location: _location,
       date: _controller.date.value ?? DateTime.now(),
       points: _controller.points,
       factors: factors.toList(),
@@ -60,7 +63,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
 
   @override
   void dispose() {
-    _controller.cleanPointsList();
+    _controller.points.clear();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -89,6 +93,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                               AppDeleteButton(onPressed: () {
                                 setState(() {
                                   _event = null;
+                                  _location = null;
                                 });
                               }),
                             ],
@@ -111,6 +116,55 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     height: 35,
                   );
                 }),
+                const SizedBox(height: 10),
+                const Text('Localização',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                _event != null && _event?.locations != null
+                    ? SizedBox(
+                        height: 50,
+                        child: DropdownButtonFormField<LocationModel>(
+                          value: _location,
+                          icon: const Icon(Icons.arrow_downward),
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 0),
+                              border: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                              ),
+                              focusColor: AppColorsConst.white,
+                              filled: true,
+                              fillColor: Colors.black12.withOpacity(0.1)),
+                          style: const TextStyle(color: Colors.black),
+                          isExpanded: true,
+                          hint: const Text('Selecione...'),
+                          onChanged: (LocationModel? value) {
+                            // This is called when the user selects an item.
+                            setState(() {
+                              _location = value!;
+                            });
+                          },
+                          items: _event?.locations!
+                              .map<DropdownMenuItem<LocationModel>>(
+                                  (LocationModel location) {
+                            return DropdownMenuItem<LocationModel>(
+                              value: location,
+                              child: Text(location.description),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    : const Text('Informe o evento'),
                 const SizedBox(height: 10),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
