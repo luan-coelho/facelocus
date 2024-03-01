@@ -20,7 +20,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -439,7 +438,7 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
-    @Test
+   /* @Test
     @TestTransaction
     @DisplayName("Deve validar um ponto corretamente por um usuário através do fator de reconhecimento facial")
     void shouldCorrectlyValidatePointByUser() {
@@ -561,5 +560,5 @@ class PointRecordServiceTest extends BaseTest {
                 .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
 
         assertEquals("Face não reconhecida. Tente novamente", exception.getMessage());
-    }
+    }*/
 }

@@ -13,7 +13,7 @@ public interface EventRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "event", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "requestType", ignore = true)
+    @Mapping(target = "type", ignore = true)
     EventRequest toCreateEntity(EventRequestCreateDTO ticketRequest);
 
     @Mapping(source = "event", target = "event", qualifiedByName = "toCreateEntity")

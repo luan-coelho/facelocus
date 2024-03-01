@@ -48,7 +48,7 @@ class EventRequestServiceTest extends BaseTest {
         assertEquals(user2.getId(), ticketRequest.getEvent().getAdministrator().getId());
         assertEquals("ZFG123", ticketRequest.getCode());
         assertEquals(event1.getId(), ticketRequest.getEvent().getId());
-        assertEquals(EventRequestType.TICKET_REQUEST, ticketRequest.getRequestType());
+        assertEquals(EventRequestType.TICKET_REQUEST, ticketRequest.getType());
         assertEquals(EventRequestStatus.PENDING, ticketRequest.getStatus());
         assertEquals(user1.getId(), ticketRequest.getInitiatorUser().getId());
         assertEquals(user2.getId(), ticketRequest.getTargetUser().getId());

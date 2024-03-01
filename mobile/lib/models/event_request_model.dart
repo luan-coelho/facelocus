@@ -7,8 +7,8 @@ class EventRequestModel {
   int? id;
   String? code;
   EventModel event;
-  EventRequestStatus? requestStatus;
-  EventRequestType? requestType;
+  EventRequestStatus? status;
+  EventRequestType? type;
   UserModel initiatorUser;
   UserModel targetUser;
 
@@ -16,8 +16,8 @@ class EventRequestModel {
     this.id,
     this.code,
     required this.event,
-    this.requestStatus,
-    this.requestType,
+    this.status,
+    this.type,
     required this.initiatorUser,
     required this.targetUser,
   });
@@ -27,12 +27,10 @@ class EventRequestModel {
       id: json['id'] as int,
       code: json['code'],
       event: EventModel.fromJson(json['event']),
-      requestStatus: json['requestStatus'] != null
-          ? EventRequestStatus.parse(json['requestStatus'])
+      status: json['status'] != null
+          ? EventRequestStatus.parse(json['status'])
           : null,
-      requestType: json['requestType'] != null
-          ? EventRequestType.parse(json['requestType'])
-          : null,
+      type: json['type'] != null ? EventRequestType.parse(json['type']) : null,
       initiatorUser: UserModel.fromJson(json['initiatorUser']),
       targetUser: UserModel.fromJson(json['targetUser']),
     );

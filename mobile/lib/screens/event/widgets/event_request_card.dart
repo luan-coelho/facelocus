@@ -67,7 +67,7 @@ class _EventRequestCardState extends State<EventRequestCard> {
 
     void showEventRequest() {
       int eventRequestId = widget.eventRequest.id!;
-      EventRequestType requestType = widget.eventRequest.requestType!;
+      EventRequestType requestType = widget.eventRequest.type!;
       context.push(Uri(
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
@@ -81,7 +81,7 @@ class _EventRequestCardState extends State<EventRequestCard> {
           widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
       return GestureDetector(
         onTap: !isRequestOwner &&
-                widget.eventRequest.requestStatus == EventRequestStatus.pending
+                widget.eventRequest.status == EventRequestStatus.pending
             ? showEventRequest
             : null,
         child: Container(
@@ -129,14 +129,14 @@ class _EventRequestCardState extends State<EventRequestCard> {
                         height: 15.0,
                         decoration: BoxDecoration(
                           color:
-                              colorByStatus(widget.eventRequest.requestStatus),
+                              colorByStatus(widget.eventRequest.status),
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 5),
                       Text(
                           descriptionByStatus(
-                              widget.eventRequest.requestStatus),
+                              widget.eventRequest.status),
                           style: const TextStyle(color: Colors.black54)),
                     ]),
                     Row(
@@ -151,16 +151,16 @@ class _EventRequestCardState extends State<EventRequestCard> {
                                   const BorderRadius.all(Radius.circular(5)),
                               border: Border.all(
                                   color: getBannerColor(
-                                      widget.eventRequest.requestType!)),
+                                      widget.eventRequest.type!)),
                               color: getBannerColor(
-                                      widget.eventRequest.requestType!)
+                                      widget.eventRequest.type!)
                                   .withOpacity(0.1)),
                           child: Text(
                               getSecondaryBannerText(
-                                  widget.eventRequest.requestType!),
+                                  widget.eventRequest.type!),
                               style: TextStyle(
                                   color: getBannerColor(
-                                      widget.eventRequest.requestType!),
+                                      widget.eventRequest.type!),
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500)),
                         ),
@@ -175,15 +175,15 @@ class _EventRequestCardState extends State<EventRequestCard> {
                                   const BorderRadius.all(Radius.circular(5)),
                               border: Border.all(
                                   color: getBannerColor(
-                                      widget.eventRequest.requestType!)),
+                                      widget.eventRequest.type!)),
                               color: getBannerColor(
-                                      widget.eventRequest.requestType!)
+                                      widget.eventRequest.type!)
                                   .withOpacity(0.1)),
                           child: Text(
-                              getBannerText(widget.eventRequest.requestType!),
+                              getBannerText(widget.eventRequest.type!),
                               style: TextStyle(
                                   color: getBannerColor(
-                                      widget.eventRequest.requestType!),
+                                      widget.eventRequest.type!),
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500)),
                         ),

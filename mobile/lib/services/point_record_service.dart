@@ -9,7 +9,7 @@ class PointRecordService {
   getAllByUser(int userId) async {
     String url = '${AppRoutes.pointRecord}?user=$userId';
     final response = await _fetchApi.get(url);
-    List data = response.data['data'];
+    List<dynamic> data = response.data;
     return data.map((json) => PointRecordModel.fromJson(json)).toList();
   }
 

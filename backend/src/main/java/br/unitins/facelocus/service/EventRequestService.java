@@ -115,7 +115,7 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
         eventRequest.setCode(event.getCode());
         eventRequest.setInitiatorUser(initiatorUser);
         eventRequest.setTargetUser(event.getAdministrator());
-        eventRequest.setRequestType(EventRequestType.TICKET_REQUEST);
+        eventRequest.setType(EventRequestType.TICKET_REQUEST);
         return super.create(eventRequest);
     }
 

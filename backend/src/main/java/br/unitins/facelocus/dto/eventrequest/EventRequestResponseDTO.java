@@ -11,7 +11,7 @@ public record EventRequestResponseDTO(
         String code,
         EventDTO event,
         EventRequestStatus status,
-        EventRequestType requestType,
+        EventRequestType type,
         UserResponseDTO initiatorUser,
         UserResponseDTO targetUser,
         LocalDateTime createdAt,

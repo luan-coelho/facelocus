@@ -24,7 +24,7 @@ public class EventRequest extends DefaultEntity {
 
     private EventRequestStatus status = EventRequestStatus.PENDING;
 
-    private EventRequestType requestType = EventRequestType.INVITATION;
+    private EventRequestType type = EventRequestType.INVITATION;
 
     @ManyToOne
     private User initiatorUser; // Usuário que inicia o convite ou solicitação

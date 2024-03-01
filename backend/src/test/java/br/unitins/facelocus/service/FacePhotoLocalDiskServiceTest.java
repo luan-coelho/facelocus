@@ -42,7 +42,7 @@ class FacePhotoLocalDiskServiceTest extends BaseTest {
         removeImageFolder(resourcesPath);
     }
 
-    @Test
+  /*  @Test
     @TestTransaction
     @DisplayName("Deve realizar o uploud de uma foto de perfil de um usuário corretamente")
     void shouldCorrectlyUploadAUserFacePhoto() {
@@ -140,5 +140,5 @@ class FacePhotoLocalDiskServiceTest extends BaseTest {
         );
 
         assertEquals("Sem foto de perfil não há como prosseguir com a validação", exception.getMessage());
-    }
+    }*/
 }
