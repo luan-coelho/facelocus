@@ -6,13 +6,14 @@ import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/screens/point-record/widgets/point_time_picker.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class PointRecordCreateScreen extends StatefulWidget {
@@ -124,8 +125,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const SizedBox(height: 10),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                // AppDatePicker(date: _date),
-                const MultiTimePicker(),
+                AppDatePicker(date: _date),
                 const SizedBox(height: 15),
                 const Text('Fatores de validação',
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -199,49 +199,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const Text('Pontos',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () {
-                        return Column(
-                          children: [
-                            ListView.separated(
-                              padding:
-                                  const EdgeInsets.only(left: 15, right: 15),
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const SizedBox(height: 10);
-                              },
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: _controller.points.length,
-                              itemBuilder: (context, index) {
-                                PointModel point = _controller.points[index];
-                                return PointTimePicker(point: point);
-                              },
-                            ),
-                            SizedBox(
-                                height: _controller.points.isNotEmpty ? 15 : 0),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: AppButton(
-                    onPressed: newPoint,
-                    textColor: Colors.green,
-                    text: 'Adicionar ponto',
-                    height: 35,
-                    textFontSize: 12,
-                    borderColor: Colors.green,
-                    backgroundColor: Colors.green.withOpacity(0.2),
-                  ),
-                ),
+                const MultiTimePicker(),
                 const SizedBox(height: 15),
                 AppButton(text: 'Cadastrar', onPressed: _create),
               ],
@@ -255,13 +213,14 @@ class MultiTimePicker extends StatefulWidget {
   const MultiTimePicker({super.key});
 
   @override
-  _MultiTimePickerState createState() => _MultiTimePickerState();
+  State<StatefulWidget> createState() => _MultiTimePickerState();
 }
 
 class _MultiTimePickerState extends State<MultiTimePicker> {
   DateTime dateTime = DateTime.now();
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
+  List<Map<String, TimeOfDay>> timeIntervals = [];
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -280,39 +239,143 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
     }
   }
 
+  void _addInterval() {
+    setState(() {
+      timeIntervals.add({'initialDate': _startTime, 'finalDate': _endTime});
+    });
+  }
+
+  void _removeInterval(int index) {
+    setState(() {
+      timeIntervals.removeAt(index);
+    });
+  }
+
   @override
   void initState() {
+    super.initState();
     _startTime = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
     DateTime endTime = dateTime.add(const Duration(minutes: 15));
-    _endTime = TimeOfDay(hour: dateTime.hour, minute: endTime.minute);
-    super.initState();
+    _endTime = TimeOfDay(hour: endTime.hour, minute: endTime.minute);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => _selectTime(context, true),
-                child: Text('${_startTime?.format(context)}'),
-              ),
-              const SizedBox(width: 10),
-              const AppDeleteButton(onPressed: null),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () => _selectTime(context, false),
-                child: Text('${_endTime?.format(context)}'),
-              ),
-            ],
-          )
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () => _selectTime(context, false),
+          child: Container(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              width: MediaQuery.of(context).size.width,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Colors.black12.withOpacity(0.1),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Hora inicial -',
+                    style: TextStyle(
+                        color: AppColorsConst.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    _startTime.format(context),
+                    style: const TextStyle(
+                        color: AppColorsConst.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )),
+        ),
+        const SizedBox(height: 5),
+        GestureDetector(
+          onTap: () => _selectTime(context, false),
+          child: Container(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              width: MediaQuery.of(context).size.width,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Colors.black12.withOpacity(0.1),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Hora final -',
+                    style: TextStyle(
+                        color: AppColorsConst.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    _endTime.format(context),
+                    style: const TextStyle(
+                        color: AppColorsConst.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )),
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppButton(
+            onPressed: _addInterval,
+            textColor: Colors.green,
+            text: 'Adicionar intervalo',
+            height: 35,
+            textFontSize: 12,
+            borderColor: Colors.green,
+            backgroundColor: Colors.green.withOpacity(0.2),
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text('Intervalos', style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 5),
+        ListView.separated(
+          shrinkWrap: true,
+          itemCount: timeIntervals.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return const SizedBox(height: 5);
+          },
+          itemBuilder: (context, index) {
+            final interval = timeIntervals[index];
+            return Container(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                width: double.infinity,
+                height: 45,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.white),
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.timelapse, color: Colors.black),
+                        const SizedBox(width: 5),
+                        Text(
+                            '${interval['initialDate']!.format(context)} - ${interval['finalDate']!.format(context)}',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w300)),
+                      ],
+                    ),
+                    AppDeleteButton(onPressed: () => _removeInterval(index))
+                  ],
+                )));
+          },
+        ),
+      ],
     );
   }
 }

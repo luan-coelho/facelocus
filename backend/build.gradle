@@ -31,7 +31,6 @@ dependencies {
     testImplementation 'com.h2database:h2'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'org.mockito:mockito-core:2.1.0'
 }
 
 group 'br.unitins.facelocus'
