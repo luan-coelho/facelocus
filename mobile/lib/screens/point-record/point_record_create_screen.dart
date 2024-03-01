@@ -72,6 +72,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   Widget build(BuildContext context) {
     return AppLayout(
         appBarTitle: 'Novo registro de ponto',
+        showBottomNavigationBar: false,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(29.0),
@@ -80,6 +81,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
               children: [
                 const Text('Evento',
                     style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
                 Builder(builder: (context) {
                   if (_event != null) {
                     return Column(
@@ -112,13 +114,15 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                       });
                     },
                     textColor: AppColorsConst.black,
+                    borderColor: Colors.transparent,
                     backgroundColor: Colors.black12.withOpacity(0.1),
-                    height: 35,
+                    height: 50,
                   );
                 }),
                 const SizedBox(height: 10),
                 const Text('Localização',
                     style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
                 _event != null && _event?.locations != null
                     ? SizedBox(
                         height: 50,
@@ -147,7 +151,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                               fillColor: Colors.black12.withOpacity(0.1)),
                           style: const TextStyle(color: Colors.black),
                           isExpanded: true,
-                          hint: const Text('Selecione...'),
+                          hint: const Text('Selecione...',
+                              style: TextStyle(fontFamily: 'Poppins')),
                           onChanged: (LocationModel? value) {
                             // This is called when the user selects an item.
                             setState(() {
@@ -159,7 +164,9 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                   (LocationModel location) {
                             return DropdownMenuItem<LocationModel>(
                               value: location,
-                              child: Text(location.description),
+                              child: Text(location.description,
+                                  style:
+                                      const TextStyle(fontFamily: 'Poppins')),
                             );
                           }).toList(),
                         ),
@@ -168,6 +175,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const SizedBox(height: 10),
                 const Text('Data',
                     style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
                 AppDatePicker(date: _date),
                 const SizedBox(height: 15),
                 const Text('Fatores de validação',
@@ -241,9 +249,9 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     : const SizedBox(),
                 const Text('Pontos',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 const MultiTimePicker(),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
                 AppButton(text: 'Cadastrar', onPressed: _create),
               ],
             ),
@@ -323,7 +331,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           child: Container(
               padding: const EdgeInsets.only(left: 15, right: 15),
               width: MediaQuery.of(context).size.width,
-              height: 35,
+              height: 50,
               decoration: BoxDecoration(
                   color: Colors.black12.withOpacity(0.1),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -335,14 +343,14 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
                     style: TextStyle(
                         color: AppColorsConst.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     _startTime.format(context),
                     style: const TextStyle(
                         color: AppColorsConst.black,
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -354,7 +362,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           child: Container(
               padding: const EdgeInsets.only(left: 15, right: 15),
               width: MediaQuery.of(context).size.width,
-              height: 35,
+              height: 50,
               decoration: BoxDecoration(
                   color: Colors.black12.withOpacity(0.1),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -366,14 +374,14 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
                     style: TextStyle(
                         color: AppColorsConst.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     _endTime.format(context),
                     style: const TextStyle(
                         color: AppColorsConst.black,
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -386,15 +394,22 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
             onPressed: _addInterval,
             textColor: Colors.green,
             text: 'Adicionar intervalo',
-            height: 35,
-            textFontSize: 12,
+            height: 50,
+            textFontSize: 14,
             borderColor: Colors.green,
             backgroundColor: Colors.green.withOpacity(0.2),
           ),
         ),
         const SizedBox(height: 10),
-        const Text('Intervalos', style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 5),
+        _controller.points.isNotEmpty
+            ? const Column(
+                children: [
+                  Text('Intervalos',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 5),
+                ],
+              )
+            : const SizedBox(),
         Obx(() {
           return ListView.separated(
             shrinkWrap: true,

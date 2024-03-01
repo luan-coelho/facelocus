@@ -37,7 +37,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width ?? double.infinity,
-      height: widget.height ?? 40,
+      height: widget.height ?? 50,
       child: TextButton(
         style: ButtonStyle(
             alignment: Alignment.center,

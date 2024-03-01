@@ -78,7 +78,7 @@ class _LocationScreenState extends State<LocationListScreen> {
                               return null;
                             },
                             onSaved: (value) => _location.description = value),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 5),
                         AppButton(
                             text: 'Pegar localização',
                             onPressed: () => _controller.savePosition(context),
@@ -163,7 +163,7 @@ class _LocationScreenState extends State<LocationListScreen> {
                         const SizedBox(height: 5),
                         ListView.separated(
                           separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(height: 20);
+                            return const SizedBox(height: 10);
                           },
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,

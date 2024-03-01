@@ -51,7 +51,7 @@ class _AppLayoutState extends State<AppLayout> {
         floatingActionButton: widget.showBottomNavigationBar != null &&
                 widget.showBottomNavigationBar == true
             ? FloatingActionButton(
-                onPressed: () => context.replace(AppRoutes.pointRecordCreate),
+                onPressed: () => context.push(AppRoutes.pointRecordCreate),
                 elevation: 13,
                 backgroundColor: AppColorsConst.blue,
                 shape: const RoundedRectangleBorder(

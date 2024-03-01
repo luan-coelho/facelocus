@@ -43,8 +43,9 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 EventHeader(
-                    description:
-                        _controller.pointRecord.value!.event!.description!,
+                    description: _controller
+                        .pointRecord.value!.event!.description!
+                        .toUpperCase(),
                     date: _controller.pointRecord.value!.date),
                 const SizedBox(height: 10),
                 SingleChildScrollView(

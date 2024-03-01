@@ -84,7 +84,7 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 35,
+      height: 50,
       child: TextButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
