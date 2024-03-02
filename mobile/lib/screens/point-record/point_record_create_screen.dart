@@ -252,7 +252,13 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 const SizedBox(height: 5),
                 const MultiTimePicker(),
                 const SizedBox(height: 10),
-                AppButton(text: 'Cadastrar', onPressed: _create),
+                Builder(builder: (context) {
+                  bool disable = _event == null ||
+                      _location == null ||
+                      _controller.points.isEmpty;
+                  return AppButton(
+                      text: 'Cadastrar', onPressed: _create, disabled: disable);
+                }),
               ],
             ),
           ),
