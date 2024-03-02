@@ -40,7 +40,7 @@ class EventCodeCard extends StatelessWidget {
                 children: [
                   const Text('Código para ingresso',
                       style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+                          TextStyle(fontWeight: FontWeight.w300)),
                   const SizedBox(width: 5),
                   Text(event.code!,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -52,22 +52,22 @@ class EventCodeCard extends StatelessWidget {
                       ClipboardData(text: event.code ?? 'Sem código')),
                   child: SvgPicture.asset(
                     'images/clipboard-copy-icon.svg',
-                    width: 20,
+                    width: 25,
                     colorFilter:
                         const ColorFilter.mode(Colors.green, BlendMode.srcIn),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 GestureDetector(
                   onTap: () => shareCode(),
                   child: SvgPicture.asset(
                     'images/share-icon.svg',
-                    width: 20,
+                    width: 25,
                     colorFilter:
                         const ColorFilter.mode(Colors.green, BlendMode.srcIn),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 GestureDetector(
                   onTap: () => showDialog<String>(
                     context: context,
@@ -90,7 +90,7 @@ class EventCodeCard extends StatelessWidget {
                   ),
                   child: SvgPicture.asset(
                     'images/refresh-ccw-dot-icon.svg',
-                    width: 20,
+                    width: 25,
                     colorFilter:
                         const ColorFilter.mode(Colors.green, BlendMode.srcIn),
                   ),
