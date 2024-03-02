@@ -9,13 +9,17 @@ class AppLayout extends StatefulWidget {
       {super.key,
       this.appBarTitle,
       bool this.showAppBar = true,
+      this.leading,
       this.showBottomNavigationBar = true,
       required this.body,
       this.floatingActionButton});
 
   final String? appBarTitle;
   final bool? showAppBar;
+
+  final Widget? leading;
   final bool? showBottomNavigationBar;
+
   final Widget body;
   final Widget? floatingActionButton;
 
@@ -30,6 +34,7 @@ class _AppLayoutState extends State<AppLayout> {
       child: Scaffold(
         appBar: widget.showAppBar != null && widget.showAppBar == true
             ? AppBar(
+                leading: widget.leading,
                 centerTitle: true,
                 backgroundColor: widget.appBarTitle != null
                     ? AppColorsConst.dark

@@ -10,6 +10,8 @@ import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 class FaceUploadScreen extends StatefulWidget {
@@ -24,6 +26,7 @@ class FaceUploadScreen extends StatefulWidget {
 class FaceUploadScreenState extends State<FaceUploadScreen> {
   late final UserController _controller;
   late final SessionController _authController;
+  late final ImagePicker picker;
   File? _capturedImage;
   late bool _openCamera;
 
@@ -31,18 +34,63 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
   void initState() {
     _controller = Get.find<UserController>();
     _authController = Get.find<SessionController>();
+    picker = ImagePicker();
     _openCamera = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    void croppedFile(String path) async {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Selecionar',
+              toolbarColor: AppColorsConst.dark,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          WebUiSettings(
+            context: context,
+          ),
+        ],
+      );
+      setState(() {
+        _capturedImage = File(croppedFile!.path);
+      });
+    }
+
+    void getPhotoFromGalery() async {
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          _capturedImage = File(image.path);
+        });
+        croppedFile(image.path);
+      }
+    }
+
     return AppLayout(
       appBarTitle: 'Realizar uploud de foto',
       showAppBar: true,
       showBottomNavigationBar: false,
+      leading: _openCamera
+          ? IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => setState(() {
+                _openCamera = false;
+              }),
+            )
+          : null,
       body: Builder(builder: (context) {
-        if (!_openCamera) {
+        if (_openCamera) {
           return Padding(
             padding: const EdgeInsets.all(29.0),
             child: Column(
@@ -61,12 +109,14 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                 ),
                 const SizedBox(height: 15),
                 AppButton(
-                    text: 'Iniciar',
+                    text: 'Tirar uma foto',
                     onPressed: () {
                       setState(() {
                         _openCamera = true;
                       });
                     }),
+                const SizedBox(height: 10),
+                AppButton(text: 'Galeria', onPressed: getPhotoFromGalery),
                 const SizedBox(height: 10),
                 AppButton(
                   text: 'Sair',
@@ -84,35 +134,31 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
 
         if (_capturedImage != null) {
           return Center(
-            child: Stack(
-              alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.file(
                   _capturedImage!,
-                  width: double.maxFinite,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   fit: BoxFit.fitWidth,
                 ),
-                Positioned(
-                  width: MediaQuery.of(context).size.width,
-                  bottom: MediaQuery.of(context).size.width * 0.05,
-                  child: Padding(
-                    padding: const EdgeInsets.all(29.0),
-                    child: Column(
-                      children: [
-                        AppButton(
-                            text: 'Validar identidade',
-                            onPressed: _controller.facePhotoProfileUploud(
-                                context, _capturedImage!)),
-                        const SizedBox(height: 15),
-                        AppButton(
-                          text: 'Tirar nova foto',
-                          onPressed: () =>
-                              setState(() => _capturedImage = null),
-                          textColor: Colors.red,
-                          backgroundColor: AppColorsConst.white,
-                        )
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(29.0),
+                  child: Column(
+                    children: [
+                      AppButton(
+                          text: 'Enviar',
+                          onPressed: () => _controller.facePhotoProfileUploud(
+                              context, _capturedImage!)),
+                      const SizedBox(height: 10),
+                      AppButton(
+                        text: 'Tirar nova foto',
+                        onPressed: () => setState(() => _capturedImage = null),
+                        textColor: Colors.red,
+                        backgroundColor: AppColorsConst.white,
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -126,7 +172,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
             defaultCameraLens: CameraLens.front,
             orientation: CameraOrientation.portraitUp,
             onCapture: (File? image) {
-              setState(() => _capturedImage = image);
+              setState(() => croppedFile(image!.path));
             },
             onFaceDetected: (Face? face) {},
             messageBuilder: (context, face) {
