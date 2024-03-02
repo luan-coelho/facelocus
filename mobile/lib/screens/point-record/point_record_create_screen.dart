@@ -64,7 +64,6 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   @override
   void dispose() {
     _controller.points.clear();
-    _controller.dispose();
     super.dispose();
   }
 
