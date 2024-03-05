@@ -82,7 +82,7 @@ class PointValidate extends StatefulWidget {
 class _PointValidateState extends State<PointValidate> {
   final Map<AttendanceRecordStatus, IconData> attendanceRecordStatus = {
     AttendanceRecordStatus.validated: Icons.check_circle,
-    AttendanceRecordStatus.notValidated: Icons.error,
+    AttendanceRecordStatus.notValidated: Icons.running_with_errors,
     AttendanceRecordStatus.pending: Icons.pending,
   };
 
