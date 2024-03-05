@@ -1,28 +1,23 @@
+import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/point_model.dart';
-import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/models/user_face_photo_model.dart';
 
-class AttendanceRecord {
-  late int id;
-  late DateTime dateTime;
-  late UserModel user;
-  late UserFacePhotoModel userFacePhoto;
-  late PointModel point;
+class AttendanceRecordModel {
+  int id;
+  AttendanceRecordStatus? status;
+  PointModel point;
 
-  AttendanceRecord({
+  AttendanceRecordModel({
     required this.id,
-    required this.dateTime,
-    required this.user,
-    required this.userFacePhoto,
+    required this.status,
     required this.point,
   });
 
-  factory AttendanceRecord.fromJson(Map<String, dynamic> json) {
-    return AttendanceRecord(
+  factory AttendanceRecordModel.fromJson(Map<String, dynamic> json) {
+    return AttendanceRecordModel(
       id: json['id'] as int,
-      dateTime: DateTime.parse(json['dateTime']),
-      user: UserModel.fromJson(json['user']),
-      userFacePhoto: UserFacePhotoModel.fromJson(json['userFacePhoto']),
+      status: json['status'] != null
+          ? AttendanceRecordStatus.parse(json['status'])
+          : null,
       point: PointModel.fromJson(json['point']),
     );
   }

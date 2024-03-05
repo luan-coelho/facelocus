@@ -38,6 +38,7 @@ class AppRoutes {
   static const pointRecord = '/point-record';
   static const pointRecordCreate = '$pointRecord/create';
   static const pointRecordPointValidate = '$pointRecord/point-validate';
+  static const userAttendance = '/user-attendance';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

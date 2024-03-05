@@ -39,6 +39,8 @@ class _LocationScreenState extends State<LocationListScreen> {
 
   @override
   void dispose() {
+    _controller.location.value = null;
+    _controller.showPosition.value = false;
     _descriptionController.dispose();
     super.dispose();
   }

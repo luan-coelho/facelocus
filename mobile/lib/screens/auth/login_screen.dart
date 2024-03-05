@@ -75,14 +75,14 @@ class LoginFormState extends State<LoginScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     AppTextField(
                         textEditingController: _loginController,
                         labelText: 'Login',
                         validator: (value) => value == null || value.isEmpty
                             ? 'Informe o login'
                             : null),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     AppTextField(
                         textEditingController: _passwordController,
                         labelText: 'Senha',

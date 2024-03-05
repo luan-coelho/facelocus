@@ -3,6 +3,7 @@ import 'package:facelocus/services/location_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 
 import '../models/location_model.dart';
 import '../shared/toast.dart';
@@ -15,6 +16,8 @@ class LocationController extends GetxController {
   final List<LocationModel> _locations = <LocationModel>[].obs;
   final RxBool _showPosition = false.obs;
   final RxBool _isLoading = false.obs;
+  final RxBool _serviceEnabled = false.obs;
+  final Location _locationLib = Location();
 
   LocationController({required this.service});
 
@@ -107,11 +110,15 @@ class LocationController extends GetxController {
   }
 
   Future<Position> determinePosition(BuildContext context) async {
-    bool serviceEnabled;
     LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    _serviceEnabled.value = await Geolocator.isLocationServiceEnabled();
+
+    if (!_serviceEnabled.value) {
+      _serviceEnabled.value = await _locationLib.requestService();
+    }
+
+    if (!_serviceEnabled.value) {
       var error = 'Os serviços de localização estão desativados.';
       _isLoading.value = false;
       Toast.showAlert(error, context);

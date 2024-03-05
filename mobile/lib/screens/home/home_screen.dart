@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const UserCardHome(),
                 const SizedBox(height: 15),
                 AppButton(
-                  text: 'Minhas solicitações',
+                  text: 'Solicitações',
                   onPressed: () => context.push(AppRoutes.eventRequest),
                   icon: SvgPicture.asset(
                     'images/event-request-icon.svg',

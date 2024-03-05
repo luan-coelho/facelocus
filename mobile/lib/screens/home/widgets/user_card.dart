@@ -47,71 +47,66 @@ class _UserCardHomeState extends State<UserCardHome> {
       if (_isLoading) {
         return const Center(child: CircularProgressIndicator());
       }
-      return Column(
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Container(
+            decoration: const BoxDecoration(shape: BoxShape.circle),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () => context.push(AppRoutes.profile),
+                  child: Builder(builder: (context) {
+                    String api = AppConfigConst.baseApiUrl;
+                    String route = AppRoutes.user;
+                    var url = '$api$route/face-photo?user=${_user.id}';
+                    return RotatedBox(
+                      quarterTurns: 3,
+                      child: CachedNetworkImage(
+                        imageUrl: url,
+                        httpHeaders: _httpHeaders,
+                        placeholder: (context, url) => const CircleAvatar(
+                          backgroundColor: Colors.amber,
+                          radius: 25,
+                        ),
+                        imageBuilder: (context, image) => CircleAvatar(
+                          backgroundImage: image,
+                          radius: 25,
+                        ),
+                        errorWidget: (context, url, error) {
+                          return SvgPicture.asset(
+                            'images/user-icon.svg',
+                            width: 25,
+                          );
+                        },
+                      ),
+                    );
+                  }),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Olá,',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w200),
-                  ),
-                  Text(
-                    _user.name,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600),
-                  )
-                ],
+              const Text(
+                'Olá,',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w200),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white.withOpacity(0.7)),
-                    shape: BoxShape.circle),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () => context.push(AppRoutes.profile),
-                      child: Builder(builder: (context) {
-                        String api = AppConfigConst.baseApiUrl;
-                        String route = AppRoutes.user;
-                        var url = '$api$route/face-photo?user=${_user.id}';
-                        return RotatedBox(
-                          quarterTurns: 3,
-                          child: CachedNetworkImage(
-                            imageUrl: url,
-                            httpHeaders: _httpHeaders,
-                            placeholder: (context, url) => const CircleAvatar(
-                              backgroundColor: Colors.amber,
-                              radius: 25,
-                            ),
-                            imageBuilder: (context, image) => CircleAvatar(
-                              backgroundImage: image,
-                              radius: 25,
-                            ),
-                            errorWidget: (context, url, error) {
-                              return SvgPicture.asset(
-                                'images/user-icon.svg',
-                                width: 25,
-                              );
-                            },
-                          ),
-                        );
-                      }),
-                    )
-                  ],
-                ),
+              Text(
+                _user.name,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
               )
             ],
-          ),
+          )
         ],
       );
     });
