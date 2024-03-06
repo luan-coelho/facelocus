@@ -2,6 +2,7 @@ import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
+import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
@@ -60,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // const UserFaceImage(),
+              const UserFaceImage(),
               const SizedBox(height: 25),
               InformationField(
                   description: 'Nome Completo', value: _user.getFullName()),

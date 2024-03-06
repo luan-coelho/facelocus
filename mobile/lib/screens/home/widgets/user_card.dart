@@ -61,26 +61,23 @@ class _UserCardHomeState extends State<UserCardHome> {
                     String api = AppConfigConst.baseApiUrl;
                     String route = AppRoutes.user;
                     var url = '$api$route/face-photo?user=${_user.id}';
-                    return RotatedBox(
-                      quarterTurns: 3,
-                      child: CachedNetworkImage(
-                        imageUrl: url,
-                        httpHeaders: _httpHeaders,
-                        placeholder: (context, url) => const CircleAvatar(
-                          backgroundColor: Colors.amber,
-                          radius: 25,
-                        ),
-                        imageBuilder: (context, image) => CircleAvatar(
-                          backgroundImage: image,
-                          radius: 25,
-                        ),
-                        errorWidget: (context, url, error) {
-                          return SvgPicture.asset(
-                            'images/user-icon.svg',
-                            width: 25,
-                          );
-                        },
+                    return CachedNetworkImage(
+                      imageUrl: url,
+                      httpHeaders: _httpHeaders,
+                      placeholder: (context, url) => const CircleAvatar(
+                        backgroundColor: Colors.amber,
+                        radius: 25,
                       ),
+                      imageBuilder: (context, image) => CircleAvatar(
+                        backgroundImage: image,
+                        radius: 25,
+                      ),
+                      errorWidget: (context, url, error) {
+                        return SvgPicture.asset(
+                          'images/user-icon.svg',
+                          width: 25,
+                        );
+                      },
                     );
                   }),
                 )
@@ -89,6 +86,7 @@ class _UserCardHomeState extends State<UserCardHome> {
           ),
           const SizedBox(width: 10),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(

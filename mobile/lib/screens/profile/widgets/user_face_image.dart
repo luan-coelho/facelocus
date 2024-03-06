@@ -21,6 +21,7 @@ class _UserFaceImageState extends State<UserFaceImage> {
   late final SessionController _authController;
   late final UserModel _user;
   late final Map<String, String> _httpHeaders;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -32,6 +33,9 @@ class _UserFaceImageState extends State<UserFaceImage> {
         HttpHeaders.contentTypeHeader: "application/json",
         HttpHeaders.authorizationHeader: "Bearer $token"
       };
+      setState(() {
+        _isLoading = false;
+      });
     });
     super.initState();
   }
@@ -41,33 +45,39 @@ class _UserFaceImageState extends State<UserFaceImage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          decoration:
-              const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-          child: Builder(builder: (context) {
-            String api = AppConfigConst.baseApiUrl;
-            String route = AppRoutes.user;
-            var url = '$api$route/face-photo?user=${_user.id}';
-            return CachedNetworkImage(
-              imageUrl: url,
-              httpHeaders: _httpHeaders,
-              placeholder: (context, url) => const CircleAvatar(
-                backgroundColor: Colors.amber,
-                radius: 100,
-              ),
-              imageBuilder: (context, image) => CircleAvatar(
-                backgroundImage: image,
-                radius: 100,
-              ),
-              errorWidget: (context, url, error) {
-                return SvgPicture.asset(
-                  'images/user-icon.svg',
-                  width: 25,
-                );
-              },
-            );
-          }),
-        ),
+        Builder(builder: (context) {
+          if (_isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Container(
+            decoration: const BoxDecoration(
+                color: Colors.white, shape: BoxShape.circle),
+            child: Builder(builder: (context) {
+              String api = AppConfigConst.baseApiUrl;
+              String route = AppRoutes.user;
+              var url = '$api$route/face-photo?user=${_user.id}';
+              return CachedNetworkImage(
+                imageUrl: url,
+                httpHeaders: _httpHeaders,
+                placeholder: (context, url) => const CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  radius: 100,
+                ),
+                imageBuilder: (context, image) => CircleAvatar(
+                  backgroundImage: image,
+                  radius: 100,
+                ),
+                errorWidget: (context, url, error) {
+                  return SvgPicture.asset(
+                    'images/user-icon.svg',
+                    width: 25,
+                  );
+                },
+              );
+            }),
+          );
+        }),
         Positioned(
           right: 30,
           bottom: -2,
