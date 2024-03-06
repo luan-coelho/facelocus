@@ -3,9 +3,7 @@ import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/screens/point-record/widgets/time_picker.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -40,6 +38,19 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
     }
   }
 
+  TimeOfDay addMinutes(TimeOfDay originalTime, int minutesToAdd) {
+    // Calcula o total de minutos adicionando os minutos ao tempo original
+    int totalMinutes = originalTime.minute + minutesToAdd;
+    // Calcula quantas horas inteiras estão nos minutos adicionados e ajusta os minutos para menos de 60
+    int extraHours = totalMinutes ~/ 60;
+    int newMinute = totalMinutes % 60;
+    // Calcula a nova hora, ajustando para não ultrapassar 23 horas
+    int newHour = (originalTime.hour + extraHours) % 24;
+
+    // Retorna o novo TimeOfDay com o horário ajustado
+    return TimeOfDay(hour: newHour, minute: newMinute);
+  }
+
   void _addInterval() {
     final DateTime now = DateTime.now();
     DateTime initialDate = DateTime(
@@ -51,6 +62,8 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
     _controller.points.add(point);
     setState(() {
       timeIntervals.add({'initialDate': _startTime, 'finalDate': _endTime});
+      _startTime = addMinutes(_endTime, 15);
+      _endTime = addMinutes(_startTime, 15);
     });
   }
 
@@ -106,7 +119,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           ),
         ),
         const SizedBox(height: 10),
-            _controller.points.isNotEmpty
+        _controller.points.isNotEmpty
             ? const Column(
                 children: [
                   Text('Intervalos',
@@ -119,6 +132,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           return ListView.separated(
             shrinkWrap: true,
             itemCount: _controller.points.length,
+            physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: 5);
             },
