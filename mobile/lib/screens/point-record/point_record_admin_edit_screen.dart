@@ -121,7 +121,9 @@ class _PointRecordAdminEditScreenState
                   onChanged: (LocationModel? value) {
                     // This is called when the user selects an item.
                     setState(() {
-                      _controller.location.value = value!;
+                      _controller.changeLocation(
+                          context, widget.pointRecordId, value!.id!);
+                      _controller.location.value = value;
                     });
                   },
                   items: _controller.pointRecord.value!.event!.locations!
@@ -143,7 +145,11 @@ class _PointRecordAdminEditScreenState
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
-              AppDatePicker(date: _date),
+              AppDatePicker(
+                date: _date,
+                onChanged: (dateTime) => _controller.changeDate(
+                    context, widget.pointRecordId, dateTime),
+              ),
               const SizedBox(height: 15),
               const Text(
                 'Fatores de validação',

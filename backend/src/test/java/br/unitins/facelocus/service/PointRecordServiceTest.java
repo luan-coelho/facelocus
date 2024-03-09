@@ -434,7 +434,7 @@ class PointRecordServiceTest extends BaseTest {
         PointRecordChangeLocation dto = new PointRecordChangeLocation(location);
 
         final Long pointRecordId = pointRecord.getId();
-        assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, dto));
+        assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, location.getId()));
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 

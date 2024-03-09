@@ -139,4 +139,23 @@ class PointRecordEditController extends GetxController {
     _location.value = _pointRecord.value!.location;
     _isLoading.value = false;
   }
+
+  changeLocation(
+      BuildContext context, int pointRecordId, int locationId) async {
+    _isLoading.value = true;
+    await service.changeLocation(pointRecordId, locationId);
+    fetchById(context, pointRecordId);
+    Toast.showSuccess('Localização alterada', context);
+    _isLoading.value = false;
+  }
+
+  changeDate(
+      BuildContext context, int pointRecordId, DateTime newDate) async {
+    _isLoading.value = true;
+    await service.changeDate(pointRecordId, newDate);
+    await fetchById(context, pointRecordId);
+    _date.value = _pointRecord.value!.date;
+    Toast.showSuccess('Data alterada', context);
+    _isLoading.value = false;
+  }
 }

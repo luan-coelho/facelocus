@@ -6,8 +6,16 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class AppDatePicker extends StatefulWidget {
-  const AppDatePicker({super.key, this.restorationId, required this.date});
+  const AppDatePicker(
+      {super.key,
+      this.value,
+      this.restorationId,
+      required this.date,
+      this.onChanged});
 
+  final Function(DateTime dateTime)? onChanged;
+
+  final DateTime? value;
   final String? restorationId;
   final RestorableDateTime date;
 
@@ -46,7 +54,7 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
           cancelText: 'Cancelar',
           restorationId: 'date_picker_dialog',
           initialEntryMode: DatePickerEntryMode.calendarOnly,
-          initialDate: DateTime.fromMillisecondsSinceEpoch(arguments! as int),
+          initialDate: widget.value ?? DateTime.fromMillisecondsSinceEpoch(arguments! as int),
           firstDate: DateTime.now(),
           lastDate: DateTime(DateTime.now().year + 2),
         );
@@ -65,6 +73,9 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
+        if (widget.onChanged != null) {
+          widget.onChanged!(newSelectedDate);
+        }
       });
       _controller.date.value = newSelectedDate;
     }

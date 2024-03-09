@@ -67,4 +67,18 @@ public class PointRecordResource {
         pointRecordService.deleteById(pointRecordId);
         return Response.noContent().build();
     }
+
+    @Path("/change-location")
+    @PATCH
+    public Response changeLocation(@RestQuery("pointrecord") Long pointRecordId, @RestQuery("location") Long locationId) {
+        pointRecordService.changeLocation(pointRecordId, locationId);
+        return Response.noContent().build();
+    }
+
+    @Path("/change-date")
+    @PATCH
+    public Response changeDate(@RestQuery("pointrecord") Long pointRecordId, @RestQuery("date") LocalDate newDate) {
+        pointRecordService.changeDate(pointRecordId, newDate);
+        return Response.noContent().build();
+    }
 }

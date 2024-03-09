@@ -31,4 +31,17 @@ class PointRecordService {
     var data = response.data;
     return PointRecordModel.fromJson(data);
   }
+
+  changeLocation(int pointRecordId, int locationId) async {
+    var url =
+        '${AppRoutes.pointRecord}/change-location/?pointrecord=$pointRecordId&location=$locationId';
+    await _fetchApi.patch(url);
+  }
+
+  changeDate(int pointRecordId, DateTime newDate) async {
+    String datef = DateFormat('yyyy-MM-dd').format(newDate);
+    var url =
+        '${AppRoutes.pointRecord}/change-date/?pointrecord=$pointRecordId&date=$datef';
+    await _fetchApi.patch(url);
+  }
 }

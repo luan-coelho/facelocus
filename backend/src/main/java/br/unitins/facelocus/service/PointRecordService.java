@@ -3,7 +3,6 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
-import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
@@ -267,6 +266,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validateDate(newDate);
         PointRecord pointRecord = findById(pointRecordId);
         pointRecord.setDate(newDate);
+        update(pointRecord);
     }
 
     @Transactional
@@ -279,9 +279,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     }
 
     @Transactional
-    public void changeLocation(Long pointRecordId, PointRecordChangeLocation dto) {
+    public void changeLocation(Long pointRecordId, Long locationId) {
         PointRecord pointRecord = findById(pointRecordId);
-        Location location = locationService.findById(dto.location().getId());
+        Location location = locationService.findById(locationId);
         validateLocation(pointRecord, location);
         if (!pointRecord.getLocation().equals(location)) {
             pointRecord.setLocation(location);
