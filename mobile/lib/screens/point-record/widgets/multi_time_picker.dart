@@ -39,15 +39,11 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
   }
 
   TimeOfDay addMinutes(TimeOfDay originalTime, int minutesToAdd) {
-    // Calcula o total de minutos adicionando os minutos ao tempo original
     int totalMinutes = originalTime.minute + minutesToAdd;
-    // Calcula quantas horas inteiras estão nos minutos adicionados e ajusta os minutos para menos de 60
     int extraHours = totalMinutes ~/ 60;
     int newMinute = totalMinutes % 60;
-    // Calcula a nova hora, ajustando para não ultrapassar 23 horas
     int newHour = (originalTime.hour + extraHours) % 24;
 
-    // Retorna o novo TimeOfDay com o horário ajustado
     return TimeOfDay(hour: newHour, minute: newMinute);
   }
 
@@ -92,16 +88,18 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           children: [
             Expanded(
               child: TimePicker(
-                  description: 'Hora inicial',
-                  timeOfDay: _startTime,
-                  onTap: () => _selectTime(context, true)),
+                description: 'Hora inicial',
+                timeOfDay: _startTime,
+                onTap: () => _selectTime(context, true),
+              ),
             ),
             const SizedBox(width: 5),
             Expanded(
               child: TimePicker(
-                  description: 'Hora final',
-                  timeOfDay: _endTime,
-                  onTap: () => _selectTime(context, false)),
+                description: 'Hora final',
+                timeOfDay: _endTime,
+                onTap: () => _selectTime(context, false),
+              ),
             ),
           ],
         ),
@@ -119,15 +117,14 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           ),
         ),
         const SizedBox(height: 10),
-        _controller.points.isNotEmpty
-            ? const Column(
-                children: [
-                  Text('Intervalos',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(height: 5),
-                ],
-              )
-            : const SizedBox(),
+        if (_controller.points.isNotEmpty)
+          const Column(
+            children: [
+              Text('Intervalos', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+            ],
+          ),
+        const SizedBox(),
         Obx(() {
           return ListView.separated(
             shrinkWrap: true,
@@ -143,8 +140,9 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
                   width: double.infinity,
                   height: 45,
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.white,
+                  ),
                   child: Center(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,8 +155,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
                             final DateFormat formatter = DateFormat('HH:mm');
                             final String initialDate =
                                 formatter.format(point.initialDate);
-                            final String finalDate =
-                                formatter.format(point.finalDate);
+                            var finalDate = formatter.format(point.finalDate);
                             return Text('$initialDate - $finalDate',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300));
