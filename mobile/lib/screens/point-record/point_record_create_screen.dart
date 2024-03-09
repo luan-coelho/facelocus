@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/delegates/event_delegate.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
@@ -25,7 +25,7 @@ class PointRecordCreateScreen extends StatefulWidget {
 }
 
 class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
-  late final PointRecordController _controller;
+  late final PointRecordCreateController _controller;
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _allowableRadiusInMeters = 5.0;
@@ -56,7 +56,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordController>();
+    _controller = Get.find<PointRecordCreateController>();
     _date = RestorableDateTime(DateTime.now());
     super.initState();
   }
@@ -264,4 +264,3 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
         ));
   }
 }
-

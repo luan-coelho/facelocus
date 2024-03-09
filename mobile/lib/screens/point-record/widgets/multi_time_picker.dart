@@ -1,4 +1,4 @@
-import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/screens/point-record/widgets/time_picker.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -15,7 +15,7 @@ class MultiTimePicker extends StatefulWidget {
 }
 
 class _MultiTimePickerState extends State<MultiTimePicker> {
-  late final PointRecordController _controller;
+  late final PointRecordCreateController _controller;
   DateTime dateTime = DateTime.now();
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
@@ -72,7 +72,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordController>();
+    _controller = Get.find<PointRecordCreateController>();
     _startTime = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
     DateTime endTime = dateTime.add(const Duration(minutes: 15));
     _endTime = TimeOfDay(hour: endTime.hour, minute: endTime.minute);

@@ -1,4 +1,4 @@
-import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +16,7 @@ class AppDatePicker extends StatefulWidget {
 }
 
 class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
-  late final PointRecordController _controller;
+  late final PointRecordCreateController _controller;
 
   @override
   String? get restorationId => widget.restorationId;
@@ -76,7 +76,7 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordController>();
+    _controller = Get.find<PointRecordCreateController>();
     super.initState();
   }
 

@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../models/event_model.dart';
 import '../shared/toast.dart';
 
-class PointRecordController extends GetxController {
+class PointRecordCreateController extends GetxController {
   final PointRecordService service;
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
@@ -52,7 +52,7 @@ class PointRecordController extends GetxController {
 
   RxBool get isLoading => _isLoading;
 
-  PointRecordController({required this.service});
+  PointRecordCreateController({required this.service});
 
   cleanPointsList() {
     _points = <PointModel>[].obs;
@@ -118,8 +118,6 @@ class PointRecordController extends GetxController {
   }
 
   changeFirstAndLastDay(List<PointRecordModel> pointsRecord) {
-    // _firstDayCalendar.value = pointsRecord.first.date;
-    // _lastDayCalendar.value = pointsRecord.last.date;
     DateTime firstDay = pointsRecord.first.date;
     DateTime today = DateTime.now();
     if (firstDay.isAfter(today)) {

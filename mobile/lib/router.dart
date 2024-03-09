@@ -11,6 +11,7 @@ import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
+import 'package:facelocus/screens/point-record/point_record_admin_edit_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_admin_show_screen.dart';
@@ -37,6 +38,7 @@ class AppRoutes {
   static const userSearch = '$user/search';
   static const pointRecord = '/point-record';
   static const pointRecordCreate = '$pointRecord/create';
+  static const pointRecordEdit = '$pointRecord/edit';
   static const pointRecordPointValidate = '$pointRecord/point-validate';
   static const userAttendance = '/user-attendance';
 }
@@ -131,6 +133,13 @@ final router = GoRouter(
       builder: (context, state) {
         final int pointRecordId = int.parse(state.pathParameters['id']!);
         return PointRecordAdminShowScreen(pointRecordId: pointRecordId);
+      },
+    ),
+    GoRoute(
+      path: '/admin${AppRoutes.pointRecordEdit}/:id',
+      builder: (context, state) {
+        final int pointRecordId = int.parse(state.pathParameters['id']!);
+        return PointRecordAdminEditScreen(pointRecordId: pointRecordId);
       },
     ),
     GoRoute(

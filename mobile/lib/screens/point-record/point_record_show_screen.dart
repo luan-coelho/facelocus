@@ -1,7 +1,6 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/attendance_record_status_enum.dart';
-import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/screens/point-record/widgets/event_header.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                     return const Center(child: Text('Ainda não há nenhum ponto'));
                   }
 
-                  var attendanceRecords = userAttendance!.attendanceRecords!;
+                  var attendanceRecords = userAttendance.attendanceRecords!;
                   return ListView.separated(
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);

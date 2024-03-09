@@ -1,6 +1,7 @@
-import 'package:facelocus/controllers/point_record_controller.dart';
+import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
 import 'package:facelocus/screens/point-record/widgets/event_header.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -10,6 +11,7 @@ import 'package:facelocus/utils/expansion_panel_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PointRecordAdminShowScreen extends StatefulWidget {
@@ -24,11 +26,11 @@ class PointRecordAdminShowScreen extends StatefulWidget {
 
 class _PointRecordAdminShowScreenState
     extends State<PointRecordAdminShowScreen> {
-  late final PointRecordController _controller;
+  late final PointRecordCreateController _controller;
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordController>();
+    _controller = Get.find<PointRecordCreateController>();
     _controller.fetchById(context, widget.pointRecordId);
     super.initState();
   }
@@ -37,6 +39,16 @@ class _PointRecordAdminShowScreenState
   Widget build(BuildContext context) {
     return AppLayout(
         appBarTitle: 'Registro de ponto',
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            onPressed: () => context.push(
+                '/admin${AppRoutes.pointRecordEdit}/${widget.pointRecordId}'),
+          )
+        ],
         showBottomNavigationBar: false,
         body: Padding(
           padding: const EdgeInsets.all(29.0),
@@ -58,7 +70,8 @@ class _PointRecordAdminShowScreenState
                       await showSearch(
                         context: context,
                         delegate: LinckedUsersDelegate(
-                            eventId: _controller.pointRecord.value!.event!.id!),
+                          eventId: _controller.pointRecord.value!.event!.id!,
+                        ),
                       );
                     },
                   )
@@ -69,9 +82,10 @@ class _PointRecordAdminShowScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 EventHeader(
-                    description:
-                        _controller.pointRecord.value!.event!.description!,
-                    date: _controller.pointRecord.value!.date),
+                  description:
+                      _controller.pointRecord.value!.event!.description!,
+                  date: _controller.pointRecord.value!.date,
+                ),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
                   child: Column(
@@ -90,8 +104,10 @@ class _PointRecordAdminShowScreenState
                             children: _controller.panelItems
                                 .map<ExpansionPanel>((Item<UserModel> item) {
                               return ExpansionPanel(
-                                headerBuilder:
-                                    (BuildContext context, bool isExpanded) {
+                                headerBuilder: (
+                                  BuildContext context,
+                                  bool isExpanded,
+                                ) {
                                   return ListTile(
                                     iconColor: Colors.blue,
                                     title: Row(
@@ -101,11 +117,13 @@ class _PointRecordAdminShowScreenState
                                           width: 25,
                                         ),
                                         const SizedBox(width: 5),
-                                        Text(item.content!.getFullName(),
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                overflow:
-                                                    TextOverflow.ellipsis)),
+                                        Text(
+                                          item.content!.getFullName(),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     subtitle: Builder(builder: (context) {
@@ -128,10 +146,13 @@ class _PointRecordAdminShowScreenState
                                   );
                                 },
                                 body: ListTile(
-                                    title: Text(item.content!.getFullName(),
-                                        style: const TextStyle(fontSize: 12)),
+                                    title: Text(
+                                      item.content!.getFullName(),
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
                                     subtitle: const Text(
-                                        'To delete this panel, tap the trash can icon'),
+                                      'To delete this panel, tap the trash can icon',
+                                    ),
                                     trailing: const Icon(Icons.delete),
                                     onTap: () {
                                       setState(() {});

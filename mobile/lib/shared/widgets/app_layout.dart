@@ -9,6 +9,7 @@ class AppLayout extends StatefulWidget {
       {super.key,
       this.appBarTitle,
       bool this.showAppBar = true,
+      this.actions,
       this.leading,
       this.showBottomNavigationBar = true,
       required this.body,
@@ -16,6 +17,7 @@ class AppLayout extends StatefulWidget {
 
   final String? appBarTitle;
   final bool? showAppBar;
+  final List<Widget>? actions;
 
   final Widget? leading;
   final bool? showBottomNavigationBar;
@@ -36,6 +38,7 @@ class _AppLayoutState extends State<AppLayout> {
             ? AppBar(
                 leading: widget.leading,
                 centerTitle: true,
+                actions: widget.actions,
                 backgroundColor: widget.appBarTitle != null
                     ? AppColorsConst.dark
                     : AppColorsConst.white,
@@ -44,10 +47,11 @@ class _AppLayoutState extends State<AppLayout> {
                         widget.appBarTitle!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: widget.appBarTitle != null
-                                ? Colors.white
-                                : Colors.black),
+                          fontSize: 16,
+                          color: widget.appBarTitle != null
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       )
                     : null)
             : null,
@@ -81,7 +85,9 @@ class _AppLayoutState extends State<AppLayout> {
                       icon: SvgPicture.asset(
                         'images/home-icon.svg',
                         colorFilter: const ColorFilter.mode(
-                            Colors.white, BlendMode.srcIn),
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       onPressed: () => context.replace(AppRoutes.home),
                     ),
@@ -89,7 +95,9 @@ class _AppLayoutState extends State<AppLayout> {
                       icon: SvgPicture.asset(
                         'images/event-icon.svg',
                         colorFilter: const ColorFilter.mode(
-                            Colors.white, BlendMode.srcIn),
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       onPressed: () => context.replace(AppRoutes.event),
                     ),
