@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _authController = Get.find<SessionController>();
     _selectedDay = _focusedDay;
     _controller.fetchAllByUser(context);
-    _controller.fetchAllByDate(context, DateTime.now());
+    _controller.fetchAllByDate(context, _focusedDay);
     super.initState();
   }
 
@@ -203,10 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         shrinkWrap: true,
                         itemCount: _controller.pointsRecordByDate.length,
                         itemBuilder: (context, index) {
-                          var pointRecord =
-                              _controller.pointsRecordByDate[index];
+                          var pr = _controller.pointsRecordByDate[index];
                           return PointRecordCard(
-                            pointRecord: pointRecord,
+                            pointRecord: pr,
                             user: _authController.authenticatedUser.value!,
                           );
                         },

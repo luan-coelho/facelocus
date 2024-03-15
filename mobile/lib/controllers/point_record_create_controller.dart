@@ -116,12 +116,12 @@ class PointRecordCreateController extends GetxController {
     _pointsRecord.clear();
     _pointsRecord.addAll(pointsRecord);
     if (pointsRecord.isNotEmpty) {
-      changeFirstAndLastDay(pointsRecord);
+      await changeFirstAndLastDay(pointsRecord);
     }
     _isLoading.value = false;
   }
 
-  changeFirstAndLastDay(List<PointRecordModel> pointsRecord) {
+  changeFirstAndLastDay(List<PointRecordModel> pointsRecord) async {
     DateTime firstDay = pointsRecord.first.date;
     DateTime today = DateTime.now();
     if (firstDay.isAfter(today)) {
