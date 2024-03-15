@@ -30,6 +30,8 @@ class PointRecordCreateController extends GetxController {
 
   final RxBool _isLoading = false.obs;
 
+  final RxBool _isLoadingPr = false.obs;
+
   Rxn<DateTime> get date => _date;
 
   Rxn<PointRecordModel> get pointRecord => _pointRecord;
@@ -51,6 +53,8 @@ class PointRecordCreateController extends GetxController {
   Rx<DateTime> get finalDate => _finalDate;
 
   RxBool get isLoading => _isLoading;
+
+  RxBool get isLoadingPr => _isLoadingPr;
 
   PointRecordCreateController({required this.service});
 
@@ -93,14 +97,14 @@ class PointRecordCreateController extends GetxController {
   }
 
   fetchAllByDate(BuildContext context, DateTime date) async {
-    _isLoading.value = true;
+    _isLoadingPr.value = true;
     SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByDate(administrator.id!, date);
     _pointsRecordByDate.clear();
     _pointsRecordByDate.addAll(pointsRecord);
-    _isLoading.value = false;
+    _isLoadingPr.value = false;
   }
 
   fetchAllByUser(BuildContext context) async {
