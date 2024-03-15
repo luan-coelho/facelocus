@@ -29,7 +29,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _allowableRadiusInMeters = 5.0;
-  late final RestorableDateTime _date;
+  DateTime? _date;
   List<PointModel> points = [];
   HashSet<Factor> factors = HashSet();
   EventModel? _event;
@@ -46,7 +46,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
     PointRecordModel pointRecord = PointRecordModel(
       event: _event,
       location: _location,
-      date: _controller.date.value ?? DateTime.now(),
+      date: _date ?? DateTime.now(),
       points: _controller.points,
       factors: factors.toList(),
       allowableRadiusInMeters: _allowableRadiusInMeters,
@@ -57,7 +57,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   @override
   void initState() {
     _controller = Get.find<PointRecordCreateController>();
-    _date = RestorableDateTime(DateTime.now());
+    _date = DateTime.now();
     super.initState();
   }
 
@@ -78,8 +78,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Evento',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Evento',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 5),
                 Builder(builder: (context) {
                   if (_event != null) {
@@ -119,8 +121,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                   );
                 }),
                 const SizedBox(height: 10),
-                const Text('Localização',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Localização',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 5),
                 _event != null && _event?.locations != null
                     ? SizedBox(
@@ -130,10 +134,13 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                           icon: const Icon(Icons.arrow_downward),
                           decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 0),
+                                horizontal: 15,
+                                vertical: 0,
+                              ),
                               border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),
@@ -142,18 +149,20 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
                               focusColor: AppColorsConst.white,
                               filled: true,
                               fillColor: Colors.black12.withOpacity(0.1)),
                           style: const TextStyle(color: Colors.black),
                           isExpanded: true,
-                          hint: const Text('Selecione...',
-                              style: TextStyle(fontFamily: 'Poppins')),
+                          hint: const Text(
+                            'Selecione...',
+                            style: TextStyle(fontFamily: 'Poppins'),
+                          ),
                           onChanged: (LocationModel? value) {
-                            // This is called when the user selects an item.
                             setState(() {
                               _location = value!;
                             });
@@ -163,29 +172,39 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                                   (LocationModel location) {
                             return DropdownMenuItem<LocationModel>(
                               value: location,
-                              child: Text(location.description,
-                                  style:
-                                      const TextStyle(fontFamily: 'Poppins')),
+                              child: Text(
+                                location.description,
+                                style: const TextStyle(fontFamily: 'Poppins'),
+                              ),
                             );
                           }).toList(),
                         ),
                       )
                     : const Text('Informe o evento'),
                 const SizedBox(height: 10),
-                const Text('Data',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Data',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 5),
-                AppDatePicker(date: _date),
+                AppDatePicker(
+                    onDateSelected: (date) => setState(() {
+                          _date = date;
+                        })),
                 const SizedBox(height: 15),
-                const Text('Fatores de validação',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Fatores de validação',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Flexible(
-                      child: Text('Reconhecimento Facial',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: Text(
+                        'Reconhecimento Facial',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     ),
                     SizedBox(
                       width: 50,
@@ -207,8 +226,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Flexible(
-                      child: Text('Localização Indoor',
-                          style: TextStyle(fontWeight: FontWeight.w500)),
+                      child: Text(
+                        'Localização Indoor',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     ),
                     SizedBox(
                       width: 50,
@@ -229,8 +250,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 indoorLocationFactor
                     ? Column(
                         children: [
-                          const Text('Raio permitido em metros (m)',
-                              style: TextStyle(fontWeight: FontWeight.normal)),
+                          const Text(
+                            'Raio permitido em metros (m)',
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
                           Slider(
                             value: _allowableRadiusInMeters,
                             min: 0.0,
@@ -246,8 +269,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                         ],
                       )
                     : const SizedBox(),
-                const Text('Pontos',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Pontos',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 5),
                 const MultiTimePicker(),
                 const SizedBox(height: 10),

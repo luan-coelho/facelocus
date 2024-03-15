@@ -30,7 +30,7 @@ class _PointRecordAdminEditScreenState
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _allowableRadiusInMeters = 5.0;
-  late final RestorableDateTime _date;
+  DateTime? _date;
   List<PointModel> points = [];
   HashSet<Factor> factors = HashSet();
   EventModel? _event;
@@ -58,7 +58,6 @@ class _PointRecordAdminEditScreenState
   void initState() {
     _controller = Get.find<PointRecordEditController>();
     _controller.fetchById(context, widget.pointRecordId);
-    _date = RestorableDateTime(DateTime.now());
     super.initState();
   }
 
@@ -119,10 +118,12 @@ class _PointRecordAdminEditScreenState
                     style: TextStyle(fontFamily: 'Poppins'),
                   ),
                   onChanged: (LocationModel? value) {
-                    // This is called when the user selects an item.
                     setState(() {
                       _controller.changeLocation(
-                          context, widget.pointRecordId, value!.id!);
+                        context,
+                        widget.pointRecordId,
+                        value!.id!,
+                      );
                       _controller.location.value = value;
                     });
                   },
@@ -146,9 +147,15 @@ class _PointRecordAdminEditScreenState
               ),
               const SizedBox(height: 5),
               AppDatePicker(
-                date: _date,
-                onChanged: (dateTime) => _controller.changeDate(
-                    context, widget.pointRecordId, dateTime),
+                value: _controller.date.value,
+                onDateSelected: (date) => setState(() {
+                  _date = date;
+                }),
+                onChanged: (date) => _controller.changeDate(
+                  context,
+                  widget.pointRecordId,
+                  date,
+                ),
               ),
               const SizedBox(height: 15),
               const Text(
@@ -238,7 +245,10 @@ class _PointRecordAdminEditScreenState
                     _controller.location.value == null ||
                     _controller.points.isEmpty;
                 return AppButton(
-                    text: 'Atualizar', onPressed: _create, disabled: disable);
+                  text: 'Atualizar',
+                  onPressed: _create,
+                  disabled: disable,
+                );
               }),
             ],
           ),

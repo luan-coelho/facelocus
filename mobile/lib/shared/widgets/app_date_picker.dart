@@ -1,94 +1,50 @@
-import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class AppDatePicker extends StatefulWidget {
   const AppDatePicker(
       {super.key,
+      this.text,
       this.value,
-      this.restorationId,
-      required this.date,
+      required this.onDateSelected,
       this.onChanged});
 
-  final Function(DateTime dateTime)? onChanged;
-
+  final String? text;
   final DateTime? value;
-  final String? restorationId;
-  final RestorableDateTime date;
+  final Function(DateTime) onDateSelected;
+  final Function(DateTime dateTime)? onChanged;
 
   @override
   State<AppDatePicker> createState() => _AppDatePickerState();
 }
 
-class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
-  late final PointRecordCreateController _controller;
+class _AppDatePickerState extends State<AppDatePicker> {
+  DateTime? _selectedDate;
 
-  @override
-  String? get restorationId => widget.restorationId;
-
-  final RestorableDateTime _selectedDate = RestorableDateTime(DateTime.now());
-  late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
-      RestorableRouteFuture<DateTime?>(
-    onComplete: _selectDate,
-    onPresent: (NavigatorState navigator, Object? arguments) {
-      return navigator.restorablePush(
-        _datePickerRoute,
-        arguments: _selectedDate.value.millisecondsSinceEpoch,
-      );
-    },
-  );
-
-  @pragma('vm:entry-point')
-  static Route<DateTime> _datePickerRoute(
-    BuildContext context,
-    Object? arguments,
-  ) {
-    return DialogRoute<DateTime>(
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
       context: context,
-      builder: (BuildContext context) {
-        return DatePickerDialog(
-          helpText: 'Selecionar data',
-          cancelText: 'Cancelar',
-          restorationId: 'date_picker_dialog',
-          initialEntryMode: DatePickerEntryMode.calendarOnly,
-          initialDate: widget.value ?? DateTime.fromMillisecondsSinceEpoch(arguments! as int),
-          firstDate: DateTime.now(),
-          lastDate: DateTime(DateTime.now().year + 2),
-        );
-      },
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 2),
     );
-  }
-
-  @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(_selectedDate, 'selected_date');
-    registerForRestoration(
-        _restorableDatePickerRouteFuture, 'date_picker_route_future');
-  }
-
-  void _selectDate(DateTime? newSelectedDate) {
-    if (newSelectedDate != null) {
+    if (picked != null && picked != _selectedDate) {
       setState(() {
-        _selectedDate.value = newSelectedDate;
+        _selectedDate = picked;
         if (widget.onChanged != null) {
-          widget.onChanged!(newSelectedDate);
+          widget.onChanged!(picked);
         }
       });
-      _controller.date.value = newSelectedDate;
+      widget.onDateSelected(picked);
     }
   }
 
-  String getFormattedDate(DateTime dateTime) {
-    return DateFormat('dd/MM/yyyy').format(_selectedDate.value);
-  }
-
-  @override
-  void initState() {
-    _controller = Get.find<PointRecordCreateController>();
-    super.initState();
+  String getFormattedDate() {
+    return DateFormat('dd/MM/yyyy').format(
+      _selectedDate ?? (widget.value ?? DateTime.now()),
+    );
   }
 
   @override
@@ -98,30 +54,38 @@ class _AppDatePickerState extends State<AppDatePicker> with RestorationMixin {
       height: 50,
       child: TextButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-                Colors.black12.withOpacity(0.1)),
-            foregroundColor:
-                MaterialStateProperty.all<Color>(AppColorsConst.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
+          backgroundColor: MaterialStateProperty.all<Color>(
+            Colors.black12.withOpacity(0.1),
+          ),
+          foregroundColor: MaterialStateProperty.all<Color>(
+            AppColorsConst.black,
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-            ))),
-        onPressed: () => setState(() {
-          _restorableDatePickerRouteFuture.present();
-        }),
+            ),
+          ),
+        ),
+        onPressed: () => _selectDate(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
               'images/calendar-icon.svg',
-              colorFilter:
-                  const ColorFilter.mode(AppColorsConst.black, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColorsConst.black,
+                BlendMode.srcIn,
+              ),
             ),
             const SizedBox(width: 5),
-            Text(getFormattedDate(_selectedDate.value),
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            Text(
+              getFormattedDate(),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       ),
