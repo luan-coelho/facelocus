@@ -8,7 +8,6 @@ import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/screens/point-record/widgets/multi_time_picker.dart';
 import 'package:facelocus/shared/constants.dart';
-import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class _PointRecordAdminEditScreenState
   bool faceRecognitionFactor = false;
   bool indoorLocationFactor = false;
   double _allowableRadiusInMeters = 5.0;
-  DateTime? _date;
   List<PointModel> points = [];
   HashSet<Factor> factors = HashSet();
   EventModel? _event;
@@ -77,182 +75,177 @@ class _PointRecordAdminEditScreenState
           return const Center(child: CircularProgressIndicator());
         }
         return SingleChildScrollView(
-            child: Padding(
-          padding: const EdgeInsets.all(29.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Localização',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 5),
-              SizedBox(
-                height: 50,
-                child: DropdownButtonFormField<LocationModel>(
-                  value: _controller.location.value,
-                  icon: const Icon(Icons.arrow_downward),
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    focusColor: AppColorsConst.white,
-                    filled: true,
-                    fillColor: Colors.black12.withOpacity(0.1),
-                  ),
-                  style: const TextStyle(color: Colors.black),
-                  isExpanded: true,
-                  hint: const Text(
-                    'Selecione...',
-                    style: TextStyle(fontFamily: 'Poppins'),
-                  ),
-                  onChanged: (LocationModel? value) {
-                    setState(() {
-                      _controller.changeLocation(
-                        context,
-                        widget.pointRecordId,
-                        value!.id!,
-                      );
-                      _controller.location.value = value;
-                    });
-                  },
-                  items: _controller.pointRecord.value!.event!.locations!
-                      .map<DropdownMenuItem<LocationModel>>(
-                          (LocationModel location) {
-                    return DropdownMenuItem<LocationModel>(
-                      value: location,
-                      child: Text(
-                        location.description,
-                        style: const TextStyle(fontFamily: 'Poppins'),
-                      ),
-                    );
-                  }).toList(),
+          child: Padding(
+            padding: const EdgeInsets.all(29.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Localização',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Data',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 5),
-              AppDatePicker(
-                value: _controller.date.value,
-                onDateSelected: (date) => setState(() {
-                  _date = date;
-                }),
-                onChanged: (date) => _controller.changeDate(
-                  context,
-                  widget.pointRecordId,
-                  date,
-                ),
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'Fatores de validação',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Flexible(
-                    child: Text(
-                      'Reconhecimento Facial',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 50,
-                    height: 20,
-                    child: Switch(
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: faceRecognitionFactor,
-                        onChanged: (value) {
-                          setState(() {
-                            faceRecognitionFactor = value;
-                          });
-                        }),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Flexible(
-                    child: Text(
-                      'Localização Indoor',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 50,
-                    height: 20,
-                    child: Switch(
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: indoorLocationFactor,
-                        onChanged: (value) {
-                          setState(() {
-                            indoorLocationFactor = value;
-                          });
-                        }),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              indoorLocationFactor
-                  ? Column(
-                      children: [
-                        const Text(
-                          'Raio permitido em metros (m)',
-                          style: TextStyle(fontWeight: FontWeight.normal),
+                const SizedBox(height: 5),
+                SizedBox(
+                  height: 50,
+                  child: DropdownButtonFormField<LocationModel>(
+                    value: _controller.location.value,
+                    icon: const Icon(Icons.arrow_downward),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
-                        Slider(
-                          value: _allowableRadiusInMeters,
-                          min: 0.0,
-                          max: 10.0,
-                          divisions: 5,
-                          label: _allowableRadiusInMeters.round().toString(),
-                          onChanged: (double value) {
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusColor: AppColorsConst.white,
+                      filled: true,
+                      fillColor: Colors.black12.withOpacity(0.1),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    isExpanded: true,
+                    hint: const Text(
+                      'Selecione...',
+                      style: TextStyle(fontFamily: 'Poppins'),
+                    ),
+                    onChanged: (LocationModel? value) {
+                      setState(() {
+                        _controller.changeLocation(
+                          context,
+                          widget.pointRecordId,
+                          value!.id!,
+                        );
+                        _controller.location.value = value;
+                      });
+                    },
+                    items: _controller.pointRecord.value!.event!.locations!
+                        .map<DropdownMenuItem<LocationModel>>(
+                            (LocationModel location) {
+                      return DropdownMenuItem<LocationModel>(
+                        value: location,
+                        child: Text(
+                          location.description,
+                          style: const TextStyle(fontFamily: 'Poppins'),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Data',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                AppDatePicker(
+                  value: _controller.date.value,
+                  onChanged: (date) => _controller.changeDate(
+                    context,
+                    widget.pointRecordId,
+                    date,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Text(
+                  'Fatores de validação',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      child: Text(
+                        'Reconhecimento Facial',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      height: 20,
+                      child: Switch(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          value:
+                              _controller.pointRecord.value!.factors!.contains(
+                            Factor.facialRecognition,
+                          ),
+                          onChanged: (value) {
                             setState(() {
-                              _allowableRadiusInMeters = value;
+                              faceRecognitionFactor = value;
                             });
-                          },
-                        )
-                      ],
-                    )
-                  : const SizedBox(),
-              const Text(
-                'Pontos',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 5),
-              const MultiTimePicker(),
-              const SizedBox(height: 10),
-              Builder(builder: (context) {
-                bool disable = _event == null ||
-                    _controller.location.value == null ||
-                    _controller.points.isEmpty;
-                return AppButton(
-                  text: 'Atualizar',
-                  onPressed: _create,
-                  disabled: disable,
-                );
-              }),
-            ],
+                          }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      child: Text(
+                        'Localização Indoor',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      height: 20,
+                      child: Switch(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          value:
+                              _controller.pointRecord.value!.factors!.contains(
+                            Factor.indoorLocation,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              indoorLocationFactor = value;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                indoorLocationFactor
+                    ? Column(
+                        children: [
+                          const Text(
+                            'Raio permitido em metros (m)',
+                            style: TextStyle(fontWeight: FontWeight.normal),
+                          ),
+                          Slider(
+                            value: _allowableRadiusInMeters,
+                            min: 0.0,
+                            max: 10.0,
+                            divisions: 5,
+                            label: _allowableRadiusInMeters.round().toString(),
+                            onChanged: (double value) {
+                              setState(() {
+                                _allowableRadiusInMeters = value;
+                              });
+                            },
+                          )
+                        ],
+                      )
+                    : const SizedBox(),
+                const Text(
+                  'Pontos',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                const MultiTimePicker(),
+              ],
+            ),
           ),
-        ));
+        );
       }),
     );
   }

@@ -33,8 +33,11 @@ class PointRecordModel {
       points: (json['points'] as List)
           .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      factors: /*(json['factors'] as List<Factor>).map((e) => e.parse(factor)).toList()*/
-          null,
+      factors: json['factors'] != null && (json['factors'] as List).isNotEmpty
+          ? (json['factors'] as List)
+              .map((typeItem) => Factor.parse(typeItem)!)
+              .toList()
+          : null,
       inProgress: json['inProgress'] as bool,
     );
   }

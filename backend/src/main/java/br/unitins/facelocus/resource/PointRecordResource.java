@@ -29,8 +29,7 @@ public class PointRecordResource {
     PointRecordMapper pointRecordMapper;
 
     @GET
-    public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) throws InterruptedException {
-        Thread.sleep(5000);
+    public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) {
         DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, userId);
         return Response.ok(dataPagination).build();
     }
@@ -38,8 +37,7 @@ public class PointRecordResource {
 
     @Path("/by-date")
     @GET
-    public Response findAllByDate(@RestQuery("user") Long userId, @RestQuery("date") LocalDate date) throws InterruptedException {
-        Thread.sleep(5000);
+    public Response findAllByDate(@RestQuery("user") Long userId, @RestQuery("date") LocalDate date) {
         List<PointRecordResponseDTO> dtos = pointRecordService.findAllByDate(userId, date)
                 .stream()
                 .map(pr -> pointRecordMapper.toResource(pr))

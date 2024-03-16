@@ -4,16 +4,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class AppDatePicker extends StatefulWidget {
-  const AppDatePicker(
-      {super.key,
-      this.text,
-      this.value,
-      required this.onDateSelected,
-      this.onChanged});
+  const AppDatePicker({
+    super.key,
+    this.text,
+    this.value,
+    this.onDateSelected,
+    this.onChanged,
+  });
 
   final String? text;
   final DateTime? value;
-  final Function(DateTime) onDateSelected;
+  final Function(DateTime)? onDateSelected;
   final Function(DateTime dateTime)? onChanged;
 
   @override
@@ -37,7 +38,9 @@ class _AppDatePickerState extends State<AppDatePicker> {
           widget.onChanged!(picked);
         }
       });
-      widget.onDateSelected(picked);
+      if (widget.onDateSelected != null) {
+        widget.onDateSelected!(picked);
+      }
     }
   }
 

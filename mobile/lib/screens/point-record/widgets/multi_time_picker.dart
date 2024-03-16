@@ -50,11 +50,23 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
   void _addInterval() {
     final DateTime now = DateTime.now();
     DateTime initialDate = DateTime(
-        now.year, now.month, now.day, _startTime.hour, _startTime.minute);
-    DateTime finalDate =
-        DateTime(now.year, now.month, now.day, _endTime.hour, _endTime.minute);
-    PointModel point =
-        PointModel(initialDate: initialDate, finalDate: finalDate);
+      now.year,
+      now.month,
+      now.day,
+      _startTime.hour,
+      _startTime.minute,
+    );
+    DateTime finalDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      _endTime.hour,
+      _endTime.minute,
+    );
+    PointModel point = PointModel(
+      initialDate: initialDate,
+      finalDate: finalDate,
+    );
     _controller.points.add(point);
     setState(() {
       timeIntervals.add({'initialDate': _startTime, 'finalDate': _endTime});
@@ -120,7 +132,10 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
         if (_controller.points.isNotEmpty)
           const Column(
             children: [
-              Text('Intervalos', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                'Intervalos',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               SizedBox(height: 5),
             ],
           ),
@@ -136,15 +151,15 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
             itemBuilder: (context, index) {
               final PointModel point = _controller.points[index];
               return Container(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  width: double.infinity,
-                  height: 45,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                      child: Row(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                width: double.infinity,
+                height: 45,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -153,18 +168,22 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
                           const SizedBox(width: 5),
                           Builder(builder: (context) {
                             final DateFormat formatter = DateFormat('HH:mm');
-                            final String initialDate =
-                                formatter.format(point.initialDate);
-                            var finalDate = formatter.format(point.finalDate);
-                            return Text('$initialDate - $finalDate',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300));
+                            final idt = formatter.format(point.initialDate);
+                            var fdt = formatter.format(point.finalDate);
+                            return Text(
+                              '$idt - $fdt',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                              ),
+                            );
                           }),
                         ],
                       ),
                       AppDeleteButton(onPressed: () => _removeInterval(index))
                     ],
-                  )));
+                  ),
+                ),
+              );
             },
           );
         }),
