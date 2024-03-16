@@ -51,48 +51,56 @@ class _AppButtonState extends State<AppButton> {
         child: TextButton(
           style: ButtonStyle(
             alignment: Alignment.center,
-            padding:
-                MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+              const EdgeInsets.all(0),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
-                widget.backgroundColor ?? AppColorsConst.purple),
+              widget.backgroundColor ?? AppColorsConst.blue,
+            ),
             foregroundColor: MaterialStateProperty.all<Color>(
-                widget.textColor ?? AppColorsConst.white),
+              widget.textColor ?? AppColorsConst.white,
+            ),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              side: BorderSide(
-                color: widget.borderColor ??
-                    widget.backgroundColor ??
-                    AppColorsConst.purple,
+              RoundedRectangleBorder(
+                side: BorderSide(
+                  color: widget.borderColor ??
+                      widget.backgroundColor ??
+                      AppColorsConst.blue,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              borderRadius: BorderRadius.circular(10.0),
-            )),
+            ),
           ),
           onPressed: isButtonDisabled ? null : widget.onPressed,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (widget.isLoading == true)
-                const SizedBox(
-                  width: 17,
-                  height: 17,
-                  child: CircularProgressIndicator(color: Colors.white),
-                )
-              else
-                widget.icon ?? const SizedBox(),
-              SizedBox(
-                  width:
-                      widget.icon != null || widget.isLoading == true ? 10 : 0),
-              widget.text != null
-                  ? Text(widget.text!,
-                      style: widget.textStyle ??
-                          TextStyle(
-                            fontSize: widget.textFontSize ?? 14,
-                            fontWeight: FontWeight.w600,
-                          ))
-                  : const SizedBox(),
-            ],
-          ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (widget.isLoading == true) ...[
+                  const SizedBox(
+                    width: 17,
+                    height: 17,
+                    child: CircularProgressIndicator(color: Colors.white),
+                  ),
+                ] else ...[
+                  widget.icon ?? const SizedBox(),
+                  SizedBox(
+                    width: widget.icon != null || widget.isLoading == true
+                        ? 10
+                        : 0,
+                  ),
+                  widget.text != null
+                      ? Text(
+                          widget.text!,
+                          style: widget.textStyle ??
+                              TextStyle(
+                                fontSize: widget.textFontSize ?? 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        )
+                      : const SizedBox()
+                ]
+              ]),
         ),
       ),
     );

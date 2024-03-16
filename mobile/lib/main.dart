@@ -26,7 +26,7 @@ class FaceLocusApp extends StatelessWidget {
               shadowColor: Colors.white,
               foregroundColor: Colors.white),
           colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColorsConst.purple,
+              seedColor: AppColorsConst.blue,
               onBackground: Colors.white,
               background: AppColorsConst.white),
           useMaterial3: true,

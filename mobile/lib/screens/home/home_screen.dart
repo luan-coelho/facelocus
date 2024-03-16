@@ -137,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 20,
                               height: 20,
                               alignment: Alignment.center,
-                              decoration: const BoxDecoration(
-                                color: AppColorsConst.blue,
+                              decoration: BoxDecoration(
+                                color: AppColorsConst.purple.shade900,
                               ),
                               child: Text(
                                 events.length.toString(),
@@ -148,8 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           : null,
                     ),
                     calendarStyle: CalendarStyle(
-                      selectedDecoration: const BoxDecoration(
-                        color: Colors.blue,
+                      selectedDecoration: BoxDecoration(
+                        color: AppColorsConst.purple.shade400.withOpacity(0.5),
                       ),
                       todayDecoration: BoxDecoration(
                         color: Colors.deepPurple.withOpacity(0.3),
