@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class UserFaceImage extends StatefulWidget {
   const UserFaceImage({super.key});
@@ -47,7 +49,7 @@ class _UserFaceImageState extends State<UserFaceImage> {
           right: 30,
           bottom: -2,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () => context.push(AppRoutes.changeFacePhoto),
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(

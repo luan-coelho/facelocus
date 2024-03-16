@@ -17,6 +17,7 @@ import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
 import 'package:facelocus/screens/point-record/widgets/validate_factors.dart';
+import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ class AppRoutes {
   static const eventRequest = '/event-request';
   static const user = '/user';
   static const userUploadFacePhoto = '$user/uploud-face-photo';
+  static const changeFacePhoto = '$user/change-face-photo';
   static const userSearch = '$user/search';
   static const pointRecord = '/point-record';
   static const pointRecordCreate = '$pointRecord/create';
@@ -69,6 +71,10 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.profile,
       builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.changeFacePhoto,
+      builder: (context, state) => const ChangeFacePhotoScreen(),
     ),
     GoRoute(
       path: AppRoutes.event,
