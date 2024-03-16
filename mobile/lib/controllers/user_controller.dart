@@ -9,6 +9,7 @@ import 'package:facelocus/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../shared/toast.dart';
 
@@ -17,6 +18,7 @@ class UserController extends GetxController {
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
   List<UserModel> _users = <UserModel>[].obs;
+  final Rxn<String> userImagePath = Rxn<String>();
 
   Rx<UserModel?> get user => _user;
 
@@ -100,6 +102,31 @@ class UserController extends GetxController {
       }
     } on DioException catch (e) {
       String detail = 'Não foi possível realizar o login';
+      if (e.response?.data['detail'] != null) {
+        detail = e.response?.data['detail'];
+      }
+
+      if (context.mounted) {
+        Toast.showError(detail, context);
+      }
+    }
+    _isLoading.value = false;
+  }
+
+  fetchFacePhotoById(BuildContext context) async {
+    _isLoading.value = true;
+    try {
+      SessionController authController = Get.find<SessionController>();
+      UserModel user = authController.authenticatedUser.value!;
+      var response = await service.getFacePhotoById(user.id!);
+
+      Directory tempDir = await getTemporaryDirectory();
+      String filePath = '${tempDir.path}/userImage.jpg';
+      File file = File(filePath);
+      await file.writeAsBytes(response.data!);
+      userImagePath.value = filePath;
+    } on DioException catch (e) {
+      String detail = 'Não foi possível buscar a imagem de perfil';
       if (e.response?.data['detail'] != null) {
         detail = e.response?.data['detail'];
       }

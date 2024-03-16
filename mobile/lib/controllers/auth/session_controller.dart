@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:facelocus/controllers/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:facelocus/router.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,6 +82,8 @@ class SessionController extends GetxController {
           return;
         }
         context.pushReplacement(AppRoutes.home);
+        UserController userController = Get.find<UserController>();
+        userController.fetchFacePhotoById(context);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401 && context.mounted) {

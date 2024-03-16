@@ -15,11 +15,22 @@ class DioFetchApi implements FetchApi {
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   @override
-  Future<Response> get(String url, {bool authHeaders = true}) async {
+  Future<Response> get(
+    String url, {
+    bool authHeaders = true,
+    ResponseType? responseType = ResponseType.json,
+  }) async {
     try {
       final String? token = await getToken();
-      return await _dio.get('$_baseUrl$url',
-          options: authHeaders ? getAuthenticationHeaders(token) : null);
+      return await _dio.get(
+        '$_baseUrl$url',
+        options: authHeaders
+            ? getAuthenticationHeaders(
+                token,
+                responseType: responseType,
+              )
+            : null,
+      );
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;
@@ -67,11 +78,14 @@ class DioFetchApi implements FetchApi {
     }
   }
 
-  Options getAuthenticationHeaders(String? token) {
+  Options getAuthenticationHeaders(
+    String? token, {
+    ResponseType? responseType = ResponseType.json,
+  }) {
     return Options(headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+    }, responseType: responseType);
   }
 
   void _checkAuthorization(DioException e) async {

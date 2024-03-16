@@ -83,7 +83,7 @@ public class UserResource {
 
     @Path("/face-photo")
     @GET
-    @Produces({"image/png", "image/jpeg"})
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getUserFacePhoto(@RestQuery("user") Long userId) {
         byte[] facePhotoBytes = facePhotoService.getFacePhotoByUser(userId);
         return Response.ok(facePhotoBytes).build();

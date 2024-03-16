@@ -53,6 +53,6 @@ class UserService {
 
   getFacePhotoById(int userId) async {
     String url = '${AppRoutes.user}/face-photo?user=$userId';
-    return await _fetchApi.get(url);
+    return await _fetchApi.get(url, responseType: ResponseType.bytes);
   }
 }

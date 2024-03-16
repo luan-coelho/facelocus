@@ -53,38 +53,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     return AppLayout(
-        showBottomNavigationBar: false,
-        appBarTitle: 'Perfil',
-        body: Padding(
-          padding: const EdgeInsets.all(29),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const UserFaceImage(),
-              const SizedBox(height: 25),
-              InformationField(
-                  description: 'Nome Completo', value: _user.getFullName()),
-              const SizedBox(height: 15),
-              InformationField(description: 'CPF', value: _user.cpf),
-              const SizedBox(height: 15),
-              InformationField(
-                  description: 'Email', value: _user.email.toLowerCase()),
-              const SizedBox(height: 25),
-              AppButton(
-                  text: 'Alterar senha',
-                  onPressed: showModal,
-                  icon: const Icon(Icons.key, color: Colors.white)),
-              const SizedBox(height: 10),
-              AppButton(
-                text: 'Sair',
-                icon: const Icon(Icons.logout, color: Colors.red),
-                onPressed: logout,
-                textColor: Colors.red,
-                backgroundColor: Colors.transparent,
-              )
-            ],
-          ),
-        ));
+      showBottomNavigationBar: false,
+      appBarTitle: 'Perfil',
+      body: Padding(
+        padding: const EdgeInsets.all(29),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const UserFaceImage(),
+            const SizedBox(height: 55),
+            InformationField(
+              description: 'Nome Completo',
+              value: _user.getFullName(),
+            ),
+            const SizedBox(height: 35),
+            AppButton(
+              text: 'Alterar senha',
+              onPressed: showModal,
+              icon: const Icon(Icons.key, color: Colors.white),
+            ),
+            const SizedBox(height: 10),
+            AppButton(
+              text: 'Sair',
+              icon: const Icon(Icons.logout, color: Colors.red),
+              onPressed: logout,
+              textColor: Colors.red,
+              backgroundColor: Colors.transparent,
+            ),
+            const SizedBox(height: 60),
+          ],
+        ),
+      ),
+    );
   }
 }
