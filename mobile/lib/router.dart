@@ -2,7 +2,6 @@ import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/auth/face_upload_screen.dart';
 import 'package:facelocus/screens/auth/login_screen.dart';
 import 'package:facelocus/screens/auth/register_screen.dart';
-import 'package:facelocus/screens/event/app_search.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
 import 'package:facelocus/screens/event/event_request_list_screen.dart';
@@ -12,11 +11,12 @@ import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_admin_edit_screen.dart';
+import 'package:facelocus/screens/point-record/point_record_admin_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
-import 'package:facelocus/screens/point-record/point_record_admin_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
+import 'package:facelocus/screens/point-record/widgets/validate_factors.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +41,7 @@ class AppRoutes {
   static const pointRecordEdit = '$pointRecord/edit';
   static const pointRecordPointValidate = '$pointRecord/point-validate';
   static const userAttendance = '/user-attendance';
+  static const validateFactors = '/validate-factors';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -156,9 +157,9 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppRoutes.userSearch,
+      path: AppRoutes.validateFactors,
       builder: (context, state) {
-        return const AppSearch();
+        return const ValidateFactors(factors: []);
       },
     ),
   ],

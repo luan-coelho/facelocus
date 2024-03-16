@@ -1,5 +1,8 @@
 import 'package:facelocus/models/attendance_record_status_enum.dart';
+import 'package:facelocus/router.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/attendance_record_model.dart';
@@ -19,7 +22,7 @@ class _PointValidateState extends State<PointValidate> {
 
   final Map<AttendanceRecordStatus, IconData> attendanceRecordStatus = {
     AttendanceRecordStatus.validated: Icons.check_circle,
-    AttendanceRecordStatus.notValidated: Icons.running_with_errors,
+    AttendanceRecordStatus.notValidated: Icons.dangerous,
     AttendanceRecordStatus.pending: Icons.pending,
   };
 
@@ -52,10 +55,14 @@ class _PointValidateState extends State<PointValidate> {
       width: double.infinity,
       height: 60,
       decoration: BoxDecoration(
-        border: checkIfFitForValidation()
-            ? Border.all(color: Colors.amber, width: 2)
-            : null,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border(
+          left: BorderSide(
+              color: attendanceRecordColor[widget.attendanceRecord.status]!,
+              width: 16),
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
         color: Colors.white,
       ),
       child: Center(
@@ -80,26 +87,37 @@ class _PointValidateState extends State<PointValidate> {
                 );
               },
             ),
-            SizedBox(
-              height: 45.0,
-              width: 45.0,
-              child: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                onPressed: null,
-                icon: Icon(
-                  attendanceRecordStatus[widget.attendanceRecord.status],
-                  size: 35.0,
-                ),
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(
-                    attendanceRecordColor[widget.attendanceRecord.status]!,
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.white,
-                  ),
-                ),
+            if (checkIfFitForValidation()) ...[
+              AppButton(
+                text: 'Validar',
+                width: 100,
+                height: 40,
+                onPressed: () => checkIfFitForValidation()
+                    ? context.push(AppRoutes.validateFactors)
+                    : null,
               ),
-            )
+            ] else ...[
+              SizedBox(
+                height: 45.0,
+                width: 45.0,
+                child: IconButton(
+                  padding: const EdgeInsets.all(0.0),
+                  onPressed: null,
+                  icon: Icon(
+                    attendanceRecordStatus[widget.attendanceRecord.status],
+                    size: 35.0,
+                  ),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                      attendanceRecordColor[widget.attendanceRecord.status]!,
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            ]
           ],
         ),
       ),
