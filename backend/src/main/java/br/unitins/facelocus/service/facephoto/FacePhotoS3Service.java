@@ -46,13 +46,13 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         RequestBody requestBody = RequestBody.fromFile(multipartData.file.filePath());
         s3.putObject(objectRequest, requestBody);
 
-        FacePhotoS3 facePhoto = new FacePhotoS3();
+        FacePhotoS3 facePhoto = (FacePhotoS3) user.getFacePhoto();
         facePhoto.setFileName(multipartData.file.fileName());
         facePhoto.setObjectKey(facePhotoKey);
         facePhoto.setUser(user);
         facePhoto.setBucket(bucketName);
 
-        create(facePhoto);
+        this.repository.getEntityManager().merge(facePhoto);
     }
 
     @Override

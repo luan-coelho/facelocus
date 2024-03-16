@@ -73,160 +73,157 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
       }
     }
 
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => {
-              if (_openCamera)
-                {
-                  setState(() {
-                    _openCamera = false;
-                  })
-                }
-              else
-                context.pop()
-            },
-            icon: const Icon(Icons.close),
-          ),
-          backgroundColor: Colors.transparent,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => {
+            if (_openCamera)
+              {
+                setState(() {
+                  _openCamera = false;
+                })
+              }
+            else
+              context.pop()
+          },
+          icon: const Icon(Icons.close),
         ),
-        body: Column(
-          children: [
-            if (!_openCamera) ...[
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width * 0.7,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    opacity: 0.6,
-                    image: NetworkImage(
-                        'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
-                  ),
-                ),
-                child: Builder(builder: (context) {
-                  double width = MediaQuery.of(context).size.width * 0.60;
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const SizedBox(height: 15),
-                      Lottie.asset('assets/face_recognition.json',
-                          width: width),
-                    ],
-                  );
-                }),
-              )
-            ],
+        backgroundColor: Colors.transparent,
+      ),
+      body: Column(
+        children: [
+          if (!_openCamera) ...[
             Container(
               width: double.infinity,
+              height: MediaQuery.of(context).size.width * 0.7,
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  topRight: Radius.circular(35),
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  opacity: 0.6,
+                  image: NetworkImage(
+                      'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
                 ),
               ),
               child: Builder(builder: (context) {
-                if (!_openCamera) {
-                  return Padding(
-                    padding: const EdgeInsets.all(29.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Alterar foto de perfil',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 25),
-                        const InforCard(
-                          'Ao alterar sua foto, você será automaticamente removido de todos os eventos.',
-                        ),
-                        const SizedBox(height: 10),
-                        AppButton(
-                            text: 'Tirar uma foto',
-                            onPressed: () {
-                              setState(() {
-                                _openCamera = true;
-                              });
-                            }),
-                        const SizedBox(height: 10),
-                        AppButton(
-                          text: 'Galeria',
-                          onPressed: getPhotoFromGalery,
-                          backgroundColor: AppColorsConst.purple,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                if (_capturedImage != null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.file(
-                          _capturedImage!,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(29.0),
-                          child: Column(
-                            children: [
-                              AppButton(
-                                  text: 'Enviar',
-                                  onPressed: () =>
-                                      _controller.facePhotoProfileUploud(
-                                          context, _capturedImage!)),
-                              const SizedBox(height: 10),
-                              AppButton(
-                                text: 'Tirar nova foto',
-                                onPressed: () =>
-                                    setState(() => _capturedImage = null),
-                                textColor: Colors.red,
-                                backgroundColor: AppColorsConst.white,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return SmartFaceCamera(
-                    message: 'Camera não detectada',
-                    autoDisableCaptureControl: true,
-                    autoCapture: false,
-                    defaultCameraLens: CameraLens.front,
-                    orientation: CameraOrientation.portraitUp,
-                    onCapture: (File? image) {
-                      setState(() => croppedFile(image!.path));
-                    },
-                    onFaceDetected: (Face? face) {},
-                    messageBuilder: (context, face) {
-                      if (face == null) {
-                        return _message('Coloque seu rosto na câmera');
-                      }
-                      if (!face.wellPositioned) {
-                        return _message('Centralize seu rosto');
-                      }
-                      return const SizedBox.shrink();
-                    });
+                double width = MediaQuery.of(context).size.width * 0.60;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 15),
+                    Lottie.asset('assets/face_recognition.json', width: width),
+                  ],
+                );
               }),
-            ),
+            )
           ],
-        ),
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(35),
+                topRight: Radius.circular(35),
+              ),
+            ),
+            child: Builder(builder: (context) {
+              if (!_openCamera) {
+                return Padding(
+                  padding: const EdgeInsets.all(29.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Alterar foto de perfil',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      const InforCard(
+                        'Ao alterar sua foto, você será automaticamente removido de todos os eventos.',
+                      ),
+                      const SizedBox(height: 10),
+                      AppButton(
+                          text: 'Tirar uma foto',
+                          onPressed: () {
+                            setState(() {
+                              _openCamera = true;
+                            });
+                          }),
+                      const SizedBox(height: 10),
+                      AppButton(
+                        text: 'Galeria',
+                        onPressed: getPhotoFromGalery,
+                        backgroundColor: AppColorsConst.purple,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (_capturedImage != null) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.file(
+                        _capturedImage!,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(29.0),
+                        child: Column(
+                          children: [
+                            AppButton(
+                                text: 'Enviar',
+                                onPressed: () =>
+                                    _controller.facePhotoProfileUploud(
+                                        context, _capturedImage!)),
+                            const SizedBox(height: 10),
+                            AppButton(
+                              text: 'Tirar nova foto',
+                              onPressed: () =>
+                                  setState(() => _capturedImage = null),
+                              textColor: Colors.red,
+                              backgroundColor: AppColorsConst.white,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return SmartFaceCamera(
+                  message: 'Camera não detectada',
+                  autoDisableCaptureControl: true,
+                  autoCapture: false,
+                  defaultCameraLens: CameraLens.front,
+                  orientation: CameraOrientation.portraitUp,
+                  onCapture: (File? image) {
+                    setState(() => croppedFile(image!.path));
+                  },
+                  onFaceDetected: (Face? face) {},
+                  messageBuilder: (context, face) {
+                    if (face == null) {
+                      return _message('Coloque seu rosto na câmera');
+                    }
+                    if (!face.wellPositioned) {
+                      return _message('Centralize seu rosto');
+                    }
+                    return const SizedBox.shrink();
+                  });
+            }),
+          ),
+        ],
       ),
     );
   }
