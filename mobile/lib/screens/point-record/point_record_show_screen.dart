@@ -51,7 +51,7 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                           builder: (context) {
                             var pr = _controller.pointRecord.value;
                             return EventHeader(
-                              description: pr!.id!.toString(),
+                              description: pr!.event!.description!,
                               date: pr.date,
                             );
                           },

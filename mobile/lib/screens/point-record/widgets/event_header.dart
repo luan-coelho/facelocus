@@ -27,7 +27,7 @@ class EventHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(width: 10),
         Builder(
           builder: (context) {
             String datef = DateFormat('dd/MM/yyyy').format(date);
