@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/controllers.dart';
 import 'package:facelocus/router.dart';
@@ -44,6 +46,8 @@ class FaceLocusApp extends StatelessWidget {
         Locale('en'),
         Locale('pt', 'BR'),
       ],
+      scrollBehavior: const MaterialScrollBehavior()
+          .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
     );
   }
 }
