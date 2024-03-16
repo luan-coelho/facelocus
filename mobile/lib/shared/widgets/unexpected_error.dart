@@ -21,8 +21,10 @@ class UnexpectedError extends StatelessWidget {
           const SizedBox(height: 25),
           Text(text,
               textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              )),
           SizedBox(height: child != null ? 25 : 0),
           child != null ? child! : const SizedBox(),
         ],

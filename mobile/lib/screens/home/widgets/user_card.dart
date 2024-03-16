@@ -92,16 +92,18 @@ class _UserCardHomeState extends State<UserCardHome> {
               const Text(
                 'Olá,',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w200),
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w200,
+                ),
               ),
               Text(
                 _user.name,
                 style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               )
             ],
           )

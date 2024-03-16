@@ -171,12 +171,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _controller.pointsRecordByDate.isNotEmpty
-                    ? const Text(
-                        'Registros de ponto',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      )
-                    : const SizedBox(),
+                if (_controller.pointsRecordByDate.isNotEmpty) ...[
+                  const Text(
+                    'Registros de ponto',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox()
+                ],
                 const SizedBox(height: 10),
                 if (_controller.isLoadingPr.value) ...[
                   const Center(
@@ -191,27 +192,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ] else ...[
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(0),
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(height: 10);
-                        },
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: _controller.pointsRecordByDate.length,
-                        itemBuilder: (context, index) {
-                          var pr = _controller.pointsRecordByDate[index];
-                          return PointRecordCard(
-                            pointRecord: pr,
-                            user: _authController.authenticatedUser.value!,
-                          );
-                        },
+                  if (_controller.pointsRecordByDate.isEmpty) ...[
+                    const Center(
+                      child: Text(
+                        'Nenhum registro de ponto para esta data',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.w500),
                       ),
-                    ),
-                  )
+                    )
+                  ] else ...[
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(0),
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(height: 10);
+                          },
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: _controller.pointsRecordByDate.length,
+                          itemBuilder: (context, index) {
+                            var pr = _controller.pointsRecordByDate[index];
+                            return PointRecordCard(
+                              pointRecord: pr,
+                              user: _authController.authenticatedUser.value!,
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ]
                 ],
               ],
             );

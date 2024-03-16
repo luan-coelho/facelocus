@@ -7,8 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class PointRecordCard extends StatefulWidget {
-  const PointRecordCard(
-      {super.key, required this.pointRecord, required this.user});
+  const PointRecordCard({
+    super.key,
+    required this.pointRecord,
+    required this.user,
+  });
 
   final PointRecordModel pointRecord;
   final UserModel user;
@@ -30,17 +33,24 @@ class _PointRecordCardState extends State<PointRecordCard> {
         context.push(url);
       },
       child: Container(
-          padding:
-              const EdgeInsets.only(top: 10, right: 15, left: 15, bottom: 10),
+          padding: const EdgeInsets.only(
+            top: 10,
+            right: 15,
+            left: 15,
+            bottom: 10,
+          ),
           decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(widget.pointRecord.event!.description!.toUpperCase(),
                   style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w600),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                   overflow: TextOverflow.ellipsis),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,10 +70,11 @@ class _PointRecordCardState extends State<PointRecordCard> {
                     DateTime date = widget.pointRecord.date;
                     String datef = DateFormat('dd/MM/yyyy').format(date);
                     return Text(
-                        widget.pointRecord.inProgress!
-                            ? 'Em andamento'
-                            : '${AppDateUtils.getDayOfWeek(date)} - $datef',
-                        style: const TextStyle(color: Colors.black54));
+                      widget.pointRecord.inProgress!
+                          ? 'Em andamento'
+                          : '${AppDateUtils.getDayOfWeek(date)} - $datef',
+                      style: const TextStyle(color: Colors.black54),
+                    );
                   })
                 ],
               )
