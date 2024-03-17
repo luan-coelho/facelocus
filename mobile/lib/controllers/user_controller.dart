@@ -18,16 +18,13 @@ class UserController extends GetxController {
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
   List<UserModel> _users = <UserModel>[].obs;
-  final Rxn<String> userImagePath = Rxn<String>();
-
-  Rx<UserModel?> get user => _user;
-
-  List<UserModel> get users => _users;
-
-  List<UserModel> get usersSearch => _usersSearch;
-
+  final Rxn<String> _userImagePath = Rxn<String>();
   final RxBool _isLoading = false.obs;
 
+  Rx<UserModel?> get user => _user;
+  List<UserModel> get users => _users;
+  List<UserModel> get usersSearch => _usersSearch;
+  Rxn<String> get userImagePath => _userImagePath;
   RxBool get isLoading => _isLoading;
 
   UserController({required this.service});

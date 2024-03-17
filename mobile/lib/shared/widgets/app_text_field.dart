@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatefulWidget {
-  const AppTextField(
-      {super.key,
-      this.labelText,
-      required this.textEditingController,
-      this.validator,
-      this.onSaved,
-      this.passwordType,
-      this.maxLength});
+  const AppTextField({
+    super.key,
+    this.labelText,
+    required this.textEditingController,
+    this.validator,
+    this.onSaved,
+    this.passwordType,
+    this.maxLength,
+  });
 
   final String? labelText;
   final TextEditingController textEditingController;
@@ -38,25 +39,36 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      widget.labelText != null
-          ? Text(widget.labelText!,
-              style: const TextStyle(fontWeight: FontWeight.w500))
-          : const SizedBox(),
-      const SizedBox(height: 5),
-      TextFormField(
-        controller: widget.textEditingController,
-        keyboardType:
-            widget.passwordType != null ? TextInputType.visiblePassword : null,
-        obscureText: widget.passwordType != null ? _obscured : false,
-        decoration: InputDecoration(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        widget.labelText != null
+            ? Text(
+                widget.labelText!,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              )
+            : const SizedBox(),
+        const SizedBox(height: 5),
+        TextFormField(
+          controller: widget.textEditingController,
+          keyboardType: widget.passwordType != null
+              ? TextInputType.visiblePassword
+              : null,
+          obscureText: widget.passwordType != null ? _obscured : false,
+          decoration: InputDecoration(
             counter: const Offstage(),
             fillColor: Colors.white,
             filled: true,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 10.0,
+            ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black38),
               borderRadius: BorderRadius.circular(10.0),
             ),
             border: OutlineInputBorder(
@@ -76,12 +88,14 @@ class _AppTextFieldState extends State<AppTextField> {
                       ),
                     ),
                   )
-                : null),
-        validator: widget.validator,
-        onSaved: widget.onSaved,
-        maxLength: widget.maxLength ?? 255,
-        maxLengthEnforcement: null,
-      ),
-    ]);
+                : null,
+          ),
+          validator: widget.validator,
+          onSaved: widget.onSaved,
+          maxLength: widget.maxLength ?? 255,
+          maxLengthEnforcement: null,
+        ),
+      ],
+    );
   }
 }

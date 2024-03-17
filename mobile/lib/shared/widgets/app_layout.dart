@@ -5,15 +5,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class AppLayout extends StatefulWidget {
-  const AppLayout(
-      {super.key,
-      this.appBarTitle,
-      bool this.showAppBar = true,
-      this.actions,
-      this.leading,
-      this.showBottomNavigationBar = true,
-      required this.body,
-      this.floatingActionButton});
+  const AppLayout({
+    super.key,
+    this.appBarTitle,
+    bool this.showAppBar = true,
+    this.actions,
+    this.leading,
+    this.showBottomNavigationBar = true,
+    required this.body,
+    this.floatingActionButton,
+  });
 
   final String? appBarTitle;
   final bool? showAppBar;
@@ -53,7 +54,8 @@ class _AppLayoutState extends State<AppLayout> {
                               : Colors.black,
                         ),
                       )
-                    : null)
+                    : null,
+              )
             : null,
         body: widget.body,
         resizeToAvoidBottomInset: false,
@@ -64,7 +66,8 @@ class _AppLayoutState extends State<AppLayout> {
                 elevation: 13,
                 backgroundColor: AppColorsConst.blue,
                 shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30))),
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
                 child: const Icon(Icons.add, color: Colors.white),
               )
             : null,

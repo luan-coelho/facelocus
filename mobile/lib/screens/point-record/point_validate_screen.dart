@@ -29,6 +29,22 @@ class PointValidateScreenState extends State<PointValidateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget message(String msg) => SizedBox(
+          child: Container(
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.white),
+            child: Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+        );
+
     return AppLayout(
       appBarTitle: 'Validar ponto',
       body: Builder(builder: (context) {
@@ -80,26 +96,14 @@ class PointValidateScreenState extends State<PointValidateScreen> {
             onFaceDetected: (Face? face) {},
             messageBuilder: (context, face) {
               if (face == null) {
-                return _message('Coloque seu rosto na câmera');
+                return message('Coloque seu rosto na câmera');
               }
               if (!face.wellPositioned) {
-                return _message('Centralize seu rosto');
+                return message('Centralize seu rosto');
               }
               return const SizedBox.shrink();
             });
       }),
     );
   }
-
-  Widget _message(String msg) => SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(msg,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400)),
-        ),
-      );
 }

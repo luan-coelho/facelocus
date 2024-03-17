@@ -13,23 +13,28 @@ class EventCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('${AppRoutes.eventShow}/${event.id}'),
       child: Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          width: double.infinity,
-          height: 45,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(event.description!,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.ellipsis)),
-              )
-            ],
-          )),
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        width: double.infinity,
+        height: 45,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                event.description!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -64,42 +64,50 @@ class LoginFormState extends State<LoginScreen> {
             child: Form(
               key: _formKey,
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'images/login.svg',
-                      width: 280,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'images/login.svg',
+                    width: 280,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Facelocus',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 15),
-                    const Text('Facelocus',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 10),
-                    AppTextField(
-                        textEditingController: _loginController,
-                        labelText: 'Login',
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Informe o login'
-                            : null),
-                    const SizedBox(height: 10),
-                    AppTextField(
-                        textEditingController: _passwordController,
-                        labelText: 'Senha',
-                        passwordType: true,
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Informe a senha'
-                            : null),
-                    const SizedBox(height: 15),
-                    AppButton(text: 'Entrar', onPressed: _login),
-                    const SizedBox(height: 10),
-                    AppButton(
-                        text: 'Cadastrar',
-                        onPressed: () => context.push(AppRoutes.register),
-                        textColor: Colors.black,
-                        backgroundColor: AppColorsConst.white,
-                        textFontSize: 14),
-                  ]),
+                  ),
+                  const SizedBox(height: 10),
+                  AppTextField(
+                    textEditingController: _loginController,
+                    labelText: 'Login',
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Informe o login'
+                        : null,
+                  ),
+                  const SizedBox(height: 10),
+                  AppTextField(
+                    textEditingController: _passwordController,
+                    labelText: 'Senha',
+                    passwordType: true,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Informe a senha'
+                        : null,
+                  ),
+                  const SizedBox(height: 15),
+                  AppButton(text: 'Entrar', onPressed: _login),
+                  const SizedBox(height: 10),
+                  AppButton(
+                    text: 'Cadastrar',
+                    onPressed: () => context.push(AppRoutes.register),
+                    textColor: Colors.black,
+                    backgroundColor: AppColorsConst.white,
+                    textFontSize: 14,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

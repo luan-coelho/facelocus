@@ -37,6 +37,19 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget message(String msg) => Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Text(
+            msg,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.green,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        );
+
     void croppedFile(String path) async {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: path,
@@ -59,6 +72,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
         ],
       );
       setState(() {
+        _openCamera = false;
         _capturedImage = File(croppedFile!.path);
       });
     }
@@ -73,65 +87,59 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
       }
     }
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => {
-            if (_openCamera)
-              {
-                setState(() {
-                  _openCamera = false;
-                })
-              }
-            else
-              context.pop()
-          },
-          icon: const Icon(Icons.close),
+    Widget getBody() {
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () => {
+              if (_openCamera)
+                {
+                  setState(() {
+                    _openCamera = false;
+                  })
+                }
+              else
+                context.pop()
+            },
+            icon: const Icon(Icons.close, color: Colors.black, size: 30),
+          ),
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
-      ),
-      body: Column(
-        children: [
-          if (!_openCamera) ...[
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width * 0.7,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  opacity: 0.6,
-                  image: NetworkImage(
-                      'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
+        body: Column(
+          children: [
+            if (!_openCamera) ...[
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width * 0.7,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    opacity: 0.6,
+                    image: NetworkImage(
+                        'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
+                  ),
                 ),
-              ),
-              child: Builder(builder: (context) {
-                double width = MediaQuery.of(context).size.width * 0.60;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const SizedBox(height: 15),
-                    Lottie.asset('assets/face_recognition.json', width: width),
-                  ],
-                );
-              }),
-            )
-          ],
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(35),
-                topRight: Radius.circular(35),
-              ),
-            ),
-            child: Builder(builder: (context) {
+                child: Builder(builder: (context) {
+                  double width = MediaQuery.of(context).size.width * 0.60;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(height: 15),
+                      Lottie.asset('assets/face_recognition.json',
+                          width: width),
+                    ],
+                  );
+                }),
+              )
+            ],
+            Builder(builder: (context) {
               if (!_openCamera) {
                 return Padding(
                   padding: const EdgeInsets.all(29.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
@@ -168,40 +176,47 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
               }
 
               if (_capturedImage != null) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.file(
-                        _capturedImage!,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        fit: BoxFit.fitWidth,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(29.0),
-                        child: Column(
-                          children: [
-                            AppButton(
-                                text: 'Enviar',
+                return SafeArea(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(29.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.file(
+                              _capturedImage!,
+                              width: MediaQuery.of(context).size.width * 1,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Column(
+                            children: [
+                              AppButton(
+                                  text: 'Enviar',
+                                  onPressed: () =>
+                                      _controller.facePhotoProfileUploud(
+                                          context, _capturedImage!)),
+                              const SizedBox(height: 10),
+                              AppButton(
+                                text: 'Tirar nova foto',
                                 onPressed: () =>
-                                    _controller.facePhotoProfileUploud(
-                                        context, _capturedImage!)),
-                            const SizedBox(height: 10),
-                            AppButton(
-                              text: 'Tirar nova foto',
-                              onPressed: () =>
-                                  setState(() => _capturedImage = null),
-                              textColor: Colors.red,
-                              backgroundColor: AppColorsConst.white,
-                            )
-                          ],
-                        ),
+                                    setState(() => _capturedImage = null),
+                                textColor: Colors.red,
+                                backgroundColor: Colors.red.withOpacity(0.2),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 );
               }
+
               return SmartFaceCamera(
                   message: 'Camera não detectada',
                   autoDisableCaptureControl: true,
@@ -211,32 +226,26 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                   onCapture: (File? image) {
                     setState(() => croppedFile(image!.path));
                   },
-                  onFaceDetected: (Face? face) {},
                   messageBuilder: (context, face) {
                     if (face == null) {
-                      return _message('Coloque seu rosto na câmera');
+                      return message('Coloque seu rosto na câmera');
                     }
                     if (!face.wellPositioned) {
-                      return _message('Centralize seu rosto');
+                      return message('Centralize seu rosto');
                     }
                     return const SizedBox.shrink();
                   });
             }),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _message(String msg) => SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(msg,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400)),
+          ],
         ),
       );
+    }
+
+    if (_openCamera) {
+      return getBody();
+    }
+    return SafeArea(
+      child: getBody(),
+    );
+  }
 }
