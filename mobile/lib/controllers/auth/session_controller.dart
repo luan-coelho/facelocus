@@ -124,5 +124,7 @@ class SessionController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('user');
     _authenticatedUser.value = null;
+    UserController userController = Get.find<UserController>();
+    userController.clearImage();
   }
 }

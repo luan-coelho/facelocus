@@ -94,9 +94,10 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
           elevation: 0,
           leading: IconButton(
             onPressed: () => {
-              if (_openCamera)
+              if (_openCamera || _capturedImage != null)
                 {
                   setState(() {
+                    _capturedImage = null;
                     _openCamera = false;
                   })
                 }
@@ -109,34 +110,51 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
         ),
         body: Column(
           children: [
-            if (!_openCamera) ...[
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width * 0.7,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    opacity: 0.6,
-                    image: NetworkImage(
-                        'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
+            if (_capturedImage == null) ...[
+              if (_openCamera) ...[
+                SmartFaceCamera(
+                    message: 'Camera não detectada',
+                    autoDisableCaptureControl: true,
+                    autoCapture: false,
+                    defaultCameraLens: CameraLens.front,
+                    orientation: CameraOrientation.portraitUp,
+                    onCapture: (File? image) {
+                      setState(() => croppedFile(image!.path));
+                    },
+                    messageBuilder: (context, face) {
+                      if (face == null) {
+                        return message('Coloque seu rosto na câmera');
+                      }
+                      if (!face.wellPositioned) {
+                        return message('Centralize seu rosto');
+                      }
+                      return const SizedBox.shrink();
+                    })
+              ] else ...[
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.7,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      opacity: 0.6,
+                      image: NetworkImage(
+                          'https://img.freepik.com/premium-photo/abstract-connected-dots-lines-blue-background_34629-424.jpg'),
+                    ),
                   ),
+                  child: Builder(builder: (context) {
+                    double width = MediaQuery.of(context).size.width * 0.60;
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const SizedBox(height: 15),
+                        Lottie.asset('assets/face_recognition.json',
+                            width: width),
+                      ],
+                    );
+                  }),
                 ),
-                child: Builder(builder: (context) {
-                  double width = MediaQuery.of(context).size.width * 0.60;
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const SizedBox(height: 15),
-                      Lottie.asset('assets/face_recognition.json',
-                          width: width),
-                    ],
-                  );
-                }),
-              )
-            ],
-            Builder(builder: (context) {
-              if (!_openCamera) {
-                return Padding(
+                Padding(
                   padding: const EdgeInsets.all(29.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -172,70 +190,51 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                       ),
                     ],
                   ),
-                );
-              }
-
-              if (_capturedImage != null) {
-                return SafeArea(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(29.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.file(
-                              _capturedImage!,
-                              width: MediaQuery.of(context).size.width * 1,
-                              fit: BoxFit.fitWidth,
-                            ),
+                )
+              ],
+            ] else ...[
+              SafeArea(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(29.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.file(
+                            _capturedImage!,
+                            width: MediaQuery.of(context).size.width * 1,
+                            fit: BoxFit.fitWidth,
                           ),
-                          const SizedBox(height: 10),
-                          Column(
-                            children: [
-                              AppButton(
-                                  text: 'Enviar',
-                                  onPressed: () =>
-                                      _controller.facePhotoProfileUploud(
-                                          context, _capturedImage!)),
-                              const SizedBox(height: 10),
-                              AppButton(
-                                text: 'Tirar nova foto',
+                        ),
+                        const SizedBox(height: 10),
+                        Column(
+                          children: [
+                            AppButton(
+                                text: 'Enviar',
                                 onPressed: () =>
-                                    setState(() => _capturedImage = null),
-                                textColor: Colors.red,
-                                backgroundColor: Colors.red.withOpacity(0.2),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                                    _controller.facePhotoProfileUploud(
+                                        context, _capturedImage!)),
+                            const SizedBox(height: 10),
+                            AppButton(
+                              text: 'Tirar nova foto',
+                              onPressed: () => setState(() {
+                                _capturedImage = null;
+                                _openCamera = true;
+                              }),
+                              textColor: Colors.red,
+                              backgroundColor: Colors.red.withOpacity(0.2),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }
-
-              return SmartFaceCamera(
-                  message: 'Camera não detectada',
-                  autoDisableCaptureControl: true,
-                  autoCapture: false,
-                  defaultCameraLens: CameraLens.front,
-                  orientation: CameraOrientation.portraitUp,
-                  onCapture: (File? image) {
-                    setState(() => croppedFile(image!.path));
-                  },
-                  messageBuilder: (context, face) {
-                    if (face == null) {
-                      return message('Coloque seu rosto na câmera');
-                    }
-                    if (!face.wellPositioned) {
-                      return message('Centralize seu rosto');
-                    }
-                    return const SizedBox.shrink();
-                  });
-            }),
+                ),
+              )
+            ],
           ],
         ),
       );

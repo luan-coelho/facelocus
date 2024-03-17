@@ -22,9 +22,13 @@ class UserController extends GetxController {
   final RxBool _isLoading = false.obs;
 
   Rx<UserModel?> get user => _user;
+
   List<UserModel> get users => _users;
+
   List<UserModel> get usersSearch => _usersSearch;
+
   Rxn<String> get userImagePath => _userImagePath;
+
   RxBool get isLoading => _isLoading;
 
   UserController({required this.service});
@@ -52,6 +56,26 @@ class UserController extends GetxController {
       if (context.mounted) {
         context.replace(AppRoutes.home);
         Toast.showSuccess('Uploud realizado com sucesso', context);
+      }
+    } on DioException catch (e) {
+      String detail = onError(e);
+      if (context.mounted) {
+        Toast.showError(detail, context);
+      }
+    }
+    _isLoading.value = false;
+  }
+
+  changeFacePhoto(BuildContext context, File file) async {
+    _isLoading.value = true;
+    try {
+      SessionController authController = Get.find<SessionController>();
+      UserModel user = authController.authenticatedUser.value!;
+      await service.facePhotoProfileUploud(file, user.id!);
+      fetchFacePhotoById(context);
+      if (context.mounted) {
+        context.replace(AppRoutes.home);
+        Toast.showSuccess('Foto alterada com sucesso', context);
       }
     } on DioException catch (e) {
       String detail = onError(e);
@@ -133,5 +157,9 @@ class UserController extends GetxController {
       }
     }
     _isLoading.value = false;
+  }
+
+  clearImage() {
+    _userImagePath.value = null;
   }
 }
