@@ -79,6 +79,7 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                               itemCount: ars.length,
                               itemBuilder: (context, index) {
                                 return PointValidate(
+                                  pointRecord: _controller.pointRecord.value!,
                                   attendanceRecord: ars[index],
                                 );
                               },

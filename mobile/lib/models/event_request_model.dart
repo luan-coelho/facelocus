@@ -1,7 +1,6 @@
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/event_request_status_enum.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
-import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 
 class EventRequestModel {

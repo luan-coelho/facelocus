@@ -47,6 +47,9 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         s3.putObject(objectRequest, requestBody);
 
         FacePhotoS3 facePhoto = (FacePhotoS3) user.getFacePhoto();
+        if (facePhoto == null) {
+            facePhoto = new FacePhotoS3();
+        }
         facePhoto.setFileName(multipartData.file.fileName());
         facePhoto.setObjectKey(facePhotoKey);
         facePhoto.setUser(user);

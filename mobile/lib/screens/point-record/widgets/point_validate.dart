@@ -1,4 +1,6 @@
 import 'package:facelocus/models/attendance_record_status_enum.dart';
+import 'package:facelocus/models/factor_enum.dart';
+import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,14 @@ import '../../../models/attendance_record_model.dart';
 import '../../../models/point_model.dart';
 
 class PointValidate extends StatefulWidget {
-  const PointValidate({super.key, required this.attendanceRecord});
+  const PointValidate({
+    super.key,
+    required this.attendanceRecord,
+    required this.pointRecord,
+  });
 
   final AttendanceRecordModel attendanceRecord;
+  final PointRecordModel pointRecord;
 
   @override
   State<PointValidate> createState() => _PointValidateState();
@@ -93,7 +100,17 @@ class _PointValidateState extends State<PointValidate> {
                 width: 100,
                 height: 40,
                 onPressed: () => checkIfFitForValidation()
-                    ? context.push(AppRoutes.validateFactors)
+                    ? context.push(
+                        Uri(path: AppRoutes.validateFactors, queryParameters: {
+                          'attendanceRecord': 1,
+                          'faceRecognitionFactor': widget.pointRecord.factors!
+                              .contains(Factor.facialRecognition)
+                              .toString(),
+                          'locationIndoorFactor': widget.pointRecord.factors!
+                              .contains(Factor.indoorLocation)
+                              .toString(),
+                        }).toString(),
+                      )
                     : null,
               ),
             ] else ...[

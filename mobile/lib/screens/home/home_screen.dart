@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/point_record_create_controller.dart';
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/home/widgets/point_record_card.dart';
@@ -27,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final PointRecordCreateController _controller;
   late final SessionController _authController;
-  late final UserController _userController;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -36,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _controller = Get.find<PointRecordCreateController>();
     _authController = Get.find<SessionController>();
-    _userController = Get.find<UserController>();
     _selectedDay = _focusedDay;
     _controller.fetchAllByUser(context);
     _controller.fetchAllByDate(context, _focusedDay);

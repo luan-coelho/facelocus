@@ -120,7 +120,9 @@ final router = GoRouter(
         int eventRequestId = int.parse(eventQueryParameter!);
         var requestType = EventRequestType.parse(requestTypeQueryParam!)!;
         return EventRequestShowScreen(
-            eventRequestId: eventRequestId, requestType: requestType);
+          eventRequestId: eventRequestId,
+          requestType: requestType,
+        );
       },
     ),
     GoRoute(
@@ -165,7 +167,20 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.validateFactors,
       builder: (context, state) {
-        return const ValidateFactors(factors: []);
+        final int attendanceRecordId = int.parse(
+          state.pathParameters['attendanceRecord']!,
+        );
+        final bool frf = bool.parse(
+          state.uri.queryParameters['faceRecognitionFactor']!,
+        );
+        final bool ilf = bool.parse(
+          state.uri.queryParameters['locationIndoorFactor']!,
+        );
+        return ValidateFactors(
+          attendanceRecordId: attendanceRecordId,
+          faceRecognitionFactor: frf,
+          locationIndoorFactor: ilf,
+        );
       },
     ),
   ],
