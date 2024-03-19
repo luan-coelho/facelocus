@@ -168,7 +168,7 @@ final router = GoRouter(
       path: AppRoutes.validateFactors,
       builder: (context, state) {
         final int attendanceRecordId = int.parse(
-          state.pathParameters['attendanceRecord']!,
+          state.uri.queryParameters['attendanceRecord']!,
         );
         final bool frf = bool.parse(
           state.uri.queryParameters['faceRecognitionFactor']!,

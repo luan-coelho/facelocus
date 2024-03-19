@@ -84,6 +84,8 @@ class SessionController extends GetxController {
           return;
         }
         context.pushReplacement(AppRoutes.home);
+        UserController userController = Get.find<UserController>();
+        userController.fetchFacePhotoById(context);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401 && context.mounted) {

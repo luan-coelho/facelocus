@@ -34,7 +34,9 @@ class _PointRecordAdminShowScreenState
   @override
   void initState() {
     _controller = Get.find<PointRecordCreateController>();
-    _controller.fetchById(context, widget.pointRecordId);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _controller.fetchById(context, widget.pointRecordId),
+    );
     super.initState();
   }
 

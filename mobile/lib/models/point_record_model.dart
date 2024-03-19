@@ -43,6 +43,7 @@ class PointRecordModel {
   }
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'date': date.toIso8601String(),
         'event': event!.toJson(),
         'location': location!.toJson(),

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/point_model.dart';
@@ -8,6 +10,7 @@ import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/utils/expansion_panel_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neat_and_clean_calendar/neat_and_clean_calendar_event.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +30,8 @@ class PointRecordCreateController extends GetxController {
   List<Item<UserModel>> _panelItems = <Item<UserModel>>[].obs;
   final Rx<DateTime> _initialDate = DateTime.now().obs;
   final Rx<DateTime> _finalDate = DateTime.now().obs;
+
+  List<NeatCleanCalendarEvent> _prEvents = <NeatCleanCalendarEvent>[].obs;
 
   final RxBool _isLoading = false.obs;
 
@@ -55,6 +60,8 @@ class PointRecordCreateController extends GetxController {
   RxBool get isLoading => _isLoading;
 
   RxBool get isLoadingPr => _isLoadingPr;
+
+  List<NeatCleanCalendarEvent> get prEvents => _prEvents;
 
   PointRecordCreateController({required this.service});
 
@@ -92,11 +99,10 @@ class PointRecordCreateController extends GetxController {
     }
     if (context.mounted) {
       fetchAllByUser(context);
-      fetchAllByDate(context, DateTime.now());
     }
   }
 
-  fetchAllByDate(BuildContext context, DateTime date) async {
+  /* fetchAllByDate(BuildContext context, DateTime date) async {
     _isLoadingPr.value = true;
     SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
@@ -105,7 +111,7 @@ class PointRecordCreateController extends GetxController {
     _pointsRecordByDate.clear();
     _pointsRecordByDate.addAll(pointsRecord);
     _isLoadingPr.value = false;
-  }
+  }*/
 
   fetchAllByUser(BuildContext context) async {
     _isLoading.value = true;
@@ -113,15 +119,13 @@ class PointRecordCreateController extends GetxController {
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByUser(administrator.id!);
-    _pointsRecord.clear();
-    _pointsRecord.addAll(pointsRecord);
     if (pointsRecord.isNotEmpty) {
-      await changeFirstAndLastDay(pointsRecord);
+      await buildPointsRecordEvents(pointsRecord);
     }
     _isLoading.value = false;
   }
 
-  changeFirstAndLastDay(List<PointRecordModel> pointsRecord) async {
+  /*changeFirstAndLastDay(List<PointRecordModel> pointsRecord) async {
     DateTime firstDay = pointsRecord.first.date;
     DateTime today = DateTime.now();
     if (firstDay.isAfter(today)) {
@@ -130,12 +134,30 @@ class PointRecordCreateController extends GetxController {
     _firstDayCalendar.value = firstDay;
     _lastDayCalendar.value = pointsRecord.last.date;
   }
-
+*/
   fetchById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
     _pointRecord.value = await service.getById(pointRecordId);
     _panelItems =
         Item<UserModel>().generateItems(pointRecord.value!.event!.users!);
     _isLoading.value = false;
+  }
+
+  buildPointsRecordEvents(List<PointRecordModel> pointsRecord) async {
+    List<NeatCleanCalendarEvent> eventList = [];
+    for (var pr in pointsRecord) {
+      DateTime startTime = pr.points.first.initialDate;
+      DateTime finalTime = pr.points.last.finalDate;
+      var prEvent = NeatCleanCalendarEvent(pr.event!.description!,
+          description: pr.location!.description,
+          startTime: startTime,
+          endTime: finalTime,
+          color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+              .withOpacity(1.0),
+          metadata: pr.toJson());
+      eventList.add(prEvent);
+    }
+    _prEvents.clear();
+    _prEvents.addAll(eventList);
   }
 }
