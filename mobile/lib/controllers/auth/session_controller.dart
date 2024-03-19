@@ -50,7 +50,6 @@ class SessionController extends GetxController {
           userController.fetchFacePhotoById(context);
           context.replace(AppRoutes.home);
         }
-
         return;
       }
     } on DioException catch (e) {

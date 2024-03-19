@@ -101,16 +101,19 @@ class _PointValidateState extends State<PointValidate> {
                 height: 40,
                 onPressed: () => checkIfFitForValidation()
                     ? context.push(
-                        Uri(path: AppRoutes.validateFactors, queryParameters: {
-                          'attendanceRecord':
-                              widget.attendanceRecord.id.toString(),
-                          'faceRecognitionFactor': widget.pointRecord.factors!
-                              .contains(Factor.facialRecognition)
-                              .toString(),
-                          'locationIndoorFactor': widget.pointRecord.factors!
-                              .contains(Factor.indoorLocation)
-                              .toString(),
-                        }).toString(),
+                        Uri(
+                          path: AppRoutes.validateFactors,
+                          queryParameters: {
+                            'attendanceRecord':
+                                widget.attendanceRecord.id.toString(),
+                            'faceRecognitionFactor': widget.pointRecord.factors!
+                                .contains(Factor.facialRecognition)
+                                .toString(),
+                            'locationIndoorFactor': widget.pointRecord.factors!
+                                .contains(Factor.indoorLocation)
+                                .toString(),
+                          },
+                        ).toString(),
                       )
                     : null,
               ),

@@ -27,7 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _controller = Get.find<PointRecordCreateController>();
     _sessionController = Get.find<SessionController>();
-    _controller.fetchAllByUser(context);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _controller.fetchAllByUser(context),
+    );
     super.initState();
   }
 

@@ -12,9 +12,11 @@ class PointRecordShowController extends GetxController {
   final Rxn<PointRecordModel> _pointRecord = Rxn<PointRecordModel>();
   final Rxn<UserAttendanceModel> _userAttendance = Rxn<UserAttendanceModel>();
   final RxBool _isLoading = false.obs;
+
   RxBool get isLoading => _isLoading;
 
   Rxn<UserAttendanceModel> get userAttendance => _userAttendance;
+
   Rxn<PointRecordModel> get pointRecord => _pointRecord;
 
   PointRecordShowController({required this.service});
@@ -23,8 +25,10 @@ class PointRecordShowController extends GetxController {
     _isLoading.value = true;
     SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
-    _userAttendance.value =
-        await service.getByPointRecordAndUser(pointRecordId, administrator.id!);
+    _userAttendance.value = await service.getByPointRecordAndUser(
+      pointRecordId,
+      administrator.id!,
+    );
     _isLoading.value = false;
   }
 
