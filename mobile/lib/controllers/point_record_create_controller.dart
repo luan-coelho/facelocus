@@ -31,7 +31,7 @@ class PointRecordCreateController extends GetxController {
   final Rx<DateTime> _initialDate = DateTime.now().obs;
   final Rx<DateTime> _finalDate = DateTime.now().obs;
 
-  List<NeatCleanCalendarEvent> _prEvents = <NeatCleanCalendarEvent>[].obs;
+  final List<NeatCleanCalendarEvent> _prEvents = <NeatCleanCalendarEvent>[].obs;
 
   final RxBool _isLoading = false.obs;
 
@@ -102,17 +102,6 @@ class PointRecordCreateController extends GetxController {
     }
   }
 
-  /* fetchAllByDate(BuildContext context, DateTime date) async {
-    _isLoadingPr.value = true;
-    SessionController authController = Get.find<SessionController>();
-    UserModel administrator = authController.authenticatedUser.value!;
-    List<PointRecordModel> pointsRecord;
-    pointsRecord = await service.getAllByDate(administrator.id!, date);
-    _pointsRecordByDate.clear();
-    _pointsRecordByDate.addAll(pointsRecord);
-    _isLoadingPr.value = false;
-  }*/
-
   fetchAllByUser(BuildContext context) async {
     _isLoading.value = true;
     SessionController authController = Get.find<SessionController>();
@@ -125,21 +114,12 @@ class PointRecordCreateController extends GetxController {
     _isLoading.value = false;
   }
 
-  /*changeFirstAndLastDay(List<PointRecordModel> pointsRecord) async {
-    DateTime firstDay = pointsRecord.first.date;
-    DateTime today = DateTime.now();
-    if (firstDay.isAfter(today)) {
-      firstDay = today;
-    }
-    _firstDayCalendar.value = firstDay;
-    _lastDayCalendar.value = pointsRecord.last.date;
-  }
-*/
   fetchById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
     _pointRecord.value = await service.getById(pointRecordId);
-    _panelItems =
-        Item<UserModel>().generateItems(pointRecord.value!.event!.users!);
+    _panelItems = Item<UserModel>().generateItems(
+      pointRecord.value!.event!.users!,
+    );
     _isLoading.value = false;
   }
 

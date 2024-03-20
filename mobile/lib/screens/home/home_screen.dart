@@ -118,6 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.w800,
                       fontSize: 11,
                     ),
+                    displayMonthTextStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    hideTodayIcon: true,
                   ),
                 ),
               ),

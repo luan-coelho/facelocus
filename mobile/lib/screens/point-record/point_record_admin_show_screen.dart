@@ -95,79 +95,79 @@ class _PointRecordAdminShowScreenState
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    Obx(() {
-                      return Skeletonizer(
-                        enabled: _controller.isLoading.value,
-                        child: ExpansionPanelList(
-                          expandedHeaderPadding: const EdgeInsets.all(0),
-                          expansionCallback: (int index, bool isExpanded) {
-                            setState(() {
-                              _controller.panelItems[index].isExpanded =
-                                  isExpanded;
-                            });
-                          },
-                          children: _controller.panelItems
-                              .map<ExpansionPanel>((Item<UserModel> item) {
-                            return ExpansionPanel(
-                              headerBuilder: (
-                                BuildContext context,
-                                bool isExpanded,
-                              ) {
-                                return ListTile(
-                                  iconColor: Colors.blue,
-                                  title: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        'images/user-icon.svg',
-                                        width: 25,
+                    Skeletonizer(
+                      enabled: _controller.isLoading.value,
+                      child: ExpansionPanelList(
+                        expandedHeaderPadding: const EdgeInsets.all(0),
+                        expansionCallback: (int index, bool isExpanded) {
+                          setState(() {
+                            _controller.panelItems[index].isExpanded =
+                                isExpanded;
+                          });
+                        },
+                        children: _controller.panelItems
+                            .map<ExpansionPanel>((Item<UserModel> item) {
+                          return ExpansionPanel(
+                            headerBuilder: (
+                              BuildContext context,
+                              bool isExpanded,
+                            ) {
+                              return ListTile(
+                                iconColor: Colors.blue,
+                                title: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'images/user-icon.svg',
+                                      width: 25,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      item.content!.getFullName(),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        item.content!.getFullName(),
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Builder(builder: (context) {
-                                    var points =
-                                        _controller.pointRecord.value!.points;
-                                    List<Widget> list = [];
-                                    for (var i = 0; i < points.length; i++) {
-                                      list.add(AttendanceRecordIndicator(
-                                          point: points[i]));
-                                      // Último da lista
-                                      if (points.indexOf(points.last) != i) {
-                                        list.add(const SizedBox(width: 5));
-                                      }
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Builder(builder: (context) {
+                                  var points =
+                                      _controller.pointRecord.value!.points;
+                                  List<Widget> list = [];
+                                  for (var i = 0; i < points.length; i++) {
+                                    list.add(
+                                      AttendanceRecordIndicator(
+                                          point: points[i]),
+                                    );
+                                    // Último da lista
+                                    if (points.indexOf(points.last) != i) {
+                                      list.add(const SizedBox(width: 5));
                                     }
-                                    return Row(children: [
-                                      const SizedBox(width: 30),
-                                      ...list
-                                    ]);
-                                  }),
-                                );
-                              },
-                              body: ListTile(
-                                  title: Text(
-                                    item.content!.getFullName(),
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  subtitle: const Text(
-                                    'To delete this panel, tap the trash can icon',
-                                  ),
-                                  trailing: const Icon(Icons.delete),
-                                  onTap: () {
-                                    setState(() {});
-                                  }),
-                              isExpanded: item.isExpanded,
-                            );
-                          }).toList(),
-                        ),
-                      );
-                    }),
+                                  }
+                                  return Row(children: [
+                                    const SizedBox(width: 30),
+                                    ...list
+                                  ]);
+                                }),
+                              );
+                            },
+                            body: ListTile(
+                                title: Text(
+                                  item.content!.getFullName(),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                subtitle: const Text(
+                                  'To delete this panel, tap the trash can icon',
+                                ),
+                                trailing: const Icon(Icons.delete),
+                                onTap: () {
+                                  setState(() {});
+                                }),
+                            isExpanded: item.isExpanded,
+                          );
+                        }).toList(),
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -143,24 +143,35 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     /**
      * Responsável por validar os pontos de um registro de ponto
      *
-     * @param pointRecord Registro de ponto
+     * @param pr Registro de ponto
      */
-    private void validatePoints(PointRecord pointRecord) {
+    private void validatePoints(PointRecord pr) {
         LocalDateTime lastDatetime = null;
 
-        for (Point point : pointRecord.getPoints()) {
-            LocalDateTime initialDateStartOfMinute = point.getInitialDate().withSecond(0).withNano(0);
-            LocalDateTime finalDateStartOfMinute = point.getFinalDate().withSecond(0).withNano(0);
+        for (Point point : pr.getPoints()) {
+            LocalDate prDate = pr.getDate();
+            LocalDateTime startTime = point.getInitialDate()
+                    .withYear(prDate.getYear())
+                    .withMonth(prDate.getMonthValue())
+                    .withDayOfMonth(prDate.getDayOfMonth())
+                    .withSecond(0)
+                    .withNano(0);
+            LocalDateTime endTime = point.getFinalDate()
+                    .withYear(prDate.getYear())
+                    .withMonth(prDate.getMonthValue())
+                    .withDayOfMonth(prDate.getDayOfMonth())
+                    .withSecond(0)
+                    .withNano(0);
 
-            if (!initialDateStartOfMinute.isBefore(finalDateStartOfMinute)) {
+            if (!startTime.isBefore(endTime)) {
                 throw new IllegalArgumentException("A hora inicial de um ponto deve ser antes da final");
             }
 
-            if (lastDatetime != null && !initialDateStartOfMinute.isAfter(lastDatetime)) {
+            if (lastDatetime != null && !startTime.isAfter(lastDatetime)) {
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ter a hora superior ao anterior");
             }
 
-            point.setPointRecord(pointRecord);
+            point.setPointRecord(pr);
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
     }
