@@ -11,6 +11,7 @@ class PointRecordShowController extends GetxController {
   final UserAttendanceService service;
   final Rxn<PointRecordModel> _pointRecord = Rxn<PointRecordModel>();
   final Rxn<UserAttendanceModel> _userAttendance = Rxn<UserAttendanceModel>();
+  final List<UserAttendanceModel> _uas = <UserAttendanceModel>[].obs;
   final RxBool _isLoading = false.obs;
 
   RxBool get isLoading => _isLoading;
@@ -19,9 +20,11 @@ class PointRecordShowController extends GetxController {
 
   Rxn<PointRecordModel> get pointRecord => _pointRecord;
 
+  List<UserAttendanceModel> get uas => _uas;
+
   PointRecordShowController({required this.service});
 
-  Future<void> fetchById(BuildContext context, int pointRecordId) async {
+  fetchById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
     SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
@@ -29,6 +32,14 @@ class PointRecordShowController extends GetxController {
       pointRecordId,
       administrator.id!,
     );
+    _isLoading.value = false;
+  }
+
+  fetchAllByPointRecord(BuildContext context, int pointRecordId) async {
+    _isLoading.value = true;
+    var uas = await service.getAllByPointRecord(pointRecordId);
+    _uas.clear();
+    _uas.addAll(uas);
     _isLoading.value = false;
   }
 

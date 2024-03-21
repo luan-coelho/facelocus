@@ -12,4 +12,12 @@ class UserAttendanceService {
     var json = response.data ?? [];
     return UserAttendanceModel.fromJson(json);
   }
+
+  getAllByPointRecord(int pointRecordId) async {
+    String url =
+        '${AppRoutes.userAttendance}/by-point-record?pointrecord=$pointRecordId';
+    final response = await _fetchApi.get(url);
+    List data = response.data;
+    return data.map((json) => UserAttendanceModel.fromJson(json)).toList();
+  }
 }

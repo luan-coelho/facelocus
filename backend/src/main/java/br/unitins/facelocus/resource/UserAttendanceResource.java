@@ -12,6 +12,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import java.util.List;
+
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @PermitAll
 @Path("/user-attendance")
@@ -28,6 +30,15 @@ public class UserAttendanceResource {
         UserAttendance userAttendances = userAttendanceService.findByPointRecordAndUser(pointRecordId, userId);
         UserAttendanceResponseDTO dto = userAttendanceMapper.toResource(userAttendances);
         return Response.ok(dto).build();
+    }
+
+
+    @Path("/by-point-record")
+    @GET
+    public Response findAllByPointRecord(@RestQuery("pointrecord") Long pointRecordId) {
+        List<UserAttendance> userAttendances = userAttendanceService.findAllByPointRecord(pointRecordId);
+        List<UserAttendanceResponseDTO> dtos = userAttendanceMapper.toResource(userAttendances);
+        return Response.ok(dtos).build();
     }
 
     @Path("/{id}")

@@ -9,9 +9,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ApplicationScoped
 public class UserAttendanceService extends BaseService<UserAttendance, UserAttendanceRepository> {
+
+    public List<UserAttendance> findAllByPointRecord(Long pointRecordId) {
+        return this.repository.findAllByPointRecord(pointRecordId);
+    }
 
     @Transactional
     public UserAttendance findByPointRecordAndUser(Long pointRecordId, Long userId) {

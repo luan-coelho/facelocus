@@ -1,12 +1,5 @@
-import 'dart:io';
-
-import 'package:facelocus/controllers/auth/session_controller.dart';
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 
 class PRUserCard extends StatefulWidget {
   const PRUserCard({super.key});

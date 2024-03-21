@@ -13,6 +13,7 @@ class AppLayout extends StatefulWidget {
     this.leading,
     this.showBottomNavigationBar = true,
     required this.body,
+    this.bodyBackgroundColor,
     this.floatingActionButton,
   });
 
@@ -24,6 +25,7 @@ class AppLayout extends StatefulWidget {
   final bool? showBottomNavigationBar;
 
   final Widget body;
+  final Color? bodyBackgroundColor;
   final Widget? floatingActionButton;
 
   @override
@@ -58,6 +60,7 @@ class _AppLayoutState extends State<AppLayout> {
               )
             : null,
         body: widget.body,
+        backgroundColor: widget.bodyBackgroundColor,
         resizeToAvoidBottomInset: false,
         floatingActionButton: widget.showBottomNavigationBar != null &&
                 widget.showBottomNavigationBar == true

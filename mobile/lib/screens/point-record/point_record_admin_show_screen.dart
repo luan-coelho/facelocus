@@ -1,18 +1,17 @@
-import 'package:facelocus/controllers/point_record_create_controller.dart';
+import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/delegates/lincked_users_delegate.dart';
-import 'package:facelocus/models/point_model.dart';
-import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/models/attendance_record_model.dart';
+import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
 import 'package:facelocus/screens/point-record/widgets/event_header.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class PointRecordAdminShowScreen extends StatefulWidget {
   const PointRecordAdminShowScreen({
@@ -29,14 +28,15 @@ class PointRecordAdminShowScreen extends StatefulWidget {
 
 class _PointRecordAdminShowScreenState
     extends State<PointRecordAdminShowScreen> {
-  late final PointRecordCreateController _controller;
+  late final PointRecordShowController _controller;
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordCreateController>();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _controller.fetchById(context, widget.pointRecordId),
-    );
+    _controller = Get.find<PointRecordShowController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.fetchById(context, widget.pointRecordId);
+      _controller.fetchAllByPointRecord(context, widget.pointRecordId);
+    });
     super.initState();
   }
 
@@ -95,27 +95,23 @@ class _PointRecordAdminShowScreenState
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    Skeletonizer(
-                      enabled: _controller.isLoading.value,
-                      child: Builder(builder: (context) {
-                        var us = _controller.pointRecord.value!.event!.users;
-                        return ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(height: 10);
-                          },
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: us!.length,
-                          itemBuilder: (context, index) {
-                            UserModel user = us[index];
-                            return ExpandingCard(
-                              points: _controller.pointRecord.value!.points,
-                            );
-                          },
-                        );
-                      }),
-                    )
+                    Builder(builder: (context) {
+                      var us = _controller.uas;
+                      return ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(height: 10);
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: us.length,
+                        itemBuilder: (context, index) {
+                          return ExpandingCard(
+                            userAttendance: us[index],
+                          );
+                        },
+                      );
+                    })
                   ],
                 ),
               ),
@@ -130,10 +126,10 @@ class _PointRecordAdminShowScreenState
 class ExpandingCard extends StatefulWidget {
   const ExpandingCard({
     super.key,
-    required this.points,
+    required this.userAttendance,
   });
 
-  final List<PointModel> points;
+  final UserAttendanceModel userAttendance;
 
   @override
   State<StatefulWidget> createState() => _ExpandingCardState();
@@ -150,10 +146,11 @@ class _ExpandingCardState extends State<ExpandingCard> {
 
   @override
   Widget build(BuildContext context) {
+    List<AttendanceRecordModel> ars = widget.userAttendance.attendanceRecords!;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       width: 300,
-      height: _isExpanded ? 100 : 80,
+      height: _isExpanded ? 100 : 60,
       curve: Curves.fastOutSlowIn,
       child: Container(
         padding: const EdgeInsets.only(
@@ -174,9 +171,6 @@ class _ExpandingCardState extends State<ExpandingCard> {
           children: [
             Expanded(
               child: Column(
-                mainAxisAlignment: _isExpanded
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -186,24 +180,26 @@ class _ExpandingCardState extends State<ExpandingCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Builder(builder: (context) {
-                    var points = widget.points;
-                    List<Widget> list = [];
-                    for (var i = 0; i < points.length; i++) {
-                      list.add(AttendanceRecordIndicator(point: points[i]));
-                      // Último da lista
-                      if (points.indexOf(points.last) != i) {
-                        list.add(const SizedBox(width: 5));
-                      }
-                    }
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(width: 30),
-                        ...list,
-                      ],
-                    );
-                  })
+                  Expanded(
+                    child: ListView.separated(
+                      padding: EdgeInsets.zero,
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          width: _isExpanded ? 0 : 5,
+                          height: _isExpanded ? 5 : 0,
+                        );
+                      },
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection:
+                          _isExpanded ? Axis.vertical : Axis.horizontal,
+                      itemCount: ars.length,
+                      itemBuilder: (context, index) {
+                        return AttendanceRecordIndicator(
+                          attendanceRecord: ars[index],
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
