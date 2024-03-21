@@ -171,7 +171,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
                 throw new IllegalArgumentException("Cada intervalo de ponto deve ter a hora superior ao anterior");
             }
 
+            point.setInitialDate(startTime);
+            point.setFinalDate(endTime);
             point.setPointRecord(pr);
+
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
     }
