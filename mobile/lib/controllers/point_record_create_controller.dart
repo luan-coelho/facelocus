@@ -117,9 +117,6 @@ class PointRecordCreateController extends GetxController {
   fetchById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
     _pointRecord.value = await service.getById(pointRecordId);
-    _panelItems = Item<UserModel>().generateItems(
-      pointRecord.value!.event!.users!,
-    );
     _isLoading.value = false;
   }
 
