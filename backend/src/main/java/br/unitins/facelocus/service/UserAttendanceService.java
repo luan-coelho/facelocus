@@ -14,8 +14,11 @@ import java.util.List;
 @ApplicationScoped
 public class UserAttendanceService extends BaseService<UserAttendance, UserAttendanceRepository> {
 
+    @Transactional
     public List<UserAttendance> findAllByPointRecord(Long pointRecordId) {
-        return this.repository.findAllByPointRecord(pointRecordId);
+        List<UserAttendance> uas = this.repository.findAllByPointRecord(pointRecordId);
+        uas.forEach(this::verifyStatus);
+        return uas;
     }
 
     @Transactional
@@ -24,6 +27,12 @@ public class UserAttendanceService extends BaseService<UserAttendance, UserAtten
                 .findByPointRecordAndUser(pointRecordId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("Presença de usuário não encontrada por id"));
 
+        verifyStatus(userAttendance);
+
+        return userAttendance;
+    }
+
+    private void verifyStatus(UserAttendance userAttendance) {
         LocalDateTime now = LocalDateTime.now();
         boolean modificationOccurred = false;
 
@@ -41,7 +50,5 @@ public class UserAttendanceService extends BaseService<UserAttendance, UserAtten
         if (modificationOccurred) {
             this.repository.persist(userAttendance);
         }
-
-        return userAttendance;
     }
 }

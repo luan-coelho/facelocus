@@ -12,6 +12,10 @@ import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet_field.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class PointRecordAdminShowScreen extends StatefulWidget {
   const PointRecordAdminShowScreen({
@@ -34,7 +38,7 @@ class _PointRecordAdminShowScreenState
   void initState() {
     _controller = Get.find<PointRecordShowController>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.fetchById(context, widget.pointRecordId);
+      _controller.fetchPointRecordById(context, widget.pointRecordId);
       _controller.fetchAllByPointRecord(context, widget.pointRecordId);
     });
     super.initState();
@@ -136,81 +140,98 @@ class ExpandingCard extends StatefulWidget {
 }
 
 class _ExpandingCardState extends State<ExpandingCard> {
-  bool _isExpanded = false;
+  late List<MultiSelectItem<AttendanceRecordModel?>> _points;
+  List<AttendanceRecordModel?> _selectedPoints = [];
+  final _multiSelectKey = GlobalKey<FormFieldState>();
 
-  void _toggleExpansion() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
+  @override
+  void initState() {
+    List<MultiSelectItem<AttendanceRecordModel?>> list = widget
+        .userAttendance.attendanceRecords!
+        .map((e) => MultiSelectItem(e, 'teste'))
+        .toList();
+    _points = list;
+    super.initState();
+  }
+
+  _showMultiSelect() {
+    showModalBottomSheet<void>(
+      isScrollControlled: true,
+      isDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: MultiSelectChipDisplay<AttendanceRecordModel?>(
+            items: _points,
+            onTap: (value) {
+              setState(() {
+                _selectedPoints.remove(value);
+              });
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     List<AttendanceRecordModel> ars = widget.userAttendance.attendanceRecords!;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      width: 300,
-      height: _isExpanded ? 100 : 60,
-      curve: Curves.fastOutSlowIn,
-      child: Container(
-        padding: const EdgeInsets.only(
-          top: 10,
-          right: 15,
-          left: 15,
-          bottom: 10,
-        ),
-        width: double.infinity,
-        height: 45,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Teste',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
+    return SingleChildScrollView(
+      child: GestureDetector(
+        onTap: _showMultiSelect,
+        child: Container(
+          padding: const EdgeInsets.only(
+            top: 10,
+            right: 15,
+            left: 15,
+            bottom: 10,
+          ),
+          width: double.infinity,
+          height: 200,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.userAttendance.user!.getFullName(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          width: _isExpanded ? 0 : 5,
-                          height: _isExpanded ? 5 : 0,
-                        );
-                      },
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection:
-                          _isExpanded ? Axis.vertical : Axis.horizontal,
-                      itemCount: ars.length,
-                      itemBuilder: (context, index) {
-                        return AttendanceRecordIndicator(
-                          attendanceRecord: ars[index],
-                        );
-                      },
+                    Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            width: 5,
+                          );
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: ars.length,
+                        itemBuilder: (context, index) {
+                          return AttendanceRecordIndicator(
+                            attendanceRecord: ars[index],
+                          );
+                        },
+                      ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: _toggleExpansion,
-              child: Icon(
-                size: 40,
-                _isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
