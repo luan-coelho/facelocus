@@ -1,6 +1,5 @@
 package br.unitins.facelocus.service;
 
-import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
@@ -13,9 +12,6 @@ import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
-import org.jboss.resteasy.reactive.server.core.multipart.DefaultFileUpload;
-import org.jboss.resteasy.reactive.server.multipart.FormValue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -364,8 +360,7 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord = pointRecordService.findById(pointRecord.getId());
 
         List<AttendanceRecord> attendancesRecord = pointRecord.getUsersAttendances().get(0).getAttendanceRecords();
-        PointRecordValidatePointDTO dto = new PointRecordValidatePointDTO(attendancesRecord);
-        pointRecordService.validatePoints(dto);
+        pointRecordService.validateUserPoints(attendancesRecord);
         pointRecord = pointRecordService.findById(pointRecord.getId());
 
         assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());

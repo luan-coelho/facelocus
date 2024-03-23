@@ -5,7 +5,6 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
-import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
@@ -88,7 +87,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         pointRecord.setEvent(event);
 
         validateDate(pointRecord.getDate());
-        validatePoints(pointRecord);
+        validateUserPoints(pointRecord);
         createUsersAttendances(pointRecord);
         validateFactors(pointRecord);
         validateLocation(pointRecord, pointRecord.getLocation());
@@ -145,7 +144,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
      *
      * @param pr Registro de ponto
      */
-    private void validatePoints(PointRecord pr) {
+    private void validateUserPoints(PointRecord pr) {
         LocalDateTime lastDatetime = null;
 
         for (Point point : pr.getPoints()) {
@@ -267,11 +266,12 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     }
 
     @Transactional
-    public void validatePoints(PointRecordValidatePointDTO dto) {
-        for (AttendanceRecord attendanceRecord : dto.attendancesRecord()) {
-            attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
-            attendanceRecord.setValidatedByAdministrator(true);
-            attendanceRecordService.update(attendanceRecord);
+    public void validateUserPoints(List<AttendanceRecord> attendancesRecord) {
+        for (AttendanceRecord attendanceRecord : attendancesRecord) {
+            AttendanceRecord ar = attendanceRecordService.findById(attendanceRecord.getId());
+            ar.setStatus(AttendanceRecordStatus.VALIDATED);
+            ar.setValidatedByAdministrator(true);
+            attendanceRecordService.update(ar);
         }
     }
 
@@ -280,6 +280,22 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         validateDate(newDate);
         PointRecord pointRecord = findById(pointRecordId);
         pointRecord.setDate(newDate);
+        for (Point point : pointRecord.getPoints()) {
+            LocalDateTime startTime = point.getInitialDate()
+                    .withYear(newDate.getYear())
+                    .withMonth(newDate.getMonthValue())
+                    .withDayOfMonth(newDate.getDayOfMonth())
+                    .withSecond(0)
+                    .withNano(0);
+            LocalDateTime endTime = point.getFinalDate()
+                    .withYear(newDate.getYear())
+                    .withMonth(newDate.getMonthValue())
+                    .withDayOfMonth(newDate.getDayOfMonth())
+                    .withSecond(0)
+                    .withNano(0);
+            point.setInitialDate(startTime);
+            point.setFinalDate(endTime);
+        }
         update(pointRecord);
     }
 

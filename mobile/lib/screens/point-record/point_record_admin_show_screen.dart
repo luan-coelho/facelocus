@@ -1,7 +1,7 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
-import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
@@ -12,10 +12,8 @@ import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet_field.dart';
-import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
-import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:intl/intl.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class PointRecordAdminShowScreen extends StatefulWidget {
   const PointRecordAdminShowScreen({
@@ -63,11 +61,12 @@ class _PointRecordAdminShowScreenState
       body: Padding(
         padding: const EdgeInsets.all(29.0),
         child: Obx(() {
-          if (_controller.isLoading.value) {
+          if (_controller.isLoading.value || _controller.prIsLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (_controller.pointRecord.value!.event!.users!.isEmpty) {
+          if (_controller.pointRecord.value != null &&
+              _controller.pointRecord.value!.event!.users!.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,8 +91,9 @@ class _PointRecordAdminShowScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EventHeader(
-                description: _controller.pointRecord.value!.event!.description!,
-                date: _controller.pointRecord.value!.date,
+                description:
+                    _controller.pointRecord.value?.event?.description ?? '...',
+                date: _controller.pointRecord.value?.date ?? DateTime.now(),
               ),
               const SizedBox(height: 10),
               SingleChildScrollView(
@@ -112,6 +112,7 @@ class _PointRecordAdminShowScreenState
                         itemBuilder: (context, index) {
                           return ExpandingCard(
                             userAttendance: us[index],
+                            pointRecordId: widget.pointRecordId,
                           );
                         },
                       );
@@ -131,56 +132,71 @@ class ExpandingCard extends StatefulWidget {
   const ExpandingCard({
     super.key,
     required this.userAttendance,
+    required this.pointRecordId,
   });
 
   final UserAttendanceModel userAttendance;
+  final int pointRecordId;
 
   @override
   State<StatefulWidget> createState() => _ExpandingCardState();
 }
 
 class _ExpandingCardState extends State<ExpandingCard> {
+  late final PointRecordShowController _controller;
   late List<MultiSelectItem<AttendanceRecordModel?>> _points;
-  List<AttendanceRecordModel?> _selectedPoints = [];
-  final _multiSelectKey = GlobalKey<FormFieldState>();
+  final List<AttendanceRecordModel?> _selectedPoints = [];
 
   @override
   void initState() {
+    _controller = Get.find<PointRecordShowController>();
+
     List<MultiSelectItem<AttendanceRecordModel?>> list = widget
         .userAttendance.attendanceRecords!
-        .map((e) => MultiSelectItem(e, 'teste'))
-        .toList();
+        .where((e) => e.status != AttendanceRecordStatus.validated)
+        .map((e) {
+      final DateFormat formatter = DateFormat('HH:mm');
+      final idt = formatter.format(e.point.initialDate);
+      var fdt = formatter.format(e.point.finalDate);
+      return MultiSelectItem(e, '$idt - $fdt');
+    }).toList();
     _points = list;
     super.initState();
   }
 
-  _showMultiSelect() {
-    showModalBottomSheet<void>(
-      isScrollControlled: true,
-      isDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: MultiSelectChipDisplay<AttendanceRecordModel?>(
-            items: _points,
-            onTap: (value) {
-              setState(() {
-                _selectedPoints.remove(value);
-              });
-            },
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    void showMultiSelect() async {
+      await showModalBottomSheet(
+        isScrollControlled: true, // required for min/max child size
+        context: context,
+        builder: (ctx) {
+          return MultiSelectBottomSheet(
+            items: _points,
+            initialValue: _selectedPoints,
+            onConfirm: (uas) => _controller.validateUserPoints(
+              context,
+              uas,
+              widget.pointRecordId,
+            ),
+            maxChildSize: 0.8,
+            title: const Text('Validar pontos',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                )),
+            confirmText: const Text('Validar'),
+            cancelText: const Text('Cancelar'),
+            listType: MultiSelectListType.CHIP,
+          );
+        },
+      );
+    }
+
     List<AttendanceRecordModel> ars = widget.userAttendance.attendanceRecords!;
     return SingleChildScrollView(
       child: GestureDetector(
-        onTap: _showMultiSelect,
+        onTap: showMultiSelect,
         child: Container(
           padding: const EdgeInsets.only(
             top: 10,
@@ -189,7 +205,7 @@ class _ExpandingCardState extends State<ExpandingCard> {
             bottom: 10,
           ),
           width: double.infinity,
-          height: 200,
+          height: 60,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             color: Colors.white,

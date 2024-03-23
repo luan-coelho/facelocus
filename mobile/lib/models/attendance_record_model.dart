@@ -21,4 +21,8 @@ class AttendanceRecordModel {
       point: PointModel.fromJson(json['point']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id.toString(),
+      };
 }

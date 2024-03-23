@@ -1,4 +1,6 @@
+import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 import 'package:intl/intl.dart';
@@ -43,5 +45,11 @@ class PointRecordService {
     var url =
         '${AppRoutes.pointRecord}/change-date/?pointrecord=$pointRecordId&date=$datef';
     await _fetchApi.patch(url);
+  }
+
+  validateUserPoints(List<AttendanceRecordModel?> ar) async {
+    var url = '${AppRoutes.pointRecord}/validate-user-points';
+    var data = ar.map((e) => e!.toJson()).toList();
+    await _fetchApi.post(url, data: data);
   }
 }

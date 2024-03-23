@@ -19,9 +19,15 @@ class UserAttendanceModel {
       attendanceRecords: json['attendanceRecords'] == null
           ? null
           : (json['attendanceRecords'] as List)
-              .map((e) =>
-                  AttendanceRecordModel.fromJson(e as Map<String, dynamic>))
+              .map(
+                (e) =>
+                    AttendanceRecordModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList(),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+      };
 }

@@ -4,10 +4,13 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
+import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
+import br.unitins.facelocus.model.AttendanceRecord;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -18,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@Authenticated
+@PermitAll
 @Path("/point-record")
 public class PointRecordResource {
 
@@ -79,6 +82,13 @@ public class PointRecordResource {
     @PATCH
     public Response changeDate(@RestQuery("pointrecord") Long pointRecordId, @RestQuery("date") LocalDate newDate) {
         pointRecordService.changeDate(pointRecordId, newDate);
+        return Response.noContent().build();
+    }
+
+    @Path("/validate-user-points")
+    @POST
+    public Response validateUserPoints(List<AttendanceRecord> attendancesRecord) {
+        pointRecordService.validateUserPoints(attendancesRecord);
         return Response.noContent().build();
     }
 }
