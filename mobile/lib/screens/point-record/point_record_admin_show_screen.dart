@@ -196,7 +196,11 @@ class _ExpandingCardState extends State<ExpandingCard> {
     List<AttendanceRecordModel> ars = widget.userAttendance.attendanceRecords!;
     return SingleChildScrollView(
       child: GestureDetector(
-        onTap: showMultiSelect,
+        onTap: ars
+                .where((ar) => ar.status != AttendanceRecordStatus.validated)
+                .isNotEmpty
+            ? showMultiSelect
+            : null,
         child: Container(
           padding: const EdgeInsets.only(
             top: 10,
