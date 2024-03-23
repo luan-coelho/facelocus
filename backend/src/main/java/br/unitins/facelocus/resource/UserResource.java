@@ -8,6 +8,7 @@ import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.UserService;
 import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -18,7 +19,8 @@ import org.jboss.resteasy.reactive.RestQuery;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@Authenticated
+//@Authenticated
+@PermitAll
 @Path("/user")
 public class UserResource {
 

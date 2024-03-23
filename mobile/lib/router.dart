@@ -16,7 +16,8 @@ import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
-import 'package:facelocus/screens/point-record/widgets/validate_factors.dart';
+import 'package:facelocus/screens/point-record/validate_factors.dart';
+import 'package:facelocus/screens/point-record/widgets/facial_factor_validate.dart';
 import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,7 @@ class AppRoutes {
   static const pointRecordPointValidate = '$pointRecord/point-validate';
   static const userAttendance = '/user-attendance';
   static const validateFactors = '/validate-factors';
+  static const facialFactorValidate = '/facial-factor-validate';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -176,12 +178,18 @@ final router = GoRouter(
         final bool ilf = bool.parse(
           state.uri.queryParameters['locationIndoorFactor']!,
         );
-        return ValidateFactors(
+        return ValidateFactorsScreen(
           attendanceRecordId: attendanceRecordId,
           faceRecognitionFactor: frf,
           locationIndoorFactor: ilf,
         );
       },
     ),
+    GoRoute(
+      path: AppRoutes.facialFactorValidate,
+      builder: (context, state) {
+        return const FacialFactorValidateScreen();
+      },
+    )
   ],
 );

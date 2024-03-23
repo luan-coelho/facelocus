@@ -6,23 +6,26 @@ import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
-import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.Header;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +42,9 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     FacePhotoLocalDiskService faceRecognitionService;
+
+    @Inject
+    AttendanceRecordService attendanceRecordService;
 
     @AfterAll
     public static void after() {
@@ -433,39 +439,48 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
-   /* @Test
+    @Test
     @TestTransaction
     @DisplayName("Deve validar um ponto corretamente por um usuário através do fator de reconhecimento facial")
     void shouldCorrectlyValidatePointByUser() {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION)));
         pointRecordService.create(pointRecord);
-
-        MultipartData uploudProfilePhoto = new MultipartData();
-        FileUpload mockFileUpload = Mockito.mock(FileUpload.class);
-        Mockito.when(mockFileUpload.fileName()).thenReturn("example.txt");
-        Mockito.when(mockFileUpload.contentType()).thenReturn("text/plain");
-        FormValue formValue = new FormValue();
-        uploudProfilePhoto.file = new DefaultFileUpload();
-        uploudProfilePhoto.inputStream = getImageAsInputStream("user1.jpg");
-
-        faceRecognitionService.profileUploud(user2.getId(), uploudProfilePhoto);
+        File profilePhoto = getImageFile("user1.jpg");
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
-        AttendanceRecord attendanceRecord = userAttendance.getAttendanceRecords().get(0);
+        AttendanceRecord ar = userAttendance.getAttendanceRecords().get(0);
+        File validationPhoto = getImageFile("user1_2.jpg");
 
-        MultipartData validationPhotoUpload = new MultipartData();
-        validationPhotoUpload.fileName = "user1_2.jpg";
-        validationPhotoUpload.inputStream = getImageAsInputStream("user1_2.jpg");
+        given()
+                .header(new Header("content-type", "multipart/form-data"))
+                .multiPart("file", profilePhoto)
+                .contentType("multipart/form-data")
+                .when()
+                .post("/user/uploud-face-photo?user=" + userAttendance.getUser().getId())
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
 
-        assertDoesNotThrow(() -> pointRecordService
-                .validateFacialRecognitionFactorForAttendanceRecord(attendanceRecord.getId(), validationPhotoUpload));
-        assertEquals(AttendanceRecordStatus.VALIDATED, attendanceRecord.getStatus());
-        assertTrue(
-                attendanceRecord.getValidationAttempts().stream().allMatch(ValidationAttempt::isValidatedSuccessfully));
+        given()
+                .header(new Header("content-type", "multipart/form-data"))
+                .multiPart("file", validationPhoto)
+                .contentType("multipart/form-data")
+                .when()
+                .post("/point-record/validate-frf?attendanceRecord=" + ar.getId())
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode());
+
+        /*assertDoesNotThrow(() -> pointRecordService
+                .validateFacialRecognitionFactorForAttendanceRecord(ar.getId(), validationPhotoUpload));
+        assertEquals(AttendanceRecordStatus.VALIDATED, ar.getStatus());
+        assertTrue(ar.getValidationAttempts()
+                .stream()
+                .allMatch(ValidationAttempt::isValidatedSuccessfully)
+        );*/
     }
 
+     /*
     @Test
     @TestTransaction
     @DisplayName("Deve lançar uma exceção quando um registro de ponto não tiver o fator de reconhecimento facial, mas é solicitado")

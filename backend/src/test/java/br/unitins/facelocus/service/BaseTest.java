@@ -108,6 +108,29 @@ public abstract class BaseTest {
         }
     }
 
+    File getImageFile(String imageName) {
+        try {
+
+            ClassLoader classLoader = getClass().getClassLoader();
+
+            InputStream imageStream = classLoader.getResourceAsStream("images/" + imageName);
+
+            if (imageStream == null) {
+                return null;
+            }
+
+            BufferedImage image = ImageIO.read(imageStream);
+
+            File outputFile = new File(imageName + ".jpg");
+            ImageIO.write(image, "jpg", outputFile);
+
+            return outputFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     static void removeImageFolder(String path) {
         String patternString = "(.*/users/)\\d+/.*";
         Pattern pattern = Pattern.compile(patternString);

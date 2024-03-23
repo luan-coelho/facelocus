@@ -20,4 +20,17 @@ enum Factor {
     }
     return null;
   }
+
+  @override
+  String toString() {
+    if (this == facialRecognition) {
+      return 'Reconhecimento Facial';
+    }
+
+    if (this == indoorLocation) {
+      return 'Localização Indoor';
+    }
+
+    return 'Fator não reconhecido';
+  }
 }

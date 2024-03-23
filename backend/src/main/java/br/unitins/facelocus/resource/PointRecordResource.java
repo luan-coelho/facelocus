@@ -1,15 +1,14 @@
 package br.unitins.facelocus.resource;
 
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
-import br.unitins.facelocus.dto.pointrecord.PointRecordValidatePointDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.AttendanceRecord;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;
-import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -90,5 +89,13 @@ public class PointRecordResource {
     public Response validateUserPoints(List<AttendanceRecord> attendancesRecord) {
         pointRecordService.validateUserPoints(attendancesRecord);
         return Response.noContent().build();
+    }
+
+    @Path("/validate-frf")
+    @POST
+    public Response validateFacialRecognitionFactor(@RestQuery("attendanceRecord") Long attendanceRecordId,
+                                                    @Valid MultipartData multipartData) {
+        pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(attendanceRecordId, multipartData);
+        return Response.ok().build();
     }
 }

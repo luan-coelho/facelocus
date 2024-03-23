@@ -1,4 +1,3 @@
-import 'package:facelocus/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class PRUserCard extends StatefulWidget {
@@ -9,13 +8,6 @@ class PRUserCard extends StatefulWidget {
 }
 
 class _PRUserCardState extends State<PRUserCard> {
-  late final UserModel _user;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
