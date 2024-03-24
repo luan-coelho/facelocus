@@ -41,7 +41,8 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                 padding: const EdgeInsets.all(29.0),
                 child: Obx(
                   () {
-                    if (_controller.isLoading.value) {
+                    if (_controller.isLoading.value ||
+                        _controller.prIsLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
                     return Column(
@@ -62,7 +63,8 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                             var ua = _controller.userAttendance.value;
                             if (ua == null) {
                               return const Center(
-                                  child: Text('Ainda não há nenhum ponto'));
+                                child: Text('Ainda não há nenhum ponto'),
+                              );
                             }
 
                             var ars = ua.attendanceRecords!;

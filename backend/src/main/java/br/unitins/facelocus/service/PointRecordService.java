@@ -10,6 +10,7 @@ import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
 import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
+import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -40,7 +41,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     UserService userService;
 
     @Inject
-    FacePhotoLocalDiskService faceRecognitionService;
+    FacePhotoS3Service faceRecognitionService;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -323,7 +324,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
         PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
-        validatePointRecordHasFacialRecognitionFactor(pointRecord, attendanceRecord);
+//        validatePointRecordHasFacialRecognitionFactor(pointRecord, attendanceRecord);
 
         User user = attendanceRecord.getUserAttendance().getUser();
         user = userService.findById(user.getId());

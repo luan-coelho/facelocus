@@ -5,7 +5,6 @@ import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.model.FacePhotoLocalDisk;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.EventService;
-import br.unitins.facelocus.service.ImageFileService;
 import br.unitins.facelocus.service.PointRecordService;
 import br.unitins.facelocus.service.UserService;
 import br.unitins.facelocus.service.facerecognition.FaceRecognitionWebService;
@@ -34,7 +33,7 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
     UserService userService;
 
     @Inject
-    ImageFileService imageFileService;
+    LocalImageFileService imageFileService;
 
     @Inject
     EventService eventService;

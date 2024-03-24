@@ -34,7 +34,9 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
           children: [
             if (widget.faceRecognitionFactor) ...[
               GestureDetector(
-                onTap: () => context.push(AppRoutes.facialFactorValidate),
+                onTap: () => context.push(
+                  '${AppRoutes.facialFactorValidate}/${widget.attendanceRecordId}',
+                ),
                 child: const FactorValidateCard(
                   factor: Factor.facialRecognition,
                 ),

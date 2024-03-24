@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
@@ -50,5 +53,17 @@ class PointRecordService {
     var url = '${AppRoutes.pointRecord}/validate-user-points';
     var data = ar.map((e) => e!.toJson()).toList();
     await _fetchApi.post(url, data: data);
+  }
+
+  validateFacialRecognitionFactorForAttendanceRecord(
+    File facePhoto,
+    int attendanceRecordId,
+  ) async {
+    var filename = "facephoto.jpg";
+    var file = await MultipartFile.fromFile(facePhoto.path, filename: filename);
+    var formData = FormData.fromMap({"fileName": filename, "file": file});
+    String endpoint = '/validate-frf?attendanceRecord=$attendanceRecordId';
+    String url = '${AppRoutes.pointRecord}$endpoint';
+    return await _fetchApi.post(url, data: formData);
   }
 }

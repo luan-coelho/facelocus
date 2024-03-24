@@ -17,7 +17,7 @@ import 'package:facelocus/screens/point-record/point_record_list_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
 import 'package:facelocus/screens/point-record/validate_factors.dart';
-import 'package:facelocus/screens/point-record/widgets/facial_factor_validate.dart';
+import 'package:facelocus/screens/point-record/facial_factor_validate_screen.dart';
 import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
 import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -186,9 +186,12 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: AppRoutes.facialFactorValidate,
+      path: '${AppRoutes.facialFactorValidate}/:id',
       builder: (context, state) {
-        return const FacialFactorValidateScreen();
+        final int attendanceRecordId = int.parse(state.pathParameters['id']!);
+        return FacialFactorValidateScreen(
+          attendanceRecordId: attendanceRecordId,
+        );
       },
     )
   ],

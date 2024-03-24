@@ -1,44 +1,31 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth/session_controller.dart';
-import 'package:facelocus/dtos/change_password_dto.dart';
-import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/router.dart';
-import 'package:facelocus/services/user_service.dart';
+import 'package:facelocus/services/point_record_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../shared/toast.dart';
 
 class ValidatePointController extends GetxController {
-  final UserService service;
-  final Rx<UserModel?> _user = (null).obs;
-  List<UserModel> _usersSearch = <UserModel>[].obs;
-  List<UserModel> _users = <UserModel>[].obs;
-  final Rxn<String> _userImagePath = Rxn<String>();
+  final PointRecordService service;
   final RxBool _isLoading = false.obs;
-
-  Rx<UserModel?> get user => _user;
-
-  List<UserModel> get users => _users;
-
-  List<UserModel> get usersSearch => _usersSearch;
-
-  Rxn<String> get userImagePath => _userImagePath;
 
   RxBool get isLoading => _isLoading;
 
   ValidatePointController({required this.service});
 
-  checkFace(BuildContext context, File file) async {
+  validateFacialRecognitionFactorForAttendanceRecord(
+    BuildContext context,
+    int attendanceRecordId,
+    File file,
+  ) async {
     _isLoading.value = true;
     try {
-      SessionController authController = Get.find<SessionController>();
-      UserModel user = authController.authenticatedUser.value!;
-      await service.checkFace(file, user.id!);
+      await service.validateFacialRecognitionFactorForAttendanceRecord(
+        file,
+        attendanceRecordId,
+      );
       if (context.mounted) {
         Toast.showSuccess('Validação realizada com sucesso', context);
       }

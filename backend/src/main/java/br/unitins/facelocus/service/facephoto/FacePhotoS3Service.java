@@ -1,20 +1,29 @@
 package br.unitins.facelocus.service.facephoto;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.model.FacePhoto;
+import br.unitins.facelocus.model.FacePhotoLocalDisk;
 import br.unitins.facelocus.model.FacePhotoS3;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.FacePhotoRepository;
 import br.unitins.facelocus.service.BaseService;
 import br.unitins.facelocus.service.UserService;
+import br.unitins.facelocus.service.facerecognition.FaceRecognitionWebService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.UUID;
 
 @ApplicationScoped
 public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoRepository> implements FacePhotoService {
@@ -27,6 +36,12 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
     @Inject
     UserService userService;
+
+    @Inject
+    FaceRecognitionWebService faceRecognitionService;
+
+    @Inject
+    S3ImageFileService imageFileService;
 
     @Transactional
     @Override
@@ -42,7 +57,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
             }
         }
         String facePhotoKey = folderKey.concat(multipartData.file.fileName());
-        PutObjectRequest objectRequest = buildPutRequest(facePhotoKey, multipartData);
+        PutObjectRequest objectRequest = buildPutRequest(facePhotoKey, multipartData.file);
         RequestBody requestBody = RequestBody.fromFile(multipartData.file.filePath());
         s3.putObject(objectRequest, requestBody);
 
@@ -90,19 +105,11 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         }
     }
 
-    private PutObjectRequest buildPutRequest(MultipartData multipartData) {
-        return PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(multipartData.file.fileName())
-                .contentType(multipartData.file.contentType())
-                .build();
-    }
-
-    private PutObjectRequest buildPutRequest(String objectKey, MultipartData multipartData) {
+    private PutObjectRequest buildPutRequest(String objectKey, FileUpload fileUpload) {
         return PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(objectKey)
-                .contentType(multipartData.file.contentType())
+                .contentType(fileUpload.contentType())
                 .build();
     }
 
@@ -113,12 +120,71 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
                 .build();
     }
 
-    public PutObjectResponse createFolder(String folderName) {
+    public void createFolder(String folderName) {
         String folderKey = folderName.endsWith("/") ? folderName : folderName + "/";
-        return s3.putObject(PutObjectRequest.builder()
+        s3.putObject(PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(folderKey)
                         .build(),
                 RequestBody.empty());
+    }
+
+    @Transactional
+    public UserFacePhotoValidation generateFacePhotoValidation(User user, MultipartData multipartData) {
+        if (user.getFacePhoto() == null) {
+            throw new IllegalArgumentException("Sem foto de perfil não há como prosseguir com a validação");
+        }
+
+        String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
+        FacePhotoS3 facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
+        this.repository.getEntityManager().merge(facePhoto);
+
+        FacePhotoS3 userFacePhoto = (FacePhotoS3) user.getFacePhoto();
+
+        String photoFacePath = multipartData.file.filePath().toAbsolutePath().toString();
+        Path path = downloadPhotoAndReturnPath(userFacePhoto.getObjectKey());
+        String profilePhotoFacePath = path.toAbsolutePath().toString();
+
+        boolean facedDetected = faceRecognitionService.faceDetected(
+                photoFacePath,
+                profilePhotoFacePath
+        );
+
+        UserFacePhotoValidation validation = new UserFacePhotoValidation();
+        validation.setFacePhoto(facePhoto);
+        validation.setFaceDetected(facedDetected);
+
+        return validation;
+    }
+
+    public FacePhotoS3 saveFileAndBuildFacePhoto(FileUpload fileUpload, String... subdirectories) {
+        String path = imageFileService.buildPath(subdirectories);
+        String folderKey = String.valueOf(path).concat("/");
+        String facePhotoKey = folderKey.concat(fileUpload.fileName());
+        PutObjectRequest objectRequest = buildPutRequest(facePhotoKey, fileUpload);
+        RequestBody requestBody = RequestBody.fromFile(fileUpload.filePath());
+        s3.putObject(objectRequest, requestBody);
+
+        FacePhotoS3 facePhoto = new FacePhotoS3();
+        facePhoto.setFileName(fileUpload.fileName());
+        facePhoto.setObjectKey(facePhotoKey);
+        facePhoto.setBucket(bucketName);
+
+        return facePhoto;
+    }
+
+    public Path downloadPhotoAndReturnPath(String objectKey) {
+        try {
+            ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
+            byte[] fileBytes = objectBytes.asByteArray();
+            String fileExtension = ".jpg";
+            Path tempFile = Files.createTempFile("s3image-", fileExtension);
+            Files.write(tempFile, fileBytes);
+
+            // tempFile.toFile().delete();
+            return tempFile;
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao recuperar a imagem de perfil");
+        }
     }
 }
