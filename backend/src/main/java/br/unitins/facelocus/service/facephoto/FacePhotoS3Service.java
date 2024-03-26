@@ -50,12 +50,12 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
         String folderKey = String.valueOf(userId).concat("/");
 
-        if (!exitsObject(folderKey)) {
+        /*if (!exitsObject(folderKey)) {
             createFolder(folderKey);
             if (exitsObject(folderKey)) {
                 throw new RuntimeException("Falha ao criar pasta em bucket AWS S3");
             }
-        }
+        }*/
         String facePhotoKey = folderKey.concat(multipartData.file.fileName());
         PutObjectRequest objectRequest = buildPutRequest(facePhotoKey, multipartData.file);
         RequestBody requestBody = RequestBody.fromFile(multipartData.file.filePath());
@@ -178,7 +178,8 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
             ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
             byte[] fileBytes = objectBytes.asByteArray();
             String fileExtension = ".jpg";
-            Path tempFile = Files.createTempFile("s3image-", fileExtension);
+            String uuid = UUID.randomUUID().toString();
+            Path tempFile = Files.createTempFile("s3image-" + uuid, fileExtension);
             Files.write(tempFile, fileBytes);
 
             // tempFile.toFile().delete();

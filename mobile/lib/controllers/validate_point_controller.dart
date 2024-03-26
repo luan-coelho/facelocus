@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../shared/toast.dart';
 
@@ -34,6 +35,7 @@ class ValidatePointController extends GetxController {
       if (context.mounted) {
         Toast.showError(detail, context);
       }
+      context.pop();
     }
     _isLoading.value = false;
   }

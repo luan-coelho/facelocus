@@ -90,7 +90,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
             )
           : null,
       body: Builder(builder: (context) {
-        if (_openCamera) {
+        if (!_openCamera) {
           return Padding(
             padding: const EdgeInsets.all(29.0),
             child: Column(
@@ -148,9 +148,12 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                   child: Column(
                     children: [
                       AppButton(
-                          text: 'Enviar',
-                          onPressed: () => _controller.facePhotoProfileUploud(
-                              context, _capturedImage!)),
+                        text: 'Enviar',
+                        onPressed: () => _controller.facePhotoProfileUploud(
+                          context,
+                          _capturedImage!,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       AppButton(
                         text: 'Tirar nova foto',
@@ -191,12 +194,15 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
   Widget _message(String msg) => SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(msg,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400)),
+          child: Text(
+            msg,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ),
       );
 }
