@@ -53,6 +53,7 @@ class UserController extends GetxController {
       SessionController authController = Get.find<SessionController>();
       UserModel user = authController.authenticatedUser.value!;
       await service.facePhotoProfileUploud(file, user.id!);
+      _userImagePath.value = file.path;
       if (context.mounted) {
         context.replace(AppRoutes.home);
         Toast.showSuccess('Uploud realizado com sucesso', context);
