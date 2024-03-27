@@ -1,6 +1,7 @@
 import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_record_model.dart';
+import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/attendance_record_model.dart';
@@ -8,11 +9,13 @@ import '../../../models/attendance_record_model.dart';
 class FactorValidateCard extends StatefulWidget {
   const FactorValidateCard({
     super.key,
+    required this.userAttendance,
     this.attendanceRecord,
     this.pointRecord,
     required this.factor,
   });
 
+  final UserAttendanceModel userAttendance;
   final AttendanceRecordModel? attendanceRecord;
   final PointRecordModel? pointRecord;
   final Factor factor;
