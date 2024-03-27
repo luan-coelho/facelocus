@@ -91,7 +91,7 @@ class LoginFormState extends State<LoginScreen> {
                   AppTextField(
                     textEditingController: _passwordController,
                     labelText: 'Senha',
-                    passwordType: true,
+                    keyboardType: TextInputType.visiblePassword,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Informe a senha'
                         : null,

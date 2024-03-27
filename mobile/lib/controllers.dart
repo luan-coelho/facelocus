@@ -19,8 +19,8 @@ import 'package:get/get.dart';
 
 class AppControllers {
   static void initControllers() {
-    Get.put(SessionController(service: AuthService()));
-    Get.put(RegisterController(service: AuthService()));
+    Get.put(SessionController(service: AuthRepository()));
+    Get.put(RegisterController(repository: AuthRepository()));
     Get.put(EventController(service: EventService()));
     Get.put(EventRequestController(service: EventRequestService()));
     Get.put(UserController(service: UserService()));

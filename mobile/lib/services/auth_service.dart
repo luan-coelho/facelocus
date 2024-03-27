@@ -3,23 +3,23 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
-class AuthService {
+class AuthRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
-  login(String login, String password) async {
+  Future<TokenResponse> login(String login, String password) async {
     String url = AppRoutes.login;
     var json = {'login': login, 'password': password};
     var response = await _fetchApi.post(url, data: json, authHeaders: false);
     return TokenResponse.fromJson(response.data);
   }
 
-  register(UserModel user) async {
+  Future<void> register(UserModel user) async {
     String url = AppRoutes.register;
     var json = user.toJson();
     await _fetchApi.post(url, data: json, authHeaders: false);
   }
 
-  checkToken() async {
+  Future<void> checkToken() async {
     String url = AppRoutes.checkToken;
     await _fetchApi.get(url, authHeaders: true);
   }

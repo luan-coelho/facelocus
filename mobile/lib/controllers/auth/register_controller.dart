@@ -8,18 +8,16 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterController extends GetxController {
-  final AuthService service;
+  final AuthRepository repository;
   final Rxn<Map<String, dynamic>> invalidFields = Rxn<Map<String, dynamic>>();
 
-  RegisterController({required this.service});
+  RegisterController({required this.repository});
 
   void register(BuildContext context, UserModel user) async {
     try {
-      await service.register(user);
-      if (context.mounted) {
-        context.replace(AppRoutes.login);
-        Toast.showSuccess('Conta criada com sucesso', context);
-      }
+      await repository.register(user);
+      Toast.showSuccess('Conta criada com sucesso', context);
+      context.replace(AppRoutes.login);
     } on DioException catch (e) {
       String detail = e.response?.data['detail'];
       if (e.response?.data['invalidFields'] != null) {

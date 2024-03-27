@@ -6,7 +6,6 @@ import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
-import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -77,18 +76,8 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
       }
     }
 
-    return AppLayout(
-      appBarTitle: 'Realizar uploud de foto',
-      showAppBar: true,
-      showBottomNavigationBar: false,
-      leading: _openCamera
-          ? IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => setState(() {
-                _openCamera = false;
-              }),
-            )
-          : null,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
       body: Builder(builder: (context) {
         if (!_openCamera) {
           return Padding(
@@ -116,7 +105,11 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                       });
                     }),
                 const SizedBox(height: 10),
-                AppButton(text: 'Galeria', onPressed: getPhotoFromGalery),
+                AppButton(
+                  text: 'Galeria',
+                  onPressed: getPhotoFromGalery,
+                  backgroundColor: AppColorsConst.purple,
+                ),
                 const SizedBox(height: 10),
                 AppButton(
                   text: 'Sair',
@@ -125,7 +118,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                     context.replace(AppRoutes.login);
                   },
                   textColor: Colors.red,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.red.withOpacity(0.2),
                 )
               ],
             ),

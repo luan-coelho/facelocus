@@ -108,6 +108,7 @@ class PointRecordCreateController extends GetxController {
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByUser(administrator.id!);
+    _prEvents.clear();
     if (pointsRecord.isNotEmpty) {
       await buildPointsRecordEvents(pointsRecord);
     }
@@ -134,7 +135,6 @@ class PointRecordCreateController extends GetxController {
           metadata: pr.toJson());
       eventList.add(prEvent);
     }
-    _prEvents.clear();
     _prEvents.addAll(eventList);
   }
 }

@@ -9,6 +9,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PointRecordMapper {
 
@@ -16,6 +18,8 @@ public interface PointRecordMapper {
     PointRecordResponseDTO toResource(PointRecord pointRecord);
 
     DataPagination<PointRecordResponseDTO> toResource(DataPagination<PointRecord> dataPagination);
+
+    List<PointRecordResponseDTO> toResource(List<PointRecord> prs);
 
     @Mapping(ignore = true, target = "id")
     PointRecord toEntity(PointRecordDTO dto);

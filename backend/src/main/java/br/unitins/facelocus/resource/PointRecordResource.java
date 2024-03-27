@@ -1,8 +1,6 @@
 package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.commons.pagination.DataPagination;
-import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.PointRecordDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
@@ -31,11 +29,10 @@ public class PointRecordResource {
     PointRecordMapper pointRecordMapper;
 
     @GET
-    public Response findAllByUser(Pageable pageable, @RestQuery("user") Long userId) {
-        DataPagination<PointRecordResponseDTO> dataPagination = pointRecordService.findAllByUser(pageable, userId);
-        return Response.ok(dataPagination).build();
+    public Response findAllByUser(@RestQuery("user") Long userId) {
+        List<PointRecordResponseDTO> prs = pointRecordMapper.toResource(pointRecordService.findAllByUser(userId));
+        return Response.ok(prs).build();
     }
-
 
     @Path("/by-date")
     @GET

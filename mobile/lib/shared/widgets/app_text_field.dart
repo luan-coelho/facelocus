@@ -7,7 +7,7 @@ class AppTextField extends StatefulWidget {
     required this.textEditingController,
     this.validator,
     this.onSaved,
-    this.passwordType,
+    this.keyboardType = TextInputType.text,
     this.maxLength,
   });
 
@@ -15,7 +15,7 @@ class AppTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final FormFieldValidator? validator;
   final FormFieldSetter? onSaved;
-  final bool? passwordType;
+  final TextInputType? keyboardType;
   final int? maxLength;
 
   @override
@@ -51,10 +51,10 @@ class _AppTextFieldState extends State<AppTextField> {
         const SizedBox(height: 5),
         TextFormField(
           controller: widget.textEditingController,
-          keyboardType: widget.passwordType != null
-              ? TextInputType.visiblePassword
-              : null,
-          obscureText: widget.passwordType != null ? _obscured : false,
+          keyboardType: widget.keyboardType,
+          obscureText: widget.keyboardType == TextInputType.visiblePassword
+              ? _obscured
+              : false,
           decoration: InputDecoration(
             counter: const Offstage(),
             fillColor: Colors.white,
@@ -75,7 +75,7 @@ class _AppTextFieldState extends State<AppTextField> {
               borderSide: const BorderSide(color: Colors.black12),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            suffixIcon: widget.passwordType != null
+            suffixIcon: widget.keyboardType == TextInputType.visiblePassword
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                     child: GestureDetector(

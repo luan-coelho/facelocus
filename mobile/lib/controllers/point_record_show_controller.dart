@@ -9,6 +9,7 @@ import 'package:facelocus/services/user_attendance_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class PointRecordShowController extends GetxController {
   final UserAttendanceService service;
@@ -32,17 +33,28 @@ class PointRecordShowController extends GetxController {
 
   fetchById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
-    SessionController authController = Get.find<SessionController>();
-    UserModel administrator = authController.authenticatedUser.value!;
-    _userAttendance.value = await service.getByPointRecordAndUser(
-      pointRecordId,
-      administrator.id!,
-    );
+    try {
+      SessionController authController = Get.find<SessionController>();
+      UserModel administrator = authController.authenticatedUser.value!;
+      _userAttendance.value = await service.getByPointRecordAndUser(
+        pointRecordId,
+        administrator.id!,
+      );
+    } on DioException catch (e) {
+      String detail = onError(e);
+      if (context.mounted) {
+        context.pop();
+        Toast.showError(detail, context);
+      }
+    }
     _isLoading.value = false;
   }
 
-  fetchAllByPointRecord(BuildContext context, int pointRecordId,
-      {bool loading = true}) async {
+  fetchAllByPointRecord(
+    BuildContext context,
+    int pointRecordId, {
+    bool loading = true,
+  }) async {
     if (loading) _isLoading.value = true;
     var uas = await service.getAllByPointRecord(pointRecordId);
     _uas.clear();
@@ -50,8 +62,11 @@ class PointRecordShowController extends GetxController {
     if (loading) _isLoading.value = false;
   }
 
-  fetchPointRecordById(BuildContext context, int pointRecordId,
-      {bool loading = true}) async {
+  fetchPointRecordById(
+    BuildContext context,
+    int pointRecordId, {
+    bool loading = true,
+  }) async {
     if (loading) _prLoading.value = true;
     PointRecordService pointRecordService = PointRecordService();
     _pointRecord.value = await pointRecordService.getById(pointRecordId);
@@ -65,8 +80,11 @@ class PointRecordShowController extends GetxController {
     return message ?? 'Falha ao executar esta ação';
   }
 
-  validateUserPoints(BuildContext context, List<AttendanceRecordModel?> ars,
-      int pointRecordId) async {
+  validateUserPoints(
+    BuildContext context,
+    List<AttendanceRecordModel?> ars,
+    int pointRecordId,
+  ) async {
     _isLoading.value = true;
     try {
       PointRecordService pointRecordService = PointRecordService();

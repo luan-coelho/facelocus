@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SessionController extends GetxController {
-  final AuthService service;
+  final AuthRepository service;
   late final UserService _userService;
   late final FlutterSecureStorage _storage;
 
@@ -47,7 +47,7 @@ class SessionController extends GetxController {
             return;
           }
           UserController userController = Get.find<UserController>();
-          userController.fetchFacePhotoById(context);
+          await userController.fetchFacePhotoById(context);
           context.replace(AppRoutes.home);
         }
         return;
@@ -126,6 +126,6 @@ class SessionController extends GetxController {
     await prefs.remove('user');
     _authenticatedUser.value = null;
     UserController userController = Get.find<UserController>();
-    userController.clearImage();
+    await userController.clearImage();
   }
 }

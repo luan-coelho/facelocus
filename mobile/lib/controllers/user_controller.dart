@@ -142,7 +142,8 @@ class UserController extends GetxController {
       var response = await service.getFacePhotoById(user.id!);
 
       Directory tempDir = await getTemporaryDirectory();
-      String filePath = '${tempDir.path}/userImage.jpg';
+      String filePath = '${tempDir.path}/${user.id}.jpg';
+      await clearImage();
       File file = File(filePath);
       await file.writeAsBytes(response.data!);
       userImagePath.value = filePath;
@@ -159,7 +160,10 @@ class UserController extends GetxController {
     _isLoading.value = false;
   }
 
-  clearImage() {
+  clearImage() async {
+    if (_userImagePath.value != null) {
+      await File(_userImagePath.value!).delete();
+    }
     _userImagePath.value = null;
   }
 }

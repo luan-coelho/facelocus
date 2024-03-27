@@ -51,10 +51,10 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                 SELECT DISTINCT pr
                 FROM PointRecord pr
                     JOIN pr.event e
-                    JOIN pr.points
-                    JOIN pr.usersAttendances ua
+                    JOIN e.administrator a
+                    LEFT JOIN pr.usersAttendances ua
                     LEFT JOIN e.users lu
-                WHERE lu.id = ?1
+                WHERE a.id = ?1 OR lu.id = ?1
                 """;
         return find(query, userId).list();
     }

@@ -59,7 +59,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               AppTextField(
                   textEditingController: _currentPasswordController,
                   labelText: 'Senha atual',
-                  passwordType: true,
+                  keyboardType: TextInputType.visiblePassword,
                   validator: (value) => value == null || value.isEmpty
                       ? 'Informe a senha atual'
                       : null),
@@ -67,7 +67,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               AppTextField(
                   textEditingController: _newPasswordController,
                   labelText: 'Nova senha',
-                  passwordType: true,
+                  keyboardType: TextInputType.visiblePassword,
                   validator: (value) => value == null || value.isEmpty
                       ? 'Informe a nova senha'
                       : null),
@@ -75,7 +75,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               AppTextField(
                   textEditingController: _confirmPasswordController,
                   labelText: 'Confirmar senha',
-                  passwordType: true,
+                  keyboardType: TextInputType.visiblePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Confirme a nova senha';

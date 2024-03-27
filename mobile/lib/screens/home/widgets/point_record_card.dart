@@ -30,7 +30,10 @@ class _PointRecordCardState extends State<PointRecordCard> {
           context.push('/admin$url');
           return;
         }
-        context.push(url);
+
+        if (widget.pointRecord.event!.users!.isNotEmpty) {
+          context.push(url);
+        }
       },
       child: Container(
           padding: const EdgeInsets.only(
