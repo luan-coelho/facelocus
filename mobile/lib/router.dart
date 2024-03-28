@@ -10,6 +10,7 @@ import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
 import 'package:facelocus/screens/home/home_screen.dart';
+import 'package:facelocus/screens/point-record/il_factor_validate_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_admin_edit_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_admin_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_create_screen.dart';
@@ -46,6 +47,7 @@ class AppRoutes {
   static const userAttendance = '/user-attendance';
   static const validateFactors = '/validate-factors';
   static const facialFactorValidate = '/facial-factor-validate';
+  static const locationFactorValidate = '/location-factor-validate';
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -190,6 +192,15 @@ final router = GoRouter(
       builder: (context, state) {
         final int attendanceRecordId = int.parse(state.pathParameters['id']!);
         return FacialFactorValidateScreen(
+          attendanceRecordId: attendanceRecordId,
+        );
+      },
+    ),
+    GoRoute(
+      path: '${AppRoutes.locationFactorValidate}/:id',
+      builder: (context, state) {
+        final int attendanceRecordId = int.parse(state.pathParameters['id']!);
+        return ILFactorValidateScreen(
           attendanceRecordId: attendanceRecordId,
         );
       },

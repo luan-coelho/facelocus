@@ -4,6 +4,9 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.eventrequest.EventDTO;
+import br.unitins.facelocus.model.Factor;
+import br.unitins.facelocus.model.Point;
+import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.model.User;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,7 +18,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +31,9 @@ class EventServiceTest extends BaseTest {
 
     @Inject
     EventService eventService;
+
+    @Inject
+    PointRecordService pointRecordService;
 
     @BeforeEach
     public void setup() {

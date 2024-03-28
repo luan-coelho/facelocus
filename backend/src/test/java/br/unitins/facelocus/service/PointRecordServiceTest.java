@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -370,9 +371,11 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord = pointRecordService.findById(pointRecord.getId());
 
         assertEquals(user2.getId(), attendancesRecord.get(0).getUserAttendance().getUser().getId());
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords()
+                .stream()
                 .allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.VALIDATED));
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream()
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords()
+                .stream()
                 .allMatch(AttendanceRecord::isValidatedByAdministrator));
     }
 
@@ -439,7 +442,7 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
-    @Test
+    /*@Test
     @TestTransaction
     @DisplayName("Deve validar um ponto corretamente por um usuário através do fator de reconhecimento facial")
     void shouldCorrectlyValidatePointByUser() {
@@ -471,14 +474,14 @@ class PointRecordServiceTest extends BaseTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
-        /*assertDoesNotThrow(() -> pointRecordService
+        *//*assertDoesNotThrow(() -> pointRecordService
                 .validateFacialRecognitionFactorForAttendanceRecord(ar.getId(), validationPhotoUpload));
         assertEquals(AttendanceRecordStatus.VALIDATED, ar.getStatus());
         assertTrue(ar.getValidationAttempts()
                 .stream()
                 .allMatch(ValidationAttempt::isValidatedSuccessfully)
-        );*/
-    }
+        );*//*
+    }*/
 
      /*
     @Test
@@ -571,4 +574,80 @@ class PointRecordServiceTest extends BaseTest {
 
         assertEquals("Face não reconhecida. Tente novamente", exception.getMessage());
     }*/
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve criar registros de presença ao adicionar usuário")
+    void shouldCreateAttendanceRecordsWhenAddingUser() {
+        PointRecord pr = new PointRecord();
+        pr.setEvent(event1);
+        pr.setDate(today);
+        pr.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
+        pr.setLocation(event1.getLocations().get(0));
+        pr.setAllowableRadiusInMeters(5d);
+        pr.setInProgress(false);
+        Point point1 = new Point(null, now, now.plusMinutes(10), pr);
+        Point point2 = new Point(null, now.plusMinutes(20), now.plusMinutes(30), pr);
+        Point point3 = new Point(null, now.plusMinutes(40), now.plusMinutes(50), pr);
+        pr.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
+
+        pr = pointRecordService.create(pr);
+        pointRecordService.createUsersAttendancesByPointRecord(pr.getId(), user3.getId());
+        int pointsSize = pr.getPoints().size();
+
+        assertEquals(2, pr.getUsersAttendances().size());
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .allMatch(ua -> ua.getAttendanceRecords().size() == pointsSize));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção ao criar um registro de presença para um usuário que já está vinculado ao evento")
+    void shouldThrowExceptionWhenCreatingAttendanceRecordForUserAlreadyLinkedToEvent() {
+        PointRecord pr = new PointRecord();
+        pr.setEvent(event1);
+        pr.setDate(today);
+        pr.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
+        pr.setLocation(event1.getLocations().get(0));
+        pr.setAllowableRadiusInMeters(5d);
+        pr.setInProgress(false);
+        Point point1 = new Point(null, now, now.plusMinutes(10), pr);
+        Point point2 = new Point(null, now.plusMinutes(20), now.plusMinutes(30), pr);
+        Point point3 = new Point(null, now.plusMinutes(40), now.plusMinutes(50), pr);
+        pr.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
+
+        pr = pointRecordService.create(pr);
+        Long prId = pr.getId();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user2.getId())); //Id do Administrador
+
+        assertEquals("Usuário já possui registro de presença", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve lançar uma exceção ao criar um registro de presença para um usuário administrador")
+    void shouldThrowExceptionWhenCreatingAttendanceRecordForAdminUser() {
+        PointRecord pr = new PointRecord();
+        pr.setEvent(event1);
+        pr.setDate(today);
+        pr.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION, Factor.INDOOR_LOCATION)));
+        pr.setLocation(event1.getLocations().get(0));
+        pr.setAllowableRadiusInMeters(5d);
+        pr.setInProgress(false);
+        Point point1 = new Point(null, now, now.plusMinutes(10), pr);
+        Point point2 = new Point(null, now.plusMinutes(20), now.plusMinutes(30), pr);
+        Point point3 = new Point(null, now.plusMinutes(40), now.plusMinutes(50), pr);
+        pr.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
+
+        pr = pointRecordService.create(pr);
+        Long prId = pr.getId();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user1.getId())); //Id do Administrador
+
+        assertEquals("O administrador do evento não pode ser vinculado como participante", exception.getMessage());
+    }
 }

@@ -63,6 +63,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         return this.repository.findAllByDate(userId, date);
     }
 
+    public List<PointRecord> findAllByEvent(Long eventId) {
+        return this.repository.findAllByEvent(eventId);
+    }
+
     @Override
     public PointRecord findById(Long pointRecordId) {
         return super.findByIdOptional(pointRecordId).orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
@@ -179,6 +183,33 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
+    @Transactional
+    public void createUsersAttendancesByPointRecord(Long pointRecordId, Long userId) {
+        PointRecord pointRecord = findById(pointRecordId);
+        User user = userService.findById(userId);
+
+        if (pointRecord.getEvent().getAdministrator().getId().equals(userId)) {
+            throw new IllegalArgumentException("O administrador do evento não pode ser vinculado como participante");
+        }
+
+        boolean userFound = false;
+        for (UserAttendance ua : pointRecord.getUsersAttendances()) {
+            if (ua.getUser().getId().equals(userId)) {
+                userFound = true;
+                break;
+            }
+        }
+
+        if (userFound) {
+            throw new IllegalArgumentException("Usuário já possui registro de presença");
+        }
+
+        UserAttendance userAttendance = createUserAttendance(pointRecord, user);
+        pointRecord.getUsersAttendances().add(userAttendance);
+
+        update(pointRecord);
+    }
+
     /**
      * Cria registros de presença para cada usuário cadastrado no evento, conforme o
      * número de pontos.
@@ -193,24 +224,29 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         List<UserAttendance> usersAttendances = new ArrayList<>();
 
         for (User user : pointRecord.getEvent().getUsers()) {
-            List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-
-            UserAttendance userAttendance = new UserAttendance();
-            userAttendance.setUser(user);
-            userAttendance.setAttendanceRecords(attendanceRecords);
-            userAttendance.setPointRecord(pointRecord);
-
-            for (Point point : pointRecord.getPoints()) {
-                AttendanceRecord attendanceRecord = new AttendanceRecord();
-                attendanceRecord.setStatus(AttendanceRecordStatus.PENDING);
-                attendanceRecord.setPoint(point);
-                attendanceRecord.setUserAttendance(userAttendance);
-
-                attendanceRecords.add(attendanceRecord);
-            }
+            UserAttendance userAttendance = createUserAttendance(pointRecord, user);
             usersAttendances.add(userAttendance);
         }
         pointRecord.setUsersAttendances(usersAttendances);
+    }
+
+    private UserAttendance createUserAttendance(PointRecord pointRecord, User user) {
+        List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+
+        UserAttendance userAttendance = new UserAttendance();
+        userAttendance.setUser(user);
+        userAttendance.setAttendanceRecords(attendanceRecords);
+        userAttendance.setPointRecord(pointRecord);
+
+        for (Point point : pointRecord.getPoints()) {
+            AttendanceRecord attendanceRecord = new AttendanceRecord();
+            attendanceRecord.setStatus(AttendanceRecordStatus.PENDING);
+            attendanceRecord.setPoint(point);
+            attendanceRecord.setUserAttendance(userAttendance);
+
+            attendanceRecords.add(attendanceRecord);
+        }
+        return userAttendance;
     }
 
     /**

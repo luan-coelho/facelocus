@@ -28,6 +28,7 @@ public abstract class BaseTest {
 
     protected User user1;
     protected User user2;
+    protected User user3;
     protected Event event1;
     protected Event event2;
     protected LocalDate today;

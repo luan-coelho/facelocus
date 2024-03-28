@@ -1,5 +1,6 @@
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -77,39 +78,7 @@ class _AppLayoutState extends State<AppLayout> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: widget.showBottomNavigationBar != null &&
                 widget.showBottomNavigationBar == true
-            ? BottomAppBar(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 60,
-                color: AppColorsConst.dark,
-                shape: const CircularNotchedRectangle(),
-                notchMargin: 5,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        'images/home-icon.svg',
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      onPressed: () => context.replace(AppRoutes.home),
-                    ),
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        'images/event-icon.svg',
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      onPressed: () => context.replace(AppRoutes.event),
-                    ),
-                  ],
-                ),
-              )
+            ? const AppBottomNavigationBar()
             : null,
       ),
     );

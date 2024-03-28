@@ -6,6 +6,7 @@ import br.unitins.facelocus.dto.eventrequest.EventDTO;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.model.Location;
+import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.EventRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,6 +16,7 @@ import jakarta.ws.rs.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,9 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Inject
     UserService userService;
+
+    @Inject
+    PointRecordService pointRecordService;
 
     public DataPagination<EventDTO> findAllPaginatedByUser(Pageable pageable, Long userId) {
         DataPagination<Event> dataPagination = this.repository.findAllByUser(pageable, userId);
@@ -39,8 +44,7 @@ public class EventService extends BaseService<Event, EventRepository> {
 
     @Override
     public Event findById(Long eventId) {
-        return this.repository.findByIdOptional(eventId)
-                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        return this.repository.findByIdOptional(eventId).orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
     }
 
     @Override
@@ -49,8 +53,7 @@ public class EventService extends BaseService<Event, EventRepository> {
     }
 
     public Event findByCode(String code) {
-        return this.repository.findByCodeOptional(code)
-                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
+        return this.repository.findByCodeOptional(code).orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
     }
 
     @Transactional
@@ -152,11 +155,15 @@ public class EventService extends BaseService<Event, EventRepository> {
         User user = userService.findById(userId);
         Event event = findById(eventId);
         event.getUsers().forEach(u -> {
-            if (u.getId().equals(userId))
-                throw new IllegalArgumentException("Usuário já vinculado ao evento");
+            if (u.getId().equals(userId)) throw new IllegalArgumentException("Usuário já vinculado ao evento");
         });
         event.getUsers().add(user);
         update(event);
+
+        List<PointRecord> prs = pointRecordService.findAllByEvent(eventId);
+        for (PointRecord pr : prs) {
+            pointRecordService.createUsersAttendancesByPointRecord(pr.getId(), userId);
+        }
     }
 
     /**
@@ -192,18 +199,17 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Transactional
     public void unlinkUserFromAll(Long userId) {
         List<Event> events = this.repository.findAllByUser(userId);
-        forFather:
+
         for (Event event : events) {
             for (User user : event.getUsers()) {
                 if (user.getId().equals(userId)) {
+                    pointRecordService.unlinkUserFromAll(userId);
+                    event.getUsers().remove(user);
                     this.update(event);
-                    break forFather;
+
+                    break;
                 }
             }
         }
-    }
-
-    public List<Event> findAllByUser(Long userId) {
-        return this.repository.findAllByUser(userId);
     }
 }

@@ -17,6 +17,20 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
         super(PointRecord.class);
     }
 
+    public List<PointRecord> findAllByEvent(Long eventId) {
+        // language=jpaql
+        String query = """
+                SELECT DISTINCT pr
+                FROM PointRecord pr
+                    JOIN pr.event e
+                    JOIN e.administrator a
+                    LEFT JOIN pr.usersAttendances ua
+                    LEFT JOIN e.users lu
+                WHERE e.id = ?1
+                """;
+        return find(query, eventId).list();
+    }
+
     public DataPagination<PointRecord> findAllByUser(Pageable pageable, Long userId) {
         // language=jpaql
         String query = """
