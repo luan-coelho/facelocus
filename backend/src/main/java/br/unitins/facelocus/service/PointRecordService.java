@@ -291,12 +291,13 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void unlinkUserFromAll(Long userId) {
         List<PointRecord> pointsRecord = this.repository.findAllByUser(userId);
-        forFather:
+
         for (PointRecord pointRecord : pointsRecord) {
             for (UserAttendance usersAttendance : pointRecord.getUsersAttendances()) {
                 if (usersAttendance.getUser().getId().equals(userId)) {
+                    pointRecord.getUsersAttendances().remove(usersAttendance);
                     update(pointRecord);
-                    break forFather;
+                    return;
                 }
             }
         }

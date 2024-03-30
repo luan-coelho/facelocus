@@ -33,4 +33,14 @@ public class UserAttendanceRepository extends BaseRepository<UserAttendance> {
                 """;
         return find(query, pointRecordId, userId).singleResultOptional();
     }
+
+    public List<UserAttendance> findAllByUser(Long userId) {
+        // language=jpaql
+        String query = """
+                FROM UserAttendance ua
+                    JOIN ua.user u
+                WHERE u.id = ?1
+                """;
+        return find(query, userId).list();
+    }
 }

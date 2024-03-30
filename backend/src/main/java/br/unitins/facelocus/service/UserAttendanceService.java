@@ -14,6 +14,10 @@ import java.util.List;
 @ApplicationScoped
 public class UserAttendanceService extends BaseService<UserAttendance, UserAttendanceRepository> {
 
+    public List<UserAttendance> findAllByUser(Long userId) {
+        return this.repository.findAllByUser(userId);
+    }
+
     @Transactional
     public List<UserAttendance> findAllByPointRecord(Long pointRecordId) {
         List<UserAttendance> uas = this.repository.findAllByPointRecord(pointRecordId);

@@ -7,18 +7,14 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
-import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.Header;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,10 +22,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @QuarkusTest
 class PointRecordServiceTest extends BaseTest {
@@ -40,12 +36,6 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     PointRecordService pointRecordService;
-
-    @Inject
-    FacePhotoLocalDiskService faceRecognitionService;
-
-    @Inject
-    AttendanceRecordService attendanceRecordService;
 
     @AfterAll
     public static void after() {
@@ -438,7 +428,7 @@ class PointRecordServiceTest extends BaseTest {
         PointRecordChangeLocation dto = new PointRecordChangeLocation(location);
 
         final Long pointRecordId = pointRecord.getId();
-        assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, location.getId()));
+        assertDoesNotThrow(() -> pointRecordService.changeLocation(pointRecordId, dto.location().getId()));
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
@@ -621,7 +611,7 @@ class PointRecordServiceTest extends BaseTest {
         Long prId = pr.getId();
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user2.getId())); //Id do Administrador
+                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user2.getId())); //Administrador
 
         assertEquals("Usuário já possui registro de presença", exception.getMessage());
     }
@@ -646,8 +636,30 @@ class PointRecordServiceTest extends BaseTest {
         Long prId = pr.getId();
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user1.getId())); //Id do Administrador
+                () -> pointRecordService.createUsersAttendancesByPointRecord(prId, user1.getId())); //Administrador
 
         assertEquals("O administrador do evento não pode ser vinculado como participante", exception.getMessage());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve desvincular um usuário de todos os registros de ponto")
+    void shouldUnlinkUserFromAllPointRecords() {
+        PointRecord pr = getPointRecord();
+        pr.getEvent().setAdministrator(user1);
+        pr.getEvent().setUsers(new ArrayList<>(List.of(user2, user3)));
+        em.merge(pr.getEvent());
+        pr = pointRecordService.create(pr);
+
+        pointRecordService.unlinkUserFromAll(user2.getId());
+        pr = pointRecordService.findById(pr.getId());
+
+        assertEquals(1, pr.getUsersAttendances().size());
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .anyMatch(ua -> ua.getUser().getId().equals(user3.getId())));
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .noneMatch(ua -> ua.getUser().getId().equals(user2.getId())));
     }
 }

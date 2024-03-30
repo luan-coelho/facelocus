@@ -4,10 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
 import br.unitins.facelocus.dto.eventrequest.EventDTO;
-import br.unitins.facelocus.model.Factor;
-import br.unitins.facelocus.model.Point;
-import br.unitins.facelocus.model.PointRecord;
-import br.unitins.facelocus.model.User;
+import br.unitins.facelocus.model.Event;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -17,23 +14,15 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class EventServiceTest extends BaseTest {
 
-    private User user3;
-
     @Inject
     EventService eventService;
-
-    @Inject
-    PointRecordService pointRecordService;
 
     @BeforeEach
     public void setup() {
@@ -42,20 +31,22 @@ class EventServiceTest extends BaseTest {
         user3 = getUser();
         event1 = getEvent();
         event2 = getEvent();
+        event3 = getEvent();
         today = LocalDate.now();
         now = LocalDateTime.now();
     }
 
     @Test
     @TestTransaction
-    @DisplayName("Deve retornar eventos paginados por usuário")
+    @DisplayName("Deve criar um evento corretamente")
     void DeveCriarUmEventoCorretamente() {
-        event1.setId(null);
+        Event event = new Event();
+        event.setDescription("ALG1");
 
-        eventService.create(event1);
+        eventService.create(event);
 
-        assertNotNull(event1.getId());
-        assertNotNull(event1.getDescription());
+        assertNotNull(event.getId());
+        assertEquals("ALG1", event.getDescription());
     }
 
     @Test
@@ -68,8 +59,8 @@ class EventServiceTest extends BaseTest {
         Pagination pagination = dataPagination.getPagination();
         List<EventDTO> eventList = dataPagination.getData();
 
-        assertEquals(2, pagination.getTotalItems());
-        assertEquals(2, pagination.getTotalPages());
+        assertEquals(3, pagination.getTotalItems());
+        assertEquals(3, pagination.getTotalPages());
         assertEquals(1, eventList.size());
     }
 
@@ -91,34 +82,18 @@ class EventServiceTest extends BaseTest {
     @DisplayName("Deve remover um usuário de todos os eventos que ele está vinculado")
     void shouldRemoveUserFromAllLinkedEvents() {
         event1.setUsers(List.of(user2, user3));
-        event2.setUsers(List.of(user2, user3));
         em.merge(event1);
+        event2.setUsers(List.of(user2, user3));
         em.merge(event2);
 
         eventService.unlinkUserFromAll(user2.getId());
 
         event1 = eventService.findById(event1.getId());
         event2 = eventService.findById(event2.getId());
+        List<Event> events = eventService.findAllByUser(user2.getId());
 
-        assertIterableEquals(new ArrayList<>(List.of(user3)), event1.getUsers());
-        assertIterableEquals(new ArrayList<>(List.of(user3)), event2.getUsers());
+        assertIterableEquals(List.of(user3), event1.getUsers());
+        assertIterableEquals(List.of(user3), event2.getUsers());
+        assertTrue(events.isEmpty());
     }
-
-    // Banco H2 não suporta a função UNACCENT
-    /*@Test
-    @TestTransaction
-    @DisplayName("Deve retornar eventos paginados por descrição com acentuação")
-    void getPaginatedEventsByDescriptionWithAccents() {
-        event1.setDescription("Atenção");
-        em.merge(event1);
-
-        Pageable pageable = new Pageable();
-        DataPagination<EventDTO> dataPagination = eventService.findAllByDescription(pageable, user1.getId(), "Atenção");
-        Pagination pagination = dataPagination.getPagination();
-        List<EventDTO> eventList = dataPagination.getData();
-
-        assertEquals(1, pagination.getTotalItems());
-        assertEquals(1, pagination.getTotalPages());
-        assertEquals(1, eventList.size());
-    }*/
 }

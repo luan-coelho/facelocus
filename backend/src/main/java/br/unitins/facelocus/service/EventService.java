@@ -5,7 +5,6 @@ import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.EventDTO;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
-import br.unitins.facelocus.model.Location;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.EventRepository;
@@ -16,7 +15,6 @@ import jakarta.ws.rs.NotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +40,19 @@ public class EventService extends BaseService<Event, EventRepository> {
         return eventMapper.toResource(dataPagination);
     }
 
+    public List<Event> findAllByUser(Long userId) {
+        return this.repository.findAllByUser(userId);
+    }
+
+    public List<Event> findAllByAdministratorUser(Long userId) {
+        return this.repository.findAllByAdministratorUser(userId);
+    }
+
     @Override
     public Event findById(Long eventId) {
-        return this.repository.findByIdOptional(eventId).orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
+        return this.repository
+                .findByIdOptional(eventId)
+                .orElseThrow(() -> new NotFoundException("Evento não encontrado pelo id"));
     }
 
     @Override
@@ -53,7 +61,9 @@ public class EventService extends BaseService<Event, EventRepository> {
     }
 
     public Event findByCode(String code) {
-        return this.repository.findByCodeOptional(code).orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
+        return this.repository
+                .findByCodeOptional(code)
+                .orElseThrow(() -> new NotFoundException("Código inválido ou não existe"));
     }
 
     @Transactional
@@ -64,9 +74,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         }
 
         if (event.getLocations() != null) {
-            for (Location location : event.getLocations()) {
-                location.setEvent(event);
-            }
+            event.getLocations().forEach(l -> l.setEvent(event));
         }
 
         return super.create(event);
@@ -189,6 +197,7 @@ public class EventService extends BaseService<Event, EventRepository> {
         Event event = findById(eventId);
         event.getUsers().removeIf(user -> user.getId().equals(userId));
         update(event);
+        pointRecordService.unlinkUserFromAll(userId);
     }
 
     /**
@@ -206,7 +215,6 @@ public class EventService extends BaseService<Event, EventRepository> {
                     pointRecordService.unlinkUserFromAll(userId);
                     event.getUsers().remove(user);
                     this.update(event);
-
                     break;
                 }
             }

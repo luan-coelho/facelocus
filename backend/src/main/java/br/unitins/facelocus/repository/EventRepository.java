@@ -28,6 +28,17 @@ public class EventRepository extends BaseRepository<Event> {
         return buildDataPagination(pageable, panacheQuery);
     }
 
+    public List<Event> findAllByAdministratorUser(Long userId) {
+        // language=jpaql
+        String query = """
+                SELECT DISTINCT e
+                FROM Event e
+                    JOIN e.administrator au
+                WHERE au.id = ?1
+                """;
+        return find(query, userId).list();
+    }
+
     public List<Event> findAllByUser(Long userId) {
         // language=jpaql
         String query = """

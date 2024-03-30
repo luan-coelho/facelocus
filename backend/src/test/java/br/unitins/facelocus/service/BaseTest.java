@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -31,6 +32,7 @@ public abstract class BaseTest {
     protected User user3;
     protected Event event1;
     protected Event event2;
+    protected Event event3;
     protected LocalDate today;
     protected LocalDateTime now;
 
@@ -51,24 +53,17 @@ public abstract class BaseTest {
 
     @Transactional
     protected Event getEvent() {
-        Location location1 = getLocation();
-        Location location2 = getLocation();
-
         Event event = new Event();
         event.setDescription("Evento " + new Random().nextInt(1000));
         event.setCode("ABC123");
         event.setAdministrator(user1);
         event.setUsers(new ArrayList<>(List.of(user2)));
-        location1.setEvent(event);
-        location2.setEvent(event);
-        event.setLocations(new ArrayList<>(List.of(location1, location2)));
+        event.setLocations(new ArrayList<>(List.of(
+                new Location(null, "LABIN V", "-15.779722", "-47.926222", event),
+                new Location(null, "LABIN V", "48.856614", "2.348803", event))
+        ));
         em.merge(event);
         return event;
-    }
-
-    @Transactional
-    protected Location getLocation() {
-        return new Location(null, "Minha Casa", "123456", "654321", null);
     }
 
     protected PointRecord getPointRecord() {
@@ -111,9 +106,7 @@ public abstract class BaseTest {
 
     File getImageFile(String imageName) {
         try {
-
             ClassLoader classLoader = getClass().getClassLoader();
-
             InputStream imageStream = classLoader.getResourceAsStream("images/" + imageName);
 
             if (imageStream == null) {
@@ -132,6 +125,7 @@ public abstract class BaseTest {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     static void removeImageFolder(String path) {
         String patternString = "(.*/users/)\\d+/.*";
         Pattern pattern = Pattern.compile(patternString);
@@ -143,8 +137,10 @@ public abstract class BaseTest {
         if (imageFolder.exists()) {
             Path folder = Paths.get(imageFolder.getAbsolutePath());
 
-            try {
-                Files.walk(folder).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            try (Stream<Path> walk = Files.walk(folder)) {
+                walk.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
             } catch (IOException e) {
                 fail("Pasta não deletada");
             }

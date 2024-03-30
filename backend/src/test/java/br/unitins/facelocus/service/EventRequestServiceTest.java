@@ -65,6 +65,7 @@ class EventRequestServiceTest extends BaseTest {
 
         event1.setAdministrator(user2);
         event1.setCode("ZFG123");
+        event1.setAllowTicketRequests(true);
         em.merge(event1);
 
         EventRequestCreateDTO dto = new EventRequestCreateDTO(event1, user3, user2);
@@ -74,12 +75,17 @@ class EventRequestServiceTest extends BaseTest {
         eventRequest = eventRequestService.findById(eventRequest.getId());
 
         List<PointRecord> prs = pointRecordService.findAllByEvent(eventRequest.getEvent().getId());
-        boolean userFound = prs.stream().flatMap(pr -> pr.getUsersAttendances().stream()).anyMatch(ua -> ua.getUser().getId().equals(user3.getId()));
+        boolean userFound = prs
+                .stream()
+                .flatMap(pr -> pr.getUsersAttendances().stream())
+                .anyMatch(ua -> ua.getUser().getId().equals(user3.getId()));
 
         assertEquals(EventRequestStatus.APPROVED, eventRequest.getStatus());
         assertTrue(userFound);
         assertEquals(user2.getId(), eventRequest.getEvent().getAdministrator().getId());
         assertEquals(2, pointRecord.getUsersAttendances().size());
-        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords().stream().allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.PENDING));
+        assertTrue(pointRecord.getUsersAttendances().get(0).getAttendanceRecords()
+                .stream()
+                .allMatch(ar -> ar.getStatus() == AttendanceRecordStatus.PENDING));
     }
 }
