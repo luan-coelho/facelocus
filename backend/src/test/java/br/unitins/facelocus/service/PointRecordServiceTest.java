@@ -662,4 +662,24 @@ class PointRecordServiceTest extends BaseTest {
                 .stream()
                 .noneMatch(ua -> ua.getUser().getId().equals(user2.getId())));
     }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um ponto de um registro de ponto")
+    void shouldRemovePointFromPointRecord() {
+        PointRecord pr = getPointRecord();
+        LocalDateTime now = LocalDateTime.now().plusHours(1);
+        Point point = new Point(null, now, now.plusMinutes(15), pr);
+        pr.getEvent().setAdministrator(user1);
+        pr.getEvent().setUsers(new ArrayList<>(List.of(user2, user3)));
+        em.merge(pr.getEvent());
+        pr.setPoints(new ArrayList<>(List.of(point)));
+        pr = pointRecordService.create(pr);
+
+        pointRecordService.removePoint(pr.getId(), point.getId());
+        pr = pointRecordService.findById(pr.getId());
+
+        assertTrue(pr.getPoints().isEmpty());
+        assertEquals(2, pr.getUsersAttendances().size());
+    }
 }

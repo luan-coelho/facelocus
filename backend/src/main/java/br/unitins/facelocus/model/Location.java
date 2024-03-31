@@ -3,7 +3,7 @@ package br.unitins.facelocus.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@EqualsAndHashCode(of = "id", callSuper = false)
+@EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @AllArgsConstructor

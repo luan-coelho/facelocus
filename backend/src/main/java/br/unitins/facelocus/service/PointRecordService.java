@@ -9,7 +9,6 @@ import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
-import br.unitins.facelocus.service.facephoto.FacePhotoLocalDiskService;
 import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -429,5 +428,21 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         if (!pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
             throw new IllegalArgumentException("O registro de ponto não possui o fator de localização indoor ativo");
         }
+    }
+
+    public void removePoint(Long pointRecordId, Long pointId) {
+        PointRecord pointRecord = this.findById(pointRecordId);
+
+        for (UserAttendance ua : pointRecord.getUsersAttendances()) {
+            for (AttendanceRecord ar : ua.getAttendanceRecords()) {
+                if (ar.getPoint().getId().equals(pointId)) {
+                    ua.getAttendanceRecords().remove(ar);
+                    pointRecord.getUsersAttendances().remove(ua);
+                    pointRecord.getPoints().remove(ar.getPoint());
+                    break;
+                }
+            }
+        }
+        this.update(pointRecord);
     }
 }
