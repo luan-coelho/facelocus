@@ -464,16 +464,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         PointRecord pointRecord = this.findById(pointRecordId);
         List<Point> points = pointRecord.getPoints();
         // Ordena a lista de pontos pela data final de forma ascendente
-        points.sort((p1, p2) -> {
-            if (p1.getFinalDate() == null && p2.getFinalDate() == null) {
-                return 0;
-            } else if (p1.getFinalDate() == null) {
-                return -1;
-            } else if (p2.getFinalDate() == null) {
-                return 1;
-            }
-            return p1.getFinalDate().compareTo(p2.getFinalDate());
-        });
+        points.sort(Comparator.comparing(Point::getFinalDate, Comparator.nullsFirst(LocalDateTime::compareTo)));
         Point lastPoint = points.get(points.size() - 1);
         validatePoint(pointRecord, point, lastPoint.getFinalDate());
         pointRecord.getPoints().add(point);
