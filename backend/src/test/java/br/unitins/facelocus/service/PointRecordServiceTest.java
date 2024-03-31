@@ -665,21 +665,75 @@ class PointRecordServiceTest extends BaseTest {
 
     @Test
     @TestTransaction
-    @DisplayName("Deve remover um ponto de um registro de ponto")
-    void shouldRemovePointFromPointRecord() {
+    @DisplayName("Deve remover um ponto de um registro de ponto com mais de um ponto")
+    void shouldRemovePointFromPointRecordWithMultiplePoints() {
         PointRecord pr = getPointRecord();
         LocalDateTime now = LocalDateTime.now().plusHours(1);
-        Point point = new Point(null, now, now.plusMinutes(15), pr);
+        Point point1 = new Point(null, now, now.plusMinutes(15), pr);
+        Point point2 = new Point(null, now.plusMinutes(25), now.plusMinutes(40), pr);
+        Point point3 = new Point(null, now.plusMinutes(55), now.plusMinutes(70), pr);
         pr.getEvent().setAdministrator(user1);
         pr.getEvent().setUsers(new ArrayList<>(List.of(user2, user3)));
         em.merge(pr.getEvent());
-        pr.setPoints(new ArrayList<>(List.of(point)));
+        pr.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
         pr = pointRecordService.create(pr);
 
-        pointRecordService.removePoint(pr.getId(), point.getId());
+        pointRecordService.removePoint(pr.getId(), point1.getId());
         pr = pointRecordService.findById(pr.getId());
 
-        assertTrue(pr.getPoints().isEmpty());
+        assertEquals(2, pr.getPoints().size());
         assertEquals(2, pr.getUsersAttendances().size());
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .anyMatch(ua -> ua.getAttendanceRecords().size() == 2));
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .allMatch(ua -> ua.getAttendanceRecords()
+                        .stream()
+                        .noneMatch(ar -> ar.getPoint().getId().equals(point1.getId()))));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve remover um ponto de um registro de ponto com um único ponto")
+    void shouldRemovePointFromPointRecordWithSinglePoint() {
+        PointRecord pr = getPointRecord();
+        LocalDateTime now = LocalDateTime.now().plusHours(1);
+        Point point1 = new Point(null, now, now.plusMinutes(15), pr);
+        pr.getEvent().setAdministrator(user1);
+        pr.getEvent().setUsers(new ArrayList<>(List.of(user2, user3)));
+        em.merge(pr.getEvent());
+        pr.setPoints(new ArrayList<>(List.of(point1)));
+        pr = pointRecordService.create(pr);
+
+        pointRecordService.removePoint(pr.getId(), point1.getId());
+        pr = pointRecordService.findById(pr.getId());
+
+        assertEquals(0, pr.getPoints().size());
+        assertEquals(0, pr.getUsersAttendances().size());
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve adicionar um ponto a um registro de ponto")
+    void shouldAddPointToPointRecord() {
+        PointRecord pr = getPointRecord();
+        LocalDateTime now = LocalDateTime.now().plusHours(1);
+        Point point1 = new Point(null, now, now.plusMinutes(15), pr);
+        Point point2 = new Point(null, now.plusMinutes(25), now.plusMinutes(40), pr);
+        pr.getEvent().setAdministrator(user1);
+        pr.getEvent().setUsers(new ArrayList<>(List.of(user2, user3)));
+        em.merge(pr.getEvent());
+        pr.setPoints(new ArrayList<>(List.of(point1)));
+        pr = pointRecordService.create(pr);
+
+        pointRecordService.addPoint(pr.getId(), point2);
+        pr = pointRecordService.findById(pr.getId());
+
+        assertEquals(2, pr.getPoints().size());
+        assertEquals(2, pr.getUsersAttendances().size());
+        assertTrue(pr.getUsersAttendances()
+                .stream()
+                .allMatch(ua -> ua.getAttendanceRecords().size() == 2));
     }
 }

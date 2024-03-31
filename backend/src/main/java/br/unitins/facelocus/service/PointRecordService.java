@@ -17,9 +17,7 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @ApplicationScoped
 public class PointRecordService extends BaseService<PointRecord, PointRecordRepository> {
@@ -152,34 +150,38 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         LocalDateTime lastDatetime = null;
 
         for (Point point : pr.getPoints()) {
-            LocalDate prDate = pr.getDate();
-            LocalDateTime startTime = point.getInitialDate()
-                    .withYear(prDate.getYear())
-                    .withMonth(prDate.getMonthValue())
-                    .withDayOfMonth(prDate.getDayOfMonth())
-                    .withSecond(0)
-                    .withNano(0);
-            LocalDateTime endTime = point.getFinalDate()
-                    .withYear(prDate.getYear())
-                    .withMonth(prDate.getMonthValue())
-                    .withDayOfMonth(prDate.getDayOfMonth())
-                    .withSecond(0)
-                    .withNano(0);
-
-            if (!startTime.isBefore(endTime)) {
-                throw new IllegalArgumentException("A hora inicial de um ponto deve ser antes da final");
-            }
-
-            if (lastDatetime != null && !startTime.isAfter(lastDatetime)) {
-                throw new IllegalArgumentException("Cada intervalo de ponto deve ter a hora superior ao anterior");
-            }
-
-            point.setInitialDate(startTime);
-            point.setFinalDate(endTime);
-            point.setPointRecord(pr);
+            validatePoint(pr, point, lastDatetime);
 
             lastDatetime = point.getFinalDate().withSecond(0).withNano(0);
         }
+    }
+
+    private void validatePoint(PointRecord pointRecord, Point point, LocalDateTime lastDatetime) {
+        LocalDate prDate = pointRecord.getDate();
+        LocalDateTime startTime = point.getInitialDate()
+                .withYear(prDate.getYear())
+                .withMonth(prDate.getMonthValue())
+                .withDayOfMonth(prDate.getDayOfMonth())
+                .withSecond(0)
+                .withNano(0);
+        LocalDateTime endTime = point.getFinalDate()
+                .withYear(prDate.getYear())
+                .withMonth(prDate.getMonthValue())
+                .withDayOfMonth(prDate.getDayOfMonth())
+                .withSecond(0)
+                .withNano(0);
+
+        if (!startTime.isBefore(endTime)) {
+            throw new IllegalArgumentException("A hora inicial de um ponto deve ser antes da final");
+        }
+
+        if (lastDatetime != null && !startTime.isAfter(lastDatetime)) {
+            throw new IllegalArgumentException("Cada intervalo de ponto deve ter a hora superior ao anterior");
+        }
+
+        point.setInitialDate(startTime);
+        point.setFinalDate(endTime);
+        point.setPointRecord(pointRecord);
     }
 
     @Transactional
@@ -203,7 +205,7 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("Usuário já possui registro de presença");
         }
 
-        UserAttendance userAttendance = createUserAttendance(pointRecord, user);
+        UserAttendance userAttendance = createUserAttendanceByUser(pointRecord, user);
         pointRecord.getUsersAttendances().add(userAttendance);
 
         update(pointRecord);
@@ -223,13 +225,13 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         List<UserAttendance> usersAttendances = new ArrayList<>();
 
         for (User user : pointRecord.getEvent().getUsers()) {
-            UserAttendance userAttendance = createUserAttendance(pointRecord, user);
+            UserAttendance userAttendance = createUserAttendanceByUser(pointRecord, user);
             usersAttendances.add(userAttendance);
         }
         pointRecord.setUsersAttendances(usersAttendances);
     }
 
-    private UserAttendance createUserAttendance(PointRecord pointRecord, User user) {
+    private UserAttendance createUserAttendanceByUser(PointRecord pointRecord, User user) {
         List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
         UserAttendance userAttendance = new UserAttendance();
@@ -238,14 +240,18 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         userAttendance.setPointRecord(pointRecord);
 
         for (Point point : pointRecord.getPoints()) {
-            AttendanceRecord attendanceRecord = new AttendanceRecord();
-            attendanceRecord.setStatus(AttendanceRecordStatus.PENDING);
-            attendanceRecord.setPoint(point);
+            AttendanceRecord attendanceRecord = createAttendanceRecord(point);
             attendanceRecord.setUserAttendance(userAttendance);
-
             attendanceRecords.add(attendanceRecord);
         }
         return userAttendance;
+    }
+
+    private static AttendanceRecord createAttendanceRecord(Point point) {
+        AttendanceRecord attendanceRecord = new AttendanceRecord();
+        attendanceRecord.setStatus(AttendanceRecordStatus.PENDING);
+        attendanceRecord.setPoint(point);
+        return attendanceRecord;
     }
 
     /**
@@ -433,16 +439,51 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     public void removePoint(Long pointRecordId, Long pointId) {
         PointRecord pointRecord = this.findById(pointRecordId);
 
-        for (UserAttendance ua : pointRecord.getUsersAttendances()) {
-            for (AttendanceRecord ar : ua.getAttendanceRecords()) {
-                if (ar.getPoint().getId().equals(pointId)) {
-                    ua.getAttendanceRecords().remove(ar);
-                    pointRecord.getUsersAttendances().remove(ua);
-                    pointRecord.getPoints().remove(ar.getPoint());
-                    break;
-                }
+        Iterator<UserAttendance> userAttendanceIterator = pointRecord.getUsersAttendances().iterator();
+
+        while (userAttendanceIterator.hasNext()) {
+            UserAttendance userAttendance = userAttendanceIterator.next();
+
+            boolean removed = userAttendance.getAttendanceRecords()
+                    .removeIf(attendanceRecord -> attendanceRecord.getPoint().getId().equals(pointId));
+
+            if (removed && userAttendance.getAttendanceRecords().isEmpty()) {
+                userAttendanceIterator.remove();
+            }
+
+            if (userAttendance.getAttendanceRecords().isEmpty()) {
+                pointRecord.getUsersAttendances().remove(userAttendance);
             }
         }
+
+        pointRecord.getPoints().removeIf(point -> point.getId().equals(pointId));
+        this.update(pointRecord);
+    }
+
+    public void addPoint(Long pointRecordId, Point point) {
+        PointRecord pointRecord = this.findById(pointRecordId);
+        List<Point> points = pointRecord.getPoints();
+        // Ordena a lista de pontos pela data final de forma ascendente
+        points.sort((p1, p2) -> {
+            if (p1.getFinalDate() == null && p2.getFinalDate() == null) {
+                return 0;
+            } else if (p1.getFinalDate() == null) {
+                return -1;
+            } else if (p2.getFinalDate() == null) {
+                return 1;
+            }
+            return p1.getFinalDate().compareTo(p2.getFinalDate());
+        });
+        Point lastPoint = points.get(points.size() - 1);
+        validatePoint(pointRecord, point, lastPoint.getFinalDate());
+        pointRecord.getPoints().add(point);
+
+        pointRecord.getUsersAttendances().forEach(userAttendance -> {
+            AttendanceRecord attendanceRecord = createAttendanceRecord(point);
+            attendanceRecord.setUserAttendance(userAttendance);
+            userAttendance.getAttendanceRecords().add(attendanceRecord);
+        });
+
         this.update(pointRecord);
     }
 }
