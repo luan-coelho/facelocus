@@ -49,30 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  cached_network_image:
-    dependency: "direct main"
-    description:
-      name: cached_network_image
-      sha256: "28ea9690a8207179c319965c13cd8df184d5ee721ae2ce60f398ced1219cea1f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.1"
-  cached_network_image_platform_interface:
-    dependency: transitive
-    description:
-      name: cached_network_image_platform_interface
-      sha256: "9e90e78ae72caa874a323d78fa6301b3fb8fa7ea76a8f96dc5b5bf79f283bf2f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
-  cached_network_image_web:
-    dependency: transitive
-    description:
-      name: cached_network_image_web
-      sha256: "42a835caa27c220d1294311ac409a43361088625a4f23c820b006dd9bffb3316"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   camera:
     dependency: "direct main"
     description:
@@ -265,19 +241,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_cache_manager:
-    dependency: transitive
+  flutter_blue_plus:
+    dependency: "direct main"
     description:
-      name: flutter_cache_manager
-      sha256: "8207f27539deb83732fdda03e259349046a39a4c767269285f449ade355d54ba"
+      name: flutter_blue_plus
+      sha256: "1e53ba4b60c1097396fbeafdd31eac5c20b0876b56a0c1ab6f3dec5ee06d44d7"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "1.32.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -629,14 +613,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  loading_animation_widget:
-    dependency: "direct main"
-    description:
-      name: loading_animation_widget
-      sha256: "1901682600273a966c34cf44a85fc5355da92a8d08a8a43c11adc4e471993e3a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0+4"
   loading_indicator:
     dependency: "direct main"
     description:
@@ -685,6 +661,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  mac_address:
+    dependency: "direct main"
+    description:
+      name: mac_address
+      sha256: "630aca295b6c525c1f79d38c8669a65aa06a3e9ff870f73780a8d9694ba789ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   macos_ui:
     dependency: transitive
     description:
@@ -749,14 +733,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  octo_image:
-    dependency: transitive
-    description:
-      name: octo_image
-      sha256: "45b40f99622f11901238e18d48f5f12ea36426d8eced9f4cbf58479c7aa2430d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   path:
     dependency: "direct main"
     description:
@@ -869,14 +845,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   share_plus:
     dependency: "direct main"
     description:
@@ -949,30 +917,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  signals_core:
-    dependency: transitive
-    description:
-      name: signals_core
-      sha256: "79ca5a5ebca67eba54f6b271f8ac7adf1250717fb5d947295e77dd34610cabac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
-  signals_flutter:
-    dependency: "direct main"
-    description:
-      name: signals_flutter
-      sha256: "85b15c10a042da332d11ca989b8b038802fe2effe2c6dc29ecbd02becec1bba5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
-  simple_gesture_detector:
-    dependency: transitive
-    description:
-      name: simple_gesture_detector
-      sha256: "86d08f85f1f58583b7b4b941d989f48ea6ce08c1724a1d10954a277c2ec36592"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   skeletonizer:
     dependency: "direct main"
     description:
@@ -1002,22 +946,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  sqflite:
-    dependency: transitive
-    description:
-      name: sqflite
-      sha256: c2c32eb0c74021d987336522acc3b6bf0082fbd0c540c36a9cf4ddb8ba891ddc
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.1"
-  sqflite_common:
-    dependency: transitive
-    description:
-      name: sqflite_common
-      sha256: bb4738f15b23352822f4c42a531677e5c6f522e079461fd240ead29d8d8a54a6
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.0+2"
   stack_trace:
     dependency: transitive
     description:
@@ -1050,22 +978,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  synchronized:
-    dependency: transitive
-    description:
-      name: synchronized
-      sha256: "539ef412b170d65ecdafd780f924e5be3f60032a1128df156adad6c5b373d558"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0+1"
-  table_calendar:
-    dependency: "direct main"
-    description:
-      name: table_calendar
-      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:
@@ -1139,13 +1051,13 @@ packages:
     source: hosted
     version: "3.1.1"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
-      sha256: "22c94e5ad1e75f9934b766b53c742572ee2677c56bc871d850a57dad0f82127f"
+      sha256: cd210a09f7c18cbe5a02511718e0334de6559871052c90a90c0cca46a4aa81c8
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.2"
+    version: "4.3.3"
   vector_graphics:
     dependency: transitive
     description:

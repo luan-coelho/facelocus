@@ -145,7 +145,7 @@ class _PointRecordAdminEditScreenState
                 ),
                 const SizedBox(height: 5),
                 AppDatePicker(
-                  value: _controller.date.value,
+                  value: _controller.pointRecord.value?.date ?? DateTime.now(),
                   onChanged: (date) => _controller.changeDate(
                     context,
                     widget.pointRecordId,

@@ -5,7 +5,6 @@ import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
-import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
 import 'package:flutter_svg/svg.dart';
