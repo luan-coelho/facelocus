@@ -1,5 +1,6 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/controllers/validate_point_controller.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
@@ -58,7 +59,13 @@ class _ILFactorValidateScreenState extends State<ILFactorValidateScreen> {
           ),
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
+              children: [
+                AppButton(
+                  text: 'MAC ADDRESS',
+                  onPressed: () async {
+                    print('ENDEREÇO MAC - ${await GetMac.macAddress}');
+                  },
+                ),
                 StreamBuilder<List<ScanResult>>(
                   stream: FlutterBluePlus.scanResults,
                   initialData: [],
@@ -66,8 +73,9 @@ class _ILFactorValidateScreenState extends State<ILFactorValidateScreen> {
                     children: snapshot.data!
                         .map(
                           (r) => ListTile(
-                            title: Text(r.device.platformName),
-                            subtitle: Text(r.rssi.toString()),
+                            title: Text('${r.device.remoteId}'),
+                            subtitle:
+                                Text('Potência do RSSI: ${r.rssi.toString()}'),
                           ),
                         )
                         .toList(),

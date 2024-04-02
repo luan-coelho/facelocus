@@ -9,9 +9,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 void main() async {
+  AppControllers.initControllers();
   WidgetsFlutterBinding.ensureInitialized(); //Add this
   await FaceCamera.initialize();
-  AppControllers.initControllers();
   runApp(const FaceLocusApp());
 }
 
