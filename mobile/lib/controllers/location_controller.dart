@@ -146,4 +146,20 @@ class LocationController extends GetxController {
     _isLoading.value = false;
     return await Geolocator.getCurrentPosition();
   }
+
+  calculateDistance(LocationModel location) {
+    if (_location.value?.latitude == 0.0 && _location.value?.longitude == 0.0) {
+      return 0.0;
+    }
+    return Geolocator.distanceBetween(
+      _location.value!.latitude,
+      _location.value!.longitude,
+      location.latitude,
+      location.longitude,
+    );
+  }
+
+  isLocationValid(LocationModel location) {
+    return calculateDistance(location) <= 20.0;
+  }
 }

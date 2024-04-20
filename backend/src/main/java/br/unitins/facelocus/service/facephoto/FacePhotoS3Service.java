@@ -3,7 +3,6 @@ package br.unitins.facelocus.service.facephoto;
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
 import br.unitins.facelocus.model.FacePhoto;
-import br.unitins.facelocus.model.FacePhotoLocalDisk;
 import br.unitins.facelocus.model.FacePhotoS3;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.FacePhotoRepository;
@@ -15,7 +14,9 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -81,7 +82,14 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         }
         FacePhotoS3 facePhoto = (FacePhotoS3) user.getFacePhoto();
         String objectKey = facePhoto.getObjectKey();
-        ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
+        ResponseBytes<GetObjectResponse> objectBytes = null;
+        try {
+            objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
+        } catch (AwsServiceException e) {
+            throw new RuntimeException(e);
+        } catch (SdkClientException e) {
+            throw new RuntimeException(e);
+        }
         return objectBytes.asByteArray();
     }
 
