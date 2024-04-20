@@ -49,8 +49,9 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
                   '${AppRoutes.locationFactorValidate}/${widget.attendanceRecordId}',
                 ),
                 child: ILFactorValidateCard(
-                    factor: Factor.indoorLocation,
-                    userAttendance: _controller.userAttendance.value!),
+                  factor: Factor.indoorLocation,
+                  userAttendance: _controller.userAttendance.value!,
+                ),
               ),
               const SizedBox(height: 10),
             ],
@@ -60,8 +61,10 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
                   '${AppRoutes.facialFactorValidate}/${widget.attendanceRecordId}',
                 ),
                 child: FRFactorValidateCard(
-                    factor: Factor.facialRecognition,
-                    userAttendance: _controller.userAttendance.value!),
+                  factor: Factor.facialRecognition,
+                  userAttendance: _controller.userAttendance.value!,
+                  factorBlocked: true,
+                ),
               )
             ]
           ],

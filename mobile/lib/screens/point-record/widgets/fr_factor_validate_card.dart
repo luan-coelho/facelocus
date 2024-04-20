@@ -13,12 +13,14 @@ class FRFactorValidateCard extends StatefulWidget {
     this.attendanceRecord,
     this.pointRecord,
     required this.factor,
+    this.factorBlocked = false,
   });
 
   final UserAttendanceModel userAttendance;
   final AttendanceRecordModel? attendanceRecord;
   final PointRecordModel? pointRecord;
   final Factor factor;
+  final bool factorBlocked;
 
   @override
   State<FRFactorValidateCard> createState() => _FRFactorValidateCardState();
@@ -45,10 +47,15 @@ class _FRFactorValidateCardState extends State<FRFactorValidateCard> {
       height: 60,
       decoration: BoxDecoration(
         border: Border(
-          left: BorderSide(
-              color: attendanceRecordColor[AttendanceRecordStatus.pending]!,
-              width: 16),
-        ),
+            left: widget.factorBlocked
+                ? const BorderSide(
+                    color: Colors.grey,
+                    width: 2,
+                  )
+                : BorderSide(
+                    color:
+                        attendanceRecordColor[AttendanceRecordStatus.pending]!,
+                    width: 16)),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
@@ -71,14 +78,24 @@ class _FRFactorValidateCardState extends State<FRFactorValidateCard> {
               child: IconButton(
                 padding: const EdgeInsets.all(0.0),
                 onPressed: null,
-                icon: Icon(
-                  attendanceRecordStatus[AttendanceRecordStatus.pending],
-                  size: 35.0,
-                ),
+                icon: widget.factorBlocked
+                    ? const Icon(
+                        Icons.lock,
+                        size: 35.0,
+                      )
+                    : Icon(
+                        attendanceRecordStatus[AttendanceRecordStatus.pending],
+                        size: 35.0,
+                      ),
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(
-                    attendanceRecordColor[AttendanceRecordStatus.pending]!,
-                  ),
+                  foregroundColor: widget.factorBlocked
+                      ? MaterialStateProperty.all<Color>(
+                          Colors.grey,
+                        )
+                      : MaterialStateProperty.all<Color>(
+                          attendanceRecordColor[
+                              AttendanceRecordStatus.pending]!,
+                        ),
                   backgroundColor: MaterialStateProperty.all<Color>(
                     Colors.white,
                   ),
