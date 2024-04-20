@@ -27,7 +27,7 @@ class PointRecordCreateController extends GetxController {
   List<PointModel> _points = <PointModel>[].obs;
   final Rx<DateTime> _firstDayCalendar = DateTime.now().obs;
   final Rx<DateTime> _lastDayCalendar = DateTime.now().obs;
-  List<Item<UserModel>> _panelItems = <Item<UserModel>>[].obs;
+  final List<Item<UserModel>> _panelItems = <Item<UserModel>>[].obs;
   final Rx<DateTime> _initialDate = DateTime.now().obs;
   final Rx<DateTime> _finalDate = DateTime.now().obs;
 

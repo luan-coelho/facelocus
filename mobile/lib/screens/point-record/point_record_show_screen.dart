@@ -21,7 +21,7 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
   void initState() {
     _controller = Get.find<PointRecordShowController>();
     _controller.fetchPointRecordById(context, widget.pointRecordId);
-    _controller.fetchById(context, widget.pointRecordId);
+    _controller.fetchUserAttendanceById(context, widget.pointRecordId);
     super.initState();
   }
 
@@ -32,7 +32,7 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
       showBottomNavigationBar: false,
       body: RefreshIndicator(
         onRefresh: () async {
-          _controller.fetchById(context, widget.pointRecordId);
+          _controller.fetchUserAttendanceById(context, widget.pointRecordId);
         },
         child: CustomScrollView(
           slivers: [

@@ -31,7 +31,7 @@ class PointRecordShowController extends GetxController {
 
   PointRecordShowController({required this.service});
 
-  fetchById(BuildContext context, int pointRecordId) async {
+  fetchUserAttendanceById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
     try {
       SessionController authController = Get.find<SessionController>();

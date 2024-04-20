@@ -7,6 +7,7 @@ import 'package:facelocus/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UserCardHome extends StatefulWidget {
   const UserCardHome({super.key});
@@ -30,15 +31,26 @@ class _UserCardHomeState extends State<UserCardHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (_controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Obx(() {
+          if (_controller.isLoading.value) {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                ),
+              ),
+              child: const Skeletonizer.zone(
+                child: Bone.circle(size: 48),
+              ),
+            );
+          }
+          return Container(
             decoration: const BoxDecoration(shape: BoxShape.circle),
             child: Column(
               children: [
@@ -53,32 +65,32 @@ class _UserCardHomeState extends State<UserCardHome> {
                 )
               ],
             ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Olá,',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w200,
-                ),
+          );
+        }),
+        const SizedBox(width: 10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Olá,',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w200,
               ),
-              Text(
-                _user.name,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
-            ],
-          )
-        ],
-      );
-    });
+            ),
+            Text(
+              _user.name,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          ],
+        )
+      ],
+    );
   }
 }

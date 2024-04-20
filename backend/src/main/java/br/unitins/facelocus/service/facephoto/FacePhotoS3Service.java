@@ -76,20 +76,18 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
     @Override
     public byte[] getFacePhotoByUser(Long userId) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         User user = userService.findById(userId);
         if (user.getFacePhoto() == null) {
             throw new IllegalArgumentException("Sem foto de perfil");
         }
         FacePhotoS3 facePhoto = (FacePhotoS3) user.getFacePhoto();
         String objectKey = facePhoto.getObjectKey();
-        ResponseBytes<GetObjectResponse> objectBytes = null;
-        try {
-            objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
-        } catch (AwsServiceException e) {
-            throw new RuntimeException(e);
-        } catch (SdkClientException e) {
-            throw new RuntimeException(e);
-        }
+        ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
         return objectBytes.asByteArray();
     }
 

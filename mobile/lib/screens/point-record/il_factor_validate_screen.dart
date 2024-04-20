@@ -1,11 +1,11 @@
+import 'package:facelocus/controllers/location_controller.dart';
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/controllers/validate_point_controller.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mac_address/mac_address.dart';
 
 class ILFactorValidateScreen extends StatefulWidget {
   const ILFactorValidateScreen({
@@ -22,22 +22,24 @@ class ILFactorValidateScreen extends StatefulWidget {
 class _ILFactorValidateScreenState extends State<ILFactorValidateScreen> {
   late final ValidatePointController _validatePointController;
   late final PointRecordShowController _pointRecordController;
+  late final LocationController _locationController;
 
   @override
   void initState() {
     _validatePointController = Get.find<ValidatePointController>();
     _pointRecordController = Get.find<PointRecordShowController>();
+    _locationController = Get.find<LocationController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _pointRecordController.fetchUserAttendanceById(
+        context,
+        widget.attendanceRecordId,
+      );
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    void getDeviceInfo() async {
-      // String? identifier = await _validatePointController.getDeviceIdentifier();
-      var identifier = await GetMac.macAddress;
-      debugPrint('Identificador - $identifier');
-    }
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -53,57 +55,45 @@ class _ILFactorValidateScreenState extends State<ILFactorValidateScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(29.0),
-        child: RefreshIndicator(
-          onRefresh: () => FlutterBluePlus.startScan(
-            timeout: const Duration(seconds: 4),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AppButton(
-                  text: 'MAC ADDRESS',
-                  onPressed: () async {
-                    print('ENDEREÇO MAC - ${await GetMac.macAddress}');
-                  },
-                ),
-                StreamBuilder<List<ScanResult>>(
-                  stream: FlutterBluePlus.scanResults,
-                  initialData: [],
-                  builder: (c, snapshot) => Column(
-                    children: snapshot.data!
-                        .map(
-                          (r) => ListTile(
-                            title: Text('${r.device.remoteId}'),
-                            subtitle:
-                                Text('Potência do RSSI: ${r.rssi.toString()}'),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: StreamBuilder<bool>(
-        stream: FlutterBluePlus.isScanning,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton(
-              onPressed: () => FlutterBluePlus.stopScan(),
-              child: const Icon(Icons.stop),
-            );
-          } else {
-            return FloatingActionButton(
-              onPressed: () => FlutterBluePlus.startScan(
-                timeout: const Duration(seconds: 4),
-              ),
-              child: const Icon(Icons.search),
-            );
+        child: Obx(() {
+          if (_pointRecordController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
           }
-        },
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'images/location.svg',
+                width: 300,
+              ),
+              const SizedBox(height: 25),
+              const Text('Local de validação',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  )),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  _pointRecordController
+                      .pointRecord.value!.location!.description
+                      .toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                  )),
+              const SizedBox(height: 15),
+              AppButton(
+                isLoading: _validatePointController.buttonLoading.value,
+                onPressed: () => _validatePointController.validateLocation(
+                  context,
+                ),
+                text: 'Validar',
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

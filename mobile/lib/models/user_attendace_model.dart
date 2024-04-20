@@ -1,15 +1,18 @@
 import 'package:facelocus/models/attendance_record_model.dart';
+import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/user_model.dart';
 
 class UserAttendanceModel {
   int? id;
   UserModel? user;
   List<AttendanceRecordModel>? attendanceRecords;
+  LocationModel location;
 
   UserAttendanceModel({
     required this.id,
     required this.user,
     required this.attendanceRecords,
+    required this.location,
   });
 
   factory UserAttendanceModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +27,7 @@ class UserAttendanceModel {
                     AttendanceRecordModel.fromJson(e as Map<String, dynamic>),
               )
               .toList(),
+      location: LocationModel.fromJson(json['pointRecord']['location']),
     );
   }
 
