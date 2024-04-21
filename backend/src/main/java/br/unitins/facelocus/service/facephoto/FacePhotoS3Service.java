@@ -14,9 +14,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.ResponseBytes;
-import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -50,13 +48,6 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         User user = userService.findById(userId);
 
         String folderKey = String.valueOf(userId).concat("/");
-
-        /*if (!exitsObject(folderKey)) {
-            createFolder(folderKey);
-            if (exitsObject(folderKey)) {
-                throw new RuntimeException("Falha ao criar pasta em bucket AWS S3");
-            }
-        }*/
         String facePhotoKey = folderKey.concat(multipartData.file.fileName());
         PutObjectRequest objectRequest = buildPutRequest(facePhotoKey, multipartData.file);
         RequestBody requestBody = RequestBody.fromFile(multipartData.file.filePath());
@@ -76,11 +67,6 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
     @Override
     public byte[] getFacePhotoByUser(Long userId) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         User user = userService.findById(userId);
         if (user.getFacePhoto() == null) {
             throw new IllegalArgumentException("Sem foto de perfil");

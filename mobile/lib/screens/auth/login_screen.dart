@@ -97,7 +97,13 @@ class LoginFormState extends State<LoginScreen> {
                         : null,
                   ),
                   const SizedBox(height: 15),
-                  AppButton(text: 'Entrar', onPressed: _login),
+                  Obx(() {
+                    return AppButton(
+                      isLoading: _controller.buttonLoading.value,
+                      text: 'Entrar',
+                      onPressed: _login,
+                    );
+                  }),
                   const SizedBox(height: 10),
                   AppButton(
                     text: 'Cadastrar',

@@ -298,9 +298,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         List<PointRecord> pointsRecord = this.repository.findAllByUser(userId);
 
         for (PointRecord pointRecord : pointsRecord) {
-            for (UserAttendance usersAttendance : pointRecord.getUsersAttendances()) {
-                if (usersAttendance.getUser().getId().equals(userId)) {
-                    pointRecord.getUsersAttendances().remove(usersAttendance);
+            for (UserAttendance userAttendance : pointRecord.getUsersAttendances()) {
+                if (userAttendance.getUser().getId().equals(userId)) {
+                    pointRecord.getUsersAttendances().remove(userAttendance);
                     update(pointRecord);
                     return;
                 }

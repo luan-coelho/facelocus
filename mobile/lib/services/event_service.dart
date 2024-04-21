@@ -40,4 +40,10 @@ class EventService {
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
+
+  removeUser(int eventId, int userId) async {
+    String url = '${AppRoutes.event}/remove-user?event=$eventId&user=$userId';
+    var response = await _fetchApi.delete(url);
+    return response.statusCode == 204;
+  }
 }

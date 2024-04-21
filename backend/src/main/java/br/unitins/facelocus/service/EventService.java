@@ -193,6 +193,11 @@ public class EventService extends BaseService<Event, EventRepository> {
      */
     @Transactional
     public void removeUser(Long eventId, Long userId) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         userService.existsByIdWithThrows(userId);
         Event event = findById(eventId);
         event.getUsers().removeIf(user -> user.getId().equals(userId));

@@ -1,26 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/user_controller.dart';
-import 'package:get/get.dart';
-import 'package:facelocus/router.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:go_router/go_router.dart';
-import 'package:facelocus/shared/toast.dart';
-import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/auth_service.dart';
-import 'package:facelocus/services/user_service.dart';
 import 'package:facelocus/dtos/login_request_dto.dart';
 import 'package:facelocus/dtos/token_response_dto.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/router.dart';
+import 'package:facelocus/services/auth_service.dart';
+import 'package:facelocus/services/user_service.dart';
+import 'package:facelocus/shared/toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionController extends GetxController {
   final AuthRepository service;
   late final UserService _userService;
   late final FlutterSecureStorage _storage;
-
   final Rxn<UserModel?> _authenticatedUser = Rxn<UserModel>();
+  final RxBool _buttonLoading = false.obs;
 
   Rx<UserModel?> get authenticatedUser => _authenticatedUser;
+
+  RxBool get buttonLoading => _buttonLoading;
 
   SessionController({required this.service}) {
     _storage = const FlutterSecureStorage();
@@ -28,6 +30,7 @@ class SessionController extends GetxController {
   }
 
   login(BuildContext context, LoginRequest loginRequest) async {
+    buttonLoading.value = true;
     try {
       String login = loginRequest.login;
       String password = loginRequest.password;
@@ -61,6 +64,7 @@ class SessionController extends GetxController {
         Toast.showError(detail, context);
       }
     }
+    buttonLoading.value = false;
   }
 
   checkLogin(BuildContext context) async {
@@ -125,6 +129,7 @@ class SessionController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('user');
     _authenticatedUser.value = null;
+    buttonLoading.value = false;
     UserController userController = Get.find<UserController>();
     await userController.clearImage();
   }

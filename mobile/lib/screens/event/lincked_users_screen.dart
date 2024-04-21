@@ -61,24 +61,25 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                 }
                 return Column(
                   children: [
-                    Obx(() {
-                      return Skeletonizer(
-                        enabled: _controller.isLoading.value,
-                        child: ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(height: 10);
-                          },
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: _controller.users.length,
-                          itemBuilder: (context, index) {
-                            UserModel user = _controller.users[index];
-                            return LinckedUserCard(user: user);
-                          },
-                        ),
-                      );
-                    }),
+                    Skeletonizer(
+                      enabled: _controller.isLoading.value,
+                      child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(height: 10);
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: _controller.users.length,
+                        itemBuilder: (context, index) {
+                          UserModel user = _controller.users[index];
+                          return LinckedUserCard(
+                            user: user,
+                            eventId: widget.eventId,
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 );
               }),

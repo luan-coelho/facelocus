@@ -14,14 +14,17 @@ class EventController extends GetxController {
   EventModel? _event;
   Map<String, dynamic>? invalidFields;
   final RxBool _isLoading = false.obs;
+  final RxBool _deleteButtonLoading = false.obs;
 
   EventController({required this.service});
-
-  RxBool get isLoading => _isLoading;
 
   EventModel? get event => _event;
 
   List<EventModel> get events => _events;
+
+  RxBool get isLoading => _isLoading;
+
+  RxBool get deleteButtonLoading => _deleteButtonLoading;
 
   fetchAll() async {
     _isLoading.value = true;
@@ -78,6 +81,24 @@ class EventController extends GetxController {
   generateNewCode(int eventId) async {
     await service.generateNewCode(eventId);
     fetchById(eventId);
+  }
+
+  removerUser(BuildContext context, int eventId, int userId) {
+    _deleteButtonLoading.value = true;
+    try {
+      service.removeUser(eventId, userId);
+      fetchById(eventId);
+      if (context.mounted) {
+        Toast.showSuccess('Removido com sucesso', context);
+        context.pop();
+      }
+    } on DioException catch (e) {
+      String detail = onError(e, message: 'Falha ao remover usuário');
+      if (context.mounted) {
+        Toast.showError(detail, context);
+      }
+    }
+    _deleteButtonLoading.value = false;
   }
 
   String onError(DioException e, {String? message}) {

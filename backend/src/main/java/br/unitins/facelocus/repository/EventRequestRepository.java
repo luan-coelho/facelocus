@@ -5,6 +5,7 @@ import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.model.EventRequest;
 import br.unitins.facelocus.model.EventRequestStatus;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -27,12 +28,12 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
     public DataPagination<EventRequest> findAllByUserId(Pageable pageable, Long userId) {
         // language=jpaql
         String query = """
-                FROM EventRequest
-                WHERE event.administrator.id = ?1
-                    OR initiatorUser.id = ?1
-                    OR targetUser.id = ?1
+                FROM EventRequest er
+                WHERE er.event.administrator.id = ?1
+                    OR er.initiatorUser.id = ?1
+                    OR er.targetUser.id = ?1
                 """;
-        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        PanacheQuery<EventRequest> panacheQuery = find(query, Sort.descending("createdAt"), userId);
         return buildDataPagination(pageable, panacheQuery);
     }
 

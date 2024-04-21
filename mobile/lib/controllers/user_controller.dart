@@ -162,9 +162,9 @@ class UserController extends GetxController {
   }
 
   clearImage() async {
-    if (_userImagePath.value != null) {
+    if (_userImagePath.value != null && !_userImagePath.value.isBlank!) {
       await File(_userImagePath.value!).delete();
     }
-    _userImagePath.value = null;
+    _userImagePath.value = '';
   }
 }
