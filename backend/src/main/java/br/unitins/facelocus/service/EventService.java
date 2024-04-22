@@ -194,12 +194,12 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Transactional
     public void removeUser(Long eventId, Long userId) {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        userService.existsByIdWithThrows(userId);
         Event event = findById(eventId);
+        userService.existsByIdWithThrows(userId);
         event.getUsers().removeIf(user -> user.getId().equals(userId));
         update(event);
         pointRecordService.unlinkUserFromAll(userId);

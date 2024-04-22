@@ -2,6 +2,7 @@ import 'package:facelocus/controllers/event_request_controller.dart';
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
+import 'package:facelocus/screens/home/widgets/user_card_er.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
@@ -46,6 +47,7 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
 
     return AppLayout(
         appBarTitle: 'Solicitação',
+        showBottomNavigationBar: false,
         body: Padding(
           padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
           child: Obx(
@@ -61,12 +63,12 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // const UserFaceImage(),
+                    UserCardER(
+                      user: _controller.eventRequest.value!.initiatorUser,
+                    ),
                     const SizedBox(height: 25),
                     InformationField(
                         description: 'Nome Completo', value: fullName),
-                    const SizedBox(height: 15),
-                    InformationField(description: 'CPF', value: cpf),
                     const SizedBox(height: 15),
                     InformationField(description: 'Email', value: email),
                     const SizedBox(height: 25),

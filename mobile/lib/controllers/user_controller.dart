@@ -19,7 +19,9 @@ class UserController extends GetxController {
   List<UserModel> _usersSearch = <UserModel>[].obs;
   List<UserModel> _users = <UserModel>[].obs;
   final Rxn<String> _userImagePath = Rxn<String>();
+  final Rxn<String> _userErImagePath = Rxn<String>();
   final RxBool _isLoading = false.obs;
+  final RxBool _imageLoading = false.obs;
 
   Rx<UserModel?> get user => _user;
 
@@ -29,7 +31,11 @@ class UserController extends GetxController {
 
   Rxn<String> get userImagePath => _userImagePath;
 
+  Rxn<String> get userErImagePath => _userErImagePath;
+
   RxBool get isLoading => _isLoading;
+
+  RxBool get imageLoading => _imageLoading;
 
   UserController({required this.service});
 
@@ -161,10 +167,39 @@ class UserController extends GetxController {
     _isLoading.value = false;
   }
 
+  fetchFacePhotoByUserIdEr(BuildContext context, int userId) async {
+    _imageLoading.value = true;
+    try {
+      var response = await service.getFacePhotoById(userId);
+
+      Directory tempDir = await getTemporaryDirectory();
+      String filePath = '${tempDir.path}/$userId.jpg';
+      await clearImageByPath(filePath);
+      File file = File(filePath);
+      await file.writeAsBytes(response.data!);
+      _userErImagePath.value = filePath;
+    } on DioException catch (e) {
+      String detail = 'Não foi possível buscar a imagem de perfil do usuário';
+      if (e.response?.data['detail'] != null) {
+        detail = e.response?.data['detail'];
+      }
+
+      if (context.mounted) {
+        Toast.showError(detail, context);
+      }
+    }
+    _imageLoading.value = false;
+  }
+
   clearImage() async {
     if (_userImagePath.value != null && !_userImagePath.value.isBlank!) {
       await File(_userImagePath.value!).delete();
     }
     _userImagePath.value = '';
+  }
+
+  clearImageByPath(String imagePath) async {
+    await File(imagePath).delete();
+    _userErImagePath.value = '';
   }
 }
