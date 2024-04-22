@@ -171,7 +171,6 @@ class UserController extends GetxController {
     _imageLoading.value = true;
     try {
       var response = await service.getFacePhotoById(userId);
-
       Directory tempDir = await getTemporaryDirectory();
       String filePath = '${tempDir.path}/$userId.jpg';
       await clearImageByPath(filePath);

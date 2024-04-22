@@ -57,7 +57,6 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
               }
               EventRequestModel eventRequest = _controller.eventRequest.value!;
               String fullName = eventRequest.initiatorUser.getFullName();
-              String cpf = eventRequest.initiatorUser.cpf;
               String email = eventRequest.initiatorUser.email;
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
