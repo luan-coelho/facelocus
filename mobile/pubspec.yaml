@@ -43,6 +43,7 @@ dependencies:
   uuid: ^4.3.3
   flutter_bloc: ^8.1.5
   bloc: ^8.1.4
+  mask_text_input_formatter: ^2.9.0
 
 dev_dependencies:
   flutter_test:

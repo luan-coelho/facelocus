@@ -8,6 +8,7 @@ import 'package:facelocus/utils/fields_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -24,6 +25,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController _surnameController;
   late TextEditingController _emailController;
   late TextEditingController _cpfController;
+  late MaskTextInputFormatter cpfInputFormatter;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPassController;
 
@@ -31,8 +33,12 @@ class RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     _nameController = TextEditingController();
     _surnameController = TextEditingController();
-    _emailController = TextEditingController();
     _cpfController = TextEditingController();
+    cpfInputFormatter = MaskTextInputFormatter(
+      mask: '000.000.000-00',
+      filter: {"0": RegExp(r'[0-9]')},
+    );
+    _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPassController = TextEditingController();
     super.initState();
@@ -124,6 +130,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.number,
                       labelText: 'CPF',
                       maxLength: 14,
+                      inputFormatters: [cpfInputFormatter],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Informe o cpf';

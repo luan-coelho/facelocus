@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
@@ -9,6 +10,7 @@ class AppTextField extends StatefulWidget {
     this.onSaved,
     this.keyboardType = TextInputType.text,
     this.maxLength,
+    this.inputFormatters,
   });
 
   final String? labelText;
@@ -17,6 +19,7 @@ class AppTextField extends StatefulWidget {
   final FormFieldSetter? onSaved;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -55,6 +58,7 @@ class _AppTextFieldState extends State<AppTextField> {
           obscureText: widget.keyboardType == TextInputType.visiblePassword
               ? _obscured
               : false,
+          inputFormatters: widget.inputFormatters,
           decoration: InputDecoration(
             counter: const Offstage(),
             fillColor: Colors.white,
