@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 
 class RegisterController extends GetxController {
   final AuthRepository repository;
-  final Rxn<Map<String, dynamic>> invalidFields = Rxn<Map<String, dynamic>>();
 
   RegisterController({required this.repository});
 
@@ -22,9 +21,6 @@ class RegisterController extends GetxController {
       String detail = e.response?.data['detail'];
       if (e.response?.data['invalidFields'] != null) {
         Map<String, dynamic> invalidFields = e.response?.data['invalidFields'];
-        if (invalidFields.isNotEmpty) {
-          this.invalidFields.value = invalidFields;
-        }
       }
       if (context.mounted) {
         Toast.showError(detail, context);

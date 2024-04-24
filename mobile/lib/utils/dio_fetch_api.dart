@@ -38,8 +38,11 @@ class DioFetchApi implements FetchApi {
   }
 
   @override
-  Future<Response> post(String url,
-      {Object? data, bool authHeaders = true}) async {
+  Future<Response> post(
+    String url, {
+    Object? data,
+    bool authHeaders = true,
+  }) async {
     try {
       final String? token = await getToken();
       var response = await _dio.post('$_baseUrl$url',
@@ -53,8 +56,11 @@ class DioFetchApi implements FetchApi {
   }
 
   @override
-  Future<Response> patch(String url,
-      {Object? data, bool authHeaders = true}) async {
+  Future<Response> patch(
+    String url, {
+    Object? data,
+    bool authHeaders = true,
+  }) async {
     try {
       final String? token = await getToken();
       return await _dio.patch('$_baseUrl$url',
@@ -67,7 +73,10 @@ class DioFetchApi implements FetchApi {
   }
 
   @override
-  Future<Response> delete(String url, {bool authHeaders = true}) async {
+  Future<Response> delete(
+    String url, {
+    bool authHeaders = true,
+  }) async {
     try {
       final String? token = await getToken();
       return await _dio.delete('$_baseUrl$url',
@@ -95,7 +104,9 @@ class DioFetchApi implements FetchApi {
       if (context != null && context.mounted) {
         SessionController controller = getx.Get.find<SessionController>();
         controller.logout();
-        context.go(AppRoutes.login);
+        if (!e.response!.requestOptions.path.contains(AppRoutes.register)) {
+          context.replace(AppRoutes.login);
+        }
       }
     }
   }

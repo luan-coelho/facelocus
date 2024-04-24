@@ -1,6 +1,7 @@
 import 'package:facelocus/features/auth/screens/face_upload_screen.dart';
 import 'package:facelocus/features/auth/screens/login_screen.dart';
 import 'package:facelocus/features/auth/screens/register_screen.dart';
+import 'package:facelocus/features/home/screens/home_screen.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/event/event_create_form.dart';
 import 'package:facelocus/screens/event/event_list_screen.dart';
@@ -9,7 +10,6 @@ import 'package:facelocus/screens/event/event_request_show_screen.dart';
 import 'package:facelocus/screens/event/event_show_screen.dart';
 import 'package:facelocus/screens/event/lincked_users_screen.dart';
 import 'package:facelocus/screens/event/location_screen.dart';
-import 'package:facelocus/screens/home/home_screen.dart';
 import 'package:facelocus/screens/point-record/facial_factor_validate_screen.dart';
 import 'package:facelocus/screens/point-record/il_factor_validate_screen.dart';
 import 'package:facelocus/screens/point-record/point_record_admin_edit_screen.dart';

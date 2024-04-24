@@ -1,4 +1,4 @@
-import 'package:facelocus/features/auth/bloc/auth_bloc.dart';
+import 'package:facelocus/features/auth/bloc/login/login_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -46,12 +46,12 @@ class LoginFormState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+      body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is LoginSuccess) {
             context.replace(AppRoutes.home);
           }
-          if (state is AuthError) {
+          if (state is LoginError) {
             Toast.showError(
               title: 'Erro de Autenticação',
               state.message,
@@ -107,8 +107,8 @@ class LoginFormState extends State<LoginScreen> {
                         text: 'Entrar',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            context.read<AuthBloc>().add(
-                                  AuthLoginRequested(
+                            context.read<LoginBloc>().add(
+                                  LoginRequested(
                                     _loginController.text,
                                     _passwordController.text,
                                   ),

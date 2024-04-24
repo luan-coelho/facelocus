@@ -1,7 +1,7 @@
 import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/point_record_create_controller.dart';
+import 'package:facelocus/features/home/widgets/user_card.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/home/widgets/user_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';

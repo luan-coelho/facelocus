@@ -9,17 +9,17 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'auth_event.dart';
-part 'auth_state.dart';
+part 'login_event.dart';
+part 'login_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class LoginBloc extends Bloc<AuthEvent, LoginState> {
   final AuthRepository repository;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  AuthBloc({required this.repository}) : super(AuthInitial()) {
-    on<AuthLoginRequested>((event, emit) async {
+  LoginBloc({required this.repository}) : super(LoginInitial()) {
+    on<LoginRequested>((event, emit) async {
       try {
-        emit(AuthLoading());
+        emit(LoginLoading());
         TokenResponse tokenResponse = await repository.login(
           event.login,
           event.password,
@@ -40,14 +40,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
           UserController userController = Get.find<UserController>();
           // await userController.fetchFacePhotoById(context);
-          emit(AuthSuccess());
+          emit(LoginSuccess());
         }
       } on DioException catch (e) {
         String detail = 'Não foi possível realizar o login';
         if (e.response?.data['detail'] != null) {
           detail = e.response?.data['detail'];
         }
-        emit(AuthError(detail));
+        emit(LoginError(detail));
       }
     });
   }
