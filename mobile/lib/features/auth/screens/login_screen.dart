@@ -1,4 +1,4 @@
-import 'package:facelocus/features/bloc/auth_bloc.dart';
+import 'package:facelocus/features/auth/bloc/auth_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -7,7 +7,6 @@ import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -50,21 +49,20 @@ class LoginFormState extends State<LoginScreen> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            context.goNamed(AppRoutes.home);
+            context.replace(AppRoutes.home);
           }
           if (state is AuthError) {
-            Toast.showAlert(state.message, context);
+            Toast.showError(
+              title: 'Erro de Autenticação',
+              state.message,
+              context,
+            );
           }
           if (state is UserWithoutFacePhoto) {
-            context.goNamed(AppRoutes.userUploadFacePhoto);
+            context.replace(AppRoutes.userUploadFacePhoto);
           }
         },
         builder: (context, state) {
-          if (state is AuthLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
           return Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -105,23 +103,23 @@ class LoginFormState extends State<LoginScreen> {
                             : null,
                       ),
                       const SizedBox(height: 15),
-                      Obx(() {
-                        return AppButton(
-                          text: 'Entrar',
-                          onPressed: () {
+                      AppButton(
+                        text: 'Entrar',
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
                             context.read<AuthBloc>().add(
                                   AuthLoginRequested(
                                     _loginController.text,
                                     _passwordController.text,
                                   ),
                                 );
-                          },
-                        );
-                      }),
+                          }
+                        },
+                      ),
                       const SizedBox(height: 10),
                       AppButton(
                         text: 'Cadastrar',
-                        onPressed: () => context.goNamed(AppRoutes.register),
+                        onPressed: () => context.push(AppRoutes.register),
                         textColor: Colors.black,
                         backgroundColor: AppColorsConst.white,
                         textFontSize: 14,

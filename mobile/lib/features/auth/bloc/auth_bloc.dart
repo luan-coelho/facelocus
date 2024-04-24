@@ -2,25 +2,21 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/dtos/token_response_dto.dart';
-import 'package:facelocus/router.dart';
+import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/auth_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../models/user_model.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository repository;
-  final GoRouter router;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  AuthBloc(this.router, {required this.repository}) : super(AuthInitial()) {
+  AuthBloc({required this.repository}) : super(AuthInitial()) {
     on<AuthLoginRequested>((event, emit) async {
       try {
         emit(AuthLoading());
@@ -40,7 +36,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
           if (user.facePhoto == null) {
             emit(UserWithoutFacePhoto());
-            router.replace(AppRoutes.userUploadFacePhoto);
             return;
           }
           UserController userController = Get.find<UserController>();
