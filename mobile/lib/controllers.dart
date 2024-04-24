@@ -8,7 +8,7 @@ import 'package:facelocus/controllers/point_record_edit_controller.dart';
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/controllers/validate_point_controller.dart';
-import 'package:facelocus/services/auth_service.dart';
+import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/event_request_service.dart';
 import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/services/location_service.dart';

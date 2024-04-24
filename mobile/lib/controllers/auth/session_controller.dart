@@ -4,7 +4,7 @@ import 'package:facelocus/dtos/login_request_dto.dart';
 import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/services/auth_service.dart';
+import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/user_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';

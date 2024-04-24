@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/services/auth_service.dart';
+import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

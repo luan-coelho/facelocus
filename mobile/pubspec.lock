@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  bloc:
+    dependency: "direct main"
+    description:
+      name: bloc
+      sha256: "106842ad6569f0b60297619e9e0b1885c2fb9bf84812935490e6c5275777804e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -254,14 +262,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_blue_plus:
+  flutter_bloc:
     dependency: "direct main"
     description:
-      name: flutter_blue_plus
-      sha256: "1e53ba4b60c1097396fbeafdd31eac5c20b0876b56a0c1ab6f3dec5ee06d44d7"
+      name: flutter_bloc
+      sha256: f0ecf6e6eb955193ca60af2d5ca39565a86b8a142452c5b24d96fb477428f4d2
       url: "https://pub.dev"
     source: hosted
-    version: "1.32.0"
+    version: "8.1.5"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -661,14 +669,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  mac_address:
-    dependency: "direct main"
-    description:
-      name: mac_address
-      sha256: "630aca295b6c525c1f79d38c8669a65aa06a3e9ff870f73780a8d9694ba789ff"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   macos_ui:
     dependency: transitive
     description:
