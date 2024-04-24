@@ -68,7 +68,7 @@ class PointRecordShowController extends GetxController {
     bool loading = true,
   }) async {
     if (loading) _prLoading.value = true;
-    PointRecordService pointRecordService = PointRecordService();
+    PointRecordRepository pointRecordService = PointRecordRepository();
     _pointRecord.value = await pointRecordService.getById(pointRecordId);
     if (loading) _prLoading.value = false;
   }
@@ -87,7 +87,7 @@ class PointRecordShowController extends GetxController {
   ) async {
     _isLoading.value = true;
     try {
-      PointRecordService pointRecordService = PointRecordService();
+      PointRecordRepository pointRecordService = PointRecordRepository();
       _pointRecord.value = await pointRecordService.validateUserPoints(ars);
     } on DioException catch (e) {
       String detail = onError(e);

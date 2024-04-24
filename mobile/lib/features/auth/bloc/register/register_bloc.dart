@@ -8,12 +8,12 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final AuthRepository repository;
+  final AuthRepository authRepository;
 
-  RegisterBloc({required this.repository}) : super(RegisterInitial()) {
+  RegisterBloc({required this.authRepository}) : super(RegisterInitial()) {
     on<RegisterRequested>((event, emit) async {
       try {
-        await repository.register(event.user);
+        await authRepository.register(event.user);
         emit(RegisterSuccess());
       } on DioException catch (e) {
         String detail = e.response?.data['detail'];

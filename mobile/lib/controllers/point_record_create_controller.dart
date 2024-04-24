@@ -18,7 +18,7 @@ import '../models/event_model.dart';
 import '../shared/toast.dart';
 
 class PointRecordCreateController extends GetxController {
-  final PointRecordService service;
+  final PointRecordRepository service;
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
   final Rxn<PointRecordModel> _pointRecord = Rxn<PointRecordModel>();

@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../shared/toast.dart';
 
 class ValidatePointController extends GetxController {
-  final PointRecordService service;
+  final PointRecordRepository service;
   final RxBool _isLoading = false.obs;
   final RxBool _buttonLoading = false.obs;
 

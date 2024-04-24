@@ -1,11 +1,9 @@
 import 'dart:ui';
 
 import 'package:face_camera/face_camera.dart';
+import 'package:facelocus/blocs.dart';
 import 'package:facelocus/controllers.dart';
-import 'package:facelocus/features/auth/bloc/login/login_bloc.dart';
-import 'package:facelocus/features/auth/bloc/register/register_bloc.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,14 +23,7 @@ class FaceLocusApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(repository: AuthRepository()),
-        ),
-        BlocProvider<RegisterBloc>(
-          create: (context) => RegisterBloc(repository: AuthRepository()),
-        ),
-      ],
+      providers: AppBlocs.blocs,
       child: GetMaterialApp.router(
         title: 'Validação de presença',
         theme: ThemeData(

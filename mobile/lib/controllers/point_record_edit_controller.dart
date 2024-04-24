@@ -16,7 +16,7 @@ import '../models/event_model.dart';
 import '../shared/toast.dart';
 
 class PointRecordEditController extends GetxController {
-  final PointRecordService service;
+  final PointRecordRepository service;
   final Rxn<LocationModel> _location = Rxn<LocationModel>();
   final Rxn<EventModel> event = Rxn<EventModel>();
   final Rxn<DateTime> _date = Rxn<DateTime>();
@@ -149,8 +149,7 @@ class PointRecordEditController extends GetxController {
     _isLoading.value = false;
   }
 
-  changeDate(
-      BuildContext context, int pointRecordId, DateTime newDate) async {
+  changeDate(BuildContext context, int pointRecordId, DateTime newDate) async {
     _isLoading.value = true;
     await service.changeDate(pointRecordId, newDate);
     await fetchById(context, pointRecordId);

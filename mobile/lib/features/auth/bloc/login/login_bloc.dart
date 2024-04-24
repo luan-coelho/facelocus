@@ -1,45 +1,40 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/auth_repository.dart';
+import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<AuthEvent, LoginState> {
-  final AuthRepository repository;
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final AuthRepository authRepository;
+  final SessionRepository sessionRepository;
 
-  LoginBloc({required this.repository}) : super(LoginInitial()) {
+  LoginBloc({
+    required this.authRepository,
+    required this.sessionRepository,
+  }) : super(LoginInitial()) {
     on<LoginRequested>((event, emit) async {
       try {
         emit(LoginLoading());
-        TokenResponse tokenResponse = await repository.login(
+        TokenResponse tokenResponse = await authRepository.login(
           event.login,
           event.password,
         );
 
         if (tokenResponse.token.isNotEmpty) {
           String token = tokenResponse.token;
-          int userId = tokenResponse.user.id!;
-          await _storage.write(key: 'token', value: token);
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setInt('user', userId);
+          await sessionRepository.saveToken(token);
           UserModel user = tokenResponse.user;
-          // addAuthenticatedUser(user);
+          sessionRepository.saveUser(user);
 
           if (user.facePhoto == null) {
             emit(UserWithoutFacePhoto());
             return;
           }
-          UserController userController = Get.find<UserController>();
-          // await userController.fetchFacePhotoById(context);
           emit(LoginSuccess());
         }
       } on DioException catch (e) {
