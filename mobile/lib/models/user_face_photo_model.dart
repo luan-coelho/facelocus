@@ -20,4 +20,13 @@ class UserFacePhotoModel {
           json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fileName': fileName,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+    };
+  }
 }

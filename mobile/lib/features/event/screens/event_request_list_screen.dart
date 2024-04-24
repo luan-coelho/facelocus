@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/event_request_controller.dart';
-import 'package:facelocus/screens/event/widgets/event_request_card.dart';
+import 'package:facelocus/features/event/widgets/event_request_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';

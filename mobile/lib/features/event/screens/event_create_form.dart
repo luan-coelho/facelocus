@@ -4,7 +4,7 @@ import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/event_controller.dart';
+import '../../../controllers/event_controller.dart';
 
 class EventCreateForm extends StatefulWidget {
   const EventCreateForm({super.key});

@@ -1,8 +1,8 @@
 import 'package:facelocus/controllers/event_request_controller.dart';
+import 'package:facelocus/features/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/features/home/widgets/user_card_er.dart';
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
-import 'package:facelocus/screens/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';

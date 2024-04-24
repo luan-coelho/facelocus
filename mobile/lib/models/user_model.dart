@@ -50,6 +50,16 @@ class UserModel {
         'password': password,
       };
 
+  Map<String, dynamic> toJsonWithFacePhoto() => {
+        'id': id,
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'cpf': cpf,
+        'facePhoto': facePhoto?.toJson(),
+        'password': password,
+      };
+
   String getFullName() {
     return '$name $surname'.trim();
   }

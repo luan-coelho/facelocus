@@ -7,6 +7,8 @@ class LoginInitial extends LoginState {}
 
 class LoginSuccess extends LoginState {}
 
+class TokenExpired extends LoginState {}
+
 class LoginError extends LoginState {
   final String message;
 

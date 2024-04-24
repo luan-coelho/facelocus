@@ -13,6 +13,15 @@ class SessionRepository {
     await prefs.setString('user', json);
   }
 
+  Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? user = prefs.getString('user');
+    if (user != null) {
+      return UserModel.fromJson(jsonDecode(user)).id;
+    }
+    return null;
+  }
+
   Future<UserModel?> getUser() async {
     final prefs = await SharedPreferences.getInstance();
     String? user = prefs.getString('user');
@@ -34,4 +43,14 @@ class SessionRepository {
   Future<void> deleteToken() async => await _storage.delete(
         key: 'token',
       );
+
+  Future<void> removeUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user');
+  }
+
+  Future<void> logout() async {
+    removeUser();
+    deleteToken();
+  }
 }

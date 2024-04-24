@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/event_controller.dart';
+import 'package:facelocus/features/event/widgets/event_code_card.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/event/widgets/event_code_card.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';

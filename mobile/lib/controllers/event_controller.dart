@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth/session_controller.dart';
+import 'package:facelocus/features/event/repository/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class EventController extends GetxController {
-  final EventService service;
+  final EventRepository service;
   final List<EventModel> _events = <EventModel>[].obs;
   EventModel? _event;
   Map<String, dynamic>? invalidFields;

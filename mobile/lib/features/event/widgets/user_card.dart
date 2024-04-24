@@ -3,16 +3,16 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LocationCard extends StatefulWidget {
-  const LocationCard({super.key, required this.user});
+class UserCard extends StatefulWidget {
+  const UserCard({super.key, required this.user});
 
   final UserModel user;
 
   @override
-  State<LocationCard> createState() => _LocationCardState();
+  State<UserCard> createState() => _UserCardState();
 }
 
-class _LocationCardState extends State<LocationCard> {
+class _UserCardState extends State<UserCard> {
   late final LocationController _controller;
 
   @override

@@ -2,10 +2,10 @@ import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
-class EventService {
+class EventRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
-  getAllByUser(int userId) async {
+  Future<List<EventModel>> getAllByUser(int userId) async {
     final response = await _fetchApi.get('${AppRoutes.event}?user=$userId');
     List data = response.data['data'];
     return data.map((json) => EventModel.fromJson(json)).toList();

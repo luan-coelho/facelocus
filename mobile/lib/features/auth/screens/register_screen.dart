@@ -1,4 +1,4 @@
-import 'package:facelocus/features/auth/bloc/register/register_bloc.dart';
+import 'package:facelocus/features/auth/blocs/register/register_bloc.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/toast.dart';

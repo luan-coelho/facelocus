@@ -1,4 +1,4 @@
-import 'package:facelocus/features/auth/bloc/login/login_bloc.dart';
+import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -25,15 +25,10 @@ class LoginFormState extends State<LoginScreen> {
 
   @override
   void initState() {
+    context.read<LoginBloc>().add(CheckAuth());
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
-    /* WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bool logged = await _controller.isLogged();
-      if (logged && context.mounted) {
-        _controller.checkLogin(context);
-      }
-    });*/
   }
 
   @override
@@ -51,6 +46,15 @@ class LoginFormState extends State<LoginScreen> {
           if (state is LoginSuccess) {
             context.replace(AppRoutes.home);
           }
+
+          if (state is TokenExpired) {
+            Toast.showAlert(
+              title: 'Sessão Expirada',
+              'Sua sessão expirou, faça login novamente',
+              context,
+            );
+          }
+
           if (state is LoginError) {
             Toast.showError(
               title: 'Erro de Autenticação',
@@ -58,6 +62,7 @@ class LoginFormState extends State<LoginScreen> {
               context,
             );
           }
+
           if (state is UserWithoutFacePhoto) {
             context.replace(AppRoutes.userUploadFacePhoto);
           }
