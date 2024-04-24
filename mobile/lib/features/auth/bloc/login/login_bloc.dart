@@ -4,6 +4,7 @@ import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
+import 'package:facelocus/shared/user-face-photo/user_face_photo_bloc.dart';
 import 'package:flutter/material.dart';
 
 part 'login_event.dart';
@@ -12,10 +13,12 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<AuthEvent, LoginState> {
   final AuthRepository authRepository;
   final SessionRepository sessionRepository;
+  final UserFacePhotoBloc userFacePhotoBloc;
 
   LoginBloc({
     required this.authRepository,
     required this.sessionRepository,
+    required this.userFacePhotoBloc,
   }) : super(LoginInitial()) {
     on<LoginRequested>((event, emit) async {
       try {
@@ -35,6 +38,7 @@ class LoginBloc extends Bloc<AuthEvent, LoginState> {
             emit(UserWithoutFacePhoto());
             return;
           }
+          userFacePhotoBloc.add(FetchUserFacePhoto());
           emit(LoginSuccess());
         }
       } on DioException catch (e) {

@@ -1,11 +1,7 @@
-import 'dart:io';
-
-import 'package:facelocus/controllers/auth/session_controller.dart';
-import 'package:facelocus/controllers/user_controller.dart';
-import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
+import 'package:facelocus/shared/user-face-photo/user_face_photo_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -17,79 +13,86 @@ class UserCardHome extends StatefulWidget {
 }
 
 class _UserCardHomeState extends State<UserCardHome> {
-  late final UserController _controller;
-  late final SessionController _authController;
-  late final UserModel _user;
-
-  @override
-  void initState() {
-    _controller = Get.find<UserController>();
-    _authController = Get.find<SessionController>();
-    _user = _authController.authenticatedUser.value!;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Obx(() {
-          if (_controller.isLoading.value) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                  width: 1,
+        BlocBuilder<UserFacePhotoBloc, UserFacePhotoState>(
+            builder: (context, state) {
+          if (state is UserFacePhotoLoaded) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  child: GestureDetector(
+                    onTap: () => context.push(AppRoutes.profile),
+                    child: CircleAvatar(
+                      backgroundImage: FileImage(state.image),
+                      radius: 25,
+                    ),
+                  ),
                 ),
-              ),
-              child: const Skeletonizer.zone(
-                child: Bone.circle(size: 48),
+                const SizedBox(width: 10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Olá,',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                    Text(
+                      state.user.name,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                  ],
+                )
+              ],
+            );
+          }
+
+          if (state is UserFacePhotoError) {
+            return Container(
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => context.push(AppRoutes.profile),
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      radius: 25,
+                    ),
+                  )
+                ],
               ),
             );
           }
+
           return Container(
-            decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () => context.push(AppRoutes.profile),
-                  child: CircleAvatar(
-                    backgroundImage: FileImage(
-                      File(_controller.userImagePath.value!),
-                    ),
-                    radius: 25,
-                  ),
-                )
-              ],
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                color: Colors.grey.shade300,
+                width: 1,
+              ),
+            ),
+            child: const Skeletonizer.zone(
+              child: Bone.circle(size: 48),
             ),
           );
         }),
-        const SizedBox(width: 10),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Olá,',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w200,
-              ),
-            ),
-            Text(
-              _user.name,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          ],
-        )
       ],
     );
   }

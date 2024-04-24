@@ -5,7 +5,7 @@ import 'package:facelocus/dtos/token_response_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/services/auth_repository.dart';
-import 'package:facelocus/services/user_service.dart';
+import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionController extends GetxController {
   final AuthRepository service;
-  late final UserService _userService;
+  late final UserRepository _userService;
   late final FlutterSecureStorage _storage;
   final Rxn<UserModel?> _authenticatedUser = Rxn<UserModel>();
   final RxBool _buttonLoading = false.obs;
@@ -26,7 +26,7 @@ class SessionController extends GetxController {
 
   SessionController({required this.service}) {
     _storage = const FlutterSecureStorage();
-    _userService = UserService();
+    _userService = UserRepository();
   }
 
   login(BuildContext context, LoginRequest loginRequest) async {

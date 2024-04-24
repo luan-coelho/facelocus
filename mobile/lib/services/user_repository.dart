@@ -6,7 +6,7 @@ import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
-class UserService {
+class UserRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
   getAllByEventId(int eventId) async {
@@ -51,7 +51,7 @@ class UserService {
     return await _fetchApi.post(url, data: formData);
   }
 
-  getFacePhotoById(int userId) async {
+  Future<Response> getFacePhotoById(int userId) async {
     String url = '${AppRoutes.user}/face-photo?user=$userId';
     return await _fetchApi.get(url, responseType: ResponseType.bytes);
   }

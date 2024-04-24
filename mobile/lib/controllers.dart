@@ -13,7 +13,7 @@ import 'package:facelocus/services/event_service.dart';
 import 'package:facelocus/services/location_service.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/services/user_attendance_service.dart';
-import 'package:facelocus/services/user_service.dart';
+import 'package:facelocus/services/user_repository.dart';
 import 'package:get/get.dart';
 
 class AppControllers {
@@ -21,7 +21,7 @@ class AppControllers {
     Get.put(SessionController(service: AuthRepository()));
     Get.put(EventController(service: EventService()));
     Get.put(EventRequestController(service: EventRequestService()));
-    Get.put(UserController(service: UserService()));
+    Get.put(UserController(service: UserRepository()));
     Get.put(PointRecordCreateController(service: PointRecordRepository()));
     Get.put(PointRecordEditController(service: PointRecordRepository()));
     Get.put(PointRecordShowController(service: UserAttendanceService()));

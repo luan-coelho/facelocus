@@ -27,5 +27,11 @@ class SessionRepository {
         value: token,
       );
 
-  Future<String?> getToken() async => await _storage.read(key: 'token');
+  Future<String?> getToken() async => await _storage.read(
+        key: 'token',
+      );
+
+  Future<void> deleteToken() async => await _storage.delete(
+        key: 'token',
+      );
 }

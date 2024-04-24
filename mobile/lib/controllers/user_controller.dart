@@ -5,7 +5,7 @@ import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/dtos/change_password_dto.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/services/user_service.dart';
+import 'package:facelocus/services/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import '../shared/toast.dart';
 
 class UserController extends GetxController {
-  final UserService service;
+  final UserRepository service;
   final Rx<UserModel?> _user = (null).obs;
   List<UserModel> _usersSearch = <UserModel>[].obs;
   List<UserModel> _users = <UserModel>[].obs;
