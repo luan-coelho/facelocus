@@ -35,8 +35,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
       },
       builder: (context, state) {
         return AppLayout(
-          appBarTitle:
-              state is EventLoaded ? state.event.description : 'Evento',
+          appBarTitle: state is EventLoaded ? state.event.description : '...',
           body: Padding(
             padding: const EdgeInsets.all(29),
             child: Builder(
@@ -72,7 +71,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                               },
                             ).toString(),
                             color: Colors.white,
-                            backgroundColor: AppColorsConst.purple,
+                            backgroundColor: AppColorsConst.blue,
                             imageName: 'locations-icon.svg',
                             height: 100,
                           ),
