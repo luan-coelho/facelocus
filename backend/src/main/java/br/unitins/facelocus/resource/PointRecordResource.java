@@ -7,7 +7,7 @@ import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.AttendanceRecord;
 import br.unitins.facelocus.model.PointRecord;
 import br.unitins.facelocus.service.PointRecordService;
-import jakarta.annotation.security.PermitAll;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@PermitAll
+@Authenticated
 @Path("/point-record")
 public class PointRecordResource {
 

@@ -106,12 +106,15 @@ class _EventListScreenState extends State<EventListScreen> {
                   return const EmptyData('Você ainda não criou nenhum evento');
                 }
 
-                return const LoadingIndicator(
-                    indicatorType: Indicator.ballPulse,
-                    colors: [AppColorsConst.blue],
-                    strokeWidth: 2,
-                    backgroundColor: Colors.transparent,
-                    pathBackgroundColor: Colors.black);
+                return const SizedBox(
+                  height: 70,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.pacman,
+                      colors: [AppColorsConst.blue],
+                      strokeWidth: 2,
+                      backgroundColor: Colors.transparent,
+                      pathBackgroundColor: Colors.black),
+                );
               },
             ),
           ],

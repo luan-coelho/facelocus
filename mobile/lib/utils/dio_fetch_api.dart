@@ -45,9 +45,11 @@ class DioFetchApi implements FetchApi {
   }) async {
     try {
       final String? token = await getToken();
-      var response = await _dio.post('$_baseUrl$url',
-          data: data,
-          options: authHeaders ? getAuthenticationHeaders(token) : null);
+      var response = await _dio.post(
+        '$_baseUrl$url',
+        data: data,
+        options: authHeaders ? getAuthenticationHeaders(token) : null,
+      );
       return response;
     } on DioException catch (e) {
       _checkAuthorization(e);
@@ -63,9 +65,11 @@ class DioFetchApi implements FetchApi {
   }) async {
     try {
       final String? token = await getToken();
-      return await _dio.patch('$_baseUrl$url',
-          data: data,
-          options: authHeaders ? getAuthenticationHeaders(token) : null);
+      return await _dio.patch(
+        '$_baseUrl$url',
+        data: data,
+        options: authHeaders ? getAuthenticationHeaders(token) : null,
+      );
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;
@@ -79,8 +83,10 @@ class DioFetchApi implements FetchApi {
   }) async {
     try {
       final String? token = await getToken();
-      return await _dio.delete('$_baseUrl$url',
-          options: authHeaders ? getAuthenticationHeaders(token) : null);
+      return await _dio.delete(
+        '$_baseUrl$url',
+        options: authHeaders ? getAuthenticationHeaders(token) : null,
+      );
     } on DioException catch (e) {
       _checkAuthorization(e);
       rethrow;

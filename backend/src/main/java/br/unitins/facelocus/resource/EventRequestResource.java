@@ -16,8 +16,8 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-@Path("/event-request")
 @Authenticated
+@Path("/event-request")
 public class EventRequestResource {
 
     @Inject

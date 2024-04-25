@@ -11,37 +11,40 @@ class EventRepository {
     return data.map((json) => EventModel.fromJson(json)).toList();
   }
 
-  getAllByDescription(int userId, String description) async {
+  Future<List<EventModel>> getAllByDescription(
+    int userId,
+    String description,
+  ) async {
     var url = '${AppRoutes.event}/search?user=$userId&description=$description';
     final response = await _fetchApi.get(url);
     List data = response.data['data'];
     return data.map((json) => EventModel.fromJson(json)).toList();
   }
 
-  create(EventModel event) async {
+  Future<void> create(EventModel event) async {
     var json = event.toJson();
     await _fetchApi.post(AppRoutes.event, data: json);
   }
 
-  getById(int id) async {
+  Future<EventModel> getById(int id) async {
     final response = await _fetchApi.get('${AppRoutes.event}/$id');
     var data = response.data;
     return EventModel.fromJson(data);
   }
 
-  changeTicketRequestPermission(int id) async {
+  Future<bool> changeTicketRequestPermission(int id) async {
     String url = '${AppRoutes.event}/change-ticket-request-permission/$id';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
 
-  generateNewCode(int id) async {
+  Future<bool> generateNewCode(int id) async {
     String url = '${AppRoutes.event}/generate-new-code/$id';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }
 
-  removeUser(int eventId, int userId) async {
+  Future<bool> removeUser(int eventId, int userId) async {
     String url = '${AppRoutes.event}/remove-user?event=$eventId&user=$userId';
     var response = await _fetchApi.delete(url);
     return response.statusCode == 204;

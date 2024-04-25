@@ -69,6 +69,10 @@ public class EventService extends BaseService<Event, EventRepository> {
     @Transactional
     @Override
     public Event create(Event event) {
+        if (event.getAdministrator() == null || event.getAdministrator().getId() == null) {
+            throw new IllegalArgumentException("O administrador do evento deve ser informado");
+        }
+
         if (event.isAllowTicketRequests()) {
             event.setCode(generateUniqueCode());
         }

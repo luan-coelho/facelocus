@@ -51,51 +51,56 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, state) {
                   if (state is PointRecordLoaded) {
                     return Expanded(
-                      child: Calendar(
-                        startOnMonday: true,
-                        weekDays: const [
-                          'Seg',
-                          'Ter',
-                          'Qua',
-                          'Qui',
-                          'Sex',
-                          'Sáb',
-                          'Dom',
-                        ],
-                        eventsList: state.pointRecordsEventsList,
-                        isExpandable: true,
-                        eventDoneColor: Colors.green,
-                        selectedColor: Colors.pink,
-                        selectedTodayColor: Colors.red,
-                        todayColor: Colors.blue,
-                        eventColor: null,
-                        onEventSelected: (value) {
-                          var endpoint = AppRoutes.pointRecord;
-                          String url = "$endpoint/${value.metadata!['id']}";
-                          var userId = state.loggedUser.id;
-                          var event = value.metadata!['event'];
-                          var pointRecordAdmin = event['administrator']['id'];
-                          if (pointRecordAdmin == userId) {
-                            context.push('/admin$url');
-                            return;
-                          }
-                          context.push(url);
-                        },
-                        locale: 'pt_br',
-                        todayButtonText: 'Hoje',
-                        isExpanded: true,
-                        expandableDateFormat: 'EEEE, dd. MMMM',
-                        datePickerType: DatePickerType.date,
-                        dayOfWeekStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 11,
+                      child: RefreshIndicator(
+                        onRefresh: () async => context.read<HomeBloc>().add(
+                              FetchPointRecords(),
+                            ),
+                        child: Calendar(
+                          startOnMonday: true,
+                          weekDays: const [
+                            'Seg',
+                            'Ter',
+                            'Qua',
+                            'Qui',
+                            'Sex',
+                            'Sáb',
+                            'Dom',
+                          ],
+                          eventsList: state.pointRecordsEventsList,
+                          isExpandable: true,
+                          eventDoneColor: Colors.green,
+                          selectedColor: Colors.pink,
+                          selectedTodayColor: Colors.red,
+                          todayColor: Colors.blue,
+                          eventColor: null,
+                          onEventSelected: (value) {
+                            var endpoint = AppRoutes.pointRecord;
+                            String url = "$endpoint/${value.metadata!['id']}";
+                            var userId = state.loggedUser.id;
+                            var event = value.metadata!['event'];
+                            var pointRecordAdmin = event['administrator']['id'];
+                            if (pointRecordAdmin == userId) {
+                              context.push('/admin$url');
+                              return;
+                            }
+                            context.push(url);
+                          },
+                          locale: 'pt_br',
+                          todayButtonText: 'Hoje',
+                          isExpanded: true,
+                          expandableDateFormat: 'EEEE, dd. MMMM',
+                          datePickerType: DatePickerType.date,
+                          dayOfWeekStyle: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 11,
+                          ),
+                          displayMonthTextStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          hideTodayIcon: true,
                         ),
-                        displayMonthTextStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        hideTodayIcon: true,
                       ),
                     );
                   }
