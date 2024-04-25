@@ -57,9 +57,7 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
       () {
         if (_controller.isLoading.value) {
           return const Center(
-            child: Spinner(
-              label: 'Procurando usuários...',
-            ),
+            child: Spinner(),
           );
         }
 
@@ -67,8 +65,10 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
           return const Center(
               child: Padding(
             padding: EdgeInsets.all(29.0),
-            child: Text('Nenhum usuário encontrado',
-                style: TextStyle(color: Colors.black)),
+            child: Text(
+              'Nenhum usuário encontrado',
+              style: TextStyle(color: Colors.black),
+            ),
           ));
         }
 

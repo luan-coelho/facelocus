@@ -3,13 +3,12 @@ import 'package:facelocus/features/event/screens/event_create_form.dart';
 import 'package:facelocus/features/event/widgets/event_card.dart';
 import 'package:facelocus/features/event/widgets/event_request_create_form.dart';
 import 'package:facelocus/models/event_model.dart';
-import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
+import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -105,16 +104,7 @@ class _EventListScreenState extends State<EventListScreen> {
                 if (state is EventsEmpty) {
                   return const EmptyData('Você ainda não criou nenhum evento');
                 }
-
-                return const SizedBox(
-                  height: 70,
-                  child: LoadingIndicator(
-                      indicatorType: Indicator.pacman,
-                      colors: [AppColorsConst.blue],
-                      strokeWidth: 2,
-                      backgroundColor: Colors.transparent,
-                      pathBackgroundColor: Colors.black),
-                );
+                return const Spinner();
               },
             ),
           ],

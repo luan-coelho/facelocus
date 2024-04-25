@@ -11,10 +11,11 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class EventRequestShowScreen extends StatefulWidget {
-  const EventRequestShowScreen(
-      {super.key,
-      required this.eventRequestId,
-      this.requestType = EventRequestType.invitation});
+  const EventRequestShowScreen({
+    super.key,
+    required this.eventRequestId,
+    this.requestType = EventRequestType.invitation,
+  });
 
   final int eventRequestId;
   final EventRequestType requestType;
@@ -80,10 +81,14 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                         }),
                     const SizedBox(height: 10),
                     AppButton(
-                        text: 'Rejeitar',
-                        onPressed: () => _controller.reject(
-                            context, widget.eventRequestId, widget.requestType),
-                        backgroundColor: Colors.red.shade600)
+                      text: 'Rejeitar',
+                      onPressed: () => _controller.reject(
+                        context,
+                        widget.eventRequestId,
+                        widget.requestType,
+                      ),
+                      backgroundColor: Colors.red.shade600,
+                    )
                   ]);
             },
           ),

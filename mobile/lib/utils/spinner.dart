@@ -1,28 +1,20 @@
+import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class Spinner extends StatelessWidget {
-  const Spinner({super.key, this.label});
-
-  final String? label;
+  const Spinner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          ),
-          if (label != null)
-            Text(label!, style: const TextStyle(color: Colors.black)),
-        ],
-      ),
+    return const SizedBox(
+      height: 70,
+      child: LoadingIndicator(
+          indicatorType: Indicator.pacman,
+          colors: [AppColorsConst.blue],
+          strokeWidth: 2,
+          backgroundColor: Colors.transparent,
+          pathBackgroundColor: Colors.black),
     );
   }
 }

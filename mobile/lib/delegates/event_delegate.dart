@@ -56,9 +56,7 @@ class EventDelegate extends SearchDelegate<EventModel> {
       () {
         if (_controller.isLoading.value) {
           return const Center(
-            child: Spinner(
-              label: 'Procurando eventos...',
-            ),
+            child: Spinner(),
           );
         }
 
