@@ -109,9 +109,7 @@ class _EventShowScreenState extends State<EventShowScreen> {
                 }
 
                 if (state is EventShowError) {
-                  return Center(
-                    child: Text(state.message),
-                  );
+                  return Center(child: Text(state.message));
                 }
 
                 return const Center(
