@@ -8,6 +8,7 @@ import 'package:facelocus/features/event-request/repositories/event_request_serv
 import 'package:facelocus/features/event/blocs/event-code-card/event_code_card_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-create/event_create_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
+import 'package:facelocus/features/event/blocs/event-request-create/event_request_create_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-show/event_show_bloc.dart';
 import 'package:facelocus/features/event/blocs/lincked-user/lincked_user_bloc.dart';
 import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.dart';
@@ -75,6 +76,12 @@ class AppBlocs {
     ),
     BlocProvider<EventRequestShowBloc>(
       create: (context) => EventRequestShowBloc(
+        eventRequestRepository: locator<EventRequestRepository>(),
+        sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<EventRequestCreateBloc>(
+      create: (context) => EventRequestCreateBloc(
         eventRequestRepository: locator<EventRequestRepository>(),
         sessionRepository: locator<SessionRepository>(),
       ),

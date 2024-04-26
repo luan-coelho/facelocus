@@ -65,6 +65,10 @@ class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
                         );
                         context.pop();
                       }
+
+                      if (state is TicketRequestCreateError) {
+                        Toast.showError(state.message, context);
+                      }
                     },
                     builder: (context, state) {
                       return AppButton(

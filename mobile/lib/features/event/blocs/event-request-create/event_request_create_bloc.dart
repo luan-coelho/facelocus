@@ -23,9 +23,9 @@ class EventRequestCreateBloc
     on<CreateTicketRequest>((event, emit) async {
       try {
         emit(TicketRequestCreateLoading());
-        UserModel user = sessionRepository.getUser()!;
+        UserModel? user = await sessionRepository.getUserFuture();
         EventWithCodeDTO eventDto = EventWithCodeDTO(code: event.code);
-        UserWithIdOnly initiatorUser = UserWithIdOnly(id: user.id);
+        UserWithIdOnly initiatorUser = UserWithIdOnly(id: user!.id);
         var eventRequest = CreateInvitationDTO(
           event: eventDto,
           initiatorUser: initiatorUser,
