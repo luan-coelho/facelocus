@@ -18,3 +18,5 @@ class LoginError extends LoginState {
 class UserWithoutFacePhoto extends LoginState {}
 
 class LoginLoading extends LoginState {}
+
+class Unauthorized extends LoginState {}

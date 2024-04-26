@@ -47,7 +47,7 @@ class LoginFormState extends State<LoginScreen> {
             context.replace(AppRoutes.home);
           }
 
-          if (state is TokenExpired) {
+          if (state is TokenExpired || state is Unauthorized) {
             Toast.showAlert(
               title: 'Sessão Expirada',
               'Sua sessão expirou, faça login novamente',

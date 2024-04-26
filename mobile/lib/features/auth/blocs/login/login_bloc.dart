@@ -77,7 +77,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<SessionExpired>((event, emit) async {
       sessionRepository.logout();
-      emit(TokenExpired());
+      emit(Unauthorized());
     });
   }
 }
