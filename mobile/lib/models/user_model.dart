@@ -33,11 +33,6 @@ class UserModel {
       facePhoto: json['facePhoto'] != null
           ? UserFacePhotoModel.fromJson(json['facePhoto'])
           : null,
-      /*devices: json['devices']
-          ? null
-          : (json['devices'] as List)
-              .map((e) => Device.fromJson(e as Map<String, dynamic>))
-              .toList(),*/
     );
   }
 

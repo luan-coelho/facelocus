@@ -21,9 +21,10 @@ class EventRepository {
     return data.map((json) => EventModel.fromJson(json)).toList();
   }
 
-  Future<void> create(EventModel event) async {
+  Future<EventModel> create(EventModel event) async {
     var json = event.toJson();
-    await _fetchApi.post(AppRoutes.event, data: json);
+    var response = await _fetchApi.post(AppRoutes.event, data: json);
+    return EventModel.fromJson(response.data);
   }
 
   Future<EventModel> getById(int id) async {

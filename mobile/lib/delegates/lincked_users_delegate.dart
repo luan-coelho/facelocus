@@ -8,6 +8,7 @@ import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   late final Debouncer _debouncer;
@@ -20,8 +21,9 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return Theme.of(context).copyWith(
-        textTheme: const TextTheme(titleLarge: TextStyle(fontSize: 16)),
-        hintColor: Colors.white);
+      textTheme: const TextTheme(titleLarge: TextStyle(fontSize: 16)),
+      hintColor: Colors.white,
+    );
   }
 
   @override
@@ -34,7 +36,7 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
   Widget buildLeading(BuildContext context) => const BackButton();
 
   @override
-  Widget buildResults(BuildContext context) => buildSearchResults();
+  Widget buildResults(BuildContext context) => buildSuggestions(context);
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -60,11 +62,12 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
     return BlocConsumer<LinckedUsersDelegateBloc, LinckedUsersDelegateState>(
       listener: (context, state) {
         if (state is CreateInvitationSuccess) {
-          Toast.showSuccess('Convite enviado com sucesso', context);
+          context.pop();
+          return Toast.showSuccess('Convite enviado com sucesso', context);
         }
 
         if (state is LinckedUsersError) {
-          Toast.showError(state.message, context);
+          return Toast.showError(state.message, context);
         }
       },
       builder: (context, state) {

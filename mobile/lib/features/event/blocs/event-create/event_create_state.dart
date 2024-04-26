@@ -5,7 +5,11 @@ abstract class EventCreateState {}
 
 class EventCreateInitial extends EventCreateState {}
 
-class EventCreateSuccess extends EventCreateState {}
+class EventCreateSuccess extends EventCreateState {
+  final int eventId;
+
+  EventCreateSuccess({required this.eventId});
+}
 
 class EventCreateLoading extends EventCreateState {}
 

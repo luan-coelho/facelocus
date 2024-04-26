@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EmptyData extends StatelessWidget {
-  const EmptyData(this.text, {super.key, this.child});
+  const EmptyData(
+    this.text, {
+    super.key,
+    this.child,
+    this.actionButton,
+  });
 
   final String text;
   final Widget? child;
+  final Widget? actionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,7 @@ class EmptyData extends StatelessWidget {
               overflow: TextOverflow.ellipsis),
           SizedBox(height: child != null ? 25 : 0),
           child != null ? child! : const SizedBox(),
+          SizedBox(height: actionButton != null ? 25 : 0),
         ],
       ),
     );

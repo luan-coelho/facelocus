@@ -28,9 +28,9 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
           allowTicketRequests: event.allowTicketRequests,
           administrator: await sessionRepository.getUserFuture(),
         );
-        await eventRepository.create(e);
+        EventModel eventCreated = await eventRepository.create(e);
         eventListBloc.add(FetchEvents());
-        emit(EventCreateSuccess());
+        emit(EventCreateSuccess(eventId: eventCreated.id!));
       } on DioException catch (e) {
         emit(EventCreateError(ResponseApiMessage.buildMessage(e)));
       }

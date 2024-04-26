@@ -1,3 +1,4 @@
+import 'package:facelocus/delegates/blocs/lincked-users-delegate/lincked_users_delegate_bloc.dart';
 import 'package:facelocus/features/auth/blocs/face-uploud/face_uploud_bloc.dart';
 import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/features/auth/blocs/register/register_bloc.dart';
@@ -95,6 +96,13 @@ class AppBlocs {
     BlocProvider<LinckedUsersBloc>(
       create: (context) => LinckedUsersBloc(
         userRepository: locator<UserRepository>(),
+      ),
+    ),
+    BlocProvider<LinckedUsersDelegateBloc>(
+      create: (context) => LinckedUsersDelegateBloc(
+        userRepositoy: locator<UserRepository>(),
+        eventRequestRepository: locator<EventRequestRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
   ];

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class EventCodeCard extends StatelessWidget {
@@ -98,9 +97,9 @@ class EventCodeCard extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Get.find<EventCodeCardBloc>().add(
-                              GenerateNewCode(event.id!),
-                            );
+                            context.read<EventCodeCardBloc>().add(
+                                  GenerateNewCode(event.id!),
+                                );
                             Navigator.pop(context, 'OK');
                           },
                           child: const Text(

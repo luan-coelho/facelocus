@@ -1,4 +1,5 @@
 import 'package:facelocus/features/event/blocs/event-create/event_create_bloc.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
@@ -71,10 +72,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
                 listener: (context, state) {
                   if (state is EventCreateSuccess) {
                     context.pop();
-                    return Toast.showSuccess(
-                      'Evento criado com sucesso',
-                      context,
-                    );
+                    context.push('${AppRoutes.eventShow}/${state.eventId}');
                   }
 
                   if (state is EventCreateError) {
