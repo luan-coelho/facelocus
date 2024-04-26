@@ -22,6 +22,20 @@ class EventCodeCard extends StatelessWidget {
 
     return BlocListener<EventCodeCardBloc, EventCodeCardState>(
       listener: (context, state) {
+        if (state is CodeCopiedSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              showCloseIcon: true,
+              content: Text(
+                'Código ${state.code} copiado para a área de transferência',
+                style: const TextStyle(
+                  color: Colors.green,
+                ),
+              ),
+            ),
+          );
+        }
+
         if (state is EventCodeCardError) {
           return Toast.showError(state.message, context);
         }
@@ -57,9 +71,16 @@ class EventCodeCard extends StatelessWidget {
             Row(
               children: [
                 GestureDetector(
-                  onTap: () async => await Clipboard.setData(
-                    ClipboardData(text: event.code ?? 'Sem código'),
-                  ),
+                  onTap: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: event.code ?? 'Sem código'),
+                    );
+                    if (context.mounted) {
+                      context.read<EventCodeCardBloc>().add(
+                            CodeCopied(event.code!),
+                          );
+                    }
+                  },
                   child: SvgPicture.asset(
                     'images/clipboard-copy-icon.svg',
                     width: 25,

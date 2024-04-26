@@ -20,7 +20,7 @@ class EventListScreen extends StatefulWidget {
 class _EventListScreenState extends State<EventListScreen> {
   @override
   void initState() {
-    context.read<EventListBloc>().add(FetchEvents());
+    context.read<EventListBloc>().add(LoadEvents());
     super.initState();
   }
 

@@ -29,7 +29,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
           administrator: await sessionRepository.getUserFuture(),
         );
         EventModel eventCreated = await eventRepository.create(e);
-        eventListBloc.add(FetchEvents());
+        eventListBloc.add(LoadEvents());
         emit(EventCreateSuccess(eventId: eventCreated.id!));
       } on DioException catch (e) {
         emit(EventCreateError(ResponseApiMessage.buildMessage(e)));

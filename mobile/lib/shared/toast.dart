@@ -5,7 +5,7 @@ final class Toast {
   static void showAlert(
     String message,
     BuildContext context, {
-    title = 'Erro',
+    title = 'Alerta',
   }) {
     toastification.show(
       context: context,
@@ -21,7 +21,7 @@ final class Toast {
   static void showSuccess(
     String message,
     BuildContext context, {
-    title = 'Erro',
+    title = 'Sucesso',
   }) {
     toastification.show(
       context: context,

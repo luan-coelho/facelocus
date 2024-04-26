@@ -12,3 +12,9 @@ class EventCodeCardError extends EventCodeCardState {
 
   EventCodeCardError(this.message);
 }
+
+class CodeCopiedSuccess extends EventCodeCardState {
+  final String code;
+
+  CodeCopiedSuccess(this.code);
+}

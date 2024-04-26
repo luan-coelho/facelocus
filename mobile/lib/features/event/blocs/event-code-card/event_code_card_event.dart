@@ -8,3 +8,9 @@ class GenerateNewCode extends EventCodeCardEvent {
 
   GenerateNewCode(this.id);
 }
+
+class CodeCopied extends EventCodeCardEvent {
+  final String code;
+
+  CodeCopied(this.code);
+}

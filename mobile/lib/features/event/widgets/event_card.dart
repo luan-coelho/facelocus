@@ -31,7 +31,31 @@ class EventCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-            )
+            ),
+            if (event.code != null && event.allowTicketRequests!) ...[
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  right: 8,
+                  left: 8,
+                  bottom: 4,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(
+                    color: Colors.green,
+                  ),
+                  color: Colors.green.withOpacity(0.1),
+                ),
+                child: Text(
+                  event.code!,
+                  style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              )
+            ]
           ],
         ),
       ),

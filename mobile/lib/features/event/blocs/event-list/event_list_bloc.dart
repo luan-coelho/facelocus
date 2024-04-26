@@ -15,7 +15,7 @@ class EventListBloc extends Bloc<EventListEvent, EventListState> {
     required this.eventRepository,
     required this.sessionRepository,
   }) : super(EventListInitial()) {
-    on<FetchEvents>((event, emit) async {
+    on<LoadEvents>((event, emit) async {
       emit(EventsLoading());
       int? loggedUserId = await sessionRepository.getUserId();
       var events = await eventRepository.getAllByUser(loggedUserId!);

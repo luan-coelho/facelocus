@@ -64,6 +64,7 @@ class AppBlocs {
     BlocProvider<EventShowBloc>(
       create: (context) => EventShowBloc(
         eventRepository: locator<EventRepository>(),
+        eventListBloc: BlocProvider.of<EventListBloc>(context),
       ),
     ),
     BlocProvider<EventRequestListBloc>(

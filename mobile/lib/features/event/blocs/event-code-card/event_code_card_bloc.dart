@@ -16,7 +16,7 @@ class EventCodeCardBloc extends Bloc<EventCodeCardEvent, EventCodeCardState> {
     required this.eventRepository,
     required this.eventShowBloc,
   }) : super(EventCodeCardInitial()) {
-    on<GenerateNewCode>((event, emit) {
+    on<GenerateNewCode>((event, emit) async {
       try {
         emit(EventCodeCardLoading());
         eventRepository.generateNewCode(event.id);
@@ -24,6 +24,10 @@ class EventCodeCardBloc extends Bloc<EventCodeCardEvent, EventCodeCardState> {
       } on DioException catch (e) {
         emit(EventCodeCardError(ResponseApiMessage.buildMessage(e)));
       }
+    });
+
+    on<CodeCopied>((event, emit) {
+      emit(CodeCopiedSuccess(event.code));
     });
   }
 }

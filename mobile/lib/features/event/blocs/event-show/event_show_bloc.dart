@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/utils/response_api_message.dart';
@@ -10,8 +11,12 @@ part 'event_show_state.dart';
 
 class EventShowBloc extends Bloc<EventShowEvent, EventShowState> {
   final EventRepository eventRepository;
+  final EventListBloc eventListBloc;
 
-  EventShowBloc({required this.eventRepository}) : super(EventShowInitial()) {
+  EventShowBloc({
+    required this.eventRepository,
+    required this.eventListBloc,
+  }) : super(EventShowInitial()) {
     on<LoadEvent>((event, emit) async {
       try {
         emit(EventLoading());
@@ -26,6 +31,7 @@ class EventShowBloc extends Bloc<EventShowEvent, EventShowState> {
       try {
         await eventRepository.changeTicketRequestPermission(event.eventId);
         add(LoadEvent(event.eventId));
+        eventListBloc.add(LoadEvents());
       } on DioException catch (e) {
         emit(ChangeTicketRequestPermissionError(
           ResponseApiMessage.buildMessage(e),
