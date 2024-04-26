@@ -12,6 +12,7 @@ import 'package:facelocus/features/event/blocs/lincked-user/lincked_user_bloc.da
 import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.dart';
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
+import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/services/user_repository.dart';
@@ -21,71 +22,71 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocs {
   static final blocs = [
-    BlocProvider<RegisterBloc>(
-      create: (context) => RegisterBloc(
-        authRepository: AuthRepository(),
-      ),
-    ),
-    BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc(
-        pointRecordRepository: PointRecordRepository(),
-        sessionRepository: SessionRepository(),
-      ),
-    ),
     BlocProvider<UserFacePhotoBloc>(
       create: (context) => UserFacePhotoBloc(
-        userRepository: UserRepository(),
-        sessionRepository: SessionRepository(),
+        userRepository: locator<UserRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(
-        authRepository: AuthRepository(),
-        userRepository: UserRepository(),
-        sessionRepository: SessionRepository(),
+        authRepository: locator<AuthRepository>(),
+        userRepository: locator<UserRepository>(),
+        sessionRepository: locator<SessionRepository>(),
         userFacePhotoBloc: BlocProvider.of<UserFacePhotoBloc>(context),
+      ),
+    ),
+    BlocProvider<RegisterBloc>(
+      create: (context) => RegisterBloc(
+        authRepository: locator<AuthRepository>(),
+      ),
+    ),
+    BlocProvider<HomeBloc>(
+      create: (context) => HomeBloc(
+        pointRecordRepository: locator<PointRecordRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<EventListBloc>(
       create: (context) => EventListBloc(
-        eventRepository: EventRepository(),
-        sessionRepository: SessionRepository(),
+        eventRepository: locator<EventRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<EventCreateBloc>(
       create: (context) => EventCreateBloc(
-        eventRepository: EventRepository(),
-        sessionRepository: SessionRepository(),
+        eventRepository: locator<EventRepository>(),
+        sessionRepository: locator<SessionRepository>(),
         eventListBloc: BlocProvider.of<EventListBloc>(context),
       ),
     ),
     BlocProvider<EventShowBloc>(
       create: (context) => EventShowBloc(
-        eventRepository: EventRepository(),
+        eventRepository: locator<EventRepository>(),
       ),
     ),
     BlocProvider<EventRequestListBloc>(
       create: (context) => EventRequestListBloc(
-        eventRequestRepository: EventRequestRepository(),
-        sessionRepository: SessionRepository(),
+        eventRequestRepository: locator<EventRequestRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<EventRequestShowBloc>(
       create: (context) => EventRequestShowBloc(
-        eventRequestRepository: EventRequestRepository(),
-        sessionRepository: SessionRepository(),
+        eventRequestRepository: locator<EventRequestRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<EventCodeCardBloc>(
       create: (context) => EventCodeCardBloc(
-        eventRepository: EventRepository(),
+        eventRepository: locator<EventRepository>(),
         eventShowBloc: BlocProvider.of<EventShowBloc>(context),
       ),
     ),
     BlocProvider<FaceUploudBloc>(
       create: (context) => FaceUploudBloc(
-        userRepository: UserRepository(),
-        sessionRepository: SessionRepository(),
+        userRepository: locator<UserRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
     BlocProvider<LinckedUserBloc>(
@@ -93,7 +94,7 @@ class AppBlocs {
     ),
     BlocProvider<LinckedUsersBloc>(
       create: (context) => LinckedUsersBloc(
-        userRepository: UserRepository(),
+        userRepository: locator<UserRepository>(),
       ),
     ),
   ];

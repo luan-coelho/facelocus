@@ -4,6 +4,7 @@ import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/blocs.dart';
 import 'package:facelocus/controllers.dart';
 import 'package:facelocus/router.dart';
+import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 void main() async {
+  setupLocator();
   AppControllers.initControllers();
   WidgetsFlutterBinding.ensureInitialized(); //Add this
   await FaceCamera.initialize();
