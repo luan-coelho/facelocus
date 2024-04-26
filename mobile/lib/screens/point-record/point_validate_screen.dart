@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -18,7 +17,6 @@ class PointValidateScreen extends StatefulWidget {
 }
 
 class PointValidateScreenState extends State<PointValidateScreen> {
-  late final UserController _controller;
   File? _capturedImage;
 
   @override
@@ -32,60 +30,66 @@ class PointValidateScreenState extends State<PointValidateScreen> {
     Widget message(String msg) => SizedBox(
           child: Container(
             decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.white),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.white,
+            ),
             child: Text(
               msg,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         );
 
     return AppLayout(
       appBarTitle: 'Validar ponto',
-      body: Builder(builder: (context) {
-        if (_capturedImage != null) {
-          return Center(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.file(
-                  _capturedImage!,
-                  width: double.maxFinite,
-                  fit: BoxFit.fitWidth,
-                ),
-                Positioned(
-                  width: MediaQuery.of(context).size.width,
-                  bottom: MediaQuery.of(context).size.width * 0.05,
-                  child: Padding(
-                    padding: const EdgeInsets.all(29.0),
-                    child: Column(
-                      children: [
-                        AppButton(
+      body: Builder(
+        builder: (context) {
+          if (_capturedImage != null) {
+            return Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.file(
+                    _capturedImage!,
+                    width: double.maxFinite,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Positioned(
+                    width: MediaQuery.of(context).size.width,
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                    child: Padding(
+                      padding: const EdgeInsets.all(29.0),
+                      child: Column(
+                        children: [
+                          AppButton(
                             text: 'Validar identidade',
                             onPressed: _controller.checkFace(
-                                context, _capturedImage!)),
-                        const SizedBox(height: 15),
-                        AppButton(
-                          text: 'Tirar nova foto',
-                          onPressed: () =>
-                              setState(() => _capturedImage = null),
-                          textColor: Colors.red,
-                          backgroundColor: AppColorsConst.white,
-                        )
-                      ],
+                              context,
+                              _capturedImage!,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          AppButton(
+                            text: 'Tirar nova foto',
+                            onPressed: () =>
+                                setState(() => _capturedImage = null),
+                            textColor: Colors.red,
+                            backgroundColor: AppColorsConst.white,
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        }
-        return SmartFaceCamera(
+                ],
+              ),
+            );
+          }
+          return SmartFaceCamera(
             message: 'Camera não detectada',
             autoDisableCaptureControl: true,
             autoCapture: false,
@@ -102,8 +106,10 @@ class PointValidateScreenState extends State<PointValidateScreen> {
                 return message('Centralize seu rosto');
               }
               return const SizedBox.shrink();
-            });
-      }),
+            },
+          );
+        },
+      ),
     );
   }
 }

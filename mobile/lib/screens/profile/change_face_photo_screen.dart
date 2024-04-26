@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/info_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,14 +20,12 @@ class ChangeFacePhotoScreen extends StatefulWidget {
 }
 
 class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
-  late final UserController _controller;
   late final ImagePicker picker;
   File? _capturedImage;
   late bool _openCamera;
 
   @override
   void initState() {
-    _controller = Get.find<UserController>();
     picker = ImagePicker();
     _openCamera = false;
     super.initState();
@@ -96,10 +92,12 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
             onPressed: () => {
               if (_openCamera || _capturedImage != null)
                 {
-                  setState(() {
-                    _capturedImage = null;
-                    _openCamera = false;
-                  })
+                  setState(
+                    () {
+                      _capturedImage = null;
+                      _openCamera = false;
+                    },
+                  )
                 }
               else
                 context.pop()
@@ -113,23 +111,24 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
             if (_capturedImage == null) ...[
               if (_openCamera) ...[
                 SmartFaceCamera(
-                    message: 'Camera não detectada',
-                    autoDisableCaptureControl: true,
-                    autoCapture: false,
-                    defaultCameraLens: CameraLens.front,
-                    orientation: CameraOrientation.portraitUp,
-                    onCapture: (File? image) {
-                      setState(() => croppedFile(image!.path));
-                    },
-                    messageBuilder: (context, face) {
-                      if (face == null) {
-                        return message('Coloque seu rosto na câmera');
-                      }
-                      if (!face.wellPositioned) {
-                        return message('Centralize seu rosto');
-                      }
-                      return const SizedBox.shrink();
-                    })
+                  message: 'Camera não detectada',
+                  autoDisableCaptureControl: true,
+                  autoCapture: false,
+                  defaultCameraLens: CameraLens.front,
+                  orientation: CameraOrientation.portraitUp,
+                  onCapture: (File? image) {
+                    setState(() => croppedFile(image!.path));
+                  },
+                  messageBuilder: (context, face) {
+                    if (face == null) {
+                      return message('Coloque seu rosto na câmera');
+                    }
+                    if (!face.wellPositioned) {
+                      return message('Centralize seu rosto');
+                    }
+                    return const SizedBox.shrink();
+                  },
+                )
               ] else ...[
                 Container(
                   width: double.infinity,
@@ -148,8 +147,10 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         const SizedBox(height: 15),
-                        Lottie.asset('assets/face_recognition.json',
-                            width: width),
+                        Lottie.asset(
+                          'assets/face_recognition.json',
+                          width: width,
+                        ),
                       ],
                     );
                   }),
@@ -213,10 +214,14 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                         Column(
                           children: [
                             AppButton(
-                                text: 'Enviar',
-                                onPressed: () =>
-                                    _controller.facePhotoProfileUploud(
-                                        context, _capturedImage!)),
+                              text: 'Enviar',
+                              onPressed: () {
+                                _controller.facePhotoProfileUploud(
+                                  context,
+                                  _capturedImage!,
+                                );
+                              },
+                            ),
                             const SizedBox(height: 10),
                             AppButton(
                               text: 'Tirar nova foto',

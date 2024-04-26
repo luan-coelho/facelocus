@@ -45,7 +45,7 @@ class EventDelegate extends SearchDelegate<EventModel> {
   }
 
   Widget buildSearchResults() {
-    return BlocBuilder(
+    return BlocBuilder<EventDelegateBloc, EventDelegateState>(
       builder: (context, state) {
         if (state is EventDelegateLoaded) {
           return ListView.separated(

@@ -1,22 +1,19 @@
-import 'package:facelocus/controllers/event_request_controller.dart';
-import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/delegates/blocs/lincked-users-delegate/lincked_users_delegate_bloc.dart';
 import 'package:facelocus/models/user_model.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
 import 'package:facelocus/utils/debouncer.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class LinckedUsersDelegate extends SearchDelegate<UserModel> {
-  late final UserController _controller;
-  late final EventRequestController _eventRequestController;
   late final Debouncer _debouncer;
   late final int eventId;
 
   LinckedUsersDelegate({required this.eventId}) {
-    _controller = Get.find<UserController>();
-    _eventRequestController = Get.find<EventRequestController>();
     _debouncer = Debouncer();
   }
 
@@ -44,56 +41,92 @@ class LinckedUsersDelegate extends SearchDelegate<UserModel> {
     if (query.isEmpty) {
       return const SizedBox();
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (query.isNotEmpty && query.trim().isBlank == false) {
-        _debouncer.run(() async => _controller.fetchAllByNameOrCpf(query));
-      }
-    });
+    if (query.isNotEmpty && query.trim().isBlank == false) {
+      _debouncer.run(
+        () async {
+          context.read<LinckedUsersDelegateBloc>().add(
+                LoadAllUsers(
+                  query: query,
+                  eventId: eventId,
+                ),
+              );
+        },
+      );
+    }
     return buildSearchResults();
   }
 
   Widget buildSearchResults() {
-    return Obx(
-      () {
-        if (_controller.isLoading.value) {
-          return const Center(
-            child: Spinner(),
-          );
+    return BlocConsumer<LinckedUsersDelegateBloc, LinckedUsersDelegateState>(
+      listener: (context, state) {
+        if (state is CreateInvitationSuccess) {
+          Toast.showSuccess('Convite enviado com sucesso', context);
         }
 
-        if (_controller.usersSearch.isEmpty) {
-          return const Center(
-              child: Padding(
-            padding: EdgeInsets.all(29.0),
-            child: Text(
-              'Nenhum usuário encontrado',
-              style: TextStyle(color: Colors.black),
-            ),
-          ));
+        if (state is LinckedUsersError) {
+          Toast.showError(state.message, context);
         }
-
-        return ListView.separated(
-          padding: const EdgeInsets.all(15),
-          itemCount: _controller.usersSearch.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(height: 10);
-          },
-          itemBuilder: (BuildContext context, int index) {
-            UserModel user = _controller.usersSearch[index];
-            return GestureDetector(
+      },
+      builder: (context, state) {
+        if (state is LinckedUsersLoaded) {
+          return ListView.separated(
+            padding: const EdgeInsets.all(15),
+            itemCount: state.users.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 10);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              UserModel user = state.users[index];
+              return GestureDetector(
                 onTap: () => close(context, user),
                 child: AppSearchCard(
                   description: user.getFullName(),
                   child: AppButton(
-                    onPressed: () => _eventRequestController.createInvitation(
-                        context, eventId, user.id!),
+                    onPressed: () {
+                      context.read<LinckedUsersDelegateBloc>().add(
+                            CreateEnviation(
+                              eventId: eventId,
+                              userId: user.id!,
+                            ),
+                          );
+                    },
                     text: 'Enviar',
                     width: 80,
                     height: 25,
                     textFontSize: 12,
                   ),
-                ));
-          },
+                ),
+              );
+            },
+          );
+        }
+
+        if (state is LinckedUsersError) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(29.0),
+              child: Text(
+                'Erro ao buscar usuários',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          );
+        }
+
+        if (state is LinckedUsersEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(29.0),
+              child: Text(
+                'Nenhum usuário encontrado',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          );
+        }
+
+        return const Center(
+          child: Spinner(),
         );
       },
     );

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
@@ -98,18 +97,18 @@ class PointRecordEditController extends GetxController {
 
   fetchAllByDate(BuildContext context, DateTime date) async {
     _isLoading.value = true;
-    SessionController authController = Get.find<SessionController>();
+    /* SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByDate(administrator.id!, date);
     _pointsRecordByDate.clear();
-    _pointsRecordByDate.addAll(pointsRecord);
+    _pointsRecordByDate.addAll(pointsRecord);*/
     _isLoading.value = false;
   }
 
   fetchAllByUser(BuildContext context) async {
     _isLoading.value = true;
-    SessionController authController = Get.find<SessionController>();
+    /* SessionController authController = Get.find<SessionController>();
     UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
     pointsRecord = await service.getAllByUser(administrator.id!);
@@ -117,7 +116,7 @@ class PointRecordEditController extends GetxController {
     _pointsRecord.addAll(pointsRecord);
     if (pointsRecord.isNotEmpty) {
       changeFirstAndLastDay(pointsRecord);
-    }
+    }*/
     _isLoading.value = false;
   }
 

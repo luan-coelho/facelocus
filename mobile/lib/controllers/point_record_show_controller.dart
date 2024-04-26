@@ -1,15 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
-import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/services/user_attendance_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 
 class PointRecordShowController extends GetxController {
   final UserAttendanceService service;
@@ -33,7 +30,7 @@ class PointRecordShowController extends GetxController {
 
   fetchUserAttendanceById(BuildContext context, int pointRecordId) async {
     _isLoading.value = true;
-    try {
+    /*try {
       SessionController authController = Get.find<SessionController>();
       UserModel administrator = authController.authenticatedUser.value!;
       _userAttendance.value = await service.getByPointRecordAndUser(
@@ -46,7 +43,7 @@ class PointRecordShowController extends GetxController {
         context.pop();
         Toast.showError(detail, context);
       }
-    }
+    }*/
     _isLoading.value = false;
   }
 
