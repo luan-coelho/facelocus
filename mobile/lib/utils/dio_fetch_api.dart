@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth/session_controller.dart';
+import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
-import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/utils/fetch_api.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart' as getx;
 import 'package:go_router/go_router.dart';
@@ -113,7 +114,7 @@ class DioFetchApi implements FetchApi {
         controller.logout();
         if (!e.response!.requestOptions.path.contains(AppRoutes.register)) {
           context.replace(AppRoutes.login);
-          Toast.showAlert('Sessão expirada, faça login novamente', context);
+          context.read<LoginBloc>().add(SessionExpired());
         }
       }
     }

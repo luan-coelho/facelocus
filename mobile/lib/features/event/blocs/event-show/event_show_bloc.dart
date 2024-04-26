@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:facelocus/features/event/repository/event_repository.dart';
+import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/utils/response_api_message.dart';
 import 'package:flutter/material.dart';

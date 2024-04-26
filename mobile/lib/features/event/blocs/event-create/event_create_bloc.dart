@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
-import 'package:facelocus/features/event/repository/event_repository.dart';
+import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/utils/response_api_message.dart';

@@ -1,6 +1,5 @@
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_status_enum.dart';
-
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
@@ -8,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class EventRequestCard extends StatefulWidget {
-  const EventRequestCard(
-      {super.key, required this.eventRequest, required this.authenticatedUser});
+  const EventRequestCard({
+    super.key,
+    required this.eventRequest,
+    required this.authenticatedUser,
+  });
 
   final EventRequestModel eventRequest;
   final UserModel authenticatedUser;
@@ -128,15 +130,12 @@ class _EventRequestCardState extends State<EventRequestCard> {
                         width: 15.0,
                         height: 15.0,
                         decoration: BoxDecoration(
-                          color:
-                              colorByStatus(widget.eventRequest.status),
+                          color: colorByStatus(widget.eventRequest.status),
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 5),
-                      Text(
-                          descriptionByStatus(
-                              widget.eventRequest.status),
+                      Text(descriptionByStatus(widget.eventRequest.status),
                           style: const TextStyle(color: Colors.black54)),
                     ]),
                     Row(
@@ -152,15 +151,13 @@ class _EventRequestCardState extends State<EventRequestCard> {
                               border: Border.all(
                                   color: getBannerColor(
                                       widget.eventRequest.type!)),
-                              color: getBannerColor(
-                                      widget.eventRequest.type!)
+                              color: getBannerColor(widget.eventRequest.type!)
                                   .withOpacity(0.1)),
                           child: Text(
-                              getSecondaryBannerText(
-                                  widget.eventRequest.type!),
+                              getSecondaryBannerText(widget.eventRequest.type!),
                               style: TextStyle(
-                                  color: getBannerColor(
-                                      widget.eventRequest.type!),
+                                  color:
+                                      getBannerColor(widget.eventRequest.type!),
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500)),
                         ),
@@ -176,14 +173,12 @@ class _EventRequestCardState extends State<EventRequestCard> {
                               border: Border.all(
                                   color: getBannerColor(
                                       widget.eventRequest.type!)),
-                              color: getBannerColor(
-                                      widget.eventRequest.type!)
+                              color: getBannerColor(widget.eventRequest.type!)
                                   .withOpacity(0.1)),
-                          child: Text(
-                              getBannerText(widget.eventRequest.type!),
+                          child: Text(getBannerText(widget.eventRequest.type!),
                               style: TextStyle(
-                                  color: getBannerColor(
-                                      widget.eventRequest.type!),
+                                  color:
+                                      getBannerColor(widget.eventRequest.type!),
                                   fontSize: 10,
                                   fontWeight: FontWeight.w500)),
                         ),

@@ -4,35 +4,39 @@ import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
-class EventRequestService {
+class EventRequestRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
-  fetchAll(int userId, {int? eventId}) async {
+  Future<List<EventRequestModel>> fetchAll(int userId, {int? eventId}) async {
     var url = '${AppRoutes.eventRequest}?user=$userId';
     final response = await _fetchApi.get(url);
     List data = response.data['data'];
     return data.map((json) => EventRequestModel.fromJson(json)).toList();
   }
 
-  createTicketRequest(CreateInvitationDTO eventRequest) async {
+  Future<void> createTicketRequest(CreateInvitationDTO eventRequest) async {
     var json = eventRequest.toJson();
     var url = '${AppRoutes.eventRequest}/ticket-request';
     await _fetchApi.post(url, data: json);
   }
 
-  createInvitation(CreateInvitationDTO eventRequest) async {
+  Future<void> createInvitation(CreateInvitationDTO eventRequest) async {
     var json = eventRequest.toJson();
     var url = '${AppRoutes.eventRequest}/invitation';
     await _fetchApi.post(url, data: json);
   }
 
-  getById(int id) async {
+  Future<EventRequestModel> getById(int id) async {
     final response = await _fetchApi.get('${AppRoutes.eventRequest}/$id');
     var data = response.data;
     return EventRequestModel.fromJson(data);
   }
 
-  approve(int eventRequestId, int userId, EventRequestType requestType) async {
+  Future<bool> approve(
+    int eventRequestId,
+    int userId,
+    EventRequestType requestType,
+  ) async {
     String rType = EventRequestType.toJson(requestType);
     var url =
         '${AppRoutes.eventRequest}/approve?eventrequest=$eventRequestId&user=$userId&requesttype=$rType';
@@ -40,7 +44,11 @@ class EventRequestService {
     return response.statusCode == 204;
   }
 
-  reject(int eventRequestId, int userId, EventRequestType requestType) async {
+  Future<bool> reject(
+    int eventRequestId,
+    int userId,
+    EventRequestType requestType,
+  ) async {
     String rType = EventRequestType.toJson(requestType);
     var url =
         '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId&requestType=$rType';

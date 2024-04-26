@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/auth/session_controller.dart';
-import 'package:facelocus/features/event/repository/event_repository.dart';
+import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/toast.dart';

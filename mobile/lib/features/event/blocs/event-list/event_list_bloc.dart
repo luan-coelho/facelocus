@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:facelocus/features/event/repository/event_repository.dart';
+import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:flutter/material.dart';

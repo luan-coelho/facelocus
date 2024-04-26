@@ -74,5 +74,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginError(ResponseApiMessage.buildMessage(e)));
       }
     });
+
+    on<SessionExpired>((event, emit) async {
+      sessionRepository.logout();
+      emit(TokenExpired());
+    });
   }
 }

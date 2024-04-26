@@ -1,9 +1,11 @@
 import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/features/auth/blocs/register/register_bloc.dart';
+import 'package:facelocus/features/event-request/blocs/event-request-list/event_request_list_bloc.dart';
+import 'package:facelocus/features/event-request/repositories/event_request_service.dart';
 import 'package:facelocus/features/event/blocs/event-create/event_create_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-show/event_show_bloc.dart';
-import 'package:facelocus/features/event/repository/event_repository.dart';
+import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_service.dart';
@@ -55,6 +57,12 @@ class AppBlocs {
     BlocProvider<EventShowBloc>(
       create: (context) => EventShowBloc(
         eventRepository: EventRepository(),
+      ),
+    ),
+    BlocProvider<EventRequestListBloc>(
+      create: (context) => EventRequestListBloc(
+        eventRequestRepository: EventRequestRepository(),
+        sessionRepository: SessionRepository(),
       ),
     ),
   ];

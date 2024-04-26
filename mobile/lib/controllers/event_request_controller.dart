@@ -3,17 +3,17 @@ import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/dtos/create_ticket_request_dto.dart';
 import 'package:facelocus/dtos/event_request_create_dto.dart';
 import 'package:facelocus/dtos/user_with_id_only_dto.dart';
+import 'package:facelocus/features/event-request/repositories/event_request_service.dart';
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/event_request_service.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class EventRequestController extends GetxController {
-  final EventRequestService service;
+  final EventRequestRepository service;
   final Rxn<EventRequestModel> _eventRequest = Rxn<EventRequestModel>();
   final List<EventRequestModel> _eventsRequest = <EventRequestModel>[].obs;
   final RxBool _isLoading = false.obs;
@@ -58,8 +58,8 @@ class EventRequestController extends GetxController {
       UserModel user = authController.authenticatedUser.value!;
       EventWithCodeDTO event = EventWithCodeDTO(code: code);
       UserWithIdOnly initiatorUser = UserWithIdOnly(id: user.id);
-      var eventRequest = CreateInvitationDTO(
-          event: event, initiatorUser: initiatorUser);
+      var eventRequest =
+          CreateInvitationDTO(event: event, initiatorUser: initiatorUser);
       await service.createTicketRequest(eventRequest);
       String message = 'Solicitação de ingresso enviada com sucesso';
       if (context.mounted) {

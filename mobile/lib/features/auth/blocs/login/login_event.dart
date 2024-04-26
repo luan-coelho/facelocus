@@ -11,3 +11,5 @@ class LoginRequested extends LoginEvent {
 }
 
 class CheckAuth extends LoginEvent {}
+
+class SessionExpired extends LoginEvent {}
