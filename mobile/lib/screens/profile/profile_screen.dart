@@ -1,14 +1,11 @@
-import 'package:facelocus/controllers/auth/session_controller.dart';
-import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
+import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,25 +16,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final SessionController _controller;
-  late final UserModel _user;
+  late final SessionRepository _sessionRepository;
 
   @override
   void initState() {
-    _controller = Get.find<SessionController>();
-    _user = _controller.authenticatedUser.value!;
+    _sessionRepository = SessionRepository();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    logout() {
-      const FlutterSecureStorage storage = FlutterSecureStorage();
-      _controller.logout();
-      storage.delete(key: 'token');
-      context.replace(AppRoutes.login);
-    }
-
     showModal() {
       showModalBottomSheet<void>(
         isScrollControlled: true,
@@ -65,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 55),
             InformationField(
               description: 'Nome Completo',
-              value: _user.getFullName(),
+              value: _sessionRepository.getUser()!.getFullName(),
             ),
             const SizedBox(height: 35),
             AppButton(
@@ -77,7 +65,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppButton(
               text: 'Sair',
               icon: const Icon(Icons.logout, color: Colors.red),
-              onPressed: logout,
+              onPressed: () async {
+                _sessionRepository.logout();
+                context.replace(AppRoutes.login);
+              },
               textColor: Colors.red,
               backgroundColor: Colors.transparent,
             ),

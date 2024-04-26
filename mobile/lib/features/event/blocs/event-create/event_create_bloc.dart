@@ -26,7 +26,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
         EventModel e = EventModel(
           description: event.description,
           allowTicketRequests: event.allowTicketRequests,
-          administrator: await sessionRepository.getUser(),
+          administrator: await sessionRepository.getUserFuture(),
         );
         await eventRepository.create(e);
         eventListBloc.add(FetchEvents());

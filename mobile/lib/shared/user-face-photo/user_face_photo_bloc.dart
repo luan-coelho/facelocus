@@ -20,7 +20,7 @@ class UserFacePhotoBloc extends Bloc<UserFacePhotoEvent, UserFacePhotoState> {
   }) : super(UserFacePhotoInitial()) {
     on<FetchUserFacePhoto>((event, emit) async {
       emit(UserFacePhotoLoading());
-      UserModel? loggedUser = await sessionRepository.getUser();
+      UserModel? loggedUser = await sessionRepository.getUserFuture();
       var response = await userRepository.getFacePhotoById(loggedUser!.id!);
 
       Directory tempDir = await getTemporaryDirectory();

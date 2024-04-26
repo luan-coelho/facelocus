@@ -3,9 +3,11 @@ import 'package:facelocus/features/auth/blocs/register/register_bloc.dart';
 import 'package:facelocus/features/event-request/blocs/event-request-list/event_request_list_bloc.dart';
 import 'package:facelocus/features/event-request/blocs/event-request-show/event_request_show_bloc.dart';
 import 'package:facelocus/features/event-request/repositories/event_request_service.dart';
+import 'package:facelocus/features/event/blocs/event-code-card/event_code_card_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-create/event_create_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-show/event_show_bloc.dart';
+import 'package:facelocus/features/event/blocs/lincked-user/lincked_user_bloc.dart';
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/services/auth_repository.dart';
@@ -71,6 +73,15 @@ class AppBlocs {
         eventRequestRepository: EventRequestRepository(),
         sessionRepository: SessionRepository(),
       ),
+    ),
+    BlocProvider<EventCodeCardBloc>(
+      create: (context) => EventCodeCardBloc(
+        eventRepository: EventRepository(),
+        eventShowBloc: BlocProvider.of<EventShowBloc>(context),
+      ),
+    ),
+    BlocProvider<LinckedUserBloc>(
+      create: (context) => LinckedUserBloc(),
     ),
   ];
 }

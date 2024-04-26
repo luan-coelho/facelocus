@@ -12,7 +12,7 @@ class EventShowBloc extends Bloc<EventShowEvent, EventShowState> {
   final EventRepository eventRepository;
 
   EventShowBloc({required this.eventRepository}) : super(EventShowInitial()) {
-    on<EventShowInitialEvent>((event, emit) async {
+    on<LoadEvent>((event, emit) async {
       try {
         emit(EventLoading());
         var eventz = await eventRepository.getById(event.eventId);
@@ -25,7 +25,7 @@ class EventShowBloc extends Bloc<EventShowEvent, EventShowState> {
     on<ChangeTicketRequestPermission>((event, emit) async {
       try {
         await eventRepository.changeTicketRequestPermission(event.eventId);
-        add(EventShowInitialEvent(event.eventId));
+        add(LoadEvent(event.eventId));
       } on DioException catch (e) {
         emit(ChangeTicketRequestPermissionError(
           ResponseApiMessage.buildMessage(e),

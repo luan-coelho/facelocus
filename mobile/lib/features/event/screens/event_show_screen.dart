@@ -21,7 +21,7 @@ class EventShowScreen extends StatefulWidget {
 class _EventShowScreenState extends State<EventShowScreen> {
   @override
   void initState() {
-    context.read<EventShowBloc>().add(EventShowInitialEvent(widget.eventId));
+    context.read<EventShowBloc>().add(LoadEvent(widget.eventId));
     super.initState();
   }
 

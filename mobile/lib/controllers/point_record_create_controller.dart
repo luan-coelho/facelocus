@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
-import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
@@ -104,14 +103,14 @@ class PointRecordCreateController extends GetxController {
 
   fetchAllByUser(BuildContext context) async {
     _isLoading.value = true;
-    SessionController authController = Get.find<SessionController>();
-    UserModel administrator = authController.authenticatedUser.value!;
+    // SessionController authController = Get.find<SessionController>();
+    // UserModel administrator = authController.authenticatedUser.value!;
     List<PointRecordModel> pointsRecord;
-    pointsRecord = await service.getAllByUser(administrator.id!);
+    // pointsRecord = await service.getAllByUser(administrator.id!);
     _prEvents.clear();
-    if (pointsRecord.isNotEmpty) {
+    /* if (pointsRecord.isNotEmpty) {
       await buildPointsRecordEvents(pointsRecord);
-    }
+    }*/
     _isLoading.value = false;
   }
 
