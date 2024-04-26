@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/auth/session_controller.dart';
 import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +24,7 @@ class FaceUploadScreen extends StatefulWidget {
 
 class FaceUploadScreenState extends State<FaceUploadScreen> {
   late final UserController _controller;
-  late final SessionController _authController;
+  late final SessionRepository _sessionRepository;
   late final ImagePicker picker;
   File? _capturedImage;
   late bool _openCamera;
@@ -32,7 +32,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
   @override
   void initState() {
     _controller = Get.find<UserController>();
-    _authController = Get.find<SessionController>();
+    _sessionRepository = SessionRepository();
     picker = ImagePicker();
     _openCamera = false;
     super.initState();
@@ -78,90 +78,94 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Builder(builder: (context) {
-        if (!_openCamera) {
-          return Padding(
-            padding: const EdgeInsets.all(29.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Builder(builder: (context) {
-                  double width = MediaQuery.of(context).size.width * 0.50;
-                  return Lottie.asset('assets/face_recognition.json',
-                      width: width);
-                }),
-                const SizedBox(height: 15),
-                const Text(
-                  'Para usar os recursos da aplicação será necessário enviar uma foto do seu rosto',
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 15),
-                AppButton(
-                    text: 'Tirar uma foto',
-                    onPressed: () {
-                      setState(() {
-                        _openCamera = true;
-                      });
-                    }),
-                const SizedBox(height: 10),
-                AppButton(
-                  text: 'Galeria',
-                  onPressed: getPhotoFromGalery,
-                  backgroundColor: AppColorsConst.purple,
-                ),
-                const SizedBox(height: 10),
-                AppButton(
-                  text: 'Sair',
-                  onPressed: () {
-                    _authController.logout();
-                    context.replace(AppRoutes.login);
-                  },
-                  textColor: Colors.red,
-                  backgroundColor: Colors.red.withOpacity(0.2),
-                )
-              ],
-            ),
-          );
-        }
-
-        if (_capturedImage != null) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.file(
-                  _capturedImage!,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  fit: BoxFit.fitWidth,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(29.0),
-                  child: Column(
-                    children: [
-                      AppButton(
-                        text: 'Enviar',
-                        onPressed: () => _controller.facePhotoProfileUploud(
-                          context,
-                          _capturedImage!,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      AppButton(
-                        text: 'Tirar nova foto',
-                        onPressed: () => setState(() => _capturedImage = null),
-                        textColor: Colors.red,
-                        backgroundColor: AppColorsConst.white,
-                      )
-                    ],
+      body: Builder(
+        builder: (context) {
+          if (!_openCamera) {
+            return Padding(
+              padding: const EdgeInsets.all(29.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Builder(
+                    builder: (context) {
+                      double width = MediaQuery.of(context).size.width * 0.50;
+                      return Lottie.asset('assets/face_recognition.json',
+                          width: width);
+                    },
                   ),
-                ),
-              ],
-            ),
-          );
-        }
-        return SmartFaceCamera(
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Para usar os recursos da aplicação será necessário enviar uma foto do seu rosto',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 15),
+                  AppButton(
+                      text: 'Tirar uma foto',
+                      onPressed: () {
+                        setState(() {
+                          _openCamera = true;
+                        });
+                      }),
+                  const SizedBox(height: 10),
+                  AppButton(
+                    text: 'Galeria',
+                    onPressed: getPhotoFromGalery,
+                    backgroundColor: AppColorsConst.purple,
+                  ),
+                  const SizedBox(height: 10),
+                  AppButton(
+                    text: 'Sair',
+                    onPressed: () {
+                      _sessionRepository.logout();
+                      context.replace(AppRoutes.login);
+                    },
+                    textColor: Colors.red,
+                    backgroundColor: Colors.red.withOpacity(0.2),
+                  )
+                ],
+              ),
+            );
+          }
+
+          if (_capturedImage != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.file(
+                    _capturedImage!,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(29.0),
+                    child: Column(
+                      children: [
+                        AppButton(
+                          text: 'Enviar',
+                          onPressed: () => _controller.facePhotoProfileUploud(
+                            context,
+                            _capturedImage!,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        AppButton(
+                          text: 'Tirar nova foto',
+                          onPressed: () =>
+                              setState(() => _capturedImage = null),
+                          textColor: Colors.red,
+                          backgroundColor: AppColorsConst.white,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return SmartFaceCamera(
             message: 'Camera não detectada',
             autoDisableCaptureControl: true,
             autoCapture: false,
@@ -179,8 +183,10 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                 return _message('Centralize seu rosto');
               }
               return const SizedBox.shrink();
-            });
-      }),
+            },
+          );
+        },
+      ),
     );
   }
 

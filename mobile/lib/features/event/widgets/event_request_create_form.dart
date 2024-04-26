@@ -1,8 +1,10 @@
-import 'package:facelocus/controllers/event_request_controller.dart';
+import 'package:facelocus/features/event/blocs/event-request-create/event_request_create_bloc.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class EventRequestCreateForm extends StatefulWidget {
   const EventRequestCreateForm({super.key});
@@ -12,13 +14,11 @@ class EventRequestCreateForm extends StatefulWidget {
 }
 
 class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
-  late EventRequestController _controller;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _codeController;
 
   @override
   void initState() {
-    _controller = Get.find<EventRequestController>();
     _codeController = TextEditingController();
     super.initState();
   }
@@ -31,22 +31,16 @@ class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
 
   @override
   Widget build(BuildContext context) {
-    void request() {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState?.save();
-        _controller.createTicketRequest(context, _codeController.text);
-      }
-    }
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(29.0),
-        child: Builder(builder: (context) {
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                AppTextField(
+        child: Builder(
+          builder: (context) {
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  AppTextField(
                     textEditingController: _codeController,
                     labelText: 'Código',
                     validator: (value) {
@@ -59,24 +53,40 @@ class _EventRequestCreateFormState extends State<EventRequestCreateForm> {
                       }
                       return null;
                     },
-                    maxLength: 6),
-                const SizedBox(height: 10),
-                Obx(() {
-                  return AppButton(
-                      onPressed: request,
-                      text: 'Solicitar',
-                      icon: _controller.isLoading.value
-                          ? const SizedBox(
-                              width: 17,
-                              height: 17,
-                              child: CircularProgressIndicator(
-                                  color: Colors.white))
-                          : null);
-                })
-              ],
-            ),
-          );
-        }),
+                    maxLength: 6,
+                  ),
+                  const SizedBox(height: 10),
+                  BlocConsumer<EventRequestCreateBloc, EventRequestCreateState>(
+                    listener: (context, state) {
+                      if (state is TicketRequestCreateSuccess) {
+                        Toast.showSuccess(
+                          'Solicitação de ingresso enviada com sucesso',
+                          context,
+                        );
+                        context.pop();
+                      }
+                    },
+                    builder: (context, state) {
+                      return AppButton(
+                        isLoading: state is TicketRequestCreateLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<EventRequestCreateBloc>().add(
+                                  CreateTicketRequest(
+                                    code: _codeController.text,
+                                  ),
+                                );
+                          }
+                        },
+                        text: 'Solicitar',
+                      );
+                    },
+                  )
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
