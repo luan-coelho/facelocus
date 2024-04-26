@@ -1,13 +1,13 @@
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/delegates/lincked_users_delegate.dart';
+import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.dart';
 import 'package:facelocus/features/event/widgets/lincked_user_card.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';
+import 'package:facelocus/shared/widgets/unexpected_error.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LinckedUsersScreen extends StatefulWidget {
   const LinckedUsersScreen({super.key, required this.eventId});
@@ -19,14 +19,13 @@ class LinckedUsersScreen extends StatefulWidget {
 }
 
 class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
-  late final UserController _controller;
-
   @override
   void initState() {
-    _controller = Get.find<UserController>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.fetchAllByEventId(widget.eventId);
-    });
+    context.read<LinckedUsersBloc>().add(
+          LoadLinckedUsers(
+            eventId: widget.eventId,
+          ),
+        );
     super.initState();
   }
 
@@ -49,40 +48,68 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                 },
               ),
               const SizedBox(height: 15),
-              Obx(() {
-                if (_controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              BlocBuilder<LinckedUsersBloc, LinckedUsersState>(
+                builder: (context, state) {
+                  if (state is LinckedUsersEmpty) {
+                    return const Center(
+                      child: EmptyData('Sem usuários vinculados'),
+                    );
+                  }
 
-                if (_controller.users.isEmpty) {
-                  return const Center(
-                    child: EmptyData('Sem usuários vinculados'),
-                  );
-                }
-                return Column(
-                  children: [
-                    Skeletonizer(
-                      enabled: _controller.isLoading.value,
-                      child: ListView.separated(
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(height: 10);
-                        },
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: _controller.users.length,
-                        itemBuilder: (context, index) {
-                          UserModel user = _controller.users[index];
-                          return LinckedUserCard(
-                            user: user,
-                            eventId: widget.eventId,
-                          );
+                  if (state is LinckedUsersError) {
+                    return UnexpectedError(
+                      state.message,
+                      child: AppButton(
+                        text: 'Tentar novamente',
+                        onPressed: () {
+                          context.read<LinckedUsersBloc>().add(
+                                LoadLinckedUsers(
+                                  eventId: widget.eventId,
+                                ),
+                              );
                         },
                       ),
-                    ),
-                  ],
-                );
-              }),
+                    );
+                  }
+
+                  if (state is LinckedUsersLoaded) {
+                    return Column(
+                      children: [
+                        ListView.separated(
+                          separatorBuilder: (
+                            BuildContext context,
+                            int index,
+                          ) {
+                            return const SizedBox(height: 10);
+                          },
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: state.users.length,
+                          itemBuilder: (context, index) {
+                            UserModel user = state.users[index];
+                            return LinckedUserCard(
+                              user: user,
+                              eventId: widget.eventId,
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  }
+
+                  return AppButton(
+                    text: 'Tentar novamente',
+                    onPressed: () {
+                      context.read<LinckedUsersBloc>().add(
+                            LoadLinckedUsers(
+                              eventId: widget.eventId,
+                            ),
+                          );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

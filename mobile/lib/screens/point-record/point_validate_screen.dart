@@ -5,7 +5,6 @@ import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class PointValidateScreen extends StatefulWidget {
   const PointValidateScreen({
@@ -21,7 +20,7 @@ class PointValidateScreenState extends State<PointValidateScreen> {
 
   @override
   void initState() {
-    _controller = Get.find<UserController>();
+    // _controller = Get.find<UserController>();
     super.initState();
   }
 
@@ -68,10 +67,10 @@ class PointValidateScreenState extends State<PointValidateScreen> {
                         children: [
                           AppButton(
                             text: 'Validar identidade',
-                            onPressed: _controller.checkFace(
+                            /*onPressed: _controller.checkFace(
                               context,
                               _capturedImage!,
-                            ),
+                            ),*/
                           ),
                           const SizedBox(height: 15),
                           AppButton(

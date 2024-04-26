@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/controllers/user_controller.dart';
+import 'package:facelocus/features/auth/blocs/face-uploud/face_uploud_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +24,6 @@ class FaceUploadScreen extends StatefulWidget {
 }
 
 class FaceUploadScreenState extends State<FaceUploadScreen> {
-  late final UserController _controller;
   late final SessionRepository _sessionRepository;
   late final ImagePicker picker;
   File? _capturedImage;
@@ -31,7 +31,6 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
 
   @override
   void initState() {
-    _controller = Get.find<UserController>();
     _sessionRepository = SessionRepository();
     picker = ImagePicker();
     _openCamera = false;
@@ -78,8 +77,17 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Builder(
-        builder: (context) {
+      body: BlocConsumer<FaceUploudBloc, FaceUploudState>(
+        listener: (context, state) {
+          if (state is UploadedSucessfully) {
+            context.go(AppRoutes.home);
+          }
+
+          if (state is UploadedFailed) {
+            Toast.showError(state.message, context);
+          }
+        },
+        builder: (context, state) {
           if (!_openCamera) {
             return Padding(
               padding: const EdgeInsets.all(29.0),
@@ -89,8 +97,10 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                   Builder(
                     builder: (context) {
                       double width = MediaQuery.of(context).size.width * 0.50;
-                      return Lottie.asset('assets/face_recognition.json',
-                          width: width);
+                      return Lottie.asset(
+                        'assets/face_recognition.json',
+                        width: width,
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
@@ -144,11 +154,11 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                     child: Column(
                       children: [
                         AppButton(
+                          isLoading: state is Uploading,
                           text: 'Enviar',
-                          onPressed: () => _controller.facePhotoProfileUploud(
-                            context,
-                            _capturedImage!,
-                          ),
+                          onPressed: () => context.read<FaceUploudBloc>().add(
+                                UploudPhoto(_capturedImage!.path),
+                              ),
                         ),
                         const SizedBox(height: 10),
                         AppButton(

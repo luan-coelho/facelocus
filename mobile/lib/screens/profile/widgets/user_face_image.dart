@@ -1,10 +1,6 @@
-import 'dart:io';
-
-import 'package:facelocus/controllers/user_controller.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class UserFaceImage extends StatefulWidget {
@@ -15,11 +11,8 @@ class UserFaceImage extends StatefulWidget {
 }
 
 class _UserFaceImageState extends State<UserFaceImage> {
-  late final UserController _controller;
-
   @override
   void initState() {
-    _controller = Get.find<UserController>();
     super.initState();
   }
 
@@ -29,18 +22,18 @@ class _UserFaceImageState extends State<UserFaceImage> {
       alignment: Alignment.center,
       children: [
         Builder(builder: (context) {
-          if (_controller.isLoading.value) {
+          /* if (_controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
-          }
+          }*/
           return Container(
             decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),
             child: CircleAvatar(
-              backgroundImage: FileImage(
+              /* backgroundImage: FileImage(
                 File(_controller.userImagePath.value!),
-              ),
+              ),*/
               radius: 100,
             ),
           );

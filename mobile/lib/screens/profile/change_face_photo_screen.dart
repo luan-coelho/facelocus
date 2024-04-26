@@ -215,12 +215,12 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                           children: [
                             AppButton(
                               text: 'Enviar',
-                              onPressed: () {
+                              /*onPressed: () {
                                 _controller.facePhotoProfileUploud(
                                   context,
                                   _capturedImage!,
                                 );
-                              },
+                              },*/
                             ),
                             const SizedBox(height: 10),
                             AppButton(

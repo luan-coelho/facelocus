@@ -1,5 +1,5 @@
+import 'package:facelocus/features/profile/screens/change_password.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/profile/widgets/change_password.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';

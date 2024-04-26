@@ -57,7 +57,6 @@ class LoginFormState extends State<LoginScreen> {
 
           if (state is LoginError) {
             Toast.showError(
-              title: 'Erro de Autenticação',
               state.message,
               context,
             );
