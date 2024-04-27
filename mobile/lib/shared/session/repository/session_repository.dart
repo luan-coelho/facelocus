@@ -22,23 +22,12 @@ class SessionRepository {
     return null;
   }
 
-  Future<UserModel?> getUserFuture() async {
+  Future<UserModel?> getUser() async {
     final prefs = await SharedPreferences.getInstance();
     String? user = prefs.getString('user');
     if (user != null) {
       return UserModel.fromJson(jsonDecode(user));
     }
-    return null;
-  }
-
-  UserModel? getUser() {
-    final prefs = SharedPreferences.getInstance();
-    prefs.then((value) {
-      String? user = value.getString('user');
-      if (user != null) {
-        return UserModel.fromJson(jsonDecode(user));
-      }
-    });
     return null;
   }
 

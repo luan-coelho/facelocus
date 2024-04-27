@@ -22,7 +22,7 @@ class EventRequestListBloc
     on<LoadAllEventRequest>((event, emit) async {
       try {
         emit(EventRequestListLoading());
-        var user = await sessionRepository.getUserFuture();
+        var user = await sessionRepository.getUser();
         var eventRequests = await eventRequestRepository.fetchAll(user!.id!);
         emit(EventRequestListLoaded(eventRequests, user));
       } on DioException catch (e) {

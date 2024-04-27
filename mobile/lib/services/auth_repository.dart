@@ -9,14 +9,18 @@ class AuthRepository {
   Future<TokenResponse> login(String login, String password) async {
     String url = AppRoutes.login;
     var json = {'login': login, 'password': password};
-    var response = await _fetchApi.post(url, data: json, authHeaders: false);
+    var response = await _fetchApi.post(
+      url,
+      data: json,
+      requireAuthentication: false,
+    );
     return TokenResponse.fromJson(response.data);
   }
 
   Future<void> register(UserModel user) async {
     String url = AppRoutes.register;
     var json = user.toJson();
-    await _fetchApi.post(url, data: json, authHeaders: false);
+    await _fetchApi.post(url, data: json, requireAuthentication: false);
   }
 
   Future<void> checkToken() async {

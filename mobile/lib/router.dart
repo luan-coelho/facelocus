@@ -9,6 +9,7 @@ import 'package:facelocus/features/event/screens/event_show_screen.dart';
 import 'package:facelocus/features/event/screens/lincked_users_screen.dart';
 import 'package:facelocus/features/event/screens/location_screen.dart';
 import 'package:facelocus/features/home/screens/home_screen.dart';
+import 'package:facelocus/features/profile/screens/profile_screen.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/point-record/facial_factor_validate_screen.dart';
 import 'package:facelocus/screens/point-record/il_factor_validate_screen.dart';
@@ -20,7 +21,6 @@ import 'package:facelocus/screens/point-record/point_record_show_screen.dart';
 import 'package:facelocus/screens/point-record/point_validate_screen.dart';
 import 'package:facelocus/screens/point-record/validate_factors.dart';
 import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
-import 'package:facelocus/screens/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,6 +48,13 @@ class AppRoutes {
   static const validateFactors = '/validate-factors';
   static const facialFactorValidate = '/facial-factor-validate';
   static const locationFactorValidate = '/location-factor-validate';
+}
+
+void clearAndNavigate(String path) {
+  while (router.canPop() == true) {
+    router.pop();
+  }
+  router.pushReplacement(path);
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

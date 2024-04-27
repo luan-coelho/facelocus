@@ -20,8 +20,9 @@ class EventDelegateBloc extends Bloc<EventDelegateEvent, EventDelegateState> {
     on<LoadAllEvents>((event, emit) async {
       try {
         emit(EventDelegateLoading());
+        int? userId = await sessionRepository.getUserId();
         var events = await eventRepository.getAllByDescription(
-          sessionRepository.getUser()!.id!,
+          userId!,
           event.description,
         );
         if (events.isEmpty) {

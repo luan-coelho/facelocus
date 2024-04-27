@@ -43,18 +43,20 @@ class DioFetchApi implements FetchApi {
   Future<Response> post(
     String url, {
     Object? data,
-    bool authHeaders = true,
+    bool requireAuthentication = true,
   }) async {
     try {
       final String? token = await getToken();
       var response = await _dio.post(
         '$_baseUrl$url',
         data: data,
-        options: authHeaders ? getAuthenticationHeaders(token) : null,
+        options: requireAuthentication ? getAuthenticationHeaders(token) : null,
       );
       return response;
     } on DioException catch (e) {
-      _checkAuthorization(e);
+      if (requireAuthentication) {
+        _checkAuthorization(e);
+      }
       rethrow;
     }
   }

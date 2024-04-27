@@ -21,7 +21,7 @@ class ChangePasswordBloc
     on<ChangePassword>((event, emit) async {
       try {
         emit(ChangePasswordLoading());
-        int? userId = sessionRepository.getUser()!.id;
+        int? userId = await sessionRepository.getUserId();
         await userRepository.changePassword(userId!, event.credentials);
         emit(ChangePasswordSuccess());
       } on DioException catch (e) {

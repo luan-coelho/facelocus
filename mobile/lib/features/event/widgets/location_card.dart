@@ -6,8 +6,11 @@ import 'package:get/get.dart';
 import '../../../controllers/location_controller.dart';
 
 class LocationCard extends StatefulWidget {
-  const LocationCard(
-      {super.key, required this.location, required this.eventId});
+  const LocationCard({
+    super.key,
+    required this.location,
+    required this.eventId,
+  });
 
   final LocationModel location;
   final int eventId;
@@ -31,19 +34,24 @@ class _LocationCardState extends State<LocationCard> {
       return showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text("Você tem certeza?"),
+          title: const Text('Você tem certeza?'),
           content: const Text(
-              "Tem certeza de que deseja excluir este item? Esta ação é irreversível e os dados excluídos não poderão ser recuperados."),
+            'Tem certeza de que deseja excluir este item?'
+            'Esta ação é irreversível e os dados excluídos não '
+            'poderão ser recuperados.',
+          ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, "Cancel"),
-              child: const Text("Cancelar"),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancelar'),
             ),
             TextButton(
               onPressed: () => _controller.deleteById(
                   context, widget.location.id!, widget.eventId),
-              child:
-                  const Text("Confirmar", style: TextStyle(color: Colors.red)),
+              child: const Text(
+                'Confirmar',
+                style: TextStyle(color: Colors.red),
+              ),
             ),
           ],
         ),
@@ -51,26 +59,32 @@ class _LocationCardState extends State<LocationCard> {
     }
 
     return Container(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        width: double.infinity,
-        height: 45,
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.white),
-        child: Center(
-            child: Row(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      width: double.infinity,
+      height: 45,
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.white),
+      child: Center(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
                 const Icon(Icons.location_on_rounded, color: Colors.black),
                 const SizedBox(width: 5),
-                Text(widget.location.description,
-                    style: const TextStyle(fontWeight: FontWeight.w300)),
+                Text(
+                  widget.location.description,
+                  style: const TextStyle(fontWeight: FontWeight.w300),
+                ),
               ],
             ),
-            AppDeleteButton(onPressed: showDeleteDialog)
+            AppDeleteButton(
+              onPressed: showDeleteDialog,
+            )
           ],
-        )));
+        ),
+      ),
+    );
   }
 }

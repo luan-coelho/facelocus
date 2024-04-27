@@ -28,7 +28,7 @@ class LinckedUsersDelegateBloc
       (event, emit) async {
         try {
           emit(LinckedUsersLoading());
-          UserModel? user = await sessionRepository.getUserFuture();
+          UserModel? user = await sessionRepository.getUser();
           var users = await userRepositoy.getAllByNameOrCpf(
             user!.id!,
             event.query,
@@ -48,7 +48,7 @@ class LinckedUsersDelegateBloc
       (event, emit) async {
         try {
           emit(CreateInvitationLoading());
-          UserModel? user = await sessionRepository.getUserFuture();
+          UserModel? user = await sessionRepository.getUser();
           EventWithCodeDTO eventDto = EventWithCodeDTO(id: event.eventId);
           UserWithIdOnly initiatorUser = UserWithIdOnly(id: user!.id);
           UserWithIdOnly targetUser = UserWithIdOnly(id: event.userId);

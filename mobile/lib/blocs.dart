@@ -14,6 +14,8 @@ import 'package:facelocus/features/event/blocs/lincked-user/lincked_user_bloc.da
 import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.dart';
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
+import 'package:facelocus/features/profile/blocs/change-password/change_password_bloc.dart';
+import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_service.dart';
@@ -110,6 +112,17 @@ class AppBlocs {
       create: (context) => LinckedUsersDelegateBloc(
         userRepositoy: locator<UserRepository>(),
         eventRequestRepository: locator<EventRequestRepository>(),
+        sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<ProfileBloc>(
+      create: (context) => ProfileBloc(
+        sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<ChangePasswordBloc>(
+      create: (context) => ChangePasswordBloc(
+        userRepository: locator<UserRepository>(),
         sessionRepository: locator<SessionRepository>(),
       ),
     ),

@@ -22,8 +22,8 @@ class FaceUploudBloc extends Bloc<FaceUploudEvent, FaceUploudState> {
       try {
         emit(Uploading());
         File file = File(event.path);
-        var user = sessionRepository.getUser()!;
-        await userRepository.facePhotoProfileUploud(file, user.id!);
+        var user = await sessionRepository.getUser();
+        await userRepository.facePhotoProfileUploud(file, user!.id!);
         // _userImagePath.value = file.path;
         emit(UploadedSucessfully());
       } on DioException catch (e) {

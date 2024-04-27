@@ -47,7 +47,15 @@ class LoginFormState extends State<LoginScreen> {
             context.replace(AppRoutes.home);
           }
 
-          if (state is TokenExpired || state is Unauthorized) {
+          if (state is TokenExpired) {
+            Toast.showAlert(
+              title: 'Sessão Expirada',
+              'Sua sessão expirou, faça login novamente',
+              context,
+            );
+          }
+
+          if (state is Unauthorized) {
             Toast.showAlert(
               title: 'Sessão Expirada',
               'Sua sessão expirou, faça login novamente',
@@ -108,6 +116,7 @@ class LoginFormState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 15),
                       AppButton(
+                        isLoading: state is LoginLoading,
                         text: 'Entrar',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {

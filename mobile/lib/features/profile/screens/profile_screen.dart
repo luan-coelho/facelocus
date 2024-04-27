@@ -1,12 +1,13 @@
+import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/features/profile/screens/change_password.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
-import 'package:facelocus/shared/session/repository/session_repository.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/information_field.dart';
+import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,11 +17,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final SessionRepository _sessionRepository;
-
   @override
   void initState() {
-    _sessionRepository = SessionRepository();
+    context.read<ProfileBloc>().add(LoadProfile());
     super.initState();
   }
 
@@ -49,11 +48,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const UserFaceImage(),
+            // const UserFaceImage(),
             const SizedBox(height: 55),
-            InformationField(
-              description: 'Nome Completo',
-              value: _sessionRepository.getUser()!.getFullName(),
+            BlocConsumer<ProfileBloc, ProfileState>(
+              listener: (context, state) {
+                if (state is LogoutSuccess) {
+                  Toast.showAlert(
+                    title: 'Até logo!',
+                    'Obrigado por usar o FaceLocus!'
+                    'Esperamos vê-lo novamente em breve.',
+                    seconds: 7,
+                    context,
+                  );
+
+                  clearAndNavigate(AppRoutes.login);
+                }
+              },
+              builder: (context, state) {
+                if (state is ProfileLoaded) {
+                  return InformationField(
+                    description: 'Nome Completo',
+                    value: state.authenticatedUserFullName,
+                  );
+                }
+                return const Center(child: Spinner());
+              },
             ),
             const SizedBox(height: 35),
             AppButton(
@@ -65,10 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppButton(
               text: 'Sair',
               icon: const Icon(Icons.logout, color: Colors.red),
-              onPressed: () async {
-                _sessionRepository.logout();
-                context.replace(AppRoutes.login);
-              },
+              onPressed: () async => context.read<ProfileBloc>().add(Logout()),
               textColor: Colors.red,
               backgroundColor: Colors.transparent,
             ),

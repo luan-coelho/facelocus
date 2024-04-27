@@ -22,7 +22,7 @@ class HomeBloc extends Bloc<PointRecordEvent, HomeState> {
     on<FetchPointRecords>((event, emit) async {
       emit(PointRecordLoading());
       try {
-        var user = await sessionRepository.getUserFuture();
+        var user = await sessionRepository.getUser();
         var pointRecords = await pointRecordRepository.getAllByUser(user!.id!);
         emit(PointRecordLoaded(
           loggedUser: user,
