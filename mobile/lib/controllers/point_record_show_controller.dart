@@ -2,14 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
-import 'package:facelocus/services/point_record_service.dart';
-import 'package:facelocus/services/user_attendance_service.dart';
+import 'package:facelocus/services/point_record_repository.dart';
+import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PointRecordShowController extends GetxController {
-  final UserAttendanceService service;
+  final UserAttendanceRepository service;
   final Rxn<PointRecordModel> _pointRecord = Rxn<PointRecordModel>();
   final Rxn<UserAttendanceModel> _userAttendance = Rxn<UserAttendanceModel>();
   final List<UserAttendanceModel> _uas = <UserAttendanceModel>[].obs;

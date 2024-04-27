@@ -2,7 +2,7 @@ import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
 
-class LocationService {
+class LocationRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
   Future<List<LocationModel>> getAllByEventId(int eventId) async {

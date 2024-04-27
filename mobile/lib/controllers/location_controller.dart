@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:facelocus/services/location_service.dart';
+import 'package:facelocus/services/location_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,7 @@ import '../models/location_model.dart';
 import '../shared/toast.dart';
 
 class LocationController extends GetxController {
-  final LocationService service;
+  final LocationRepository service;
   late int eventId;
   final Rxn<LocationModel> _location = Rxn<LocationModel>();
   final Rxn<LocationModel> _auxLocation = Rxn<LocationModel>();

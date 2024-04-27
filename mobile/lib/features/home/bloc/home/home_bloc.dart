@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
-import 'package:facelocus/services/point_record_service.dart';
+import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/utils/response_api_message.dart';
 import 'package:flutter/material.dart';

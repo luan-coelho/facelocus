@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:facelocus/controllers/location_controller.dart';
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/models/location_model.dart';
-import 'package:facelocus/services/point_record_service.dart';
+import 'package:facelocus/services/point_record_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator_platform_interface/src/models/position.dart';
 import 'package:get/get.dart';

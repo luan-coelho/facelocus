@@ -20,7 +20,7 @@ import 'package:facelocus/features/profile/blocs/change-password/change_password
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/services/auth_repository.dart';
-import 'package:facelocus/services/point_record_service.dart';
+import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/shared/user-face-photo/user_face_photo_bloc.dart';

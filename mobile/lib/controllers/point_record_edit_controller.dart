@@ -4,7 +4,7 @@ import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/services/point_record_service.dart';
+import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/utils/expansion_panel_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
