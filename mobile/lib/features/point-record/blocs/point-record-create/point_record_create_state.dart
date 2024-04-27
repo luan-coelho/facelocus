@@ -5,7 +5,11 @@ abstract class PointRecordCreateState {}
 
 class PointRecordCreateInitial extends PointRecordCreateState {}
 
-class PointRecordCreateSuccess extends PointRecordCreateState {}
+class PointRecordCreateSuccess extends PointRecordCreateState {
+  final PointRecordModel pointRecord;
+
+  PointRecordCreateSuccess({required this.pointRecord});
+}
 
 class PointRecordCreateLoading extends PointRecordCreateState {}
 

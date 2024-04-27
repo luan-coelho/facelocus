@@ -17,7 +17,7 @@ class PointRecordRepository {
     return data.map((json) => PointRecordModel.fromJson(json)).toList();
   }
 
-  getAllByDate(int userId, DateTime date) async {
+  Future<List<PointRecordModel>> getAllByDate(int userId, DateTime date) async {
     String datef = DateFormat('yyyy-MM-dd').format(date);
     String url = '${AppRoutes.pointRecord}/by-date?user=$userId&date=$datef';
     final response = await _fetchApi.get(url);
@@ -25,12 +25,13 @@ class PointRecordRepository {
     return data.map((json) => PointRecordModel.fromJson(json)).toList();
   }
 
-  create(PointRecordModel pointRecord) async {
+  Future<PointRecordModel> create(PointRecordModel pointRecord) async {
     var json = pointRecord.toJson();
-    await _fetchApi.post(AppRoutes.pointRecord, data: json);
+    var response = await _fetchApi.post(AppRoutes.pointRecord, data: json);
+    return PointRecordModel.fromJson(response.data);
   }
 
-  getById(int id) async {
+  Future<PointRecordModel> getById(int id) async {
     final response = await _fetchApi.get('${AppRoutes.pointRecord}/$id');
     var data = response.data;
     return PointRecordModel.fromJson(data);

@@ -2,7 +2,6 @@ import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class AppLayout extends StatefulWidget {
@@ -51,7 +50,7 @@ class _AppLayoutState extends State<AppLayout> {
                         widget.appBarTitle!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           color: widget.appBarTitle != null
                               ? Colors.white
                               : Colors.black,

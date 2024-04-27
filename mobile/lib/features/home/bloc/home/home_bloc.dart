@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/services/point_record_service.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
+import 'package:facelocus/utils/response_api_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
 
@@ -19,17 +21,17 @@ class HomeBloc extends Bloc<PointRecordEvent, HomeState> {
     required this.pointRecordRepository,
     required this.sessionRepository,
   }) : super(PointRecordInitial()) {
-    on<FetchPointRecords>((event, emit) async {
-      emit(PointRecordLoading());
+    on<LoadPointRecords>((event, emit) async {
       try {
-        var user = await sessionRepository.getUser();
+        emit(PointRecordLoading());
+        UserModel? user = await sessionRepository.getUser();
         var pointRecords = await pointRecordRepository.getAllByUser(user!.id!);
         emit(PointRecordLoaded(
           loggedUser: user,
           pointRecordsEventsList: await buildPointsRecordEvents(pointRecords),
         ));
-      } catch (e) {
-        emit(PointRecordError('Erro ao buscar registros de pontos'));
+      } on DioException catch (e) {
+        emit(PointRecordError(ResponseApiMessage.buildMessage(e)));
       }
     });
   }
@@ -41,13 +43,16 @@ class HomeBloc extends Bloc<PointRecordEvent, HomeState> {
     for (var pr in pointsRecord) {
       DateTime startTime = pr.points.first.initialDate;
       DateTime finalTime = pr.points.last.finalDate;
-      var prEvent = NeatCleanCalendarEvent(pr.event!.description!,
-          description: pr.location!.description,
-          startTime: startTime,
-          endTime: finalTime,
-          color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-              .withOpacity(1.0),
-          metadata: pr.toJson());
+      var prEvent = NeatCleanCalendarEvent(
+        pr.event!.description!,
+        description: pr.location!.description,
+        startTime: startTime,
+        endTime: finalTime,
+        color: Color(
+          (math.Random().nextDouble() * 0xFFFFFF).toInt(),
+        ).withOpacity(1.0),
+        metadata: pr.toJson(),
+      );
       eventList.add(prEvent);
     }
     return eventList;

@@ -15,6 +15,7 @@ import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/event-delegate/event_delegate_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-create/point_record_create_bloc.dart';
 import 'package:facelocus/features/profile/blocs/change-password/change_password_bloc.dart';
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/service_locator.dart';
@@ -131,6 +132,12 @@ class AppBlocs {
       create: (context) => EventDelegateBloc(
         eventRepository: locator<EventRepository>(),
         sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<PointRecordCreateBloc>(
+      create: (context) => PointRecordCreateBloc(
+        pointRecordRepository: locator<PointRecordRepository>(),
+        homeBloc: BlocProvider.of<HomeBloc>(context),
       ),
     ),
   ];

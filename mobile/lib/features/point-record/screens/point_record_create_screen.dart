@@ -7,13 +7,16 @@ import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_model.dart';
+import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class PointRecordCreateScreen extends StatefulWidget {
   const PointRecordCreateScreen({super.key});
@@ -30,7 +33,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   late bool _faceRecognitionFactor;
   late bool _indoorLocationFactor;
   late double _allowableRadiusInMeters;
-  late final List<PointModel> _points;
+  late List<PointModel> _points;
   late final HashSet<Factor> _factors;
 
   @override
@@ -266,22 +269,40 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 });
               }),
               const SizedBox(height: 10),
-              AppButton(
-                text: 'Cadastrar',
-                onPressed: () => context.read<PointRecordCreateBloc>().add(
-                      CreatePointRecord(
-                        event: _event!,
-                        location: _location!,
-                        date: _date,
-                        points: _points,
-                        factors: _factors,
-                        allowableRadiusInMeters: _allowableRadiusInMeters,
-                        faceRecognitionFactor: _faceRecognitionFactor,
-                        locationFactor: _indoorLocationFactor,
-                      ),
-                    ),
-                disabled:
-                    _event == null || _location == null || _points.isEmpty,
+              BlocConsumer<PointRecordCreateBloc, PointRecordCreateState>(
+                listener: (context, state) {
+                  if (state is PointRecordCreateSuccess) {
+                    context.pushReplacement(
+                      '/admin${AppRoutes.pointRecordEdit}/${state.pointRecord.id}',
+                    );
+                  }
+
+                  if (state is PointRecordCreateError) {
+                    return Toast.showError(state.message, context);
+                  }
+                },
+                builder: (context, state) {
+                  return AppButton(
+                      isLoading: state is PointRecordCreateLoading,
+                      text: 'Cadastrar',
+                      onPressed: () => context
+                          .read<PointRecordCreateBloc>()
+                          .add(
+                            CreatePointRecord(
+                              event: _event!,
+                              location: _location!,
+                              date: _date,
+                              points: _points,
+                              factors: _factors,
+                              allowableRadiusInMeters: _allowableRadiusInMeters,
+                              faceRecognitionFactor: _faceRecognitionFactor,
+                              locationFactor: _indoorLocationFactor,
+                            ),
+                          ),
+                      disabled: _event == null ||
+                          _location == null ||
+                          _points.isEmpty);
+                },
               ),
             ],
           ),

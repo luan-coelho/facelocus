@@ -29,16 +29,22 @@ class FaceLocusApp extends StatelessWidget {
       child: GetMaterialApp.router(
         title: 'Validação de presença',
         theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-                backgroundColor: AppColorsConst.dark,
-                shadowColor: Colors.white,
-                foregroundColor: Colors.white),
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColorsConst.blue,
-                onBackground: Colors.white,
-                background: AppColorsConst.white),
-            useMaterial3: true,
-            fontFamily: 'Poppins'),
+          textTheme: Theme.of(context).textTheme.apply(
+                fontSizeFactor: 1.0,
+                fontSizeDelta: 1.5,
+                fontFamily: 'Poppins',
+              ),
+          appBarTheme: const AppBarTheme(
+              backgroundColor: AppColorsConst.dark,
+              shadowColor: Colors.white,
+              foregroundColor: Colors.white),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColorsConst.blue,
+              onBackground: Colors.white,
+              background: AppColorsConst.white),
+          useMaterial3: true,
+          fontFamily: 'Poppins',
+        ),
         debugShowCheckedModeBanner: false,
         routerDelegate: router.routerDelegate,
         routeInformationParser: router.routeInformationParser,
@@ -52,8 +58,9 @@ class FaceLocusApp extends StatelessWidget {
           Locale('en'),
           Locale('pt', 'BR'),
         ],
-        scrollBehavior: const MaterialScrollBehavior()
-            .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: PointerDeviceKind.values.toSet(),
+        ),
       ),
     );
   }

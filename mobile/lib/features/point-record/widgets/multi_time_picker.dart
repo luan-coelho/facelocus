@@ -82,6 +82,7 @@ class _PointsPickerState extends State<PointsPicker> {
   void _removeInterval(int index) {
     setState(() {
       _points.removeAt(index);
+      widget.onPointListChanged(_points);
     });
   }
 

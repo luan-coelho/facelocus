@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<HomeBloc>().add(FetchPointRecords());
+    context.read<HomeBloc>().add(LoadPointRecords());
     super.initState();
   }
 
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async => context.read<HomeBloc>().add(
-                              FetchPointRecords(),
+                              LoadPointRecords(),
                             ),
                         child: Calendar(
                           startOnMonday: true,
