@@ -1,10 +1,10 @@
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/features/profile/screens/change_password.dart';
 import 'package:facelocus/router.dart';
+import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
-import 'package:facelocus/shared/widgets/information_field.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,8 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // const UserFaceImage(),
-            const SizedBox(height: 55),
+            const UserFaceImage(),
+            const SizedBox(height: 25),
             BlocConsumer<ProfileBloc, ProfileState>(
               listener: (context, state) {
                 if (state is LogoutSuccess) {
@@ -66,15 +66,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               builder: (context, state) {
                 if (state is ProfileLoaded) {
-                  return InformationField(
-                    description: 'Nome Completo',
-                    value: state.authenticatedUserFullName,
+                  return Text(
+                    state.authenticatedUserFullName,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   );
                 }
                 return const Center(child: Spinner());
               },
             ),
-            const SizedBox(height: 35),
+            const SizedBox(height: 25),
             AppButton(
               text: 'Alterar senha',
               onPressed: showModal,
