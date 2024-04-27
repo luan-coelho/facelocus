@@ -11,7 +11,7 @@ class PointModel {
 
   factory PointModel.fromJson(Map<String, dynamic> json) {
     return PointModel(
-      id: json['id'] as int,
+      id: json['id'] != null ? json['id'] as int : null,
       initialDate: DateTime.parse(json['initialDate']),
       finalDate: DateTime.parse(json['finalDate']),
     );

@@ -1,5 +1,7 @@
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
+import 'package:facelocus/features/home/widgets/point_record_card.dart';
 import 'package:facelocus/features/home/widgets/user_card.dart';
+import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
@@ -55,51 +57,85 @@ class _HomeScreenState extends State<HomeScreen> {
                         onRefresh: () async => context.read<HomeBloc>().add(
                               LoadPointRecords(),
                             ),
-                        child: Calendar(
-                          startOnMonday: true,
-                          weekDays: const [
-                            'Seg',
-                            'Ter',
-                            'Qua',
-                            'Qui',
-                            'Sex',
-                            'Sáb',
-                            'Dom',
-                          ],
-                          eventsList: state.pointRecordsEventsList,
-                          isExpandable: true,
-                          eventDoneColor: Colors.green,
-                          selectedColor: Colors.pink,
-                          selectedTodayColor: Colors.red,
-                          todayColor: Colors.blue,
-                          eventColor: null,
-                          onEventSelected: (value) {
-                            var endpoint = AppRoutes.pointRecord;
-                            String url = "$endpoint/${value.metadata!['id']}";
-                            var userId = state.loggedUser.id;
-                            var event = value.metadata!['event'];
-                            var pointRecordAdmin = event['administrator']['id'];
-                            if (pointRecordAdmin == userId) {
-                              context.push('/admin$url');
-                              return;
-                            }
-                            context.push(url);
-                          },
-                          locale: 'pt_br',
-                          todayButtonText: 'Hoje',
-                          isExpanded: true,
-                          expandableDateFormat: 'EEEE, dd. MMMM',
-                          datePickerType: DatePickerType.date,
-                          dayOfWeekStyle: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 11,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 10,
+                                offset: Offset(0, 5),
+                              ),
+                            ],
                           ),
-                          displayMonthTextStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                          child: Calendar(
+                            startOnMonday: true,
+                            weekDays: const [
+                              'Seg',
+                              'Ter',
+                              'Qua',
+                              'Qui',
+                              'Sex',
+                              'Sáb',
+                              'Dom',
+                            ],
+                            eventsList: state.pointRecordsEventsList,
+                            isExpandable: true,
+                            eventDoneColor: Colors.green,
+                            selectedColor: Colors.pink,
+                            selectedTodayColor: Colors.red,
+                            todayColor: Colors.blue,
+                            eventColor: null,
+                            onEventSelected: (value) {
+                              Map<String, dynamic> json = value.metadata!;
+                              var pr = PointRecordModel.fromJson(json);
+                              var loggedUser = state.loggedUser.id;
+                              var prAdmin = pr.event!.administrator!.id;
+
+                              String url = "$AppRoutes.pointRecord/${pr.id}";
+                              if (prAdmin == loggedUser) {
+                                context.push('/admin$url');
+                                return;
+                              }
+                              context.push(url);
+                            },
+                            locale: 'pt_br',
+                            todayButtonText: 'Hoje',
+                            isExpanded: true,
+                            expandableDateFormat: 'EEEE, dd. MMMM',
+                            datePickerType: DatePickerType.date,
+                            dayOfWeekStyle: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                            ),
+                            displayMonthTextStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            hideTodayIcon: true,
+                            eventListBuilder: (
+                              BuildContext context,
+                              List<NeatCleanCalendarEvent> selectesdEvents,
+                            ) {
+                              return ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: selectesdEvents.length,
+                                separatorBuilder: (context, index) =>
+                                    const Divider(),
+                                itemBuilder: (context, index) {
+                                  var json = selectesdEvents[index].metadata;
+                                  var pr = PointRecordModel.fromJson(json!);
+                                  return PointRecordCard(
+                                    pointRecord: pr,
+                                    user: state.loggedUser,
+                                  );
+                                },
+                              );
+                            },
                           ),
-                          hideTodayIcon: true,
                         ),
                       ),
                     );

@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:facelocus/features/point-record/blocs/point-record-create/point_record_create_bloc.dart';
 import 'package:facelocus/features/point-record/delegates/event_delegate.dart';
-import 'package:facelocus/features/point-record/widgets/multi_time_picker.dart';
+import 'package:facelocus/features/point-record/widgets/points_picker.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';

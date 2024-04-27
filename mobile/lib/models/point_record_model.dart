@@ -38,7 +38,7 @@ class PointRecordModel {
               .map((typeItem) => Factor.parse(typeItem)!)
               .toList()
           : null,
-      inProgress: json['inProgress'] as bool,
+      inProgress: json['inProgress'] ?? false,
     );
   }
 
@@ -49,6 +49,6 @@ class PointRecordModel {
         'location': location!.toJson(),
         'points': points.map((p) => p.toJson()).toList(),
         'allowableRadiusInMeters': allowableRadiusInMeters,
-        'factors': factors ?? factors!.map((f) => f.toJson()).toList()
+        'factors': factors!.map((f) => f.toJson()).toList(),
       };
 }

@@ -23,8 +23,8 @@ class LocationModel {
   Map<String, dynamic> toJson() => {
         'id': id,
         'description': description,
-        'latitude': latitude,
-        'longitude': longitude,
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
       };
 
   @override
