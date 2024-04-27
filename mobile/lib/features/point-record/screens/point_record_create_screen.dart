@@ -117,6 +117,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 }),
               ),
               const SizedBox(height: 15),
+              const Divider(),
               const Text(
                 'Fatores de validação',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -173,12 +174,12 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
               ),
               const SizedBox(height: 15),
               if (_indoorLocationFactor) ...[
-                const SizedBox(height: 5),
                 if (_event != null && _event?.locations != null) ...[
                   const Text(
                     'Local de validação',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 5),
                   SizedBox(
                     height: 50,
                     child: DropdownButtonFormField<LocationModel>(
@@ -192,6 +193,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.transparent,
+                            style: BorderStyle.none,
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(10.0),
@@ -247,8 +249,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 Slider(
                   value: _allowableRadiusInMeters,
                   min: 0.0,
-                  max: 10.0,
-                  divisions: 5,
+                  max: 60.0,
+                  divisions: 20,
                   label: _allowableRadiusInMeters.round().toString(),
                   onChanged: (double value) {
                     setState(() {
@@ -258,6 +260,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 ),
                 const SizedBox(),
               ],
+              const Divider(),
               const Text(
                 'Pontos',
                 style: TextStyle(fontWeight: FontWeight.bold),

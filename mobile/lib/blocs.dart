@@ -22,6 +22,7 @@ import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
+import 'package:facelocus/shared/er-user-face-photo/er_user_face_photo_bloc.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:facelocus/shared/user-face-photo/user_face_photo_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -138,6 +139,12 @@ class AppBlocs {
       create: (context) => PointRecordCreateBloc(
         pointRecordRepository: locator<PointRecordRepository>(),
         homeBloc: BlocProvider.of<HomeBloc>(context),
+      ),
+    ),
+    BlocProvider<ErUserFacePhotoBloc>(
+      create: (context) => ErUserFacePhotoBloc(
+        userRepository: locator<UserRepository>(),
+        sessionRepository: locator<SessionRepository>(),
       ),
     ),
   ];

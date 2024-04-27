@@ -62,13 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
                           ),
                           child: Calendar(
                             startOnMonday: true,

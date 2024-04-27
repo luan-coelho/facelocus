@@ -42,7 +42,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(UserWithoutFacePhoto());
             return;
           }
-          userFacePhotoBloc.add(FetchUserFacePhoto());
+          userFacePhotoBloc.add(LoadUserFacePhoto());
           emit(LoginSuccess());
         }
       } on DioException catch (e) {
@@ -63,7 +63,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(UserWithoutFacePhoto());
           return;
         }
-        userFacePhotoBloc.add(FetchUserFacePhoto());
+        userFacePhotoBloc.add(LoadUserFacePhoto());
         emit(LoginSuccess());
       } on DioException catch (e) {
         if (e.response?.statusCode == 401) {

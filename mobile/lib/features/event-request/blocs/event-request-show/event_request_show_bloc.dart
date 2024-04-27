@@ -38,7 +38,7 @@ class EventRequestShowBloc
           userId!,
           event.requestType,
         );
-        emit(RequestCompleted());
+        emit(RequestCompletedSuccessfully());
       } on DioException catch (e) {
         emit(EventRequestShowError(ResponseApiMessage.buildMessage(e)));
       }
@@ -53,7 +53,7 @@ class EventRequestShowBloc
           userId!,
           event.requestType,
         );
-        emit(RequestCompleted());
+        emit(RequestCompletedSuccessfully());
       } on DioException catch (e) {
         emit(EventRequestShowError(ResponseApiMessage.buildMessage(e)));
       }

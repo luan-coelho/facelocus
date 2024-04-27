@@ -19,4 +19,4 @@ class EventRequestShowError extends EventRequestShowState {
   EventRequestShowError(this.message);
 }
 
-class RequestCompleted extends EventRequestShowState {}
+class RequestCompletedSuccessfully extends EventRequestShowState {}
