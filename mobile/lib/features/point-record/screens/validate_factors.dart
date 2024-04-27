@@ -1,8 +1,8 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
+import 'package:facelocus/features/point-record/widgets/fr_factor_validate_card.dart';
+import 'package:facelocus/features/point-record/widgets/il_factor_validate_card.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/point-record/widgets/fr_factor_validate_card.dart';
-import 'package:facelocus/screens/point-record/widgets/il_factor_validate_card.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

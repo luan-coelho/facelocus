@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/point_record_create_controller.dart';
+import 'package:facelocus/features/point-record/widgets/time_picker.dart';
 import 'package:facelocus/models/point_model.dart';
-import 'package:facelocus/screens/point-record/widgets/time_picker.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';

@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_edit_controller.dart';
+import 'package:facelocus/features/point-record/widgets/multi_time_picker.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/screens/point-record/widgets/multi_time_picker.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';

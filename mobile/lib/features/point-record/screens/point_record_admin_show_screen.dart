@@ -1,11 +1,11 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
 import 'package:facelocus/features/event/delegates/lincked_users_delegate.dart';
+import 'package:facelocus/features/point-record/widgets/attendance_record_indicator.dart';
+import 'package:facelocus/features/point-record/widgets/event_header.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/point-record/widgets/attendance_record_indicator.dart';
-import 'package:facelocus/screens/point-record/widgets/event_header.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/empty_data.dart';

@@ -1,6 +1,6 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
-import 'package:facelocus/screens/point-record/widgets/event_header.dart';
-import 'package:facelocus/screens/point-record/widgets/point_validate.dart';
+import 'package:facelocus/features/point-record/widgets/event_header.dart';
+import 'package:facelocus/features/point-record/widgets/point_validate.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
