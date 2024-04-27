@@ -60,15 +60,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     seconds: 7,
                     context,
                   );
-
                   clearAndNavigate(AppRoutes.login);
                 }
               },
               builder: (context, state) {
                 if (state is ProfileLoaded) {
                   return Text(
-                    state.authenticatedUserFullName,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    state.authenticatedUserFullName.toUpperCase(),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   );
                 }
                 return const Center(child: Spinner());

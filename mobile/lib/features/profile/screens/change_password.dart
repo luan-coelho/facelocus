@@ -101,15 +101,13 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                     text: 'Alterar',
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        context.read<ChangePasswordBloc>().add(
-                              ChangePassword(
-                                credentials: ChangePasswordDTO(
-                                  currentPassword: _currentPassController.text,
-                                  newPassword: _newPasswordController.text,
-                                  confirmPassword: _confirmPassController.text,
-                                ),
+                        context.read<ChangePasswordBloc>().add(ChangePassword(
+                              credentials: ChangePasswordDTO(
+                                currentPassword: _currentPassController.text,
+                                newPassword: _newPasswordController.text,
+                                confirmPassword: _confirmPassController.text,
                               ),
-                            );
+                            ));
                       }
                     },
                   );
