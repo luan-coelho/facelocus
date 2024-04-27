@@ -1,5 +1,5 @@
-import 'package:facelocus/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.dart';
+import 'package:facelocus/features/event/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/features/event/widgets/lincked_user_card.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';

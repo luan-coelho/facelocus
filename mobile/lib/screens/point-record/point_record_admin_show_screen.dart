@@ -1,5 +1,5 @@
 import 'package:facelocus/controllers/point_record_show_controller.dart';
-import 'package:facelocus/delegates/lincked_users_delegate.dart';
+import 'package:facelocus/features/event/delegates/lincked_users_delegate.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/user_attendace_model.dart';

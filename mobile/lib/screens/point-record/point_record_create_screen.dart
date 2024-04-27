@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_create_controller.dart';
-import 'package:facelocus/delegates/event_delegate.dart';
+import 'package:facelocus/features/point-record/delegates/event_delegate.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';

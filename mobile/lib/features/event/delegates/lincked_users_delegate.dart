@@ -1,4 +1,4 @@
-import 'package:facelocus/delegates/blocs/lincked-users-delegate/lincked_users_delegate_bloc.dart';
+import 'package:facelocus/features/event/blocs/lincked-users-delegate/lincked_users_delegate_bloc.dart';
 import 'package:facelocus/models/user_model.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';

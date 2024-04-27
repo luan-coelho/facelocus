@@ -1,4 +1,4 @@
-import 'package:facelocus/delegates/blocs/event-delegate/event_delegate_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/event-delegate/event_delegate_bloc.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_search_card.dart';
