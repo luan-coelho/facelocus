@@ -5,7 +5,7 @@ abstract class PointRecordCreateEvent {}
 
 class CreatePointRecord extends PointRecordCreateEvent {
   final EventModel event;
-  final LocationModel location;
+  final LocationModel? location;
   final DateTime date;
   final List<PointModel> points;
   final HashSet<Factor> factors;
@@ -15,7 +15,7 @@ class CreatePointRecord extends PointRecordCreateEvent {
 
   CreatePointRecord({
     required this.event,
-    required this.location,
+    this.location,
     required this.date,
     required this.points,
     required this.factors,

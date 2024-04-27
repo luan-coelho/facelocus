@@ -45,7 +45,7 @@ class HomeBloc extends Bloc<PointRecordEvent, HomeState> {
       DateTime finalTime = pr.points.last.finalDate;
       var prEvent = NeatCleanCalendarEvent(
         pr.event!.description!,
-        description: pr.location!.description,
+        description: pr.location?.description ?? '...',
         startTime: startTime,
         endTime: finalTime,
         color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())

@@ -83,6 +83,7 @@ class AppBlocs {
       create: (context) => EventRequestShowBloc(
         eventRequestRepository: locator<EventRequestRepository>(),
         sessionRepository: locator<SessionRepository>(),
+        eventRequestListBloc: BlocProvider.of<EventRequestListBloc>(context),
       ),
     ),
     BlocProvider<EventRequestCreateBloc>(
@@ -101,6 +102,7 @@ class AppBlocs {
       create: (context) => FaceUploudBloc(
         userRepository: locator<UserRepository>(),
         sessionRepository: locator<SessionRepository>(),
+        userFacePhotoBloc: BlocProvider.of<UserFacePhotoBloc>(context),
       ),
     ),
     BlocProvider<LinckedUserBloc>(

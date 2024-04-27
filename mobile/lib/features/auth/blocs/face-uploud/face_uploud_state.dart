@@ -14,3 +14,13 @@ class UploadedFailed extends FaceUploudState {
 
   UploadedFailed(this.message);
 }
+
+class CapturePhotoByGallery extends FaceUploudState {}
+
+class CapturePhotoByCamera extends FaceUploudState {}
+
+class CameraPhotoCapturedSuccessfully extends FaceUploudState {}
+
+class GaleryPhotoCapturedSuccessfully extends FaceUploudState {}
+
+class Logout extends FaceUploudState {}

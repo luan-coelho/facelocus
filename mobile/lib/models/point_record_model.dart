@@ -29,7 +29,9 @@ class PointRecordModel {
       id: json['id'] as int,
       date: DateTime.parse(json['date']),
       event: EventModel.fromJson(json['event']),
-      location: LocationModel.fromJson(json['location']),
+      location: json['location'] != null
+          ? LocationModel.fromJson(json['location'])
+          : null,
       points: (json['points'] as List)
           .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -46,7 +48,7 @@ class PointRecordModel {
         'id': id,
         'date': date.toIso8601String(),
         'event': event!.toJson(),
-        'location': location!.toJson(),
+        'location': location?.toJson(),
         'points': points.map((p) => p.toJson()).toList(),
         'allowableRadiusInMeters': allowableRadiusInMeters,
         'factors': factors!.map((f) => f.toJson()).toList(),

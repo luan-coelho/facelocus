@@ -69,7 +69,7 @@ class ValidatePointController extends GetxController {
       longitude: position.longitude,
     );
     var distance = locationController.calculateDistance(
-      prController.userAttendance.value!.location,
+      prController.userAttendance.value!.location!,
       currentLocation,
     );
     if (distance < 15) {

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:facelocus/features/event-request/blocs/event-request-list/event_request_list_bloc.dart';
 import 'package:facelocus/features/event-request/repositories/event_request_service.dart';
 import 'package:facelocus/models/event_request_model.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
@@ -14,10 +15,12 @@ class EventRequestShowBloc
     extends Bloc<EventRequestShowEvent, EventRequestShowState> {
   final EventRequestRepository eventRequestRepository;
   final SessionRepository sessionRepository;
+  final EventRequestListBloc eventRequestListBloc;
 
   EventRequestShowBloc({
     required this.eventRequestRepository,
     required this.sessionRepository,
+    required this.eventRequestListBloc,
   }) : super(EventRequestShowInitial()) {
     on<LoadEventRequest>((event, emit) async {
       try {
@@ -38,6 +41,7 @@ class EventRequestShowBloc
           userId!,
           event.requestType,
         );
+        eventRequestListBloc.add(LoadAllEventRequest());
         emit(RequestCompletedSuccessfully());
       } on DioException catch (e) {
         emit(EventRequestShowError(ResponseApiMessage.buildMessage(e)));
@@ -53,6 +57,7 @@ class EventRequestShowBloc
           userId!,
           event.requestType,
         );
+        eventRequestListBloc.add(LoadAllEventRequest());
         emit(RequestCompletedSuccessfully());
       } on DioException catch (e) {
         emit(EventRequestShowError(ResponseApiMessage.buildMessage(e)));

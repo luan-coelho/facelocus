@@ -31,7 +31,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   LocationModel? _location;
   late DateTime _date;
   late bool _faceRecognitionFactor;
-  late bool _indoorLocationFactor;
+  late bool _locationFactor;
   late double _allowableRadiusInMeters;
   late List<PointModel> _points;
   late final HashSet<Factor> _factors;
@@ -40,7 +40,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
   void initState() {
     _date = DateTime.now();
     _faceRecognitionFactor = false;
-    _indoorLocationFactor = false;
+    _locationFactor = false;
     _allowableRadiusInMeters = 0.0;
     _points = <PointModel>[];
     _factors = HashSet<Factor>();
@@ -162,10 +162,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     height: 20,
                     child: Switch(
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: _indoorLocationFactor,
+                      value: _locationFactor,
                       onChanged: (value) {
                         setState(() {
-                          _indoorLocationFactor = value;
+                          _locationFactor = value;
                         });
                       },
                     ),
@@ -173,7 +173,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 ],
               ),
               const SizedBox(height: 15),
-              if (_indoorLocationFactor) ...[
+              if (_locationFactor) ...[
                 if (_event != null && _event?.locations != null) ...[
                   const Text(
                     'Local de validação',
@@ -293,17 +293,17 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                           .add(
                             CreatePointRecord(
                               event: _event!,
-                              location: _location!,
+                              location: _location,
                               date: _date,
                               points: _points,
                               factors: _factors,
                               allowableRadiusInMeters: _allowableRadiusInMeters,
                               faceRecognitionFactor: _faceRecognitionFactor,
-                              locationFactor: _indoorLocationFactor,
+                              locationFactor: _locationFactor,
                             ),
                           ),
                       disabled: _event == null ||
-                          _location == null ||
+                          (_locationFactor && _location == null) ||
                           _points.isEmpty);
                 },
               ),

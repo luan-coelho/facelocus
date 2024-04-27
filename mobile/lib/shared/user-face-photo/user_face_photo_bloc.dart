@@ -29,5 +29,10 @@ class UserFacePhotoBloc extends Bloc<UserFacePhotoEvent, UserFacePhotoState> {
       await imageFile.writeAsBytes(response.data!);
       emit(UserFacePhotoLoaded(image: imageFile, user: loggedUser));
     });
+
+    on<UpdateUserFacePhoto>((event, emit) async {
+      UserModel? loggedUser = await sessionRepository.getUser();
+      emit(UserFacePhotoLoaded(image: event.image, user: loggedUser!));
+    });
   }
 }

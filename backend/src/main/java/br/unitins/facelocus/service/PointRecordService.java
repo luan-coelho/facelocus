@@ -73,7 +73,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Override
     public PointRecord create(PointRecord pointRecord) {
         validations(pointRecord);
-        return super.create(pointRecord);
+        super.create(pointRecord);
+        return findById(pointRecord.getId());
     }
 
     private void validations(PointRecord pointRecord) {
@@ -97,7 +98,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     private void validateLocation(PointRecord pointRecord, Location location) {
         List<Location> locations = pointRecord.getEvent().getLocations();
-        if (!locations.contains(location)) {
+        Set<Factor> factors = pointRecord.getFactors();
+        if (factors.contains(Factor.INDOOR_LOCATION) && !locations.contains(location)) {
             throw new IllegalArgumentException("Informe uma localização do evento");
         }
     }
