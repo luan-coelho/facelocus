@@ -4,12 +4,12 @@ import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -112,15 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   return const Center(
-                    child: SizedBox(
-                      width: 50,
-                      child: LoadingIndicator(
-                          indicatorType: Indicator.ballPulse,
-                          colors: [AppColorsConst.blue],
-                          strokeWidth: 2,
-                          backgroundColor: Colors.transparent,
-                          pathBackgroundColor: Colors.black),
-                    ),
+                    child: Spinner(),
                   );
                 },
               ),

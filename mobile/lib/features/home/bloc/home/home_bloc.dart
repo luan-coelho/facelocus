@@ -48,9 +48,8 @@ class HomeBloc extends Bloc<PointRecordEvent, HomeState> {
         description: pr.location!.description,
         startTime: startTime,
         endTime: finalTime,
-        color: Color(
-          (math.Random().nextDouble() * 0xFFFFFF).toInt(),
-        ).withOpacity(1.0),
+        color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+            .withOpacity(1.0),
         metadata: pr.toJson(),
       );
       eventList.add(prEvent);
