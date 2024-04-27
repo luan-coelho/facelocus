@@ -2,11 +2,12 @@ import 'package:facelocus/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class TimePicker extends StatefulWidget {
-  const TimePicker(
-      {super.key,
-      required this.description,
-      required this.timeOfDay,
-      this.onTap});
+  const TimePicker({
+    super.key,
+    required this.description,
+    required this.timeOfDay,
+    this.onTap,
+  });
 
   final String description;
   final TimeOfDay timeOfDay;
@@ -22,30 +23,36 @@ class _TimePickerState extends State<TimePicker> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          width: double.infinity,
-          height: 50,
-          decoration: BoxDecoration(
-              color: Colors.black12.withOpacity(0.1),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
-          child: Column(
-            children: [
-              Text(
-                widget.description,
-                style: const TextStyle(
-                    color: AppColorsConst.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        width: double.infinity,
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.black12.withOpacity(0.1),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              widget.description,
+              style: const TextStyle(
+                color: AppColorsConst.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
-              Text(
-                widget.timeOfDay.format(context),
-                style: const TextStyle(
-                    color: AppColorsConst.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+            ),
+            Text(
+              widget.timeOfDay.format(context),
+              style: const TextStyle(
+                color: AppColorsConst.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

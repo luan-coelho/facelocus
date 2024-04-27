@@ -1,12 +1,12 @@
 enum Factor {
   facialRecognition,
-  indoorLocation;
+  location;
 
   String toJson() {
     switch (this) {
       case Factor.facialRecognition:
         return 'FACIAL_RECOGNITION';
-      case Factor.indoorLocation:
+      case Factor.location:
         return 'INDOOR_LOCATION';
     }
   }
@@ -16,7 +16,7 @@ enum Factor {
       case 'FACIAL_RECOGNITION':
         return Factor.facialRecognition;
       case 'INDOOR_LOCATION':
-        return Factor.indoorLocation;
+        return Factor.location;
     }
     return null;
   }
@@ -27,7 +27,7 @@ enum Factor {
       return 'Reconhecimento Facial';
     }
 
-    if (this == indoorLocation) {
+    if (this == location) {
       return 'Localização Indoor';
     }
 

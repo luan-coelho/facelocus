@@ -110,7 +110,7 @@ class _PointValidateState extends State<PointValidate> {
                                 .contains(Factor.facialRecognition)
                                 .toString(),
                             'locationIndoorFactor': widget.pointRecord.factors!
-                                .contains(Factor.indoorLocation)
+                                .contains(Factor.location)
                                 .toString(),
                           },
                         ).toString(),

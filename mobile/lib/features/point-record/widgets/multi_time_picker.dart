@@ -1,25 +1,29 @@
-import 'package:facelocus/controllers/point_record_create_controller.dart';
 import 'package:facelocus/features/point-record/widgets/time_picker.dart';
 import 'package:facelocus/models/point_model.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class MultiTimePicker extends StatefulWidget {
-  const MultiTimePicker({super.key});
+class PointsPicker extends StatefulWidget {
+  const PointsPicker({
+    super.key,
+    required this.onPointListChanged,
+    this.value,
+  });
+
+  final ValueChanged<List<PointModel>> onPointListChanged;
+  final List<PointModel>? value;
 
   @override
-  State<StatefulWidget> createState() => _MultiTimePickerState();
+  State<StatefulWidget> createState() => _PointsPickerState();
 }
 
-class _MultiTimePickerState extends State<MultiTimePicker> {
-  late final PointRecordCreateController _controller;
-  DateTime dateTime = DateTime.now();
+class _PointsPickerState extends State<PointsPicker> {
+  late final List<PointModel> _points;
+  late DateTime _dateTime;
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
-  List<Map<String, TimeOfDay>> timeIntervals = [];
 
   Future<void> _selectTime(BuildContext context, bool isStartTime) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -49,14 +53,14 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
 
   void _addInterval() {
     final DateTime now = DateTime.now();
-    DateTime initialDate = DateTime(
+    DateTime startDateTime = DateTime(
       now.year,
       now.month,
       now.day,
       _startTime.hour,
       _startTime.minute,
     );
-    DateTime finalDate = DateTime(
+    DateTime endDateTime = DateTime(
       now.year,
       now.month,
       now.day,
@@ -64,30 +68,30 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
       _endTime.minute,
     );
     PointModel point = PointModel(
-      initialDate: initialDate,
-      finalDate: finalDate,
+      initialDate: startDateTime,
+      finalDate: endDateTime,
     );
-    _controller.points.add(point);
     setState(() {
-      timeIntervals.add({'initialDate': _startTime, 'finalDate': _endTime});
       _startTime = addMinutes(_endTime, 15);
       _endTime = addMinutes(_startTime, 15);
+      _points.add(point);
     });
+    widget.onPointListChanged(_points);
   }
 
   void _removeInterval(int index) {
-    _controller.points.removeAt(index);
     setState(() {
-      timeIntervals.removeAt(index);
+      _points.removeAt(index);
     });
   }
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordCreateController>();
-    _startTime = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
-    DateTime endTime = dateTime.add(const Duration(minutes: 15));
+    _dateTime = DateTime.now();
+    _startTime = TimeOfDay(hour: _dateTime.hour, minute: _dateTime.minute);
+    DateTime endTime = _dateTime.add(const Duration(minutes: 15));
     _endTime = TimeOfDay(hour: endTime.hour, minute: endTime.minute);
+    _points = widget.value ?? <PointModel>[];
     super.initState();
   }
 
@@ -129,7 +133,7 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
           ),
         ),
         const SizedBox(height: 10),
-        if (_controller.points.isNotEmpty)
+        if (_points.isNotEmpty)
           const Column(
             children: [
               Text(
@@ -140,53 +144,53 @@ class _MultiTimePickerState extends State<MultiTimePicker> {
             ],
           ),
         const SizedBox(),
-        Obx(() {
-          return ListView.separated(
-            shrinkWrap: true,
-            itemCount: _controller.points.length,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 5);
-            },
-            itemBuilder: (context, index) {
-              final PointModel point = _controller.points[index];
-              return Container(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                width: double.infinity,
-                height: 45,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.white,
+        ListView.separated(
+          shrinkWrap: true,
+          itemCount: _points.length,
+          physics: const NeverScrollableScrollPhysics(),
+          separatorBuilder: (BuildContext context, int index) {
+            return const SizedBox(height: 5);
+          },
+          itemBuilder: (context, index) {
+            final PointModel point = _points[index];
+            return Container(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              width: double.infinity,
+              height: 45,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.timelapse, color: Colors.black),
+                        const SizedBox(width: 5),
+                        Builder(builder: (context) {
+                          final DateFormat formatter = DateFormat('HH:mm');
+                          final idt = formatter.format(point.initialDate);
+                          var fdt = formatter.format(point.finalDate);
+                          return Text(
+                            '$idt - $fdt',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                    AppDeleteButton(
+                      onPressed: () => _removeInterval(index),
+                    )
+                  ],
                 ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.timelapse, color: Colors.black),
-                          const SizedBox(width: 5),
-                          Builder(builder: (context) {
-                            final DateFormat formatter = DateFormat('HH:mm');
-                            final idt = formatter.format(point.initialDate);
-                            var fdt = formatter.format(point.finalDate);
-                            return Text(
-                              '$idt - $fdt',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                      AppDeleteButton(onPressed: () => _removeInterval(index))
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        }),
+              ),
+            );
+          },
+        )
       ],
     );
   }

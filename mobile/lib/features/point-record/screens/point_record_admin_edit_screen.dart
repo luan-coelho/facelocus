@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:facelocus/controllers/point_record_edit_controller.dart';
-import 'package:facelocus/features/point-record/widgets/multi_time_picker.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';
@@ -38,7 +37,7 @@ class _PointRecordAdminEditScreenState
       factors.add(Factor.facialRecognition);
     }
     if (indoorLocationFactor) {
-      factors.add(Factor.indoorLocation);
+      factors.add(Factor.location);
       _controller.cleanPoint();
     }
     PointRecordModel pointRecord = PointRecordModel(
@@ -203,7 +202,7 @@ class _PointRecordAdminEditScreenState
                               MaterialTapTargetSize.shrinkWrap,
                           value:
                               _controller.pointRecord.value!.factors!.contains(
-                            Factor.indoorLocation,
+                            Factor.location,
                           ),
                           onChanged: (value) {
                             setState(() {
@@ -241,7 +240,7 @@ class _PointRecordAdminEditScreenState
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
-                const MultiTimePicker(),
+                // const PointsPicker(),
               ],
             ),
           ),

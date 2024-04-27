@@ -1,20 +1,19 @@
 import 'dart:collection';
 
-import 'package:facelocus/controllers/point_record_create_controller.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-create/point_record_create_bloc.dart';
 import 'package:facelocus/features/point-record/delegates/event_delegate.dart';
 import 'package:facelocus/features/point-record/widgets/multi_time_picker.dart';
 import 'package:facelocus/models/event_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/location_model.dart';
 import 'package:facelocus/models/point_model.dart';
-import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_date_picker.dart';
 import 'package:facelocus/shared/widgets/app_delete_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PointRecordCreateScreen extends StatefulWidget {
   const PointRecordCreateScreen({super.key});
@@ -25,46 +24,24 @@ class PointRecordCreateScreen extends StatefulWidget {
 }
 
 class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
-  late final PointRecordCreateController _controller;
-  bool faceRecognitionFactor = false;
-  bool indoorLocationFactor = false;
-  double _allowableRadiusInMeters = 5.0;
-  DateTime? _date;
-  List<PointModel> points = [];
-  HashSet<Factor> factors = HashSet();
   EventModel? _event;
   LocationModel? _location;
-
-  _create() {
-    if (faceRecognitionFactor) {
-      factors.add(Factor.facialRecognition);
-    }
-    if (indoorLocationFactor) {
-      factors.add(Factor.indoorLocation);
-      _controller.cleanPoint();
-    }
-    PointRecordModel pointRecord = PointRecordModel(
-      event: _event,
-      location: _location,
-      date: _date ?? DateTime.now(),
-      points: _controller.points,
-      factors: factors.toList(),
-      allowableRadiusInMeters: _allowableRadiusInMeters,
-    );
-    _controller.create(context, pointRecord);
-  }
+  late DateTime _date;
+  late bool _faceRecognitionFactor;
+  late bool _indoorLocationFactor;
+  late double _allowableRadiusInMeters;
+  late final List<PointModel> _points;
+  late final HashSet<Factor> _factors;
 
   @override
   void initState() {
-    _controller = Get.find<PointRecordCreateController>();
     _date = DateTime.now();
+    _faceRecognitionFactor = false;
+    _indoorLocationFactor = false;
+    _allowableRadiusInMeters = 0.0;
+    _points = <PointModel>[];
+    _factors = HashSet<Factor>();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.points.clear();
-    super.dispose();
   }
 
   @override
@@ -83,9 +60,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
-              Builder(builder: (context) {
-                if (_event != null) {
-                  return Column(
+              Builder(
+                builder: (context) {
+                  if (_event != null) {
+                    return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
@@ -93,94 +71,37 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                           children: [
                             Text(_event!.description!),
                             const SizedBox(width: 5),
-                            AppDeleteButton(onPressed: () {
-                              setState(() {
-                                _event = null;
-                                _location = null;
-                              });
-                            }),
+                            AppDeleteButton(
+                              onPressed: () {
+                                setState(() {
+                                  _event = null;
+                                  _location = null;
+                                });
+                              },
+                            ),
                           ],
                         )
-                      ]);
-                }
-                return AppButton(
-                  text: 'Selecionar evento',
-                  onPressed: () async {
-                    var result = await showSearch(
-                      context: context,
-                      delegate: EventDelegate(),
+                      ],
                     );
-                    setState(() {
-                      _event = result;
-                    });
-                  },
-                  textColor: AppColorsConst.black,
-                  borderColor: Colors.transparent,
-                  backgroundColor: Colors.black12.withOpacity(0.1),
-                  height: 50,
-                );
-              }),
-              const SizedBox(height: 10),
-              const Text(
-                'Localização',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                  }
+                  return AppButton(
+                    text: 'Selecionar evento',
+                    onPressed: () async {
+                      var result = await showSearch(
+                        context: context,
+                        delegate: EventDelegate(),
+                      );
+                      setState(() {
+                        _event = result;
+                      });
+                    },
+                    textColor: AppColorsConst.black,
+                    borderColor: Colors.transparent,
+                    backgroundColor: Colors.black12.withOpacity(0.1),
+                    height: 50,
+                  );
+                },
               ),
-              const SizedBox(height: 5),
-              _event != null && _event?.locations != null
-                  ? SizedBox(
-                      height: 50,
-                      child: DropdownButtonFormField<LocationModel>(
-                        value: _location,
-                        icon: const Icon(Icons.arrow_downward),
-                        decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 0,
-                            ),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                            focusColor: AppColorsConst.white,
-                            filled: true,
-                            fillColor: Colors.black12.withOpacity(0.1)),
-                        style: const TextStyle(color: Colors.black),
-                        isExpanded: true,
-                        hint: const Text(
-                          'Selecione...',
-                          style: TextStyle(fontFamily: 'Poppins'),
-                        ),
-                        onChanged: (LocationModel? value) {
-                          setState(() {
-                            _location = value!;
-                          });
-                        },
-                        items: _event?.locations!
-                            .map<DropdownMenuItem<LocationModel>>(
-                                (LocationModel location) {
-                          return DropdownMenuItem<LocationModel>(
-                            value: location,
-                            child: Text(
-                              location.description,
-                              style: const TextStyle(fontFamily: 'Poppins'),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  : const Text('Informe o evento'),
               const SizedBox(height: 10),
               const Text(
                 'Data',
@@ -212,10 +133,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     height: 20,
                     child: Switch(
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: faceRecognitionFactor,
+                      value: _faceRecognitionFactor,
                       onChanged: (value) {
                         setState(() {
-                          faceRecognitionFactor = value;
+                          _faceRecognitionFactor = value;
                         });
                       },
                     ),
@@ -228,7 +149,7 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 children: [
                   const Flexible(
                     child: Text(
-                      'Localização Indoor',
+                      'Localização',
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -237,10 +158,10 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                     height: 20,
                     child: Switch(
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: indoorLocationFactor,
+                      value: _indoorLocationFactor,
                       onChanged: (value) {
                         setState(() {
-                          indoorLocationFactor = value;
+                          _indoorLocationFactor = value;
                         });
                       },
                     ),
@@ -248,45 +169,120 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 ],
               ),
               const SizedBox(height: 15),
-              indoorLocationFactor
-                  ? Column(
-                      children: [
-                        const Text(
-                          'Raio permitido em metros (m)',
-                          style: TextStyle(fontWeight: FontWeight.normal),
+              if (_indoorLocationFactor) ...[
+                const SizedBox(height: 5),
+                if (_event != null && _event?.locations != null) ...[
+                  const Text(
+                    'Local de validação',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField<LocationModel>(
+                      value: _location,
+                      icon: const Icon(Icons.arrow_downward),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 0,
                         ),
-                        Slider(
-                          value: _allowableRadiusInMeters,
-                          min: 0.0,
-                          max: 10.0,
-                          divisions: 5,
-                          label: _allowableRadiusInMeters.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _allowableRadiusInMeters = value;
-                            });
-                          },
-                        )
-                      ],
-                    )
-                  : const SizedBox(),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        focusColor: AppColorsConst.white,
+                        filled: true,
+                        fillColor: Colors.black12.withOpacity(0.1),
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                      isExpanded: true,
+                      hint: const Text(
+                        'Selecione...',
+                        style: TextStyle(fontFamily: 'Poppins'),
+                      ),
+                      onChanged: (LocationModel? value) {
+                        setState(() {
+                          _location = value!;
+                        });
+                      },
+                      items: _event?.locations!
+                          .map<DropdownMenuItem<LocationModel>>(
+                        (LocationModel location) {
+                          return DropdownMenuItem<LocationModel>(
+                            value: location,
+                            child: Text(
+                              location.description,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  )
+                ],
+                const SizedBox(height: 10),
+                const Center(
+                  child: Text(
+                    'Raio permitido em metros (m)',
+                    style: TextStyle(fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Slider(
+                  value: _allowableRadiusInMeters,
+                  min: 0.0,
+                  max: 10.0,
+                  divisions: 5,
+                  label: _allowableRadiusInMeters.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _allowableRadiusInMeters = value;
+                    });
+                  },
+                ),
+                const SizedBox(),
+              ],
               const Text(
                 'Pontos',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
-              const MultiTimePicker(),
-              const SizedBox(height: 10),
-              Builder(builder: (context) {
-                bool disable = _event == null ||
-                    _location == null ||
-                    _controller.points.isEmpty;
-                return AppButton(
-                  text: 'Cadastrar',
-                  onPressed: _create,
-                  disabled: disable,
-                );
+              PointsPicker(onPointListChanged: (points) {
+                setState(() {
+                  _points = points;
+                });
               }),
+              const SizedBox(height: 10),
+              AppButton(
+                text: 'Cadastrar',
+                onPressed: () => context.read<PointRecordCreateBloc>().add(
+                      CreatePointRecord(
+                        event: _event!,
+                        location: _location!,
+                        date: _date,
+                        points: _points,
+                        factors: _factors,
+                        allowableRadiusInMeters: _allowableRadiusInMeters,
+                        faceRecognitionFactor: _faceRecognitionFactor,
+                        locationFactor: _indoorLocationFactor,
+                      ),
+                    ),
+                disabled:
+                    _event == null || _location == null || _points.isEmpty,
+              ),
             ],
           ),
         ),

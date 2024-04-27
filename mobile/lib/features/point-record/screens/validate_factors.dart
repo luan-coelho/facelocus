@@ -49,7 +49,7 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
                   '${AppRoutes.locationFactorValidate}/${widget.attendanceRecordId}',
                 ),
                 child: ILFactorValidateCard(
-                  factor: Factor.indoorLocation,
+                  factor: Factor.location,
                   userAttendance: _controller.userAttendance.value!,
                 ),
               ),
