@@ -2,12 +2,14 @@ import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/features/profile/screens/change_password.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
+import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -86,6 +88,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () async => context.read<ProfileBloc>().add(Logout()),
               textColor: Colors.red,
               backgroundColor: Colors.transparent,
+            ),
+            const SizedBox(height: 10),
+            AppButton(
+              text: 'Sobre o Facelocus',
+              onPressed: () => context.push(AppRoutes.about),
+              icon: const Icon(Icons.info, color: Colors.white),
+              backgroundColor: AppColorsConst.dark,
             ),
             const SizedBox(height: 60),
           ],

@@ -18,6 +18,7 @@ import 'package:facelocus/features/point-record/screens/point_record_list_screen
 import 'package:facelocus/features/point-record/screens/point_record_show_screen.dart';
 import 'package:facelocus/features/point-record/screens/point_validate_screen.dart';
 import 'package:facelocus/features/point-record/screens/validate_factors.dart';
+import 'package:facelocus/features/profile/screens/app_about_screen.dart';
 import 'package:facelocus/features/profile/screens/profile_screen.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
 import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
@@ -48,6 +49,7 @@ class AppRoutes {
   static const validateFactors = '/validate-factors';
   static const facialFactorValidate = '/facial-factor-validate';
   static const locationFactorValidate = '/location-factor-validate';
+  static const about = '/about';
 }
 
 void clearAndNavigate(String path) {
@@ -118,10 +120,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.eventRequest,
-      builder: (context, state) {
-        // int eventId = int.parse(state.uri.queryParameters['event']!);
-        return const EventRequestListScreen();
-      },
+      builder: (context, state) => const EventRequestListScreen(),
     ),
     GoRoute(
       path: '${AppRoutes.eventRequest}/:id',
@@ -138,15 +137,11 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.pointRecord,
-      builder: (context, state) {
-        return const PointRecordListScreen();
-      },
+      builder: (context, state) => const PointRecordListScreen(),
     ),
     GoRoute(
       path: AppRoutes.pointRecordCreate,
-      builder: (context, state) {
-        return const PointRecordCreateScreen();
-      },
+      builder: (context, state) => const PointRecordCreateScreen(),
     ),
     GoRoute(
       path: '/admin${AppRoutes.pointRecord}/:id',
@@ -171,9 +166,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.pointRecordPointValidate,
-      builder: (context, state) {
-        return const PointValidateScreen();
-      },
+      builder: (context, state) => const PointValidateScreen(),
     ),
     GoRoute(
       path: AppRoutes.validateFactors,
@@ -211,6 +204,10 @@ final router = GoRouter(
           attendanceRecordId: attendanceRecordId,
         );
       },
+    ),
+    GoRoute(
+      path: AppRoutes.about,
+      builder: (context, state) => const AppAboutScreen(),
     )
   ],
 );
