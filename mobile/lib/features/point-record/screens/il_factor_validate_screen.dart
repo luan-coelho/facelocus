@@ -106,18 +106,11 @@ class _LocationFactorValidateScreenState
                       width: 200,
                     ),
                     const SizedBox(height: 15),
-                    const Text('Local de validação',
+                    const Text('Localização validada com sucesso',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                        )),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    const Text('Validado com sucesso',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300,
                         )),
                     const SizedBox(height: 15),
                     AppButton(
@@ -138,6 +131,7 @@ class _LocationFactorValidateScreenState
                     ),
                     const SizedBox(height: 25),
                     const Text('Fora do raio permitido',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,

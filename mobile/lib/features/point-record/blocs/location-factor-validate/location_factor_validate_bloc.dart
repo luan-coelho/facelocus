@@ -44,7 +44,7 @@ class LocationFactorValidateBloc
           position.latitude,
           position.longitude,
         );
-        if (distance > allowableRadiusInMeters) {
+        if (distance < allowableRadiusInMeters) {
           emit(WithinThePermittedRadius());
         } else {
           emit(OutsideThePermittedRadius(userAttendance: event.userAttendance));

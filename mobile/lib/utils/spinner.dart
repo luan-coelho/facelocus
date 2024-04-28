@@ -8,7 +8,7 @@ class Spinner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      height: 70,
+      height: 90,
       child: LoadingIndicator(
           indicatorType: Indicator.pacman,
           colors: [AppColorsConst.blue],
