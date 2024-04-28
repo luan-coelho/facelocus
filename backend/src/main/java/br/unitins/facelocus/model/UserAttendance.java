@@ -26,4 +26,10 @@ public class UserAttendance {
 
     @ManyToOne
     private PointRecord pointRecord;
+
+    @Transient
+    private boolean validatedFaceRecognition;
+
+    @Transient
+    private boolean validatedLocation;
 }

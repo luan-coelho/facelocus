@@ -2,6 +2,7 @@ import 'package:facelocus/features/point-record/blocs/point-record-show/point_re
 import 'package:facelocus/features/point-record/widgets/event_header.dart';
 import 'package:facelocus/features/point-record/widgets/point_validate.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:facelocus/shared/widgets/info_card.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,6 +91,13 @@ class _PointRecordShowScreenState extends State<PointRecordShowScreen> {
                         ],
                       );
                     }
+
+                    if (state is PointRecordShowError) {
+                      return Center(
+                        child: InforCard(state.message),
+                      );
+                    }
+
                     return const Center(child: Spinner());
                   },
                 ),

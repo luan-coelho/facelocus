@@ -6,10 +6,12 @@ import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:get_it/get_it.dart';
+import 'package:location/location.dart';
 
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
+  /*Repositórios*/
   locator.registerLazySingleton(() => AuthRepository());
   locator.registerLazySingleton(() => SessionRepository());
   locator.registerLazySingleton(() => UserRepository());
@@ -17,4 +19,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => EventRequestRepository());
   locator.registerLazySingleton(() => PointRecordRepository());
   locator.registerLazySingleton(() => UserAttendanceRepository());
+
+  /*Tools*/
+  locator.registerLazySingleton(() => Location());
 }

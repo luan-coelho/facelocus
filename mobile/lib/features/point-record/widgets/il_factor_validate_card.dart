@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../../../models/attendance_record_model.dart';
 
-class ILFactorValidateCard extends StatefulWidget {
-  const ILFactorValidateCard({
+class LocationFactorValidateCard extends StatefulWidget {
+  const LocationFactorValidateCard({
     super.key,
     required this.userAttendance,
     this.attendanceRecord,
@@ -21,10 +21,12 @@ class ILFactorValidateCard extends StatefulWidget {
   final Factor factor;
 
   @override
-  State<ILFactorValidateCard> createState() => _ILFactorValidateCardState();
+  State<LocationFactorValidateCard> createState() =>
+      _LocationFactorValidateCardState();
 }
 
-class _ILFactorValidateCardState extends State<ILFactorValidateCard> {
+class _LocationFactorValidateCardState
+    extends State<LocationFactorValidateCard> {
   final Map<AttendanceRecordStatus, IconData> attendanceRecordStatus = {
     AttendanceRecordStatus.validated: Icons.check_circle,
     AttendanceRecordStatus.notValidated: Icons.dangerous,

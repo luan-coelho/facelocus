@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/controllers/point_record_show_controller.dart';
-import 'package:facelocus/controllers/validate_point_controller.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class FacialFactorValidateScreen extends StatefulWidget {
 
 class _FacialFactorValidateScreenState
     extends State<FacialFactorValidateScreen> {
-  late final ValidatePointController _validatePointController;
   late final PointRecordShowController _pointRecordController;
   late final ImagePicker picker;
   File? _capturedImage;
@@ -34,7 +32,6 @@ class _FacialFactorValidateScreenState
 
   @override
   void initState() {
-    _validatePointController = Get.find<ValidatePointController>();
     _pointRecordController = Get.find<PointRecordShowController>();
     picker = ImagePicker();
     _openCamera = true;
@@ -150,13 +147,13 @@ class _FacialFactorValidateScreenState
                         children: [
                           AppButton(
                             text: 'Enviar',
-                            onPressed: () => _validatePointController
+/*                            onPressed: () => _validatePointController
                                 .validateFacialRecognitionFactorForAttendanceRecord(
                               context,
                               widget.attendanceRecordId,
                               _pointRecordController.pointRecord.value!.id!,
                               _capturedImage!,
-                            ),
+                            ),*/
                           ),
                           const SizedBox(height: 10),
                           AppButton(

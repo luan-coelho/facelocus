@@ -16,6 +16,12 @@ class UserAttendanceRepository {
     return UserAttendanceModel.fromJson(json);
   }
 
+  Future<UserAttendanceModel> getById(int userAttendanceId) async {
+    String url = '${AppRoutes.userAttendance}/$userAttendanceId';
+    final response = await _fetchApi.get(url);
+    return UserAttendanceModel.fromJson(response.data);
+  }
+
   Future<List<UserAttendanceModel>> getAllByPointRecord(
     int pointRecordId,
   ) async {

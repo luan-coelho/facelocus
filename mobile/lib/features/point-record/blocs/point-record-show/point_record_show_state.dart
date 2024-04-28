@@ -10,10 +10,14 @@ class PointRecordShowLoading extends PointRecordShowState {}
 class PointRecordShowLoaded extends PointRecordShowState {
   final PointRecordModel pointRecord;
   final UserAttendanceModel? userAttendance;
+  final bool faceRecognitionFactorValidate;
+  final bool locationFactorValidate;
 
   PointRecordShowLoaded({
     required this.pointRecord,
     this.userAttendance,
+    this.faceRecognitionFactorValidate = false,
+    this.locationFactorValidate = false,
   });
 }
 

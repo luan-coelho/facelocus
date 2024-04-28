@@ -28,7 +28,7 @@ enum Factor {
     }
 
     if (this == location) {
-      return 'Localização Indoor';
+      return 'Localização - GPS';
     }
 
     return 'Fator não reconhecido';

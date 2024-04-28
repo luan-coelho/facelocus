@@ -15,6 +15,7 @@ import 'package:facelocus/features/event/blocs/lincked-users/lincked_users_bloc.
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/event-delegate/event_delegate_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/location-factor-validate/location_factor_validate_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/point-record-create/point_record_create_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/features/profile/blocs/change-password/change_password_bloc.dart';
@@ -156,6 +157,11 @@ class AppBlocs {
         pointRecordRepository: locator<PointRecordRepository>(),
         userAttendanceRepository: locator<UserAttendanceRepository>(),
         sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<LocationFactorValidateBloc>(
+      create: (context) => LocationFactorValidateBloc(
+        userAttendanceRepository: locator<UserAttendanceRepository>(),
       ),
     ),
   ];

@@ -64,8 +64,9 @@ class _PointValidateState extends State<PointValidate> {
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-              color: attendanceRecordColor[widget.attendanceRecord.status]!,
-              width: 16),
+            color: attendanceRecordColor[widget.attendanceRecord.status]!,
+            width: 16,
+          ),
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),

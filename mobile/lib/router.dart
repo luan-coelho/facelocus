@@ -207,7 +207,7 @@ final router = GoRouter(
       path: '${AppRoutes.locationFactorValidate}/:id',
       builder: (context, state) {
         final int attendanceRecordId = int.parse(state.pathParameters['id']!);
-        return ILFactorValidateScreen(
+        return LocationFactorValidateScreen(
           attendanceRecordId: attendanceRecordId,
         );
       },

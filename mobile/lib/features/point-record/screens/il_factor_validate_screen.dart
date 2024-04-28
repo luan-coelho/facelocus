@@ -1,14 +1,14 @@
-import 'package:facelocus/controllers/location_controller.dart';
-import 'package:facelocus/controllers/point_record_show_controller.dart';
-import 'package:facelocus/controllers/validate_point_controller.dart';
+import 'package:facelocus/features/point-record/blocs/location-factor-validate/location_factor_validate_bloc.dart';
+import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
+import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
-class ILFactorValidateScreen extends StatefulWidget {
-  const ILFactorValidateScreen({
+class LocationFactorValidateScreen extends StatefulWidget {
+  const LocationFactorValidateScreen({
     super.key,
     required this.attendanceRecordId,
   });
@@ -16,84 +16,147 @@ class ILFactorValidateScreen extends StatefulWidget {
   final int attendanceRecordId;
 
   @override
-  State<ILFactorValidateScreen> createState() => _ILFactorValidateScreenState();
+  State<LocationFactorValidateScreen> createState() =>
+      _LocationFactorValidateScreenState();
 }
 
-class _ILFactorValidateScreenState extends State<ILFactorValidateScreen> {
-  late final ValidatePointController _validatePointController;
-  late final PointRecordShowController _pointRecordController;
-  late final LocationController _locationController;
-
+class _LocationFactorValidateScreenState
+    extends State<LocationFactorValidateScreen> {
   @override
   void initState() {
-    _validatePointController = Get.find<ValidatePointController>();
-    _pointRecordController = Get.find<PointRecordShowController>();
-    _locationController = Get.find<LocationController>();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _pointRecordController.fetchUserAttendanceById(
-        context,
-        widget.attendanceRecordId,
-      );
-    });
+    context.read<LocationFactorValidateBloc>().add(LoadUserAttendace(
+          userAttendanceId: widget.attendanceRecordId,
+        ));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          onPressed: context.pop,
-          icon: const Icon(
-            Icons.close,
-            color: Colors.black,
-            size: 30,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          leading: IconButton(
+            onPressed: context.pop,
+            icon: const Icon(
+              Icons.close,
+              color: Colors.black,
+              size: 30,
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(29.0),
+          child: BlocConsumer<LocationFactorValidateBloc,
+              LocationFactorValidateState>(
+            listener: (context, state) {
+              if (state is LocationFactorValidateSuccess) {
+                context.pop();
+              }
+
+              if (state is LocationFactorValidateError) {
+                return Toast.showError(state.message, context);
+              }
+            },
+            builder: (context, state) {
+              if (state is LocationFactorLoaded) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'images/location.svg',
+                      width: 300,
+                    ),
+                    const SizedBox(height: 25),
+                    const Text('Local de validação',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      state.userAttendance.pointRecord!.location!.description
+                          .toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    AppButton(
+                      onPressed: () => context
+                          .read<LocationFactorValidateBloc>()
+                          .add(ValidateLocation(
+                              userAttendance: state.userAttendance)),
+                      text: 'Validar',
+                    ),
+                  ],
+                );
+              }
+
+              if (state is WithinThePermittedRadius) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'images/completing.svg',
+                      width: 200,
+                    ),
+                    const SizedBox(height: 15),
+                    const Text('Local de validação',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    const Text('Validado com sucesso',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                        )),
+                    const SizedBox(height: 15),
+                    AppButton(
+                      onPressed: () => context.pop(),
+                      text: 'Fechar',
+                    ),
+                  ],
+                );
+              }
+
+              if (state is OutsideThePermittedRadius) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'images/failed.svg',
+                      width: 200,
+                    ),
+                    const SizedBox(height: 25),
+                    const Text('Fora do raio permitido',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    const SizedBox(height: 25),
+                    AppButton(
+                        onPressed: () => context
+                            .read<LocationFactorValidateBloc>()
+                            .add(ValidateLocation(
+                                userAttendance: state.userAttendance)),
+                        text: 'Tentar novamente'),
+                  ],
+                );
+              }
+
+              return const Center(child: Spinner());
+            },
           ),
         ),
-        backgroundColor: Colors.transparent,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(29.0),
-        child: Obx(() {
-          if (_pointRecordController.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'images/location.svg',
-                width: 300,
-              ),
-              const SizedBox(height: 25),
-              const Text('Local de validação',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  )),
-              const SizedBox(
-                width: 15,
-              ),
-              Text(
-                  _pointRecordController
-                      .pointRecord.value!.location!.description
-                      .toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w300,
-                  )),
-              const SizedBox(height: 15),
-              AppButton(
-                isLoading: _validatePointController.buttonLoading.value,
-                onPressed: () => _validatePointController.validateLocation(
-                  context,
-                ),
-                text: 'Validar',
-              ),
-            ],
-          );
-        }),
       ),
     );
   }
