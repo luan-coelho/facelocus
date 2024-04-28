@@ -2,6 +2,7 @@ import 'package:facelocus/features/event-request/repositories/event_request_serv
 import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_repository.dart';
+import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
 import 'package:get_it/get_it.dart';
@@ -15,4 +16,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => EventRepository());
   locator.registerLazySingleton(() => EventRequestRepository());
   locator.registerLazySingleton(() => PointRecordRepository());
+  locator.registerLazySingleton(() => UserAttendanceRepository());
 }

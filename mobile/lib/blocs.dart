@@ -16,11 +16,13 @@ import 'package:facelocus/features/event/repositories/event_repository.dart';
 import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/event-delegate/event_delegate_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/point-record-create/point_record_create_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/features/profile/blocs/change-password/change_password_bloc.dart';
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/service_locator.dart';
 import 'package:facelocus/services/auth_repository.dart';
 import 'package:facelocus/services/point_record_repository.dart';
+import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/er-user-face-photo/er_user_face_photo_bloc.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
@@ -146,6 +148,13 @@ class AppBlocs {
     BlocProvider<ErUserFacePhotoBloc>(
       create: (context) => ErUserFacePhotoBloc(
         userRepository: locator<UserRepository>(),
+        sessionRepository: locator<SessionRepository>(),
+      ),
+    ),
+    BlocProvider<PointRecordShowBloc>(
+      create: (context) => PointRecordShowBloc(
+        pointRecordRepository: locator<PointRecordRepository>(),
+        userAttendanceRepository: locator<UserAttendanceRepository>(),
         sessionRepository: locator<SessionRepository>(),
       ),
     ),
