@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ValidationAttempt {
+public class FaceRecognitionValidationAttempt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,14 +19,8 @@ public class ValidationAttempt {
 
     @ManyToOne
     private FacePhoto facePhoto;
-
-    private Double distanceInMeters;
-
-    private LocalDateTime facialRecognitionValidationTime;
-
-    private LocalDateTime indoorLocationValidationTime;
-
-    private boolean validatedSuccessfully;
+    private LocalDateTime dateTime;
+    private boolean validated;
 
     @ManyToOne
     private AttendanceRecord attendanceRecord;

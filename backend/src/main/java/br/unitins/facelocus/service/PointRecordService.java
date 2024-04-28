@@ -3,6 +3,7 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
+import br.unitins.facelocus.dto.pointrecord.LocationValidationAttemptDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
@@ -84,6 +85,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
+        }
+
+        if (pointRecord.getFactors() == null || pointRecord.getFactors().isEmpty()) {
+            throw new IllegalArgumentException("Informe pelo menos um fator");
         }
 
         Event event = eventService.findById(pointRecord.getEvent().getId());
@@ -367,24 +372,23 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
-        PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
-//        validatePointRecordHasFacialRecognitionFactor(pointRecord, attendanceRecord);
+        checkFacialRecognitionValidity(attendanceRecord);
 
         User user = attendanceRecord.getUserAttendance().getUser();
         user = userService.findById(user.getId());
 
         UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
 
-        ValidationAttempt validationAttempt = new ValidationAttempt();
+        FaceRecognitionValidationAttempt validationAttempt = new FaceRecognitionValidationAttempt();
         validationAttempt.setFacePhoto(validation.getFacePhoto());
         validationAttempt.setAttendanceRecord(attendanceRecord);
-        attendanceRecord.getValidationAttempts().add(validationAttempt);
+        attendanceRecord.getFrValidationAttempts().add(validationAttempt);
         boolean faceDetected = validation.isFaceDetected();
         attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
 
         if (faceDetected) {
-            validationAttempt.setValidatedSuccessfully(true);
-            validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
+            validationAttempt.setValidated(true);
+            validationAttempt.setDateTime(LocalDateTime.now());
             attendanceRecordService.update(attendanceRecord);
         } else {
             attendanceRecordService.update(attendanceRecord);
@@ -392,49 +396,41 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
-    @Transactional
-    public void validateIndoorFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
+    public void validateLocationFactorForAttendanceRecord(Long attendanceRecordId,
+                                                          LocationValidationAttemptDTO attemptDto) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
-        PointRecord pointRecord = attendanceRecord.getUserAttendance().getPointRecord();
-        validatePointRecordHasIndoorLocation(pointRecord);
-
-        User user = attendanceRecord.getUserAttendance().getUser();
-        user = userService.findById(user.getId());
-
-        UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
-
-        ValidationAttempt validationAttempt = new ValidationAttempt();
-        validationAttempt.setFacePhoto(validation.getFacePhoto());
-        validationAttempt.setAttendanceRecord(attendanceRecord);
-        attendanceRecord.getValidationAttempts().add(validationAttempt);
-        boolean faceDetected = validation.isFaceDetected();
-        if (faceDetected) {
-            validationAttempt.setValidatedSuccessfully(true);
-            validationAttempt.setFacialRecognitionValidationTime(LocalDateTime.now());
+        PointRecord pointRecord = attendanceRecord.getPoint().getPointRecord();
+        Set<Factor> factors = pointRecord.getFactors();
+        boolean hasLocationFactor = factors.contains(Factor.INDOOR_LOCATION);
+        if (!hasLocationFactor) {
+            throw new IllegalArgumentException("O registro de ponto não possui o fator de localização ativo");
         }
-        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
 
+        if (factors.size() == 1 && attemptDto.validated()) {
+            attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
+            attendanceRecord.setLocationValidatedSuccessfully(true);
+        }
+
+        LocationValidationAttempt attempt = pointRecordMapper.toEntity(attemptDto);
+        attendanceRecord.getLocationValidationAttempts().add(attempt);
         attendanceRecordService.update(attendanceRecord);
     }
 
-    private void validatePointRecordHasFacialRecognitionFactor(PointRecord pointRecord, AttendanceRecord attendanceRecord) {
-        if (!pointRecord.getFactors().contains(Factor.FACIAL_RECOGNITION)) {
+    private void checkFacialRecognitionValidity(AttendanceRecord attendanceRecord) {
+        PointRecord pointRecord = attendanceRecord.getPoint().getPointRecord();
+        Set<Factor> factors = pointRecord.getFactors();
+
+        if (!factors.contains(Factor.FACIAL_RECOGNITION)) {
             throw new IllegalArgumentException("O registro de ponto não possui o fator de reconhecimento facial ativo");
         }
 
-        if (pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
-            for (ValidationAttempt validationAttempt : attendanceRecord.getValidationAttempts()) {
-                if (validationAttempt.getIndoorLocationValidationTime() != null && validationAttempt.isValidatedSuccessfully()) {
-                    return;
-                }
+        if (factors.contains(Factor.INDOOR_LOCATION)) {
+            if (attendanceRecord.getLocationValidationAttempts()
+                    .stream()
+                    .noneMatch(LocationValidationAttempt::isValidated)) {
+                String message = "É necessário validar a localização antes de validar o reconhecimento facial";
+                throw new IllegalArgumentException(message);
             }
-            throw new IllegalArgumentException("É necessário validar o fator de localização indoor");
-        }
-    }
-
-    private void validatePointRecordHasIndoorLocation(PointRecord pointRecord) {
-        if (!pointRecord.getFactors().contains(Factor.INDOOR_LOCATION)) {
-            throw new IllegalArgumentException("O registro de ponto não possui o fator de localização indoor ativo");
         }
     }
 
@@ -479,4 +475,5 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         this.update(pointRecord);
     }
+
 }

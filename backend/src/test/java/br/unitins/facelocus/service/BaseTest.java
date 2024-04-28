@@ -46,7 +46,7 @@ public abstract class BaseTest {
         user.setSurname("Silva");
         user.setCpf("01534043020");
         user.setEmail("joao@gmail.com");
-        user.setPassword("12345");
+        user.setPassword("123");
         em.persist(user);
         return user;
     }

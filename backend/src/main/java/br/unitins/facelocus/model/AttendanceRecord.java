@@ -19,9 +19,16 @@ public class AttendanceRecord {
     private Long id;
 
     @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
-    private List<ValidationAttempt> validationAttempts = new ArrayList<>();
+    private List<FaceRecognitionValidationAttempt> frValidationAttempts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
+    private List<LocationValidationAttempt> locationValidationAttempts = new ArrayList<>();
 
     private AttendanceRecordStatus status = AttendanceRecordStatus.PENDING;
+
+    private boolean frValidatedSuccessfully;
+
+    private boolean locationValidatedSuccessfully;
 
     @ManyToOne
     private Point point;

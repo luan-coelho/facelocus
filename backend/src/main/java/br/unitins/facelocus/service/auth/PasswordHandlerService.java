@@ -13,4 +13,8 @@ public class PasswordHandlerService {
     public boolean checkPassword(String plainTextPassword, String passwordHash) {
         return BCrypt.checkpw(plainTextPassword, passwordHash);
     }
+
+    public String plainTextPassword(String passwordHash) {
+        return BCrypt.gensalt();
+    }
 }

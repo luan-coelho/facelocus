@@ -24,14 +24,14 @@ public class OAuthAuthenticationService {
     JWTService jwtService;
 
     @Transactional
-    public JwtDTO checkCredentials(LoginRequestDTO loginRequest) throws AuthenticationException {
-        User user = userService.findByEmailOrCpf(loginRequest.login())
+    public JwtDTO checkCredentials(String login, String password) throws AuthenticationException {
+        User user = userService.findByEmailOrCpf(login)
                 .orElseThrow(() -> {
                     String message = "Não existe nenhuma conta associada a este email";
                     return new AuthenticationException(message);
                 });
 
-        if (!passwordHandlerService.checkPassword(loginRequest.password(), user.getPassword())) {
+        if (!passwordHandlerService.checkPassword(password, user.getPassword())) {
             throw new UnauthorizedException("Verifique seu email ou senha");
         }
 

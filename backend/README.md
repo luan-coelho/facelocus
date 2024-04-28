@@ -20,10 +20,11 @@ pip install face_recognition --break-system-packages
 
 Python 3.11.6
 
-caminho: 
+caminho:
 ```pip 24.0 from /usr/lib/python3.11/site-packages/pip (python 3.11)```
 
 .env
+
 ```
 _DEV_AWS_ACCESS_KEY_ID=
     _DEV_AWS_SECRET_ACCESS_KEY=
@@ -39,4 +40,16 @@ _TEST_FACE_RECOGNITION_SERVICE_URL=http://127.0.0.1:5000/facerecognition/check-f
 _TEST_DEEP_FACE_SERVICE_URL=http://127.0.0.1:5000/deepface/check-faces
 _TEST_INSIGHT_FACE_SERVICE_URL=http://127.0.0.1:5000/insightface/check-faces
 _TEST_TZ=America/Sao_Paulo
+```
+
+Rodar postgres de testes no docker
+
+```shell
+docker run --name facelocus-dbtest -e POSTGRES_PASSWORD=root -e POSTGRES_DB=facelocus-test -p 5433:5432 -d postgres
+```
+
+Criar extensão unaccent no banco de dados, reponsável por remover acentos
+
+```postgresql
+CREATE EXTENSION unaccent;
 ```

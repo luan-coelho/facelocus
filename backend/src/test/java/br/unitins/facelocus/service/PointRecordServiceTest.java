@@ -3,18 +3,25 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
+import br.unitins.facelocus.dto.auth.JwtDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
+import br.unitins.facelocus.service.auth.JWTService;
+import br.unitins.facelocus.service.auth.PasswordHandlerService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +44,9 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     PointRecordService pointRecordService;
+
+    @Inject
+    JWTService jwtService;
 
     @AfterAll
     public static void after() {
@@ -86,24 +97,6 @@ class PointRecordServiceTest extends BaseTest {
 
         assertEquals("Informe o evento", exception.getMessage());
     }
-
-    /*
-     * @Test
-     *
-     * @TestTransaction
-     *
-     * @DisplayName("Deve lançar uma exceção quando o registro de ponto estiver ativo e o evento não tiver usuários vinculados"
-     * )
-     * void shouldThrowExceptionWhenTimeRecordIsActiveAndEventHasNoLinkedUsers() {
-     * PointRecord pointRecord = new PointRecord();
-     *
-     * Exception exception = assertThrows(IllegalArgumentException.class,
-     * () -> pointRecordService.create(pointRecord)
-     * );
-     *
-     * assertEquals("O evento não possui n", exception.getMessage());
-     * }
-     */
 
     @Test
     @TestTransaction
@@ -432,7 +425,7 @@ class PointRecordServiceTest extends BaseTest {
         assertEquals(location.getId(), pointRecord.getLocation().getId());
     }
 
-    /*@Test
+    @Test
     @TestTransaction
     @DisplayName("Deve validar um ponto corretamente por um usuário através do fator de reconhecimento facial")
     void shouldCorrectlyValidatePointByUser() {
@@ -446,32 +439,29 @@ class PointRecordServiceTest extends BaseTest {
         AttendanceRecord ar = userAttendance.getAttendanceRecords().get(0);
         File validationPhoto = getImageFile("user1_2.jpg");
 
+        User user = userAttendance.getUser();
+        JwtDTO jwtDTO = jwtService.generateJwt(user);
+
         given()
-                .header(new Header("content-type", "multipart/form-data"))
+                .headers(new Headers(new Header("content-type", "multipart/form-data"),
+                        new Header("Authorization", "Bearer " + jwtDTO.getToken())))
                 .multiPart("file", profilePhoto)
                 .contentType("multipart/form-data")
                 .when()
-                .post("/user/uploud-face-photo?user=" + userAttendance.getUser().getId())
+                .post("/user/uploud-face-photo?user=" + user.getId())
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
 
         given()
-                .header(new Header("content-type", "multipart/form-data"))
+                .headers(new Headers(new Header("content-type", "multipart/form-data"),
+                        new Header("Authorization", "Bearer " + jwtDTO.getToken())))
                 .multiPart("file", validationPhoto)
                 .contentType("multipart/form-data")
                 .when()
                 .post("/point-record/validate-frf?attendanceRecord=" + ar.getId())
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode());
-
-        *//*assertDoesNotThrow(() -> pointRecordService
-                .validateFacialRecognitionFactorForAttendanceRecord(ar.getId(), validationPhotoUpload));
-        assertEquals(AttendanceRecordStatus.VALIDATED, ar.getStatus());
-        assertTrue(ar.getValidationAttempts()
-                .stream()
-                .allMatch(ValidationAttempt::isValidatedSuccessfully)
-        );*//*
-    }*/
+    }
 
      /*
     @Test

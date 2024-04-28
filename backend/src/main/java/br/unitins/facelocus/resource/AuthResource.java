@@ -42,7 +42,7 @@ public class AuthResource {
     @Path("/login")
     @POST
     public Response login(@Valid LoginRequestDTO loginRequestDTO) {
-        JwtDTO dto = authAuthenticationService.checkCredentials(loginRequestDTO);
+        JwtDTO dto = authAuthenticationService.checkCredentials(loginRequestDTO.login(), loginRequestDTO.password());
         return Response.ok(dto).build();
     }
 
