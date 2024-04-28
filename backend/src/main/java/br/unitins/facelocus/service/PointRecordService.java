@@ -15,6 +15,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -379,16 +380,16 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
 
-        FaceRecognitionValidationAttempt validationAttempt = new FaceRecognitionValidationAttempt();
-        validationAttempt.setFacePhoto(validation.getFacePhoto());
-        validationAttempt.setAttendanceRecord(attendanceRecord);
-        attendanceRecord.getFrValidationAttempts().add(validationAttempt);
+        FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
+        attempt.setFacePhoto(validation.getFacePhoto());
+        attempt.setAttendanceRecord(attendanceRecord);
+        attendanceRecord.getFrValidationAttempts().add(attempt);
         boolean faceDetected = validation.isFaceDetected();
         attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
 
         if (faceDetected) {
-            validationAttempt.setValidated(true);
-            validationAttempt.setDateTime(LocalDateTime.now());
+            attempt.setValidated(true);
+            attempt.setDateTime(LocalDateTime.now());
             attendanceRecordService.update(attendanceRecord);
         } else {
             attendanceRecordService.update(attendanceRecord);
@@ -408,11 +409,14 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         if (factors.size() == 1 && attemptDto.validated()) {
             attendanceRecord.setStatus(AttendanceRecordStatus.VALIDATED);
-            attendanceRecord.setLocationValidatedSuccessfully(true);
         }
 
         LocationValidationAttempt attempt = pointRecordMapper.toEntity(attemptDto);
-        attendanceRecord.getLocationValidationAttempts().add(attempt);
+        attempt.setAttendanceRecord(attendanceRecord);
+        List<LocationValidationAttempt> attempts = attendanceRecord.getLocationValidationAttempts();
+        Hibernate.initialize(attempts);
+        attempts.add(attempt);
+        attendanceRecord.setLocationValidatedSuccessfully(true);
         attendanceRecordService.update(attendanceRecord);
     }
 

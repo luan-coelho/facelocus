@@ -49,6 +49,7 @@ class AppRoutes {
   static const validateFactors = '/validate-factors';
   static const facialFactorValidate = '/facial-factor-validate';
   static const locationFactorValidate = '/location-factor-validate';
+  static const attendanceRecord = '/attendance-record';
   static const about = '/about';
 }
 

@@ -11,6 +11,10 @@ class LoadUserAttendace extends LocationFactorValidateEvent {
 
 class ValidateLocation extends LocationFactorValidateEvent {
   final UserAttendanceModel userAttendance;
+  final int attendanceRecordId;
 
-  ValidateLocation({required this.userAttendance});
+  ValidateLocation({
+    required this.userAttendance,
+    required this.attendanceRecordId,
+  });
 }

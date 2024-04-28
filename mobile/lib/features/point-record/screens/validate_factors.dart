@@ -1,6 +1,8 @@
+import 'package:facelocus/features/point-record/blocs/attendance-record/attendance_record_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/features/point-record/widgets/fr_factor_validate_card.dart';
 import 'package:facelocus/features/point-record/widgets/il_factor_validate_card.dart';
+import 'package:facelocus/models/attendance_record_model.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -29,6 +31,9 @@ class ValidateFactorsScreen extends StatefulWidget {
 class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
   @override
   void initState() {
+    context.read<AttendanceRecordBloc>().add(
+          LoadAttendanceRecord(attendanceRecordId: widget.attendanceRecordId),
+        );
     super.initState();
   }
 
@@ -39,19 +44,21 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
       showBottomNavigationBar: false,
       body: Padding(
         padding: const EdgeInsets.all(29.0),
-        child: BlocBuilder<PointRecordShowBloc, PointRecordShowState>(
+        child: BlocBuilder<AttendanceRecordBloc, AttendanceRecordState>(
           builder: (context, state) {
-            if (state is PointRecordShowLoaded) {
+            if (state is AttendanceRecordLoaded) {
+              AttendanceRecordModel ar = state.attendanceRecord;
               return Column(
                 children: [
                   if (widget.locationIndoorFactor) ...[
                     GestureDetector(
-                      onTap: () => context.push(
-                        '${AppRoutes.locationFactorValidate}/${widget.attendanceRecordId}',
-                      ),
+                      onTap: !ar.locationValidatedSuccessfully
+                          ? () => context.push(
+                                '${AppRoutes.locationFactorValidate}/${widget.attendanceRecordId}',
+                              )
+                          : null,
                       child: LocationFactorValidateCard(
-                        factor: Factor.location,
-                        userAttendance: state.userAttendance!,
+                        attendanceRecord: ar,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -61,12 +68,19 @@ class _ValidateFactorsScreenState extends State<ValidateFactorsScreen> {
                       onTap: () => context.push(
                         '${AppRoutes.facialFactorValidate}/${widget.attendanceRecordId}',
                       ),
-                      child: FrFactorValidateCard(
-                        factor: Factor.facialRecognition,
-                        userAttendance: state.userAttendance!,
-                        factorBlocked: state.pointRecord.factors!
-                                .contains(Factor.location) &&
-                            !state.userAttendance!.validatedLocation,
+                      child: BlocBuilder<PointRecordShowBloc,
+                          PointRecordShowState>(
+                        builder: (context, state) {
+                          if (state is PointRecordShowLoaded) {
+                            return FrFactorValidateCard(
+                              factor: Factor.facialRecognition,
+                              blocked: state.pointRecord.factors!
+                                      .contains(Factor.location) &&
+                                  !ar.locationValidatedSuccessfully,
+                            );
+                          }
+                          return const Center(child: Spinner());
+                        },
                       ),
                     )
                   ]

@@ -1,26 +1,19 @@
 import 'package:facelocus/models/attendance_record_status_enum.dart';
 import 'package:facelocus/models/factor_enum.dart';
 import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:flutter/material.dart';
-
-import '../../../models/attendance_record_model.dart';
 
 class FrFactorValidateCard extends StatefulWidget {
   const FrFactorValidateCard({
     super.key,
-    required this.userAttendance,
-    this.attendanceRecord,
     this.pointRecord,
     required this.factor,
-    this.factorBlocked = false,
+    this.blocked = false,
   });
 
-  final UserAttendanceModel userAttendance;
-  final AttendanceRecordModel? attendanceRecord;
   final PointRecordModel? pointRecord;
   final Factor factor;
-  final bool factorBlocked;
+  final bool blocked;
 
   @override
   State<FrFactorValidateCard> createState() => _FrFactorValidateCardState();
@@ -47,7 +40,7 @@ class _FrFactorValidateCardState extends State<FrFactorValidateCard> {
       height: 60,
       decoration: BoxDecoration(
         border: Border(
-            left: widget.factorBlocked
+            left: widget.blocked
                 ? const BorderSide(
                     color: Colors.grey,
                     width: 2,
@@ -78,7 +71,7 @@ class _FrFactorValidateCardState extends State<FrFactorValidateCard> {
               child: IconButton(
                 padding: const EdgeInsets.all(0.0),
                 onPressed: null,
-                icon: widget.factorBlocked
+                icon: widget.blocked
                     ? const Icon(
                         Icons.lock,
                         size: 35.0,
@@ -88,7 +81,7 @@ class _FrFactorValidateCardState extends State<FrFactorValidateCard> {
                         size: 35.0,
                       ),
                 style: ButtonStyle(
-                  foregroundColor: widget.factorBlocked
+                  foregroundColor: widget.blocked
                       ? MaterialStateProperty.all<Color>(
                           Colors.grey,
                         )

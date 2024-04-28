@@ -67,17 +67,21 @@ public class UserAttendanceService extends BaseService<UserAttendance, UserAtten
 
     private void checkWhetherFactorsHaveBeenValidated(UserAttendance userAttendance) {
         List<AttendanceRecord> attendanceRecords = userAttendance.getAttendanceRecords();
-       /* for (AttendanceRecord attendanceRecord : attendanceRecords) {
-            List<FaceRecognitionValidationAttempt> validationAttempts = attendanceRecord.getFrValidationAttempts();
-            for (FaceRecognitionValidationAttempt validationAttempt : validationAttempts) {
-                if (validationAttempt.getFacialRecognitionValidationTime() != null) {
-                    userAttendance.setValidatedFaceRecognition(true);
-                }
+        for (AttendanceRecord attendanceRecord : attendanceRecords) {
+            List<LocationValidationAttempt> locationAttempts = attendanceRecord.getLocationValidationAttempts();
+            List<FaceRecognitionValidationAttempt> frAttempts = attendanceRecord.getFrValidationAttempts();
 
-                if (validationAttempt.() != null) {
-                    userAttendance.setValidatedLocation(true);
+            locationAttempts.forEach(locationAttempt -> {
+                if (locationAttempt.isValidated()) {
+                    attendanceRecord.setLocationValidatedSuccessfully(true);
                 }
-            }
-        }*/
+            });
+
+            frAttempts.forEach(frAttempt -> {
+                if (frAttempt.isValidated()) {
+                    attendanceRecord.setFrValidatedSuccessfully(true);
+                }
+            });
+        }
     }
 }

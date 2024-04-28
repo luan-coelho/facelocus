@@ -1,13 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:facelocus/features/point-record/blocs/attendance-record/attendance_record_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/models/location_model.dart';
+import 'package:facelocus/models/location_validation_attempt.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/service_locator.dart';
+import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/utils/response_api_message.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
-import 'package:meta/meta.dart';
 
 part 'location_factor_validate_event.dart';
 part 'location_factor_validate_state.dart';
@@ -15,9 +19,15 @@ part 'location_factor_validate_state.dart';
 class LocationFactorValidateBloc
     extends Bloc<LocationFactorValidateEvent, LocationFactorValidateState> {
   final UserAttendanceRepository userAttendanceRepository;
+  final PointRecordRepository pointRecordRepository;
+  final AttendanceRecordBloc attendanceRecordBloc;
+  final PointRecordShowBloc pointRecordShowBloc;
 
   LocationFactorValidateBloc({
     required this.userAttendanceRepository,
+    required this.pointRecordRepository,
+    required this.attendanceRecordBloc,
+    required this.pointRecordShowBloc,
   }) : super(LocationFactorValidateInitial()) {
     on<LoadUserAttendace>((event, emit) async {
       try {
@@ -34,10 +44,11 @@ class LocationFactorValidateBloc
     on<ValidateLocation>((event, emit) async {
       try {
         emit(LocationFactorValidateLoading());
+        var pointRecord = event.userAttendance.pointRecord;
+        LocationModel location = pointRecord!.location!;
+        double allowableRadiusInMeters = pointRecord.allowableRadiusInMeters;
+
         Position position = await determinePosition();
-        LocationModel location = event.userAttendance.pointRecord!.location!;
-        double allowableRadiusInMeters =
-            event.userAttendance.pointRecord!.allowableRadiusInMeters;
         double distance = calculateDistance(
           location.latitude,
           location.longitude,
@@ -45,6 +56,23 @@ class LocationFactorValidateBloc
           position.longitude,
         );
         if (distance < allowableRadiusInMeters) {
+          await pointRecordRepository.validateLocationFactorForAttendanceRecord(
+            event.userAttendance.id!,
+            LocationValidationAttempt(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              distanceInMeters: distance,
+              allowedDistanceInMeters: allowableRadiusInMeters,
+              dateTime: DateTime.now(),
+              validated: true,
+            ),
+          );
+          attendanceRecordBloc.add(LoadAttendanceRecord(
+            attendanceRecordId: event.attendanceRecordId,
+          ));
+          pointRecordShowBloc.add(LoadPointRecord(
+            pointRecordId: pointRecord.id,
+          ));
           emit(WithinThePermittedRadius());
         } else {
           emit(OutsideThePermittedRadius(userAttendance: event.userAttendance));

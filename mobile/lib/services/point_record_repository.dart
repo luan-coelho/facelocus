@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:facelocus/models/attendance_record_model.dart';
+import 'package:facelocus/models/location_validation_attempt.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/utils/dio_fetch_api.dart';
@@ -56,7 +57,17 @@ class PointRecordRepository {
     await _fetchApi.post(url, data: data);
   }
 
-  validateFacialRecognitionFactorForAttendanceRecord(
+  Future<Response> validateLocationFactorForAttendanceRecord(
+    int attendanceRecordId,
+    LocationValidationAttempt attempt,
+  ) async {
+    String endpoint = '/validate-lf?attendanceRecord=$attendanceRecordId';
+    String url = '${AppRoutes.pointRecord}$endpoint';
+    var data = attempt.toJson();
+    return await _fetchApi.post(url, data: data);
+  }
+
+  Future<Response> validateFacialRecognitionFactorForAttendanceRecord(
     File facePhoto,
     int attendanceRecordId,
   ) async {

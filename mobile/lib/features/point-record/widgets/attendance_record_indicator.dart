@@ -22,10 +22,11 @@ class AttendanceRecordIndicator extends StatelessWidget {
       width: 15.0,
       height: 15.0,
       decoration: BoxDecoration(
-          color: attendanceRecordColor[attendanceRecord.status] ??
-              Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.black)),
+        color: attendanceRecordColor[attendanceRecord.status] ??
+            Colors.transparent,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black),
+      ),
     );
   }
 }

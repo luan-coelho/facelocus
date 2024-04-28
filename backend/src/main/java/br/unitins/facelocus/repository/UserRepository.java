@@ -44,6 +44,6 @@ public class UserRepository extends BaseRepository<User> {
                     FUNCTION('unaccent',LOWER(email)) LIKE '%'||?1||'%'
                     OR LOWER(cpf) LIKE '%'||?1||'%'
                 """;
-        return find(query, identifier).singleResultOptional();
+         return find(query, identifier).singleResultOptional();
     }
 }

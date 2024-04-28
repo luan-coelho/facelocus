@@ -1,6 +1,7 @@
 package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.dto.pointrecord.LocationValidationAttemptDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.mapper.PointRecordMapper;
@@ -86,6 +87,14 @@ public class PointRecordResource {
     public Response validateUserPoints(List<AttendanceRecord> attendancesRecord) {
         pointRecordService.validateUserPoints(attendancesRecord);
         return Response.noContent().build();
+    }
+
+    @Path("/validate-lf")
+    @POST
+    public Response validateLocationFactor(@RestQuery("attendanceRecord") Long attendanceRecordId,
+                                           LocationValidationAttemptDTO attemptDto) {
+        pointRecordService.validateLocationFactorForAttendanceRecord(attendanceRecordId, attemptDto);
+        return Response.ok().build();
     }
 
     @Path("/validate-frf")

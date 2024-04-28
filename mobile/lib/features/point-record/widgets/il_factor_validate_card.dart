@@ -1,7 +1,4 @@
 import 'package:facelocus/models/attendance_record_status_enum.dart';
-import 'package:facelocus/models/factor_enum.dart';
-import 'package:facelocus/models/point_record_model.dart';
-import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/attendance_record_model.dart';
@@ -9,16 +6,10 @@ import '../../../models/attendance_record_model.dart';
 class LocationFactorValidateCard extends StatefulWidget {
   const LocationFactorValidateCard({
     super.key,
-    required this.userAttendance,
-    this.attendanceRecord,
-    this.pointRecord,
-    required this.factor,
+    required this.attendanceRecord,
   });
 
-  final UserAttendanceModel userAttendance;
-  final AttendanceRecordModel? attendanceRecord;
-  final PointRecordModel? pointRecord;
-  final Factor factor;
+  final AttendanceRecordModel attendanceRecord;
 
   @override
   State<LocationFactorValidateCard> createState() =>
@@ -39,6 +30,20 @@ class _LocationFactorValidateCardState
     AttendanceRecordStatus.pending: Colors.amber,
   };
 
+  getColorByStatus(AttendanceRecordStatus status) {
+    if (widget.attendanceRecord.locationValidatedSuccessfully) {
+      return attendanceRecordColor[AttendanceRecordStatus.validated]!;
+    }
+    return attendanceRecordColor[status]!;
+  }
+
+  getIconByStatus(AttendanceRecordStatus status) {
+    if (widget.attendanceRecord.locationValidatedSuccessfully) {
+      return attendanceRecordStatus[AttendanceRecordStatus.validated]!;
+    }
+    return attendanceRecordStatus[status]!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +53,7 @@ class _LocationFactorValidateCardState
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-              color: attendanceRecordColor[AttendanceRecordStatus.pending]!,
+              color: getColorByStatus(widget.attendanceRecord.status),
               width: 16),
         ),
         borderRadius: const BorderRadius.all(
@@ -60,9 +65,9 @@ class _LocationFactorValidateCardState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.factor.toString(),
-              style: const TextStyle(
+            const Text(
+              'Localização',
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
               ),
@@ -74,12 +79,12 @@ class _LocationFactorValidateCardState
                 padding: const EdgeInsets.all(0.0),
                 onPressed: null,
                 icon: Icon(
-                  attendanceRecordStatus[AttendanceRecordStatus.pending],
+                  getIconByStatus(widget.attendanceRecord.status),
                   size: 35.0,
                 ),
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
-                    attendanceRecordColor[AttendanceRecordStatus.pending]!,
+                    getColorByStatus(widget.attendanceRecord.status),
                   ),
                   backgroundColor: MaterialStateProperty.all<Color>(
                     Colors.white,

@@ -90,7 +90,9 @@ class _LocationFactorValidateScreenState
                       onPressed: () => context
                           .read<LocationFactorValidateBloc>()
                           .add(ValidateLocation(
-                              userAttendance: state.userAttendance)),
+                            userAttendance: state.userAttendance,
+                            attendanceRecordId: widget.attendanceRecordId,
+                          )),
                       text: 'Validar',
                     ),
                   ],
@@ -141,7 +143,8 @@ class _LocationFactorValidateScreenState
                         onPressed: () => context
                             .read<LocationFactorValidateBloc>()
                             .add(ValidateLocation(
-                                userAttendance: state.userAttendance)),
+                                userAttendance: state.userAttendance,
+                                attendanceRecordId: widget.attendanceRecordId)),
                         text: 'Tentar novamente'),
                   ],
                 );
