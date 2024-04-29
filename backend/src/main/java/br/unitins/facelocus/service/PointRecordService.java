@@ -383,9 +383,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
         attempt.setFacePhoto(validation.getFacePhoto());
         attempt.setAttendanceRecord(attendanceRecord);
-        attendanceRecord.getFrValidationAttempts().add(attempt);
         boolean faceDetected = validation.isFaceDetected();
         attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
+        attendanceRecord.getFrValidationAttempts().add(attempt);
 
         if (faceDetected) {
             attempt.setValidated(true);

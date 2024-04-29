@@ -10,7 +10,7 @@ import 'package:facelocus/features/event/screens/lincked_users_screen.dart';
 import 'package:facelocus/features/event/screens/location_screen.dart';
 import 'package:facelocus/features/home/screens/home_screen.dart';
 import 'package:facelocus/features/point-record/screens/facial_factor_validate_screen.dart';
-import 'package:facelocus/features/point-record/screens/il_factor_validate_screen.dart';
+import 'package:facelocus/features/point-record/screens/location_factor_validate_screen.dart';
 import 'package:facelocus/features/point-record/screens/point_record_admin_edit_screen.dart';
 import 'package:facelocus/features/point-record/screens/point_record_admin_show_screen.dart';
 import 'package:facelocus/features/point-record/screens/point_record_create_screen.dart';
