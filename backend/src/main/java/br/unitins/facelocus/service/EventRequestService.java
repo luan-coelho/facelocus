@@ -102,6 +102,10 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
         User initiatorUser = userService.findById(requestCreateDTO.initiatorUser().getId());
         User administrator = event.getAdministrator();
 
+        if (!event.isAllowTicketRequests()) {
+            throw new IllegalArgumentException("O evento não está aceitando solicitações de ingresso");
+        }
+
         if (administrator.getId().equals(initiatorUser.getId())) {
             throw new IllegalArgumentException("Você é o administrador do evento");
         }

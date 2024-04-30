@@ -79,18 +79,24 @@ class _PointRecordCardState extends State<PointRecordCard> {
                 if (checkIfItIsProgress()) ...[
                   Container(
                     padding: const EdgeInsets.only(
-                        top: 4, right: 8, left: 8, bottom: 4),
+                      top: 4,
+                      right: 8,
+                      left: 8,
+                      bottom: 4,
+                    ),
                     decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
                         border: Border.all(color: Colors.green),
                         color: Colors.green.withOpacity(0.1)),
                     child: const Text(
                       'Em andamento',
                       style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500),
+                        color: Colors.green,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   )
                 ]

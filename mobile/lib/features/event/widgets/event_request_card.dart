@@ -78,15 +78,16 @@ class _EventRequestCardState extends State<EventRequestCard> {
           }).toString());
     }
 
-    return Builder(builder: (context) {
-      bool isRequestOwner =
-          widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
-      return GestureDetector(
-        onTap: !isRequestOwner &&
-                widget.eventRequest.status == EventRequestStatus.pending
-            ? showEventRequest
-            : null,
-        child: Container(
+    return Builder(
+      builder: (context) {
+        bool isRequestOwner =
+            widget.eventRequest.initiatorUser.id == widget.authenticatedUser.id;
+        return GestureDetector(
+          onTap: !isRequestOwner &&
+                  widget.eventRequest.status == EventRequestStatus.pending
+              ? showEventRequest
+              : null,
+          child: Container(
             padding: const EdgeInsets.all(15),
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -94,31 +95,37 @@ class _EventRequestCardState extends State<EventRequestCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.eventRequest.event.description!.toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                    overflow: TextOverflow.ellipsis),
+                Text(
+                  widget.eventRequest.event.description!.toUpperCase(),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 Row(
                   children: [
                     Text(
-                        widget.eventRequest.initiatorUser.id ==
-                                widget.authenticatedUser.id
-                            ? 'Para:'
-                            : 'De:',
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis),
+                      widget.eventRequest.initiatorUser.id ==
+                              widget.authenticatedUser.id
+                          ? 'Para:'
+                          : 'De:',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     const SizedBox(width: 3),
                     Text(
-                        widget.eventRequest.initiatorUser.id ==
-                                widget.authenticatedUser.id
-                            ? widget.eventRequest.targetUser
-                                .getFullName()
-                                .toUpperCase()
-                            : widget.eventRequest.initiatorUser
-                                .getFullName()
-                                .toUpperCase(),
-                        style: const TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis)
+                      widget.eventRequest.initiatorUser.id ==
+                              widget.authenticatedUser.id
+                          ? widget.eventRequest.targetUser
+                              .getFullName()
+                              .toUpperCase()
+                          : widget.eventRequest.initiatorUser
+                              .getFullName()
+                              .toUpperCase(),
+                      style: const TextStyle(fontSize: 14),
+                      overflow: TextOverflow.ellipsis,
+                    )
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -135,8 +142,10 @@ class _EventRequestCardState extends State<EventRequestCard> {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      Text(descriptionByStatus(widget.eventRequest.status),
-                          style: const TextStyle(color: Colors.black54)),
+                      Text(
+                        descriptionByStatus(widget.eventRequest.status),
+                        style: const TextStyle(color: Colors.black54),
+                      ),
                     ]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -144,51 +153,80 @@ class _EventRequestCardState extends State<EventRequestCard> {
                       children: [
                         Container(
                           padding: const EdgeInsets.only(
-                              top: 4, right: 8, left: 8, bottom: 4),
+                            top: 4,
+                            right: 8,
+                            left: 8,
+                            bottom: 4,
+                          ),
                           decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                              border: Border.all(
-                                  color: getBannerColor(
-                                      widget.eventRequest.type!)),
-                              color: getBannerColor(widget.eventRequest.type!)
-                                  .withOpacity(0.1)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                            border: Border.all(
+                              color: getBannerColor(
+                                widget.eventRequest.type!,
+                              ),
+                            ),
+                            color: getBannerColor(
+                              widget.eventRequest.type!,
+                            ).withOpacity(0.1),
+                          ),
                           child: Text(
-                              getSecondaryBannerText(widget.eventRequest.type!),
-                              style: TextStyle(
-                                  color:
-                                      getBannerColor(widget.eventRequest.type!),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500)),
+                            getSecondaryBannerText(
+                              widget.eventRequest.type!,
+                            ),
+                            style: TextStyle(
+                              color: getBannerColor(
+                                widget.eventRequest.type!,
+                              ),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         const SizedBox(
                           width: 5,
                         ),
                         Container(
                           padding: const EdgeInsets.only(
-                              top: 4, right: 8, left: 8, bottom: 4),
+                            top: 4,
+                            right: 8,
+                            left: 8,
+                            bottom: 4,
+                          ),
                           decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                              border: Border.all(
-                                  color: getBannerColor(
-                                      widget.eventRequest.type!)),
-                              color: getBannerColor(widget.eventRequest.type!)
-                                  .withOpacity(0.1)),
-                          child: Text(getBannerText(widget.eventRequest.type!),
-                              style: TextStyle(
-                                  color:
-                                      getBannerColor(widget.eventRequest.type!),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                            border: Border.all(
+                              color: getBannerColor(
+                                widget.eventRequest.type!,
+                              ),
+                            ),
+                            color: getBannerColor(
+                              widget.eventRequest.type!,
+                            ).withOpacity(0.1),
+                          ),
+                          child: Text(
+                            getBannerText(
+                              widget.eventRequest.type!,
+                            ),
+                            style: TextStyle(
+                              color: getBannerColor(widget.eventRequest.type!),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ],
                     )
                   ],
                 ),
               ],
-            )),
-      );
-    });
+            ),
+          ),
+        );
+      },
+    );
   }
 }

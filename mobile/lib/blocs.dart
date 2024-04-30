@@ -178,6 +178,7 @@ class AppBlocs {
     BlocProvider<FacialFactorValidateBloc>(
       create: (context) => FacialFactorValidateBloc(
         pointRecordRepository: locator<PointRecordRepository>(),
+        pointRecordShowBloc: BlocProvider.of<PointRecordShowBloc>(context),
       ),
     ),
   ];
