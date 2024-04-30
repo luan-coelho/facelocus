@@ -12,8 +12,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.List;
-
 @ApplicationScoped
 public class EventRequestService extends BaseService<EventRequest, EventRequestRepository> {
 
@@ -25,9 +23,6 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
 
     @Inject
     EventService eventService;
-
-    @Inject
-    PointRecordService pointRecordService;
 
     /**
      * Responsável por buscar todas as solicitações de ingresso vinculadas ao um evento
@@ -144,9 +139,8 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      *
      * @param userId         Identificador do usuário solicitado
      * @param eventRequestId Identificador da solicitação de ingresso
-     * @param status         Situação da solicitação
      */
-    private void updateInvitationRequestStatus(Long userId, Long eventRequestId, EventRequestStatus status) {
+    private void updateInvitationRequestStatus(Long userId, Long eventRequestId) {
         EventRequest eventRequest = findById(eventRequestId);
         Long administratorId = eventRequest.getEvent().getAdministrator().getId();
         Long targetUserId = eventRequest.getTargetUser().getId();
@@ -165,9 +159,8 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
      *
      * @param userId         Identificador do usuário solicitado
      * @param eventRequestId Identificador da solicitação de ingresso
-     * @param status         Situação da solicitação
      */
-    private void updateTicketRequestStatus(Long userId, Long eventRequestId, EventRequestStatus status) {
+    private void updateTicketRequestStatus(Long userId, Long eventRequestId) {
         EventRequest eventRequest = findById(eventRequestId);
         Long initialUserId = eventRequest.getInitiatorUser().getId();
         Long targetUserId = eventRequest.getTargetUser().getId();
@@ -188,18 +181,16 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     @Transactional
     public void approve(Long userId, Long eventRequestId, EventRequestType requestType) {
         if (requestType == EventRequestType.INVITATION) {
-            updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
+            updateInvitationRequestStatus(userId, eventRequestId);
         } else {
-            updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.APPROVED);
+            updateTicketRequestStatus(userId, eventRequestId);
         }
     }
 
     @Transactional
-    public void reject(Long userId, Long eventRequestId, EventRequestType requestType) {
-        if (requestType == EventRequestType.INVITATION) {
-            updateInvitationRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
-        } else {
-            updateTicketRequestStatus(userId, eventRequestId, EventRequestStatus.REJECTED);
-        }
+    public void reject(Long eventRequestId) {
+        EventRequest eventRequest = findById(eventRequestId);
+        eventRequest.setStatus(EventRequestStatus.REJECTED);
+        update(eventRequest);
     }
 }

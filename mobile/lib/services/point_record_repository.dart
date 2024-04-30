@@ -57,7 +57,7 @@ class PointRecordRepository {
     await _fetchApi.post(url, data: data);
   }
 
-  Future<Response> validateLocationFactorForAttendanceRecord(
+  Future<Response> validateLocationFactor(
     int attendanceRecordId,
     LocationValidationAttempt attempt,
   ) async {
@@ -67,7 +67,7 @@ class PointRecordRepository {
     return await _fetchApi.post(url, data: data);
   }
 
-  Future<Response> validateFacialRecognitionFactorForAttendanceRecord(
+  Future<Response> validateFacialRecognitionFactor(
     File facePhoto,
     int attendanceRecordId,
   ) async {

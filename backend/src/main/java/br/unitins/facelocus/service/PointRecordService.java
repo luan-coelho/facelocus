@@ -387,12 +387,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
         attendanceRecord.getFrValidationAttempts().add(attempt);
 
-        if (faceDetected) {
-            attempt.setValidated(true);
-            attempt.setDateTime(LocalDateTime.now());
-            attendanceRecordService.update(attendanceRecord);
-        } else {
-            attendanceRecordService.update(attendanceRecord);
+        attempt.setValidated(faceDetected);
+        attempt.setDateTime(LocalDateTime.now());
+        attendanceRecordService.update(attendanceRecord);
+
+        if (!faceDetected) {
             throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
         }
     }

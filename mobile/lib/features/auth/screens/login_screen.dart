@@ -71,7 +71,7 @@ class LoginFormState extends State<LoginScreen> {
           }
 
           if (state is UserWithoutFacePhoto) {
-            context.replace(AppRoutes.userUploadFacePhoto);
+            clearAndNavigate(AppRoutes.userUploadFacePhoto);
           }
         },
         builder: (context, state) {

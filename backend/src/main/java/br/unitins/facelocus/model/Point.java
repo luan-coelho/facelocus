@@ -20,9 +20,7 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     private LocalDateTime initialDate;
-
     private LocalDateTime finalDate;
 
     @ManyToOne

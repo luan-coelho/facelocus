@@ -26,9 +26,9 @@ class AppAboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 const Text(
-                  'Desenvolvido por:',
+                  'Desenvolvido por',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -36,13 +36,29 @@ class AppAboutScreen extends StatelessWidget {
                 const Text(
                   'Luan Coêlho de Souza',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Sob orientação de',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Prof. Me. Jânio Elias Teixeira Júnior',
+                  style: TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  text: 'Github',
+                  text: 'Github | luan-coelho',
                   icon: const Icon(Icons.developer_mode),
                   onPressed: () async {
                     final Uri url = Uri.parse('https://github.com/luan-coelho');
@@ -80,7 +96,7 @@ class AppAboutScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Contato',
+                              'Contato para suporte',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -89,6 +105,13 @@ class AppAboutScreen extends StatelessWidget {
                             SizedBox(height: 10),
                             Text(
                               'luancoelho@unitins.br',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              'janio.et@unitins.br',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,

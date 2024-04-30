@@ -14,6 +14,8 @@ class EventRequestListLoaded extends EventRequestListState {
   EventRequestListLoaded(this.eventRequests, this.authenticatedUser);
 }
 
+class EventRequestListEmpty extends EventRequestListState {}
+
 class EventRequestListError extends EventRequestListState {
   final String message;
 

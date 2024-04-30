@@ -14,9 +14,8 @@ public class FacePhoto extends DefaultEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     private String fileName;
 
-    @OneToOne
+    @ManyToOne
     private User user;
 }

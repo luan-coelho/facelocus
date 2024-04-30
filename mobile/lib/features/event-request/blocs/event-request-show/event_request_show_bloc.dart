@@ -25,7 +25,9 @@ class EventRequestShowBloc
     on<LoadEventRequest>((event, emit) async {
       try {
         emit(EventRequestShowLoading());
-        var er = await eventRequestRepository.getById(event.eventRequestId);
+        EventRequestModel er = await eventRequestRepository.getById(
+          event.eventRequestId,
+        );
         emit(EventRequestShowLoaded(er));
       } on DioException catch (e) {
         emit(EventRequestShowError(ResponseApiMessage.buildMessage(e)));
@@ -51,12 +53,7 @@ class EventRequestShowBloc
     on<RejectEventRequest>((event, emit) async {
       try {
         emit(EventRequestShowLoading());
-        var userId = await sessionRepository.getUserId();
-        await eventRequestRepository.reject(
-          event.eventRequestId,
-          userId!,
-          event.requestType,
-        );
+        await eventRequestRepository.reject(event.eventRequestId);
         eventRequestListBloc.add(LoadAllEventRequest());
         emit(RequestCompletedSuccessfully());
       } on DioException catch (e) {

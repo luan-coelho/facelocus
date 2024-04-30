@@ -2,6 +2,7 @@ import 'package:facelocus/features/event-request/blocs/event-request-list/event_
 import 'package:facelocus/features/event/widgets/event_request_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
+import 'package:facelocus/shared/widgets/empty_data.dart';
 import 'package:facelocus/shared/widgets/unexpected_error.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,10 @@ class _EventRequestListScreenState extends State<EventRequestListScreen> {
           builder: (context, state) {
             if (state is EventRequestListLoading) {
               return const Center(child: Spinner());
+            }
+
+            if (state is EventRequestListEmpty) {
+              return const EmptyData('Nada por aqui...');
             }
 
             if (state is EventRequestListError) {

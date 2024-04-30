@@ -61,8 +61,10 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         facePhoto.setObjectKey(facePhotoKey);
         facePhoto.setUser(user);
         facePhoto.setBucket(bucketName);
+        user.setFacePhoto(facePhoto);
 
         this.repository.getEntityManager().merge(facePhoto);
+        userService.update(user);
     }
 
     @Override
@@ -80,21 +82,6 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
     @Override
     public void facePhotoValidation(Long userId, MultipartData multipartBody) {
 
-    }
-
-    public boolean exitsObject(String objectKey) {
-        try {
-            s3.headObject(HeadObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(objectKey)
-                    .build());
-            return true;
-        } catch (S3Exception e) {
-            if (e.awsErrorDetails().errorCode().equals("NoSuchKey")) {
-                return false;
-            }
-            throw e;
-        }
     }
 
     private PutObjectRequest buildPutRequest(String objectKey, FileUpload fileUpload) {
@@ -129,6 +116,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
         String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
         FacePhotoS3 facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
+        facePhoto.setUser(user);
         this.repository.getEntityManager().merge(facePhoto);
 
         FacePhotoS3 userFacePhoto = (FacePhotoS3) user.getFacePhoto();

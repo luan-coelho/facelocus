@@ -5,8 +5,9 @@ abstract class UserFacePhotoEvent {}
 
 class LoadUserFacePhoto extends UserFacePhotoEvent {}
 
-class UpdateUserFacePhoto extends UserFacePhotoEvent {
+class UptatedUserFacePhoto extends UserFacePhotoEvent {
   final File image;
+  final UserModel user;
 
-  UpdateUserFacePhoto({required this.image});
+  UptatedUserFacePhoto({required this.image, required this.user});
 }

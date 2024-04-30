@@ -19,14 +19,10 @@ class FacialFactorValidateBloc
     on<ValidateFace>((event, emit) async {
       try {
         emit(ValidateFaceLoading());
-        await pointRecordRepository
-            .validateFacialRecognitionFactorForAttendanceRecord(
+        await pointRecordRepository.validateFacialRecognitionFactor(
           event.image,
           event.attendanceRecordId,
         );
-        /*   var _prController = Get.find<PointRecordShowController>();
-        await _prController.fetchUserAttendanceById(context, pointRecordId);
-        context.pop();*/
         emit(ValidateFaceSuccess());
       } on DioException catch (e) {
         emit(ValidateFaceError(message: ResponseApiMessage.buildMessage(e)));

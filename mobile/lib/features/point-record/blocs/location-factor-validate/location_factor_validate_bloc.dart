@@ -56,7 +56,7 @@ class LocationFactorValidateBloc
           position.longitude,
         );
         if (distance < allowableRadiusInMeters) {
-          await pointRecordRepository.validateLocationFactorForAttendanceRecord(
+          await pointRecordRepository.validateLocationFactor(
             event.userAttendance.id!,
             LocationValidationAttempt(
               latitude: position.latitude,
@@ -81,6 +81,11 @@ class LocationFactorValidateBloc
         emit(LocationFactorValidateError(
           message: ResponseApiMessage.buildMessage(e),
         ));
+      } catch (e) {
+        emit(LocationFactorValidateError(
+          message: e.toString(),
+        ));
+        emit(LocationFactorLoaded(userAttendance: event.userAttendance));
       }
     });
   }
@@ -112,23 +117,20 @@ class LocationFactorValidateBloc
     }
 
     if (!enabled) {
-      var error = 'Os serviços de localização estão desativados.';
-      return Future.error(error);
+      throw 'Os serviços de localização estão desativados.';
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        var error = 'As permissões de localização foram negadas';
-        return Future.error(error);
+        throw 'As permissões de localização foram negadas';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      var error = 'As permissões de localização foram negadas permanentemente,'
+      throw 'As permissões de localização foram negadas permanentemente,'
           'não é possivel solicitar permissões.';
-      return Future.error(error);
     }
     return await Geolocator.getCurrentPosition();
   }

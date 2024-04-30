@@ -44,14 +44,8 @@ class EventRequestRepository {
     return response.statusCode == 204;
   }
 
-  Future<bool> reject(
-    int eventRequestId,
-    int userId,
-    EventRequestType requestType,
-  ) async {
-    String rType = EventRequestType.toJson(requestType);
-    var url =
-        '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId&user=$userId&requestType=$rType';
+  Future<bool> reject(int eventRequestId) async {
+    var url = '${AppRoutes.eventRequest}/reject?eventrequest=$eventRequestId';
     var response = await _fetchApi.patch(url);
     return response.statusCode == 204;
   }

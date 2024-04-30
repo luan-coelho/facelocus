@@ -98,10 +98,9 @@ public class EventRequestResource {
 
     @Path("/reject")
     @PATCH
-    public Response reject(@RestQuery("user") Long userId,
-                           @RestQuery("eventRequest")
-                           Long eventRequestId, @RestQuery("requesttype") EventRequestType requestType) {
-        eventRequestService.reject(userId, eventRequestId, requestType);
+    public Response reject(@RestQuery("eventRequest") Long eventRequestId) {
+        eventRequestService.reject(eventRequestId);
         return Response.ok().build();
     }
+
 }

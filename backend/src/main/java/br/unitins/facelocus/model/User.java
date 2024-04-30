@@ -28,11 +28,8 @@ public class User extends DefaultEntity {
 
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private FacePhoto facePhoto;
-
-  /*  @OneToMany(mappedBy = "user")
-    private List<Device> devices;*/
 
     @ManyToMany(mappedBy = "users")
     private List<Event> events;
