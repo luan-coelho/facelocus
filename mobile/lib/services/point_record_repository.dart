@@ -78,4 +78,8 @@ class PointRecordRepository {
     String url = '${AppRoutes.pointRecord}$endpoint';
     return await _fetchApi.post(url, data: formData);
   }
+
+  Future<Response> deleteById(int id) async {
+    return await _fetchApi.delete('${AppRoutes.pointRecord}/$id');
+  }
 }

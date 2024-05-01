@@ -64,7 +64,7 @@ public class PointRecordResource {
     @Path("/{id}")
     @DELETE
     public Response deleteById(@PathParam("id") Long pointRecordId) {
-        pointRecordService.deleteById(pointRecordId);
+        pointRecordService.deactivate(pointRecordId);
         return Response.noContent().build();
     }
 

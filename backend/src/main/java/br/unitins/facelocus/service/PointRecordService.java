@@ -479,4 +479,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         this.update(pointRecord);
     }
 
+    @Transactional
+    public void deactivate(Long id) {
+        PointRecord pointRecord = findById(id);
+        pointRecord.setActive(false);
+        update(pointRecord);
+    }
 }

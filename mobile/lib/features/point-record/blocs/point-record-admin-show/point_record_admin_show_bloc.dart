@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:facelocus/features/home/bloc/home/home_bloc.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/models/user_attendace_model.dart';
 import 'package:facelocus/services/point_record_repository.dart';
@@ -12,12 +13,14 @@ part 'point_record_admin_show_state.dart';
 
 class PointRecordAdminShowBloc
     extends Bloc<PointRecordAdminShowEvent, PointRecordAdminShowState> {
-  final UserAttendanceRepository userAttendanceRepository;
   final PointRecordRepository pointRecordRepository;
+  final UserAttendanceRepository userAttendanceRepository;
+  final HomeBloc homeBloc;
 
   PointRecordAdminShowBloc({
-    required this.userAttendanceRepository,
     required this.pointRecordRepository,
+    required this.userAttendanceRepository,
+    required this.homeBloc,
   }) : super(PointRecordAdminShowInitial()) {
     on<LoadPointRecordAdminShow>((event, emit) async {
       try {
@@ -38,6 +41,19 @@ class PointRecordAdminShowBloc
           pointRecord: pointRecord,
           userAttendances: uas,
         ));
+      } on DioException catch (e) {
+        emit(PointRecordAdminShowError(
+          message: ResponseApiMessage.buildMessage(e),
+        ));
+      }
+    });
+
+    on<DeletePointRecordAdminShow>((event, emit) async {
+      try {
+        emit(PointRecordAdminShowLoading());
+        await pointRecordRepository.deleteById(event.pointRecordId);
+        homeBloc.add(LoadPointRecords());
+        emit(SuccessfullDeletion());
       } on DioException catch (e) {
         emit(PointRecordAdminShowError(
           message: ResponseApiMessage.buildMessage(e),

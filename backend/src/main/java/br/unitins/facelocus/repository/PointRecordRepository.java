@@ -55,8 +55,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                     JOIN FETCH pr.event e
                     JOIN FETCH e.administrator u
                     LEFT JOIN e.users lu
-                WHERE pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2)""";
-        return find(query, date, userId).list();
+                WHERE (pr.date = ?1 AND (u.id = ?2 OR lu.id = ?2) AND pr.active = ?3)""";
+        return find(query, date, userId, true).list();
     }
 
     public List<PointRecord> findAllByUser(Long userId) {
@@ -68,8 +68,8 @@ public class PointRecordRepository extends BaseRepository<PointRecord> {
                     JOIN e.administrator a
                     LEFT JOIN pr.usersAttendances ua
                     LEFT JOIN e.users lu
-                WHERE a.id = ?1 OR lu.id = ?1
+                WHERE (a.id = ?1 OR lu.id = ?1) AND pr.active = ?2
                 """;
-        return find(query, userId).list();
+        return find(query, userId, true).list();
     }
 }

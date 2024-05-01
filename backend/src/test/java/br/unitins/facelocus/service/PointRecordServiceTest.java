@@ -9,7 +9,6 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.service.auth.JWTService;
-import br.unitins.facelocus.service.auth.PasswordHandlerService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.Header;
@@ -33,7 +32,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @QuarkusTest
 class PointRecordServiceTest extends BaseTest {
@@ -725,5 +723,22 @@ class PointRecordServiceTest extends BaseTest {
         assertTrue(pr.getUsersAttendances()
                 .stream()
                 .allMatch(ua -> ua.getAttendanceRecords().size() == 2));
+    }
+
+    @Test
+    @TestTransaction
+    @DisplayName("Deve desativar um registro de ponto com sucesso")
+    void ShouldSuccessfullyDeactivatePointRecord() {
+        PointRecord pr1 = getPointRecord();
+        PointRecord pr2 = getPointRecord();
+        this.em.merge(pr1);
+        this.em.merge(pr2);
+
+        pointRecordService.deactivate(pr1.getId());
+        List<PointRecord> prs = pointRecordService.findAllByUser(event1.getAdministrator().getId());
+
+        assertEquals(1, prs.size());
+        assertEquals(pr2.getId(), prs.get(0).getId());
+        assertTrue(prs.get(0).isActive());
     }
 }

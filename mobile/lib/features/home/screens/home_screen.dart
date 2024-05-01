@@ -32,11 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.only(
-            top: 29,
-            right: 29,
-            left: 29,
-          ),
+          padding: const EdgeInsets.all(29),
           child: Column(
             children: [
               const UserCardHome(),

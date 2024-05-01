@@ -8,3 +8,9 @@ class LoadPointRecordAdminShow extends PointRecordAdminShowEvent {
 
   LoadPointRecordAdminShow({required this.pointRecordId});
 }
+
+class DeletePointRecordAdminShow extends PointRecordAdminShowEvent {
+  final int pointRecordId;
+
+  DeletePointRecordAdminShow({required this.pointRecordId});
+}

@@ -28,3 +28,5 @@ class PointRecordAdminShowError extends PointRecordAdminShowState {
 
   PointRecordAdminShowError({required this.message});
 }
+
+class SuccessfullDeletion extends PointRecordAdminShowState {}

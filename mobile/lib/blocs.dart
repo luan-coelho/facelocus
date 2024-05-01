@@ -187,6 +187,7 @@ class AppBlocs {
       create: (context) => PointRecordAdminShowBloc(
         userAttendanceRepository: locator<UserAttendanceRepository>(),
         pointRecordRepository: locator<PointRecordRepository>(),
+        homeBloc: BlocProvider.of<HomeBloc>(context),
       ),
     ),
     BlocProvider<UserAttendanceValidateBloc>(
