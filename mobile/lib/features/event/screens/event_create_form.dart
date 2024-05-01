@@ -41,6 +41,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
           child: Column(
             children: [
               AppTextField(
+                maxLength: 20,
                 textEditingController: _descriptionController,
                 labelText: 'Descrição',
                 validator: (value) {
@@ -49,6 +50,7 @@ class _EventCreateFormState extends State<EventCreateForm> {
                   }
                   return null;
                 },
+                characterCounter: true,
               ),
               Row(
                 children: [

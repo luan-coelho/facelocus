@@ -11,6 +11,7 @@ class AppTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.maxLength,
     this.inputFormatters,
+    this.characterCounter = false,
   });
 
   final String? labelText;
@@ -20,6 +21,7 @@ class AppTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
+  final bool characterCounter;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -60,7 +62,7 @@ class _AppTextFieldState extends State<AppTextField> {
               : false,
           inputFormatters: widget.inputFormatters,
           decoration: InputDecoration(
-            counter: const Offstage(),
+            counter: widget.characterCounter ? null : const Offstage(),
             fillColor: Colors.white,
             filled: true,
             contentPadding: const EdgeInsets.symmetric(

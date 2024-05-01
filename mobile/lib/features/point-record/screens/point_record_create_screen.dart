@@ -72,7 +72,12 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(_event!.description!),
+                            Flexible(
+                              child: Text(
+                                _event!.description!,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                             const SizedBox(width: 5),
                             AppDeleteButton(
                               onPressed: () {
