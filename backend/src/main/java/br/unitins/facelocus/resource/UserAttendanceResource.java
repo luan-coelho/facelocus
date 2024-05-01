@@ -5,7 +5,6 @@ import br.unitins.facelocus.mapper.UserAttendanceMapper;
 import br.unitins.facelocus.model.UserAttendance;
 import br.unitins.facelocus.service.UserAttendanceService;
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,8 +15,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 import java.util.List;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
-//@Authenticated
-@PermitAll
+@Authenticated
 @Path("/user-attendance")
 public class UserAttendanceResource {
 

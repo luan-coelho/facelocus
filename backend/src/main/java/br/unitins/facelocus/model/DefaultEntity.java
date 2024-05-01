@@ -28,5 +28,8 @@ public abstract class DefaultEntity {
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 }

@@ -1,13 +1,13 @@
 class UserFacePhotoModel {
   int id;
   String fileName;
-  DateTime createdAt;
+  DateTime? createdAt;
   DateTime? updatedAt;
 
   UserFacePhotoModel({
     required this.id,
     required this.fileName,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
@@ -15,7 +15,8 @@ class UserFacePhotoModel {
     return UserFacePhotoModel(
       id: json['id'],
       fileName: json['fileName'],
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       updatedAt:
           json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
@@ -25,7 +26,7 @@ class UserFacePhotoModel {
     return {
       'id': id,
       'fileName': fileName,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
   }

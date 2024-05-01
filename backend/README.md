@@ -25,23 +25,6 @@ caminho:
 
 .env
 
-```
-_DEV_AWS_ACCESS_KEY_ID=
-    _DEV_AWS_SECRET_ACCESS_KEY=
-_DEV_FILES_USERS_FACEPHOTO_RESOURCES=facelocus/users
-_DEV_FACE_RECOGNITION_SERVICE_URL=http://127.0.0.1:5000/facerecognition/check-faces
-_DEV_FACERECOGNITION_LIB_PATH=/home/luan/.local/bin/face_recognition
-_DEV_DEEP_FACE_SERVICE_URL=http://127.0.0.1:5000/deepface/check-faces
-_DEV_INSIGHT_FACE_SERVICE_URL=http://127.0.0.1:5000/insightface/check-faces
-_DEV_TZ=America/Sao_Paulo
-_TEST_FILES_USERS_FACEPHOTO_RESOURCES=facelocus-test/users
-_TEST_FACERECOGNITION_LIB_PATH=/home/luan/.local/bin/face_recognition
-_TEST_FACE_RECOGNITION_SERVICE_URL=http://127.0.0.1:5000/facerecognition/check-faces
-_TEST_DEEP_FACE_SERVICE_URL=http://127.0.0.1:5000/deepface/check-faces
-_TEST_INSIGHT_FACE_SERVICE_URL=http://127.0.0.1:5000/insightface/check-faces
-_TEST_TZ=America/Sao_Paulo
-```
-
 Rodar postgres de testes no docker
 
 ```shell
@@ -52,4 +35,16 @@ Criar extensão unaccent no banco de dados, reponsável por remover acentos
 
 ```postgresql
 CREATE EXTENSION unaccent;
+```
+
+Comando para gerar o .jar da aplicação
+
+```shell
+./gradlew build -Dquarkus.package.type=uber-jar -x test
+```
+
+Executar jar
+
+```shell
+nohup java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar meu-aplicativo.jar &
 ```
