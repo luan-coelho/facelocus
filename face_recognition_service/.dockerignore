@@ -1,0 +1,19 @@
+# Ignore the virtual environment
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+*.log
+*.csv
+local_settings.py
+.DS_Store
+.env
+.git
+.gitignore
+README.md
+Dockerfile
+*.md
+node_modules/

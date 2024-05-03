@@ -54,6 +54,7 @@ numpy==1.26.4
 oauthlib==3.2.2
 onnx==1.15.0
 onnxruntime==1.17.1
+opencv_python_headless
 opencv-contrib-python==4.9.0.80
 opencv-python==4.9.0.80
 opencv-python-headless==4.9.0.80
