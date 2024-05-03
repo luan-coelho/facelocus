@@ -1,0 +1,3 @@
+### GET request with a header
+GET http://127.0.0.1:5000/facerecognition/check-faces?face_photo=1/facephoto.jpg&profile_face_photo=2/f496f528-e065-4e53-833c-39715aa20524/facephoto.jpg
+Accept: application/json
