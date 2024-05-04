@@ -9,9 +9,9 @@ def register_error_handlers(app):
             'detail': str(error)
         }), 500
 
-    @app.errorhandler(404)
-    def handle_404_error(error):
+    @app.errorhandler(400)
+    def bad_request(error):
         return jsonify({
-            'title': 'Not Found',
+            'title': 'Bad Request',
             'detail': str(error)
-        }), 404
+        }), 400
