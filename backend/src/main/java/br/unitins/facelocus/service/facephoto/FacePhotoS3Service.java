@@ -8,7 +8,7 @@ import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.FacePhotoRepository;
 import br.unitins.facelocus.service.BaseService;
 import br.unitins.facelocus.service.UserService;
-import br.unitins.facelocus.service.facerecognition.FaceRecognitionWebService;
+import br.unitins.facelocus.service.facerecognition.FaceRecognitionAllWebService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -17,7 +17,9 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,7 +39,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
     UserService userService;
 
     @Inject
-    FaceRecognitionWebService faceRecognitionService;
+    FaceRecognitionAllWebService faceRecognitionService;
 
     @Inject
     S3ImageFileService imageFileService;
@@ -110,7 +112,9 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
 
     @Transactional
     public UserFacePhotoValidation generateFacePhotoValidation(User user, MultipartData multipartData) {
-        if (user.getFacePhoto() == null) {
+        FacePhoto profileFacePhoto = user.getFacePhoto();
+
+        if (profileFacePhoto == null) {
             throw new IllegalArgumentException("Sem foto de perfil não há como prosseguir com a validação");
         }
 
@@ -119,15 +123,9 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         facePhoto.setUser(user);
         this.repository.getEntityManager().merge(facePhoto);
 
-        FacePhotoS3 userFacePhoto = (FacePhotoS3) user.getFacePhoto();
-
-        String photoFacePath = multipartData.file.filePath().toAbsolutePath().toString();
-        Path path = downloadPhotoAndReturnPath(userFacePhoto.getObjectKey());
-        String profilePhotoFacePath = path.toAbsolutePath().toString();
-
         boolean facedDetected = faceRecognitionService.faceDetected(
-                photoFacePath,
-                profilePhotoFacePath
+                facePhoto.getObjectKey(),
+                ((FacePhotoS3) profileFacePhoto).getObjectKey()
         );
 
         UserFacePhotoValidation validation = new UserFacePhotoValidation();

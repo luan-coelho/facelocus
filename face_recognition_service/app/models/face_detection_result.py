@@ -6,5 +6,5 @@ class FaceDetectionResult:
     def to_dict(self):
         return {
             'faceDetected': self.face_detected,
-            'execution_time': self.execution_time
+            'executionTime': self.execution_time
         }

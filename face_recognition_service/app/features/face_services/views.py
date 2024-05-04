@@ -28,7 +28,7 @@ def check_faces():
     delete_local_file(profile_photo_face_path)
 
     return jsonify({
-        'face_recognition': fr_result.to_dict(),
+        'faceRecognition': fr_result.to_dict(),
         'deepface': df_result.to_dict(),
         'insightface': if_result.to_dict()
     })
