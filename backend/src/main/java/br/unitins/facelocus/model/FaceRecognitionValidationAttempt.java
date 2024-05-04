@@ -1,5 +1,6 @@
 package br.unitins.facelocus.model;
 
+import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,9 @@ public class FaceRecognitionValidationAttempt {
     private FacePhoto facePhoto;
     private LocalDateTime dateTime;
     private boolean validated;
+
+    @OneToOne(mappedBy = "faceRecognitionValidationAttempt")
+    private FaceRecognitionAllServices recognitionResult;
 
     @ManyToOne
     private AttendanceRecord attendanceRecord;

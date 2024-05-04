@@ -23,6 +23,7 @@ import 'package:facelocus/features/point-record/blocs/point-record-create/point_
 import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/features/point-record/blocs/user-attendance-validate/user_attendance_validate_bloc.dart';
 import 'package:facelocus/features/point-record/repositories/attendance_record_repository.dart';
+import 'package:facelocus/features/profile/blocs/change-face-photo/change_face_photo_bloc.dart';
 import 'package:facelocus/features/profile/blocs/change-password/change_password_bloc.dart';
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/service_locator.dart';
@@ -197,5 +198,11 @@ class AppBlocs {
             BlocProvider.of<PointRecordAdminShowBloc>(context),
       ),
     ),
+    BlocProvider<ChangeFacePhotoBloc>(
+        create: (context) => ChangeFacePhotoBloc(
+              userRepository: locator<UserRepository>(),
+              sessionRepository: locator<SessionRepository>(),
+              userFacePhotoBloc: BlocProvider.of<UserFacePhotoBloc>(context),
+            )),
   ];
 }

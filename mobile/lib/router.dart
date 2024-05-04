@@ -19,9 +19,9 @@ import 'package:facelocus/features/point-record/screens/point_record_show_screen
 import 'package:facelocus/features/point-record/screens/point_validate_screen.dart';
 import 'package:facelocus/features/point-record/screens/validate_factors.dart';
 import 'package:facelocus/features/profile/screens/app_about_screen.dart';
+import 'package:facelocus/features/profile/screens/change_face_photo_screen.dart';
 import 'package:facelocus/features/profile/screens/profile_screen.dart';
 import 'package:facelocus/models/event_request_type_enum.dart';
-import 'package:facelocus/screens/profile/change_face_photo_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 

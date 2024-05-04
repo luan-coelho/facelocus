@@ -1,7 +1,7 @@
 import 'package:facelocus/features/profile/blocs/profile/profile_bloc.dart';
 import 'package:facelocus/features/profile/screens/change_password.dart';
+import 'package:facelocus/features/profile/widgets/user_face_image.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/screens/profile/widgets/user_face_image.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';

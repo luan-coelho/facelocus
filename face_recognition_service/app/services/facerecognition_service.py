@@ -21,14 +21,29 @@ def check_face(photo_face_key, profile_photo_face_key) -> FaceDetectionResult:
 
 def execute_recognition(photo_face_path, profile_photo_face_path) -> FaceDetectionResult:
     start_time = time.time()
+    compare_faces: bool = True
+    face_detected: bool = False
 
     photo_face = face_recognition.load_image_file(photo_face_path)
     profile_photo = face_recognition.load_image_file(profile_photo_face_path)
     encoding1 = face_recognition.face_encodings(photo_face)
     encoding2 = face_recognition.face_encodings(profile_photo)
-    result = face_recognition.compare_faces(encoding1, encoding2[0])
 
-    face_detected = True if result[0] else False
+    if len(encoding1) == 0:
+        face_detected = False
+        compare_faces = False
+
+    if len(encoding2) == 0:
+        face_detected = False
+        compare_faces = False
+
+    if len(encoding1) > 1 or len(encoding2) > 1:
+        face_detected = False
+
+    if compare_faces:
+        result = face_recognition.compare_faces(encoding1, encoding2[0])
+        face_detected = True if result[0] else False
+
     end_time = time.time()
     execution_time = round(end_time - start_time, 3)
 

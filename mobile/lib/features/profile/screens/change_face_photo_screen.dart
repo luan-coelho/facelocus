@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
-import 'package:facelocus/features/auth/blocs/face-uploud/face_uploud_bloc.dart';
-import 'package:facelocus/router.dart';
+import 'package:facelocus/features/profile/blocs/change-face-photo/change_face_photo_bloc.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -15,16 +14,16 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
-class FaceUploadScreen extends StatefulWidget {
-  const FaceUploadScreen({
+class ChangeFacePhotoScreen extends StatefulWidget {
+  const ChangeFacePhotoScreen({
     super.key,
   });
 
   @override
-  FaceUploadScreenState createState() => FaceUploadScreenState();
+  ChangeFacePhotoScreenState createState() => ChangeFacePhotoScreenState();
 }
 
-class FaceUploadScreenState extends State<FaceUploadScreen> {
+class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
   late final ImagePicker picker;
   File? _capturedImage;
 
@@ -59,7 +58,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
       );
       _capturedImage = File(croppedFile!.path);
       if (context.mounted) {
-        context.read<FaceUploudBloc>().add(
+        context.read<ChangeFacePhotoBloc>().add(
               GaleryPhotoCaptured(
                 path: croppedFile.path,
               ),
@@ -81,18 +80,19 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        body: BlocConsumer<FaceUploudBloc, FaceUploudState>(
+        body: BlocConsumer<ChangeFacePhotoBloc, ChangeFacePhotoState>(
           listener: (context, state) {
             if (state is UploadedSucessfully) {
-              context.go(AppRoutes.home);
+              context.pop();
+              return Toast.showSuccess('Foto alterada com sucesso', context);
             }
 
             if (state is UploadedFailed) {
               return Toast.showError(state.message, context);
             }
 
-            if (state is Logout) {
-              clearAndNavigate(AppRoutes.login);
+            if (state is Cancellation) {
+              context.pop();
             }
           },
           builder: (context, state) {
@@ -111,7 +111,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                 orientation: CameraOrientation.portraitUp,
                 onCapture: (File? image) {
                   _capturedImage = image;
-                  context.read<FaceUploudBloc>().add(
+                  context.read<ChangeFacePhotoBloc>().add(
                         CameraPhotoCaptured(path: image!.path),
                       );
                 },
@@ -149,15 +149,16 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                           AppButton(
                             isLoading: state is Uploading,
                             text: 'Enviar',
-                            onPressed: () => context.read<FaceUploudBloc>().add(
-                                  UploudPhoto(_capturedImage!.path),
-                                ),
+                            onPressed: () =>
+                                context.read<ChangeFacePhotoBloc>().add(
+                                      UploudPhoto(_capturedImage!.path),
+                                    ),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
                             text: 'Tirar nova foto',
                             onPressed: () => context
-                                .read<FaceUploudBloc>()
+                                .read<ChangeFacePhotoBloc>()
                                 .add(RequestCaptureByCamera()),
                             textColor: Colors.red,
                             backgroundColor: AppColorsConst.white,
@@ -166,7 +167,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                           AppButton(
                             text: 'Voltar',
                             onPressed: () => context
-                                .read<FaceUploudBloc>()
+                                .read<ChangeFacePhotoBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
                             backgroundColor: AppColorsConst.white,
@@ -196,24 +197,25 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                           AppButton(
                             isLoading: state is Uploading,
                             text: 'Enviar',
-                            onPressed: () => context.read<FaceUploudBloc>().add(
-                                  UploudPhoto(_capturedImage!.path),
-                                ),
+                            onPressed: () =>
+                                context.read<ChangeFacePhotoBloc>().add(
+                                      UploudPhoto(_capturedImage!.path),
+                                    ),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
                             text: 'Selecionar uma nova foto',
                             onPressed: () => context
-                                .read<FaceUploudBloc>()
+                                .read<ChangeFacePhotoBloc>()
                                 .add(RequestCaptureByGallery()),
                             textColor: Colors.red,
                             backgroundColor: AppColorsConst.white,
                           ),
                           const SizedBox(height: 10),
                           AppButton(
-                            text: 'Voltar',
+                            text: 'Cancelar',
                             onPressed: () => context
-                                .read<FaceUploudBloc>()
+                                .read<ChangeFacePhotoBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
                             backgroundColor: AppColorsConst.white,
@@ -241,15 +243,15 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                     },
                   ),
                   const InforCard(
-                    'Para usar os recursos da aplicação será necessário '
-                    'enviar uma foto do seu rosto',
+                    'Por questões de segurança, ao alterar sua foto de perfil, '
+                    'você será removido de todos os eventos que participa.',
                   ),
                   const SizedBox(height: 15),
                   AppButton(
                       text: 'Tirar uma foto',
                       onPressed: () {
                         context
-                            .read<FaceUploudBloc>()
+                            .read<ChangeFacePhotoBloc>()
                             .add(RequestCaptureByCamera());
                       }),
                   const SizedBox(height: 10),
@@ -260,9 +262,11 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                   ),
                   const SizedBox(height: 10),
                   AppButton(
-                    text: 'Sair',
+                    text: 'Cancelar',
                     onPressed: () {
-                      context.read<FaceUploudBloc>().add(RequestLogout());
+                      context
+                          .read<ChangeFacePhotoBloc>()
+                          .add(RequestCancellation());
                     },
                     textColor: Colors.red,
                     backgroundColor: Colors.red.withOpacity(0.2),

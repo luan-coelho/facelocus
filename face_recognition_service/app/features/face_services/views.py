@@ -3,8 +3,8 @@ import os
 from flask import Blueprint, request, jsonify
 
 from app.models.face_detection_result import FaceDetectionResult
-from app.services.deepface_service import execute_recognition as df_execute_recognition
 from app.services.facerecognition_service import execute_recognition as fr_execute_recognition
+from app.services.deepface_service import execute_recognition as df_execute_recognition
 from app.services.insightface_service import execute_recognition as if_execute_recognition
 from app.services.s3_service import download_image, delete_local_file
 

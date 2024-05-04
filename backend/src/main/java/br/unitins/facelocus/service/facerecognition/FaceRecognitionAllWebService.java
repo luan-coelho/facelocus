@@ -1,6 +1,6 @@
 package br.unitins.facelocus.service.facerecognition;
 
-import br.unitins.facelocus.dto.webservice.AllServices;
+import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.SneakyThrows;
@@ -18,9 +18,8 @@ public class FaceRecognitionAllWebService implements FaceRecognitionService {
     @ConfigProperty(name = "face-recognition.all-services.url")
     String FACE_RECOGNITION_ALL_SERVICES_URL;
 
-    @Override
     @SneakyThrows
-    public boolean faceDetected(String facePhoto, String profileFacePhoto) {
+    public FaceRecognitionAllServices getResults(String facePhoto, String profileFacePhoto) {
         HttpClient client = HttpClient.newHttpClient();
         String url = String.format("%s?face_photo=%s&profile_face_photo=%s",
                 FACE_RECOGNITION_ALL_SERVICES_URL,
@@ -38,18 +37,18 @@ public class FaceRecognitionAllWebService implements FaceRecognitionService {
         }
         ObjectMapper mapper = new ObjectMapper();
 
-        AllServices results = mapper.readValue(
+        FaceRecognitionAllServices results = mapper.readValue(
                 response.body(),
-                AllServices.class
+                FaceRecognitionAllServices.class
         );
 
         if (response.statusCode() == 400) {
             throw new IllegalArgumentException(results.getError());
         }
-        return checkResults(results);
+        return results;
     }
 
-    private boolean checkResults(AllServices result) {
+    public boolean checkResults(FaceRecognitionAllServices result) {
         boolean faceDetected = result.getFaceRecognition().isFaceDetected();
         boolean deepfaceDetected = result.getDeepface().isFaceDetected();
         boolean insightfaceDetected = result.getInsightface().isFaceDetected();
@@ -68,5 +67,10 @@ public class FaceRecognitionAllWebService implements FaceRecognitionService {
         }
 
         return count >= 2;
+    }
+
+    @Override
+    public boolean faceDetected(String photoFacePath, String profilePhotoFacePath) {
+        return false;
     }
 }

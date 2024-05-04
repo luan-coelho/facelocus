@@ -2,6 +2,7 @@ package br.unitins.facelocus.service.facephoto;
 
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
+import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
 import br.unitins.facelocus.model.FacePhoto;
 import br.unitins.facelocus.model.FacePhotoS3;
 import br.unitins.facelocus.model.User;
@@ -123,14 +124,16 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         facePhoto.setUser(user);
         this.repository.getEntityManager().merge(facePhoto);
 
-        boolean facedDetected = faceRecognitionService.faceDetected(
+        FaceRecognitionAllServices result = faceRecognitionService.getResults(
                 facePhoto.getObjectKey(),
                 ((FacePhotoS3) profileFacePhoto).getObjectKey()
         );
 
+        boolean faceDetected = faceRecognitionService.checkResults(result);
         UserFacePhotoValidation validation = new UserFacePhotoValidation();
         validation.setFacePhoto(facePhoto);
-        validation.setFaceDetected(facedDetected);
+        validation.setFaceDetected(faceDetected);
+        validation.setRecognitionResult(result);
 
         return validation;
     }
