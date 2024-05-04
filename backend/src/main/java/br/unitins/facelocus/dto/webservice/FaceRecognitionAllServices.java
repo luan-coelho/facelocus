@@ -17,11 +17,11 @@ public class FaceRecognitionAllServices {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @OneToOne(mappedBy = "services")
+    @OneToOne(cascade = CascadeType.ALL)
     private ServiceResult faceRecognition;
-    @OneToOne(mappedBy = "services")
+    @OneToOne(cascade = CascadeType.ALL)
     private ServiceResult deepface;
-    @OneToOne(mappedBy = "services")
+    @OneToOne(cascade = CascadeType.ALL)
     private ServiceResult insightface;
     private String error;
 

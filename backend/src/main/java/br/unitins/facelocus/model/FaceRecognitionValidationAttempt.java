@@ -23,7 +23,7 @@ public class FaceRecognitionValidationAttempt {
     private LocalDateTime dateTime;
     private boolean validated;
 
-    @OneToOne(mappedBy = "faceRecognitionValidationAttempt")
+    @OneToOne(mappedBy = "faceRecognitionValidationAttempt", cascade = CascadeType.ALL)
     private FaceRecognitionAllServices recognitionResult;
 
     @ManyToOne

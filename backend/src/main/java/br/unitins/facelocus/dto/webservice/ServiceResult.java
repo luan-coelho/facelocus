@@ -18,7 +18,12 @@ public class ServiceResult {
     private Long id;
     private boolean faceDetected;
     private float executionTime;
+    @Enumerated(EnumType.STRING)
+    private ServiceType serviceType;
 
-    @OneToOne
-    FaceRecognitionAllServices services;
+    public enum ServiceType {
+        FACE_RECOGNITION,
+        DEEPFACE,
+        INSIGHTFACE
+    }
 }

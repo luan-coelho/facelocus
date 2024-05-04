@@ -7,6 +7,8 @@ import br.unitins.facelocus.dto.pointrecord.LocationValidationAttemptDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
+import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
+import br.unitins.facelocus.dto.webservice.ServiceResult;
 import br.unitins.facelocus.mapper.PointRecordMapper;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.repository.PointRecordRepository;
@@ -391,13 +393,23 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         attempt.setValidated(faceDetected);
         attempt.setDateTime(LocalDateTime.now());
-        attempt.setRecognitionResult(validation.getRecognitionResult());
+        FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
+        recognitionResult.setFaceRecognitionValidationAttempt(attempt);
+        attempt.setRecognitionResult(recognitionResult);
 
         attendanceRecordService.update(attendanceRecord);
 
         if (!faceDetected) {
             throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
         }
+    }
+
+    private FaceRecognitionAllServices buildFaceRecognitionResult(FaceRecognitionAllServices recognitionResult) {
+        recognitionResult.getFaceRecognition().setServiceType(ServiceResult.ServiceType.FACE_RECOGNITION);
+        recognitionResult.getDeepface().setServiceType(ServiceResult.ServiceType.DEEPFACE);
+        recognitionResult.getInsightface().setServiceType(ServiceResult.ServiceType.INSIGHTFACE);
+
+        return recognitionResult;
     }
 
     public void validateLocationFactorForAttendanceRecord(Long attendanceRecordId,
