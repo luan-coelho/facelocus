@@ -27,7 +27,7 @@ class FacialFactorValidateBloc
           event.attendanceRecordId,
         );
         pointRecordShowBloc.add(
-          LoadPointRecord(pointRecordId: event.attendanceRecordId),
+          LoadPointRecord(pointRecordId: event.pointRecordId),
         );
         emit(ValidateFaceSuccess());
       } on DioException catch (e) {

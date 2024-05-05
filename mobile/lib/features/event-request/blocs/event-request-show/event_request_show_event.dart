@@ -11,17 +11,24 @@ class LoadEventRequest extends EventRequestShowEvent {
 
 class ApproveEventRequest extends EventRequestShowEvent {
   final int eventRequestId;
+  final int eventId;
   final EventRequestType requestType;
 
   ApproveEventRequest({
     required this.eventRequestId,
+    required this.eventId,
     required this.requestType,
   });
 }
 
 class RejectEventRequest extends EventRequestShowEvent {
   final int eventRequestId;
+  final int eventId;
   final EventRequestType requestType;
 
-  RejectEventRequest(this.eventRequestId, this.requestType);
+  RejectEventRequest({
+    required this.eventRequestId,
+    required this.eventId,
+    required this.requestType,
+  });
 }

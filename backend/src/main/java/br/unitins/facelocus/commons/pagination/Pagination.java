@@ -16,7 +16,7 @@ public class Pagination {
     private long totalPages;
     private long totalItems;
 
-    public static final int STANDARD_PAGE_SIZE = 25;
+    public static final int STANDARD_PAGE_SIZE = 100;
 
     public Pagination(int currentPage, long totalPages, long totalItems) {
         this.currentPage = currentPage;

@@ -7,10 +7,17 @@ import 'package:facelocus/utils/dio_fetch_api.dart';
 class EventRequestRepository {
   final DioFetchApi _fetchApi = DioFetchApi();
 
-  Future<List<EventRequestModel>> fetchAll(int userId, {int? eventId}) async {
-    var url = '${AppRoutes.eventRequest}?user=$userId';
+  Future<List<EventRequestModel>> fetchAllByUserId(int userId) async {
+    var url = '${AppRoutes.eventRequest}/user/$userId';
     final response = await _fetchApi.get(url);
-    List data = response.data['data'];
+    List data = response.data;
+    return data.map((json) => EventRequestModel.fromJson(json)).toList();
+  }
+
+  Future<List<EventRequestModel>> fetchAllByEventId(int eventId) async {
+    var url = '${AppRoutes.eventRequest}/event/$eventId';
+    final response = await _fetchApi.get(url);
+    List data = response.data;
     return data.map((json) => EventRequestModel.fromJson(json)).toList();
   }
 

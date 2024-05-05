@@ -15,6 +15,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import java.util.List;
+
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Authenticated
 @Path("/event-request")
@@ -42,6 +44,22 @@ public class EventRequestResource {
         }
         dataPagination = eventRequestService.findAllByEvent(pageable, eventId);
         return Response.ok(dataPagination).build();
+    }
+
+    @Path("/user/{userId}")
+    @GET
+    public Response findAllByUser(@PathParam("userId") Long userId) {
+        List<EventRequest> eventRequests = eventRequestService.findAllByUserId(userId);
+        List<EventRequestResponseDTO> dtos = eventRequestMapper.toResource(eventRequests);
+        return Response.ok(dtos).build();
+    }
+
+    @Path("/event/{eventId}")
+    @GET
+    public Response findAllByEvent(@PathParam("eventId") Long eventId) {
+        List<EventRequest> eventRequests = eventRequestService.findAllByEventId(eventId);
+        List<EventRequestResponseDTO> dtos = eventRequestMapper.toResource(eventRequests);
+        return Response.ok(dtos).build();
     }
 
     @Path("/{id}")

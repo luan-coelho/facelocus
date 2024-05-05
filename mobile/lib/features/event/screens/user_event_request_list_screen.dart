@@ -10,7 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class UserEventRequestListScreen extends StatefulWidget {
-  const UserEventRequestListScreen({super.key});
+  const UserEventRequestListScreen({
+    super.key,
+  });
 
   @override
   State<UserEventRequestListScreen> createState() =>

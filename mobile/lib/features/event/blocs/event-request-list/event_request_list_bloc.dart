@@ -23,14 +23,17 @@ class EventRequestListBloc
       try {
         emit(EventRequestListLoading());
         var user = await sessionRepository.getUser();
-        var eventRequests = await eventRequestRepository.fetchAll(
-          user!.id!,
+        var eventRequests = await eventRequestRepository.fetchAllByEventId(
+          event.eventId,
         );
         if (eventRequests.isEmpty) {
           emit(EventRequestListEmpty());
           return;
         }
-        emit(EventRequestListLoaded(eventRequests, user));
+        emit(EventRequestListLoaded(
+          eventRequests: eventRequests,
+          authenticatedUser: user!,
+        ));
       } on DioException catch (e) {
         emit(EventRequestListError(ResponseApiMessage.buildMessage(e)));
       }

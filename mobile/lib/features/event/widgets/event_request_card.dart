@@ -74,6 +74,7 @@ class _EventRequestCardState extends State<EventRequestCard> {
           path: '${AppRoutes.eventRequest}/$eventRequestId',
           queryParameters: {
             'eventrequest': widget.eventRequest.id.toString(),
+            'event': widget.eventRequest.event.id.toString(),
             'requesttype': EventRequestType.toJson(requestType)
           }).toString());
     }

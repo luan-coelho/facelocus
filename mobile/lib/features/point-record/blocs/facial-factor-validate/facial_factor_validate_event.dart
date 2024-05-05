@@ -6,10 +6,12 @@ abstract class FacialFactorValidateEvent {}
 class ValidateFace extends FacialFactorValidateEvent {
   final File image;
   final int attendanceRecordId;
+  final int pointRecordId;
 
   ValidateFace({
     required this.image,
     required this.attendanceRecordId,
+    required this.pointRecordId,
   });
 }
 

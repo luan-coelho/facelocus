@@ -5,6 +5,7 @@ import 'package:facelocus/features/event-request/screens/event_request_list_scre
 import 'package:facelocus/features/event-request/screens/event_request_show_screen.dart';
 import 'package:facelocus/features/event/screens/event_create_form.dart';
 import 'package:facelocus/features/event/screens/event_list_screen.dart';
+import 'package:facelocus/features/event/screens/event_request_list_screen.dart';
 import 'package:facelocus/features/event/screens/event_show_screen.dart';
 import 'package:facelocus/features/event/screens/lincked_users_screen.dart';
 import 'package:facelocus/features/event/screens/location_screen.dart';
@@ -35,6 +36,7 @@ class AppRoutes {
   static const eventShow = '$event/show';
   static const eventCreate = '$event/create';
   static const eventLocations = '$event-location';
+  static const eventRequests = '$event-requests';
   static const eventUsers = '$event-users';
   static const eventRequest = '/event-request';
   static const user = '/user';
@@ -120,18 +122,28 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      path: AppRoutes.eventRequests,
+      builder: (context, state) {
+        int eventId = int.parse(state.uri.queryParameters['event']!);
+        return EventRequestListScreen(eventId: eventId);
+      },
+    ),
+    GoRoute(
       path: AppRoutes.eventRequest,
-      builder: (context, state) => const EventRequestListScreen(),
+      builder: (context, state) => const UserEventRequestListScreen(),
     ),
     GoRoute(
       path: '${AppRoutes.eventRequest}/:id',
       builder: (context, state) {
-        var eventQueryParameter = state.uri.queryParameters['eventrequest'];
+        var eventReqQueryParameter = state.uri.queryParameters['eventrequest'];
+        var eventQueryParameter = state.uri.queryParameters['event'];
         var requestTypeQueryParam = state.uri.queryParameters['requesttype'];
-        int eventRequestId = int.parse(eventQueryParameter!);
+        int eventRequestId = int.parse(eventReqQueryParameter!);
+        int eventId = int.parse(eventQueryParameter!);
         var requestType = EventRequestType.parse(requestTypeQueryParam!)!;
-        return EventRequestShowScreen(
+        return UserEventRequestShowScreen(
           eventRequestId: eventRequestId,
+          eventId: eventId,
           requestType: requestType,
         );
       },

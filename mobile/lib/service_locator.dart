@@ -6,6 +6,7 @@ import 'package:facelocus/services/point_record_repository.dart';
 import 'package:facelocus/services/user_attendance_repository.dart';
 import 'package:facelocus/services/user_repository.dart';
 import 'package:facelocus/shared/session/repository/session_repository.dart';
+import 'package:facelocus/shared/widgets/app_search_field.dart';
 import 'package:get_it/get_it.dart';
 import 'package:location/location.dart';
 
@@ -24,4 +25,5 @@ void setupLocator() {
 
   /*Tools*/
   locator.registerLazySingleton(() => Location());
+  locator.registerLazySingleton(() => Debouncer());
 }

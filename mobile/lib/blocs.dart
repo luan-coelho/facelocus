@@ -1,13 +1,14 @@
 import 'package:facelocus/features/auth/blocs/face-uploud/face_uploud_bloc.dart';
 import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/features/auth/blocs/register/register_bloc.dart';
-import 'package:facelocus/features/event-request/blocs/event-request-list/event_request_list_bloc.dart';
 import 'package:facelocus/features/event-request/blocs/event-request-show/event_request_show_bloc.dart';
+import 'package:facelocus/features/event-request/blocs/user_event-request-list/user_event_request_list_bloc.dart';
 import 'package:facelocus/features/event-request/repositories/event_request_service.dart';
 import 'package:facelocus/features/event/blocs/event-code-card/event_code_card_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-create/event_create_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-list/event_list_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-request-create/event_request_create_bloc.dart';
+import 'package:facelocus/features/event/blocs/event-request-list/event_request_list_bloc.dart';
 import 'package:facelocus/features/event/blocs/event-show/event_show_bloc.dart';
 import 'package:facelocus/features/event/blocs/lincked-user/lincked_user_bloc.dart';
 import 'package:facelocus/features/event/blocs/lincked-users-delegate/lincked_users_delegate_bloc.dart';
@@ -82,16 +83,23 @@ class AppBlocs {
         eventListBloc: BlocProvider.of<EventListBloc>(context),
       ),
     ),
-    BlocProvider<EventRequestListBloc>(
-      create: (context) => EventRequestListBloc(
+    BlocProvider<UserEventRequestListBloc>(
+      create: (context) => UserEventRequestListBloc(
         eventRequestRepository: locator<EventRequestRepository>(),
         sessionRepository: locator<SessionRepository>(),
       ),
     ),
+    BlocProvider<EventRequestListBloc>(
+        create: (context) => EventRequestListBloc(
+              eventRequestRepository: locator<EventRequestRepository>(),
+              sessionRepository: locator<SessionRepository>(),
+            )),
     BlocProvider<EventRequestShowBloc>(
       create: (context) => EventRequestShowBloc(
         eventRequestRepository: locator<EventRequestRepository>(),
         sessionRepository: locator<SessionRepository>(),
+        userEventRequestListBloc:
+            BlocProvider.of<UserEventRequestListBloc>(context),
         eventRequestListBloc: BlocProvider.of<EventRequestListBloc>(context),
       ),
     ),

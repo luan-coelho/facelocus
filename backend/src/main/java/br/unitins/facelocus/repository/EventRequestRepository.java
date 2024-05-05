@@ -8,6 +8,8 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
+
 @ApplicationScoped
 public class EventRequestRepository extends BaseRepository<EventRequest> {
 
@@ -23,6 +25,26 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
                 """;
         PanacheQuery<EventRequest> panacheQuery = find(query, eventId);
         return buildDataPagination(pageable, panacheQuery);
+    }
+
+    public List<EventRequest> findAllByUserId(Long userId) {
+        // language=jpaql
+        String query = """
+                FROM EventRequest
+                WHERE initiatorUser.id = ?1
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        return panacheQuery.list();
+    }
+
+    public List<EventRequest> findAllByEventId(Long eventId) {
+        // language=jpaql
+        String query = """
+                FROM EventRequest
+                WHERE event.id = ?1
+                """;
+        PanacheQuery<EventRequest> panacheQuery = find(query, eventId);
+        return panacheQuery.list();
     }
 
     public DataPagination<EventRequest> findAllByUserId(Pageable pageable, Long userId) {

@@ -11,21 +11,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class EventRequestShowScreen extends StatefulWidget {
-  const EventRequestShowScreen({
+class UserEventRequestShowScreen extends StatefulWidget {
+  const UserEventRequestShowScreen({
     super.key,
     required this.eventRequestId,
+    required this.eventId,
     this.requestType = EventRequestType.invitation,
   });
 
   final int eventRequestId;
+  final int eventId;
   final EventRequestType requestType;
 
   @override
-  State<EventRequestShowScreen> createState() => _EventRequestShowScreenState();
+  State<UserEventRequestShowScreen> createState() =>
+      _UserEventRequestShowScreenState();
 }
 
-class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
+class _UserEventRequestShowScreenState
+    extends State<UserEventRequestShowScreen> {
   @override
   void initState() {
     context.read<EventRequestShowBloc>().add(
@@ -78,11 +82,6 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                     description: 'Nome Completo',
                     value: state.eventRequest.initiatorUser.getFullName(),
                   ),
-                  const SizedBox(height: 15),
-                  InformationField(
-                    description: 'Email',
-                    value: state.eventRequest.initiatorUser.email,
-                  ),
                   const SizedBox(height: 25),
                   AppButton(
                       text: 'Aceitar',
@@ -90,6 +89,7 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                           .read<EventRequestShowBloc>()
                           .add(ApproveEventRequest(
                             eventRequestId: widget.eventRequestId,
+                            eventId: widget.eventId,
                             requestType: widget.requestType,
                           ))),
                   const SizedBox(height: 10),
@@ -98,8 +98,9 @@ class _EventRequestShowScreenState extends State<EventRequestShowScreen> {
                     onPressed: () => context
                         .read<EventRequestShowBloc>()
                         .add(RejectEventRequest(
-                          widget.eventRequestId,
-                          widget.requestType,
+                          eventRequestId: widget.eventRequestId,
+                          eventId: widget.eventId,
+                          requestType: widget.requestType,
                         )),
                     backgroundColor: Colors.red.shade600,
                   )

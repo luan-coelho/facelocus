@@ -3,11 +3,14 @@ import 'package:facelocus/features/event/widgets/event_code_card.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
+import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
 import 'package:facelocus/shared/widgets/feature_card.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class EventShowScreen extends StatefulWidget {
   const EventShowScreen({super.key, required this.eventId});
@@ -76,6 +79,32 @@ class _EventShowScreenState extends State<EventShowScreen> {
                             height: 100,
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        height: 50,
+                        child: AppButton(
+                          onPressed: () => context.push(
+                            Uri(
+                              path: AppRoutes.eventRequests,
+                              queryParameters: {
+                                'event': widget.eventId.toString()
+                              },
+                            ).toString(),
+                          ),
+                          icon: SvgPicture.asset(
+                            'images/event-request-icon.svg',
+                            width: 25,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.black,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          textColor: Colors.black,
+                          backgroundColor: Colors.white,
+                          borderColor: Colors.black.withOpacity(0.5),
+                          text: 'Solicitações',
+                        ),
                       ),
                       const SizedBox(height: 15),
                       Row(

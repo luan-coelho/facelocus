@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/features/point-record/blocs/facial-factor-validate/facial_factor_validate_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
@@ -103,6 +104,7 @@ class _FacialFactorValidateScreenState
           if (state is ValidateFaceSuccess) {
             context.pop();
             context.pop();
+            return Toast.showSuccess('Ponto validado com sucesso', context);
           }
 
           if (state is ValidateFaceError) {
@@ -145,16 +147,25 @@ class _FacialFactorValidateScreenState
                       const SizedBox(height: 25),
                       Column(
                         children: [
-                          AppButton(
-                            text: 'Enviar',
-                            onPressed: () {
-                              context.read<FacialFactorValidateBloc>().add(
-                                    ValidateFace(
-                                      image: _capturedImage!,
-                                      attendanceRecordId:
-                                          widget.attendanceRecordId,
-                                    ),
-                                  );
+                          BlocBuilder<PointRecordShowBloc,
+                              PointRecordShowState>(
+                            builder: (context, state) {
+                              return AppButton(
+                                text: 'Enviar',
+                                onPressed: () {
+                                  context.read<FacialFactorValidateBloc>().add(
+                                        ValidateFace(
+                                          image: _capturedImage!,
+                                          attendanceRecordId:
+                                              widget.attendanceRecordId,
+                                          pointRecordId:
+                                              (state as PointRecordShowLoaded)
+                                                  .pointRecord
+                                                  .id!,
+                                        ),
+                                      );
+                                },
+                              );
                             },
                           ),
                           const SizedBox(height: 10),

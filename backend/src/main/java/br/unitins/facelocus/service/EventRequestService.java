@@ -12,6 +12,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 @ApplicationScoped
 public class EventRequestService extends BaseService<EventRequest, EventRequestRepository> {
 
@@ -67,6 +69,14 @@ public class EventRequestService extends BaseService<EventRequest, EventRequestR
     public DataPagination<EventRequestResponseDTO> findAllSentByUser(Pageable pageable, Long userId) {
         DataPagination<EventRequest> dataPagination = this.repository.findAllSentByUser(pageable, userId);
         return eventRequestMapper.toCreateEntity(dataPagination);
+    }
+
+    public List<EventRequest> findAllByUserId(Long eventId) {
+        return repository.findAllByUserId(eventId);
+    }
+
+    public List<EventRequest> findAllByEventId(Long eventId) {
+        return repository.findAllByEventId(eventId);
     }
 
     public EventRequest findById(Long id) {

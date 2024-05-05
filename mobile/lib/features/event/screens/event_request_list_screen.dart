@@ -1,4 +1,4 @@
-import 'package:facelocus/features/event-request/blocs/user_event-request-list/user_event_request_list_bloc.dart';
+import 'package:facelocus/features/event/blocs/event-request-list/event_request_list_bloc.dart';
 import 'package:facelocus/features/event/widgets/event_request_card.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_layout.dart';
@@ -9,19 +9,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-class UserEventRequestListScreen extends StatefulWidget {
-  const UserEventRequestListScreen({super.key});
+class EventRequestListScreen extends StatefulWidget {
+  const EventRequestListScreen({
+    super.key,
+    required this.eventId,
+  });
+
+  final int eventId;
 
   @override
-  State<UserEventRequestListScreen> createState() =>
+  State<EventRequestListScreen> createState() =>
       _UserEventRequestListScreenState();
 }
 
-class _UserEventRequestListScreenState
-    extends State<UserEventRequestListScreen> {
+class _UserEventRequestListScreenState extends State<EventRequestListScreen> {
   @override
   void initState() {
-    context.read<UserEventRequestListBloc>().add(LoadAllUserEventRequest());
+    context.read<EventRequestListBloc>().add(LoadAllEventRequest(
+          eventId: widget.eventId,
+        ));
     super.initState();
   }
 
@@ -31,8 +37,7 @@ class _UserEventRequestListScreenState
       appBarTitle: 'Solicitações',
       body: Padding(
         padding: const EdgeInsets.all(29),
-        child:
-            BlocConsumer<UserEventRequestListBloc, UserEventRequestListState>(
+        child: BlocConsumer<EventRequestListBloc, EventRequestListState>(
           listener: (context, state) {
             if (state is EventRequestListError) {
               Get.snackbar('Erro', state.message);
@@ -73,8 +78,10 @@ class _UserEventRequestListScreenState
             }
             return Center(
               child: AppButton(
-                onPressed: () => context.read<UserEventRequestListBloc>().add(
-                      LoadAllUserEventRequest(),
+                onPressed: () => context.read<EventRequestListBloc>().add(
+                      LoadAllEventRequest(
+                        eventId: widget.eventId,
+                      ),
                     ),
                 text: 'Tentar novamente',
               ),

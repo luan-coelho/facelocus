@@ -11,7 +11,10 @@ class EventRequestListLoaded extends EventRequestListState {
   final List<EventRequestModel> eventRequests;
   final UserModel authenticatedUser;
 
-  EventRequestListLoaded(this.eventRequests, this.authenticatedUser);
+  EventRequestListLoaded({
+    required this.eventRequests,
+    required this.authenticatedUser,
+  });
 }
 
 class EventRequestListEmpty extends EventRequestListState {}

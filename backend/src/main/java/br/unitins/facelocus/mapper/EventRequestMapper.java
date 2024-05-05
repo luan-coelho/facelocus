@@ -6,6 +6,8 @@ import br.unitins.facelocus.dto.eventrequest.EventRequestResponseDTO;
 import br.unitins.facelocus.model.EventRequest;
 import org.mapstruct.*;
 
+import java.util.List;
+
 @Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {EventMapper.class, UserMapper.class})
 public interface EventRequestMapper {
@@ -23,6 +25,8 @@ public interface EventRequestMapper {
     @Mapping(source = "initiatorUser", target = "initiatorUser", qualifiedByName = "toResource")
     @Mapping(source = "targetUser", target = "targetUser", qualifiedByName = "toResource")
     EventRequestResponseDTO toResource(EventRequest eventRequest);
+
+    List<EventRequestResponseDTO> toResource(List<EventRequest> eventRequest);
 
     DataPagination<EventRequestResponseDTO> toCreateEntity(DataPagination<EventRequest> dataPagination);
 
