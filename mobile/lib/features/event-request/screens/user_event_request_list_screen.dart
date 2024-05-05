@@ -28,7 +28,7 @@ class _UserEventRequestListScreenState
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      appBarTitle: 'Solicitações',
+      appBarTitle: 'Solicitações enviadas',
       body: Padding(
         padding: const EdgeInsets.all(29),
         child:

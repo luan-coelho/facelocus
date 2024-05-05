@@ -1,8 +1,8 @@
 import 'package:facelocus/features/auth/screens/face_upload_screen.dart';
 import 'package:facelocus/features/auth/screens/login_screen.dart';
 import 'package:facelocus/features/auth/screens/register_screen.dart';
-import 'package:facelocus/features/event-request/screens/event_request_list_screen.dart';
 import 'package:facelocus/features/event-request/screens/event_request_show_screen.dart';
+import 'package:facelocus/features/event-request/screens/user_event_request_list_screen.dart';
 import 'package:facelocus/features/event/screens/event_create_form.dart';
 import 'package:facelocus/features/event/screens/event_list_screen.dart';
 import 'package:facelocus/features/event/screens/event_request_list_screen.dart';

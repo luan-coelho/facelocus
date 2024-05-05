@@ -55,38 +55,42 @@ class _EventListScreenState extends State<EventListScreen> {
       );
     }
 
+    Widget actions() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: AppButton(
+              onPressed: showEventRequestCreateForm,
+              textColor: Colors.black,
+              backgroundColor: Colors.white,
+              borderColor: Colors.black.withOpacity(0.5),
+              text: 'Ingressar-se',
+            ),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: AppButton(
+              onPressed: showEventCreateForm,
+              text: 'Criar evento',
+            ),
+          )
+        ],
+      );
+    }
+
     return AppLayout(
       appBarTitle: 'Meus eventos',
       body: Padding(
         padding: const EdgeInsets.all(30),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: AppButton(
-                    onPressed: showEventRequestCreateForm,
-                    textColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    borderColor: Colors.black.withOpacity(0.5),
-                    text: 'Ingressar-se',
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: AppButton(
-                    onPressed: showEventCreateForm,
-                    text: 'Criar evento',
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 25),
-            BlocBuilder<EventListBloc, EventListState>(
-              builder: (context, state) {
-                if (state is EventsLoaded) {
-                  return ListView.separated(
+        child: BlocBuilder<EventListBloc, EventListState>(
+          builder: (context, state) {
+            if (state is EventsLoaded) {
+              return Column(
+                children: [
+                  actions(),
+                  const SizedBox(height: 20),
+                  ListView.separated(
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);
                     },
@@ -98,16 +102,24 @@ class _EventListScreenState extends State<EventListScreen> {
                       EventModel event = state.events[index];
                       return EventCard(event: event);
                     },
-                  );
-                }
+                  ),
+                ],
+              );
+            }
 
-                if (state is EventsEmpty) {
-                  return const EmptyData('Você ainda não criou nenhum evento');
-                }
-                return const Spinner();
-              },
-            ),
-          ],
+            if (state is EventsEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const EmptyData('Você ainda não criou nenhum evento'),
+                  const SizedBox(height: 25),
+                  actions(),
+                ],
+              );
+            }
+            return const Spinner();
+          },
         ),
       ),
     );
