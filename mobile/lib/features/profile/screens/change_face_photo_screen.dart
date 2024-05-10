@@ -208,8 +208,9 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                             onPressed: () => context
                                 .read<ChangeFacePhotoBloc>()
                                 .add(RequestCaptureByGallery()),
-                            textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            textColor: Colors.black,
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.black.withOpacity(0.5),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
@@ -218,7 +219,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                                 .read<ChangeFacePhotoBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            backgroundColor: Colors.red.withOpacity(0.2),
                           )
                         ],
                       ),

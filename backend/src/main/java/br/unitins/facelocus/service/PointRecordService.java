@@ -86,6 +86,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
             throw new IllegalArgumentException("Informe o evento");
         }
 
+        if (pointRecord.getLocation() == null || pointRecord.getLocation().getId() == null) {
+            throw new IllegalArgumentException("Ative o fator de Localização e informe a localização");
+        }
+
         if (pointRecord.getPoints() == null || pointRecord.getPoints().isEmpty()) {
             throw new IllegalArgumentException("É necessário informar pelo menos um intervalo de ponto");
         }
@@ -109,6 +113,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         Set<Factor> factors = pointRecord.getFactors();
         if (factors.contains(Factor.INDOOR_LOCATION) && !locations.contains(location)) {
             throw new IllegalArgumentException("Informe uma localização do evento");
+        }
+
+        if (pointRecord.getAllowableRadiusInMeters() == null || pointRecord.getAllowableRadiusInMeters() == 0) {
+            throw new IllegalArgumentException("Informe o raio permitido em metros");
         }
     }
 

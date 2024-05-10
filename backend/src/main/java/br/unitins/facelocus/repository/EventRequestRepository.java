@@ -30,10 +30,12 @@ public class EventRequestRepository extends BaseRepository<EventRequest> {
     public List<EventRequest> findAllByUserId(Long userId) {
         // language=jpaql
         String query = """
-                FROM EventRequest
-                WHERE initiatorUser.id = ?1
+                FROM EventRequest er
+                WHERE er.event.administrator.id = ?1
+                    OR er.initiatorUser.id = ?1
+                    OR er.targetUser.id = ?1
                 """;
-        PanacheQuery<EventRequest> panacheQuery = find(query, userId);
+        PanacheQuery<EventRequest> panacheQuery = find(query, Sort.descending("createdAt"), userId);
         return panacheQuery.list();
     }
 

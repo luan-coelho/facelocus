@@ -46,5 +46,5 @@ Comando para gerar o .jar da aplicação
 Executar jar
 
 ```shell
-nohup java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar meu-aplicativo.jar &
+nohup java -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo -jar facelocus-1.0-runner.jar &
 ```

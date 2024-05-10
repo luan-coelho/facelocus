@@ -15,6 +15,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterRequested>(
       (event, emit) async {
         try {
+          emit(RegisterLoading());
           await authRepository.register(event.user);
           emit(RegisterSuccess());
         } on DioException catch (e) {

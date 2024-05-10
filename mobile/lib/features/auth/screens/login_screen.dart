@@ -1,6 +1,5 @@
 import 'package:facelocus/features/auth/blocs/login/login_bloc.dart';
 import 'package:facelocus/router.dart';
-import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/shared/widgets/app_text_field.dart';
@@ -134,8 +133,8 @@ class LoginFormState extends State<LoginScreen> {
                         text: 'Cadastrar',
                         onPressed: () => context.push(AppRoutes.register),
                         textColor: Colors.black,
-                        backgroundColor: AppColorsConst.white,
-                        textFontSize: 14,
+                        backgroundColor: Colors.white,
+                        borderColor: Colors.black.withOpacity(0.5),
                       ),
                     ],
                   ),

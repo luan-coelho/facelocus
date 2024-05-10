@@ -5,8 +5,7 @@ class AppConfigConst {
 
   // static const String baseApiUrl = 'http://10.0.2.2:8080';
   static const String baseApiUrl = 'http://127.0.0.1:8080'; // dev
-  // static const String baseApiUrl =
-  //     'http://ec2-18-228-191-235.sa-east-1.compute.amazonaws.com:8080'; // prod
+  // static const String baseApiUrl = 'http://18.230.249.227:8080'; // prod
 }
 
 class AppColorsConst {

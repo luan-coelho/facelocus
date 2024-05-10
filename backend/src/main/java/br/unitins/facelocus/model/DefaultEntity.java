@@ -3,7 +3,10 @@ package br.unitins.facelocus.model;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -28,8 +31,5 @@ public abstract class DefaultEntity {
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
     }
 }

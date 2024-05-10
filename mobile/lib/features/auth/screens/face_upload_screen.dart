@@ -206,8 +206,9 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                             onPressed: () => context
                                 .read<FaceUploudBloc>()
                                 .add(RequestCaptureByGallery()),
-                            textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            textColor: Colors.black,
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.black.withOpacity(0.5),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
@@ -216,7 +217,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                                 .read<FaceUploudBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            backgroundColor: Colors.red.withOpacity(0.2),
                           )
                         ],
                       ),

@@ -118,7 +118,7 @@ class _EventListScreenState extends State<EventListScreen> {
                 ],
               );
             }
-            return const Spinner();
+            return const Center(child: Spinner());
           },
         ),
       ),
