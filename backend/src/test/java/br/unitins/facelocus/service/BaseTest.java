@@ -9,6 +9,8 @@ import org.eclipse.microprofile.config.ConfigProvider;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,6 +81,21 @@ public abstract class BaseTest {
         Point point3 = new Point(null, now.plusMinutes(40), now.plusMinutes(50), pointRecord);
         pointRecord.setPoints(new ArrayList<>(List.of(point1, point2, point3)));
         return pointRecord;
+    }
+
+    public Path getImagePath(String imageName) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try {
+            URL imageUrl = classLoader.getResource("images/" + imageName);
+            if (imageUrl == null) {
+                System.out.println("Resource not found: " + imageName);
+                return null;
+            }
+            return Paths.get(imageUrl.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     byte[] getImageAsByteArray(String imageName) {

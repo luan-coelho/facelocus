@@ -14,6 +14,7 @@ public class MockFileUpload implements FileUpload {
     public String contentType;
     private String formFieldName;
     private String charSet;
+    private Path path;
 
     @Override
     public String name() {
@@ -22,7 +23,7 @@ public class MockFileUpload implements FileUpload {
 
     @Override
     public Path filePath() {
-        return null;
+        return path;
     }
 
     @Override
@@ -43,5 +44,10 @@ public class MockFileUpload implements FileUpload {
     @Override
     public long size() {
         return data.length;
+    }
+
+    @Override
+    public Path uploadedFile() {
+        return path;
     }
 }

@@ -10,7 +10,7 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.service.auth.JWTService;
-import br.unitins.facelocus.service.facephoto.FacePhotoService;
+import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,10 +42,10 @@ class PointRecordServiceTest extends BaseTest {
     PointRecordService pointRecordService;
 
     @Inject
-    UserAttendanceService userAttendanceService;
+    AttendanceRecordService attendanceRecordService;
 
     @Inject
-    FacePhotoService facePhotoService;
+    FacePhotoS3Service facePhotoService;
 
     @Inject
     JWTService jwtService;
@@ -434,7 +435,9 @@ class PointRecordServiceTest extends BaseTest {
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION)));
         pointRecordService.create(pointRecord);
         byte[] photo1 = getImageAsByteArray("user1.jpg");
+        Path photo1Path = getImagePath("user1.jpg");
         byte[] photo2 = getImageAsByteArray("user1_2.jpg");
+        Path photo2Path = getImagePath("user1_2.jpg");
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
@@ -448,7 +451,8 @@ class PointRecordServiceTest extends BaseTest {
                 "facephoto.jpg",
                 "image/jpeg",
                 "facephoto.jpg",
-                "UTF-8"
+                "UTF-8",
+                photo1Path
         );
         facePhotoService.profileUploud(user.getId(), multipartData1);
 
@@ -458,13 +462,16 @@ class PointRecordServiceTest extends BaseTest {
                 "facephoto.jpg",
                 "image/jpeg",
                 "facephoto.jpg",
-                "UTF-8"
+                "UTF-8",
+                photo2Path
         );
         pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(ar.getId(), multipartData2);
 
-        userAttendance = userAttendanceService.findById(userAttendance.getId());
+        ar = attendanceRecordService.findById(ar.getId());
 
-        assertTrue(true);
+        assertFalse(ar.isValidatedByAdministrator());
+        assertEquals(AttendanceRecordStatus.VALIDATED, ar.getStatus());
+        assertEquals(1, ar.getFrValidationAttempts().size());
     }
 
      /*

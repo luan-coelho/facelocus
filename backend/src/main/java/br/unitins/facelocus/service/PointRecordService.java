@@ -155,9 +155,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
             Location location = locationService.findById(pointRecord.getLocation().getId());
             pointRecord.setLocation(location);
-        } else {
+        } /*else {
             pointRecord.setAllowableRadiusInMeters(null);
-        }
+        }*/
     }
 
     /**
