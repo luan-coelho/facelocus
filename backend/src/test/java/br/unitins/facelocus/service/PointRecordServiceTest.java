@@ -9,7 +9,6 @@ import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
-import br.unitins.facelocus.service.auth.JWTService;
 import br.unitins.facelocus.service.facephoto.FacePhotoS3Service;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
@@ -46,9 +45,6 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     FacePhotoS3Service facePhotoService;
-
-    @Inject
-    JWTService jwtService;
 
     @AfterAll
     public static void after() {

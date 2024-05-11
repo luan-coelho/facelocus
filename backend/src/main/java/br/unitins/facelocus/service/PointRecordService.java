@@ -1,6 +1,7 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
+import br.unitins.facelocus.commons.TaskQueueManager;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.LocationValidationAttemptDTO;
@@ -43,6 +44,9 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Inject
     FacePhotoS3Service faceRecognitionService;
+
+    @Inject
+    TaskQueueManager taskQueueManager;
 
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
@@ -385,34 +389,39 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId,
                                                                    MultipartData multipartData) {
-        AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
-        checkFacialRecognitionValidity(attendanceRecord);
+        taskQueueManager.submitTask(() -> {
+            AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
+            checkFacialRecognitionValidity(attendanceRecord);
 
-        User user = attendanceRecord.getUserAttendance().getUser();
-        user = userService.findById(user.getId());
+            User user = attendanceRecord.getUserAttendance().getUser();
+            user = userService.findById(user.getId());
 
-        UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(user, multipartData);
+            UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(
+                    user,
+                    multipartData
+            );
 
-        FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
-        attempt.setFacePhoto(validation.getFacePhoto());
-        attempt.setAttendanceRecord(attendanceRecord);
+            FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
+            attempt.setFacePhoto(validation.getFacePhoto());
+            attempt.setAttendanceRecord(attendanceRecord);
 
-        boolean faceDetected = validation.isFaceDetected();
+            boolean faceDetected = validation.isFaceDetected();
 
-        attendanceRecord.setStatus(faceDetected ?
-                AttendanceRecordStatus.VALIDATED :
-                AttendanceRecordStatus.NOT_VALIDATED);
-        attendanceRecord.getFrValidationAttempts().add(attempt);
+            attendanceRecord.setStatus(faceDetected ?
+                    AttendanceRecordStatus.VALIDATED :
+                    AttendanceRecordStatus.NOT_VALIDATED);
+            attendanceRecord.getFrValidationAttempts().add(attempt);
 
-        attempt.setValidated(faceDetected);
-        attempt.setDateTime(LocalDateTime.now());
-        /*FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
-        recognitionResult.setFaceRecognitionValidationAttempt(attempt);*/
-        attendanceRecordService.update(attendanceRecord);
+            attempt.setValidated(faceDetected);
+            attempt.setDateTime(LocalDateTime.now());
+            /*FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
+            recognitionResult.setFaceRecognitionValidationAttempt(attempt);*/
+            attendanceRecordService.update(attendanceRecord);
 
-        if (!faceDetected) {
-            throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
-        }
+            if (!faceDetected) {
+                throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
+            }
+        });
     }
 
     @SuppressWarnings("unused")
