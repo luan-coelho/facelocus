@@ -24,8 +24,8 @@ def check_faces():
     df_result: FaceDetectionResult = df_execute_recognition(photo_face_path, profile_photo_face_path)
     if_result: FaceDetectionResult = if_execute_recognition(photo_face_path, profile_photo_face_path)
 
-    delete_local_file(photo_face_path)
-    delete_local_file(profile_photo_face_path)
+    # delete_local_file(photo_face_path)
+    # delete_local_file(profile_photo_face_path)
 
     return jsonify({
         'faceRecognition': fr_result.to_dict(),
