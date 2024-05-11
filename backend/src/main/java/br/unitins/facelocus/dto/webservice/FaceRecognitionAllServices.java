@@ -23,6 +23,7 @@ public class FaceRecognitionAllServices {
     private ServiceResult deepface;
     @OneToOne(cascade = CascadeType.ALL)
     private ServiceResult insightface;
+    @Transient
     private String error;
 
     @OneToOne

@@ -81,6 +81,27 @@ public abstract class BaseTest {
         return pointRecord;
     }
 
+    byte[] getImageAsByteArray(String imageName) {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream imageStream = classLoader.getResourceAsStream("images/" + imageName);
+
+            if (imageStream == null) {
+                return null;
+            }
+
+            BufferedImage image = ImageIO.read(imageStream);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+
+            return baos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     InputStream getImageAsInputStream(String imageName) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();

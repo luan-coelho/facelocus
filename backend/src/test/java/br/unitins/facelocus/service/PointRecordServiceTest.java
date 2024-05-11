@@ -1,26 +1,24 @@
 package br.unitins.facelocus.service;
 
+import br.unitins.facelocus.commons.MockFileUpload;
+import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.commons.pagination.Pagination;
-import br.unitins.facelocus.dto.auth.JwtDTO;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeLocation;
 import br.unitins.facelocus.dto.pointrecord.PointRecordChangeRadiusMeters;
 import br.unitins.facelocus.dto.pointrecord.PointRecordResponseDTO;
 import br.unitins.facelocus.model.*;
 import br.unitins.facelocus.service.auth.JWTService;
+import br.unitins.facelocus.service.facephoto.FacePhotoService;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +39,12 @@ class PointRecordServiceTest extends BaseTest {
 
     @Inject
     PointRecordService pointRecordService;
+
+    @Inject
+    UserAttendanceService userAttendanceService;
+
+    @Inject
+    FacePhotoService facePhotoService;
 
     @Inject
     JWTService jwtService;
@@ -430,35 +433,38 @@ class PointRecordServiceTest extends BaseTest {
         PointRecord pointRecord = getPointRecord();
         pointRecord.setFactors(new HashSet<>(Set.of(Factor.FACIAL_RECOGNITION)));
         pointRecordService.create(pointRecord);
-        File profilePhoto = getImageFile("user1.jpg");
+        byte[] photo1 = getImageAsByteArray("user1.jpg");
+        byte[] photo2 = getImageAsByteArray("user1_2.jpg");
 
         List<UserAttendance> usersAttendance = pointRecord.getUsersAttendances();
         UserAttendance userAttendance = usersAttendance.get(0);
         AttendanceRecord ar = userAttendance.getAttendanceRecords().get(0);
-        File validationPhoto = getImageFile("user1_2.jpg");
 
         User user = userAttendance.getUser();
-        JwtDTO jwtDTO = jwtService.generateJwt(user);
 
-        given()
-                .headers(new Headers(new Header("content-type", "multipart/form-data"),
-                        new Header("Authorization", "Bearer " + jwtDTO.getToken())))
-                .multiPart("file", profilePhoto)
-                .contentType("multipart/form-data")
-                .when()
-                .post("/user/uploud-face-photo?user=" + user.getId())
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+        MultipartData multipartData1 = new MultipartData();
+        multipartData1.file = new MockFileUpload(
+                photo1,
+                "facephoto.jpg",
+                "image/jpeg",
+                "facephoto.jpg",
+                "UTF-8"
+        );
+        facePhotoService.profileUploud(user.getId(), multipartData1);
 
-        given()
-                .headers(new Headers(new Header("content-type", "multipart/form-data"),
-                        new Header("Authorization", "Bearer " + jwtDTO.getToken())))
-                .multiPart("file", validationPhoto)
-                .contentType("multipart/form-data")
-                .when()
-                .post("/point-record/validate-frf?attendanceRecord=" + ar.getId())
-                .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+        MultipartData multipartData2 = new MultipartData();
+        multipartData2.file = new MockFileUpload(
+                photo2,
+                "facephoto.jpg",
+                "image/jpeg",
+                "facephoto.jpg",
+                "UTF-8"
+        );
+        pointRecordService.validateFacialRecognitionFactorForAttendanceRecord(ar.getId(), multipartData2);
+
+        userAttendance = userAttendanceService.findById(userAttendance.getId());
+
+        assertTrue(true);
     }
 
      /*

@@ -1,11 +1,12 @@
 package br.unitins.facelocus.model;
 
-import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
+import br.unitins.facelocus.dto.webservice.ServiceResult;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("CommentedOutCode")
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
 @Setter
@@ -23,8 +24,11 @@ public class FaceRecognitionValidationAttempt {
     private LocalDateTime dateTime;
     private boolean validated;
 
-    @OneToOne(mappedBy = "faceRecognitionValidationAttempt", cascade = CascadeType.ALL)
-    private FaceRecognitionAllServices recognitionResult;
+    /*@OneToOne(mappedBy = "faceRecognitionValidationAttempt", cascade = CascadeType.ALL)
+    private FaceRecognitionAllServices recognitionResult;*/
+
+    /*@OneToOne(cascade = CascadeType.ALL)
+    private ServiceResult serviceResult;*/
 
     @ManyToOne
     private AttendanceRecord attendanceRecord;

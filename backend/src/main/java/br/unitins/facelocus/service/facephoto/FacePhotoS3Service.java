@@ -2,14 +2,14 @@ package br.unitins.facelocus.service.facephoto;
 
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
-import br.unitins.facelocus.dto.webservice.FaceRecognitionAllServices;
+import br.unitins.facelocus.dto.webservice.ServiceResult;
 import br.unitins.facelocus.model.FacePhoto;
 import br.unitins.facelocus.model.FacePhotoS3;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.repository.FacePhotoRepository;
 import br.unitins.facelocus.service.BaseService;
 import br.unitins.facelocus.service.UserService;
-import br.unitins.facelocus.service.facerecognition.FaceRecognitionAllWebService;
+import br.unitins.facelocus.service.facerecognition.FaceRecognitionWebService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -28,7 +28,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 @ApplicationScoped
-public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoRepository> implements FacePhotoService {
+public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoRepository> {
 
     @ConfigProperty(name = "bucket.name")
     String bucketName;
@@ -40,13 +40,12 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
     UserService userService;
 
     @Inject
-    FaceRecognitionAllWebService faceRecognitionService;
+    FaceRecognitionWebService faceRecognitionService;
 
     @Inject
     S3ImageFileService imageFileService;
 
     @Transactional
-    @Override
     public void profileUploud(Long userId, MultipartData multipartData) {
         User user = userService.findById(userId);
 
@@ -70,7 +69,6 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         userService.update(user);
     }
 
-    @Override
     public byte[] getFacePhotoByUser(Long userId) {
         User user = userService.findById(userId);
         if (user.getFacePhoto() == null) {
@@ -80,11 +78,6 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         String objectKey = facePhoto.getObjectKey();
         ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
         return objectBytes.asByteArray();
-    }
-
-    @Override
-    public void facePhotoValidation(Long userId, MultipartData multipartBody) {
-
     }
 
     private PutObjectRequest buildPutRequest(String objectKey, FileUpload fileUpload) {
@@ -102,6 +95,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
                 .build();
     }
 
+    @SuppressWarnings("unused")
     public void createFolder(String folderName) {
         String folderKey = folderName.endsWith("/") ? folderName : folderName + "/";
         s3.putObject(PutObjectRequest.builder()
@@ -124,12 +118,11 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         facePhoto.setUser(user);
         this.repository.getEntityManager().merge(facePhoto);
 
-        FaceRecognitionAllServices result = faceRecognitionService.getResults(
+        ServiceResult result = faceRecognitionService.getResult(
                 facePhoto.getObjectKey(),
                 ((FacePhotoS3) profileFacePhoto).getObjectKey()
         );
-
-        boolean faceDetected = faceRecognitionService.checkResults(result);
+        boolean faceDetected = result.isFaceDetected();
         UserFacePhotoValidation validation = new UserFacePhotoValidation();
         validation.setFacePhoto(facePhoto);
         validation.setFaceDetected(faceDetected);
@@ -154,6 +147,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         return facePhoto;
     }
 
+    @SuppressWarnings("unused")
     public Path downloadPhotoAndReturnPath(String objectKey) {
         try {
             ResponseBytes<GetObjectResponse> objectBytes = s3.getObjectAsBytes(buildGetRequest(objectKey));
@@ -169,4 +163,5 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
             throw new RuntimeException("Falha ao recuperar a imagem de perfil");
         }
     }
+
 }

@@ -70,7 +70,8 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     @Override
     public PointRecord findById(Long pointRecordId) {
-        return super.findByIdOptional(pointRecordId).orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
+        return super.findByIdOptional(pointRecordId)
+                .orElseThrow(() -> new NotFoundException("Registro de ponto não encontrado pelo id"));
     }
 
     @Transactional
@@ -380,8 +381,10 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
+    @SuppressWarnings("CommentedOutCode")
     @Transactional
-    public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId, MultipartData multipartData) {
+    public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId,
+                                                                   MultipartData multipartData) {
         AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
         checkFacialRecognitionValidity(attendanceRecord);
 
@@ -396,15 +399,15 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
         boolean faceDetected = validation.isFaceDetected();
 
-        attendanceRecord.setStatus(faceDetected ? AttendanceRecordStatus.VALIDATED : AttendanceRecordStatus.NOT_VALIDATED);
+        attendanceRecord.setStatus(faceDetected ?
+                AttendanceRecordStatus.VALIDATED :
+                AttendanceRecordStatus.NOT_VALIDATED);
         attendanceRecord.getFrValidationAttempts().add(attempt);
 
         attempt.setValidated(faceDetected);
         attempt.setDateTime(LocalDateTime.now());
-        FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
-        recognitionResult.setFaceRecognitionValidationAttempt(attempt);
-        attempt.setRecognitionResult(recognitionResult);
-
+        /*FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
+        recognitionResult.setFaceRecognitionValidationAttempt(attempt);*/
         attendanceRecordService.update(attendanceRecord);
 
         if (!faceDetected) {
@@ -412,11 +415,11 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
         }
     }
 
+    @SuppressWarnings("unused")
     private FaceRecognitionAllServices buildFaceRecognitionResult(FaceRecognitionAllServices recognitionResult) {
         recognitionResult.getFaceRecognition().setServiceType(ServiceResult.ServiceType.FACE_RECOGNITION);
         recognitionResult.getDeepface().setServiceType(ServiceResult.ServiceType.DEEPFACE);
         recognitionResult.getInsightface().setServiceType(ServiceResult.ServiceType.INSIGHTFACE);
-
         return recognitionResult;
     }
 
@@ -463,7 +466,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
 
     public void removePoint(Long pointRecordId, Long pointId) {
         PointRecord pointRecord = this.findById(pointRecordId);
-
         Iterator<UserAttendance> userAttendanceIterator = pointRecord.getUsersAttendances().iterator();
 
         while (userAttendanceIterator.hasNext()) {

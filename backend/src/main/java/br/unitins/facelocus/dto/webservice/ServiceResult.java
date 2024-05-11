@@ -20,6 +20,8 @@ public class ServiceResult {
     private float executionTime;
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
+    @Transient
+    private String error;
 
     public enum ServiceType {
         FACE_RECOGNITION,

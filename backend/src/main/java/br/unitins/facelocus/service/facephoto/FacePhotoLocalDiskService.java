@@ -2,6 +2,7 @@ package br.unitins.facelocus.service.facephoto;
 
 import br.unitins.facelocus.commons.MultipartData;
 import br.unitins.facelocus.dto.user.UserFacePhotoValidation;
+import br.unitins.facelocus.dto.webservice.ServiceResult;
 import br.unitins.facelocus.model.FacePhotoLocalDisk;
 import br.unitins.facelocus.model.User;
 import br.unitins.facelocus.service.EventService;
@@ -103,7 +104,8 @@ public class FacePhotoLocalDiskService implements FacePhotoService {
         FacePhotoLocalDisk facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
         String profilePhotoFacePath = ((FacePhotoLocalDisk) user.getFacePhoto()).getFilePath();
 
-        boolean facedDetected = faceRecognitionService.faceDetected(facePhoto.getFilePath(), profilePhotoFacePath);
+        ServiceResult result = faceRecognitionService.getResult(facePhoto.getFilePath(), profilePhotoFacePath);
+        boolean facedDetected = result.isFaceDetected();
 
         UserFacePhotoValidation validation = new UserFacePhotoValidation();
         validation.setFacePhoto(facePhoto);

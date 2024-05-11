@@ -73,14 +73,6 @@ public class UserResource {
         return Response.ok().build();
     }
 
-    @Path("/check-face")
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response checkFace(@RestQuery("user") Long userId, @Valid MultipartData multipartBody) {
-        facePhotoService.facePhotoValidation(userId, multipartBody);
-        return Response.ok().build();
-    }
-
     @Path("/face-photo")
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
