@@ -31,7 +31,6 @@ public class Event extends DefaultEntity {
 
     @ManyToMany
     private List<User> users = new ArrayList<>();
-
     private String code;
 
     private boolean allowTicketRequests;

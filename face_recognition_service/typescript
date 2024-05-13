@@ -1,0 +1,680 @@
+Script started on 2024-05-11 16:56:50-03:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="223" LINES="13"]
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear[Ccleardclear clear[C[C[C[C[C[K[K[K[Ksc[K[K[Ksc'scripts/[K[K[K[K[K[K[K[K[Krip[K[K[K[K[K[K[K[Kscripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+Response 6:
+
+Response 7:
+
+Response 8:
+
+Response 9:
+
+Response 10:
+
+Response 11:
+
+Response 12:
+
+Response 13:
+
+Response 14:
+
+Response 15:
+
+cccuuucrcrcccrcululuuulur:r:rrrc:crl l lllu rul:(:(:::(lr:: 2 2   2l  (82(8(((8c:(()82)222)u 22 )8 8F88 rF(88F ))a))la2))aF  i  :i8  iaFFlFF l)FFliaaeaa(e aaeliidii2dFiidell ll8 all deetee)tieet ddodd olddot     F e   ottcttacdttc oooooio oooc  n  lnt  noccnccenoccnnooeoode ooennncnn ccnncenntnnttonntcee eeo nee tcctcc tncct ttottcoettot     o c   ott1ttn1ttt1 oo7oon7 oo71  2  e2t  2711.11c.o11.277377t3 773.22122 112213.....t.7...133433o42334.11711 7.1174.....1.3...744144711441.7757725.7751..9...94..9511 113 711 955p551p.55p 99o99.o199op  r  4r5  ropptpp7t9pptroo oo.  oo trr5rr15prr5 tt0tt50ott05  0  90r  0055055 0t550000 00p  00 000a00oa500a 00f00rf000fa  t  tt0  tfaaeaa e0aaetffrff5r ffrett tt0 att ree1ee01fee1 rr3rr03trr31  3   3e  3311711a7r117333933f9 339733233t21332977 77e 377 299m99rm399m 22s12 s722sm  :  1:9  :smm mm3 2mm :ssCss3C ssC ::o::7om::oC  u  9us  uoCClCC2l:CCluoodoo d oodluunuumnCuundll'lls'oll'nddtdd:tuddt'nn nn  lnn t''c''Ccd''c ttottoont connect ttoc  n  unc'o nocncocln ctnnoeonodeso enncnnnncenccentnen'trnotce ecet ven tctctc tecnt tot tcorteot   t o 
+ c otstotnsntts oeo oeeoc es r s r ttresvsesvs ovreeereeet evrrrvrrrosrev
+vev
+v e
+reerreesr
+r
+
+rrev
+
+
+revre
+r
+curl: (28) Failed to connect to 172.31.47.159 port 5000 after 133795 ms: Couldn't connect to server
+curl: (28) Failed to connect to 172.31.47.159 port 5000 afctuerrl :1 3(32789)2  Fmasi:l eCdo utlod nc'otn nceocntn etcot  1t7o2 .s3e1r.v4e7r.
+159 port 5000 after 133795 ms: Couldn't connect to server
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ scripts/aws-facerecognition-loadtest.sh clear[Kscripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+cccccuuuuurrrlrrll:l l:::(:   2 8(((()2222 8888F))))a    iFFFFlaaaaeiiiidllll eeeetdd ddo t   tottco ooo c  ncoccnonooennnncnenntecee ctcctto tt  t  t1otto7 oo 21  1.7117327721.22..3.1.3437.311.41..17..4454177975.. .911p1 55o5p99r9o  t rpp ptoo5o rr0r5tt0t0  0 055 5000a0 0a0f00f0t0 t e aearafrf  ftt11tee335err53r1  3 61111 3373m55 5s33m3:11s1 77:7C    ommCmussosl::u:d  l nC'CdCotonou u'ulcltldod dnnncn'n'o'tetntn c  ectccco ootntnn nonnt eeeosccc etttsre   vrtttevooore
+   rsss
+eeerrrvvveeerrr
+
+
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ [7mhttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Chttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg
+[?2004l[1] 67815
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ bash: http://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg: Arquivo ou diretório inexistente
+^C[?2004l[?2004h[?2004l
+[1]+  Fim da execução com status 127        http://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ curl -v [7mhttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jp[27m[7mg[27m[A]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ [C[C[C[C[C[C[C[Chttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg
+[?2004l[1] 67831
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ *   Trying 172.31.47.159:5000...
+^C[?2004l[?2004h[?2004l
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clearurl -v http://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg[A]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ [Clear[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Chttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Kscripts/aws-facerecognition-loadtest.sh [K* connect to 172.31.47.159 port 5000 from 192.168.15.147 port 50804 failed: Tempo esgotado para conexão
+* Failed to connect to 172.31.47.159 port 5000 after 136261 ms: Couldn't connect to server
+* Closing connection
+curl: (28) Failed to connect to 172.31.47.159 port 5000 after 136261 ms: Couldn't connect to server
+^C[?2004l[?2004h[?2004l
+[1]+  Fim da execução com status 28       curl -v http://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clearurl -v http://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg[A]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ [Clear[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Chttp://172.31.47.159:5000/facerecognition/check-faces?face_photo=1/1ce669d6-d73c-4f68-8ebf-16e506559510/facephoto.jpg&profile_face_photo=1/facephoto.jpg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Kscripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ scripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+{"detail":"'tuple' object has no attribute 'read'","title":"Internal Server Error"}
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ scripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+ccuurrll::  ((5522))  EEmmppttyy  rreeppllyy  ffrroomm  sseerrvveerr
+
+curl: (52) Empty reply from server
+curl: (52) Empty recpulryl :f r(o5m2 )s eErmvpetry
+ reply from server
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clearscripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+{"executionTime":5.4,"faceDetected":true}
+{"executionTime":5.756,"faceDetected":true}
+{"executionTime":5.765,"faceDetected":true}
+{"executionTime":5.894,"faceDetected":true}
+{"executionTime":5.721,"faceDetected":true}
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ scripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+Response 6:
+
+Response 7:
+
+Response 8:
+
+Response 9:
+
+Response 10:
+
+Response 11:
+
+Response 12:
+
+Response 13:
+
+Response 14:
+
+Response 15:
+
+{"executionTime":12.248,"faceDetected":true}
+{"executionTime":16.116,"faceDetected":true}
+{"executionTime":16.666,"faceDetected":true}
+{"executionTime":16.847,"faceDetected":true}
+{"executionTime":16.783,"faceDetected":true}
+{"executionTime":17.501,"faceDetected":true}
+{"executionTime":17.564,"faceDetected":true}
+{"executionTime":17.473,"faceDetected":true}
+{"executionTime":17.55,"faceDetected":true}
+{"executionTime":17.28,"faceDetected":true}
+{"executionTime":16.933,"faceDetected":true}
+{"executionTime":17.203,"faceDetected":true}
+{"executionTime":17.053,"faceDetected":true}
+{"executionTime":17.2,"faceDetected":true}
+{"executionTime":17.183,"faceDetected":true}
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ ./[K[Kclearscripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+Response 6:
+
+Response 7:
+
+Response 8:
+
+Response 9:
+
+Response 10:
+
+Response 11:
+
+Response 12:
+
+Response 13:
+
+Response 14:
+
+Response 15:
+
+cucrulr:l :( 5(25)2 )cE umErpmltp:yt  y(r 5er2pe)lp ylE ymf prftroyomm   rsseeepcrcrluver
+uvyrre llrf::
+r  cou(52) (mrE5 lm2s:p)e t r(yvE5 em2rcrp)eu
+t pryEll my:rp  e(t5fpy2rl )oyr mE e mfpspty reply frlecroyruom vrm fel srr:seeo
+ rrmc(u5vv err2esl: (52) Empty rec
+)re
+pu rElrvmylep :rtf 
+yr( o5rm2e )ps leEyrm vpfetrryo
+ mr espelryv efrr
+om server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ scripts/aws-facerecognition-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+Response 6:
+
+Response 7:
+
+Response 8:
+
+Response 9:
+
+Response 10:
+
+Response 11:
+
+Response 12:
+
+Response 13:
+
+Response 14:
+
+Response 15:
+
+curl: (52) Ecmuprtly:  r(e5p2lcy)u  rfElrmc:o pum(tr 5yls2 :er)r  veE(epm5rlp2
+yt)  yfE rmropetmpy  lsryee prflvryeo rmf
+ rsoemr vseerr
+ver
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply frcoumr ls:e r(v5e2r)
+ Empty reply from server
+curl: (52) Emptcyu rrle:p l(y5 2f)r oEmm psteyr vreerp
+ly from secruvrelrc:
+u r(l5:2 )( 5E2m)p tEym prteyp lrye pflryo mf rsoemr vseerr
+ver
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clearscripts/aws-facerecognition-loadtest.sh [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kdeepface-loadtest.sh 
+[?2004lResponse 1:
+
+Response 2:
+
+Response 3:
+
+Response 4:
+
+Response 5:
+
+Response 6:
+
+Response 7:
+
+Response 8:
+
+Response 9:
+
+Response 10:
+
+Response 11:
+
+Response 12:
+
+Response 13:
+
+Response 14:
+
+Response 15:
+
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+{"detail":"[Errno 28] No space left on device","title":"Internal Server Error"}
+[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ pip install -r [K requirements.txt 
+[?2004lRequirement already satisfied: absl-py==2.1.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 1)) (2.1.0)
+Requirement already satisfied: albumentations==1.4.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 2)) (1.4.0)
+Requirement already satisfied: astunparse==1.6.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 3)) (1.6.3)
+Requirement already satisfied: beautifulsoup4==4.12.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 4)) (4.12.3)
+Requirement already satisfied: blinker==1.7.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 5)) (1.7.0)
+Requirement already satisfied: build==1.2.1 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 6)) (1.2.1)
+Requirement already satisfied: boto3==1.34.98 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 7)) (1.34.98)
+Requirement already satisfied: cachetools==5.3.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 8)) (5.3.2)
+Requirement already satisfied: certifi==2024.2.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 9)) (2024.2.2)
+Requirement already satisfied: charset-normalizer==3.3.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 10)) (3.3.2)
+Requirement already satisfied: click==8.1.7 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 11)) (8.1.7)
+Requirement already satisfied: cmake==3.28.4 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 12)) (3.28.4)
+Requirement already satisfied: coloredlogs==15.0.1 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 13)) (15.0.1)
+Requirement already satisfied: contourpy==1.2.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 14)) (1.2.0)
+Requirement already satisfied: cycler==0.12.1 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 15)) (0.12.1)
+Requirement already satisfied: Cython==3.0.8 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 16)) (3.0.8)
+Requirement already satisfied: deepface==0.0.85 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 17)) (0.0.85)
+Requirement already satisfied: Distance==0.1.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 18)) (0.1.3)
+Collecting dlib==19.24.2 (from -r requirements.txt (line 19))
+  Using cached dlib-19.24.2.tar.gz (11.8 MB)
+  Installing build dependencies ... [?25l- \ | / done
+[?25h  Getting requirements to build wheel ... [?25l- done
+[?25h  Preparing metadata (pyproject.toml) ... [?25l- done
+[?25hRequirement already satisfied: easydict==1.12 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 20)) (1.12)
+Collecting face-recognition==1.3.0 (from -r requirements.txt (line 21))
+  Obtaining dependency information for face-recognition==1.3.0 from https://files.pythonhosted.org/packages/1e/95/f6c9330f54ab07bfa032bf3715c12455a381083125d8880c43cbe76bb3d0/face_recognition-1.3.0-py2.py3-none-any.whl.metadata
+  Using cached face_recognition-1.3.0-py2.py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: face_recognition_models==0.3.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 22)) (0.3.0)
+Requirement already satisfied: filelock==3.13.1 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 23)) (3.13.1)
+Requirement already satisfied: fire==0.5.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 24)) (0.5.0)
+Requirement already satisfied: Flask==3.0.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 25)) (3.0.2)
+Requirement already satisfied: flatbuffers==23.5.26 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 26)) (23.5.26)
+Requirement already satisfied: fonttools==4.49.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 27)) (4.49.0)
+Requirement already satisfied: gast==0.5.4 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 28)) (0.5.4)
+Requirement already satisfied: gdown==5.1.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 29)) (5.1.0)
+Requirement already satisfied: google-auth==2.28.1 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 30)) (2.28.1)
+Requirement already satisfied: google-auth-oauthlib==1.2.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 31)) (1.2.0)
+Requirement already satisfied: google-pasta==0.2.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 32)) (0.2.0)
+Requirement already satisfied: grpcio==1.62.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 33)) (1.62.0)
+Requirement already satisfied: gunicorn==21.2.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 34)) (21.2.0)
+Requirement already satisfied: h5py==3.10.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 35)) (3.10.0)
+Requirement already satisfied: humanfriendly==10.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 36)) (10.0)
+Requirement already satisfied: idna==3.6 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 37)) (3.6)
+Requirement already satisfied: imageio==2.34.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 38)) (2.34.0)
+Collecting insightface==0.7.3 (from -r requirements.txt (line 39))
+  Using cached insightface-0.7.3.tar.gz (439 kB)
+  Installing build dependencies ... [?25l- \ | / - \ done
+[?25h  Getting requirements to build wheel ... [?25l- \ done
+[?25h  Installing backend dependencies ... [?25l- \ done
+[?25h  Preparing metadata (pyproject.toml) ... [?25l- done
+[?25hRequirement already satisfied: itsdangerous==2.1.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 40)) (2.1.2)
+Requirement already satisfied: Jinja2==3.1.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 41)) (3.1.3)
+Requirement already satisfied: joblib==1.3.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 42)) (1.3.2)
+Collecting keras==2.15.0 (from -r requirements.txt (line 43))
+  Obtaining dependency information for keras==2.15.0 from https://files.pythonhosted.org/packages/fc/a7/0d4490de967a67f68a538cc9cdb259bff971c4b5787f7765dc7c8f118f71/keras-2.15.0-py3-none-any.whl.metadata
+  Using cached keras-2.15.0-py3-none-any.whl.metadata (2.4 kB)
+Requirement already satisfied: kiwisolver==1.4.5 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 44)) (1.4.5)
+Requirement already satisfied: lazy_loader==0.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 45)) (0.3)
+Requirement already satisfied: libclang==16.0.6 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 46)) (16.0.6)
+Requirement already satisfied: Markdown==3.5.2 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 47)) (3.5.2)
+Requirement already satisfied: MarkupSafe==2.1.5 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 48)) (2.1.5)
+Requirement already satisfied: matplotlib==3.8.3 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 49)) (3.8.3)
+Collecting ml-dtypes==0.2.0 (from -r requirements.txt (line 50))
+  Using cached ml_dtypes-0.2.0.tar.gz (698 kB)
+  Installing build dependencies ... [?25l- \ | / - error
+  [1;31merror[0m: [1msubprocess-exited-with-error[0m
+  
+  [31m×[0m [32mpip subprocess to install build dependencies[0m did not run successfully.
+  [31m│[0m exit code: [1;36m1[0m
+  [31m╰─>[0m [31m[58 lines of output][0m
+  [31m   [0m Ignoring numpy: markers 'python_version < "3.11"' don't match your environment
+  [31m   [0m Collecting numpy~=1.23.3
+  [31m   [0m   Using cached numpy-1.23.5.tar.gz (10.7 MB)
+  [31m   [0m   Installing build dependencies: started
+  [31m   [0m   Installing build dependencies: finished with status 'done'
+  [31m   [0m   Getting requirements to build wheel: started
+  [31m   [0m   Getting requirements to build wheel: finished with status 'error'
+  [31m   [0m   error: subprocess-exited-with-error
+  [31m   [0m 
+  [31m   [0m   × Getting requirements to build wheel did not run successfully.
+  [31m   [0m   │ exit code: 1
+  [31m   [0m   ╰─> [33 lines of output]
+  [31m   [0m       Traceback (most recent call last):
+  [31m   [0m         File "/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+  [31m   [0m           main()
+  [31m   [0m         File "/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+  [31m   [0m           json_out['return_val'] = hook(**hook_input['kwargs'])
+  [31m   [0m                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  [31m   [0m         File "/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 112, in get_requires_for_build_wheel
+  [31m   [0m           backend = _build_backend()
+  [31m   [0m                     ^^^^^^^^^^^^^^^^
+  [31m   [0m         File "/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 77, in _build_backend
+  [31m   [0m           obj = import_module(mod_path)
+  [31m   [0m                 ^^^^^^^^^^^^^^^^^^^^^^^
+  [31m   [0m         File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+  [31m   [0m           return _bootstrap._gcd_import(name[level:], package, level)
+  [31m   [0m                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  [31m   [0m         File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  [31m   [0m         File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  [31m   [0m         File "/tmp/pip-build-env-nuull9bi/overlay/lib/python3.12/site-packages/setuptools/__init__.py", line 16, in <module>
+  [31m   [0m           import setuptools.version
+  [31m   [0m         File "/tmp/pip-build-env-nuull9bi/overlay/lib/python3.12/site-packages/setuptools/version.py", line 1, in <module>
+  [31m   [0m           import pkg_resources
+  [31m   [0m         File "/tmp/pip-build-env-nuull9bi/overlay/lib/python3.12/site-packages/pkg_resources/__init__.py", line 2172, in <module>
+  [31m   [0m           register_finder(pkgutil.ImpImporter, find_on_path)
+  [31m   [0m                           ^^^^^^^^^^^^^^^^^^^
+  [31m   [0m       AttributeError: module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?
+  [31m   [0m       [end of output]
+  [31m   [0m 
+  [31m   [0m   note: This error originates from a subprocess, and is likely not a problem with pip.
+  [31m   [0m error: subprocess-exited-with-error
+  [31m   [0m 
+  [31m   [0m × Getting requirements to build wheel did not run successfully.
+  [31m   [0m │ exit code: 1
+  [31m   [0m ╰─> See above for output.
+  [31m   [0m 
+  [31m   [0m note: This error originates from a subprocess, and is likely not a problem with pip.
+  [31m   [0m 
+  [31m   [0m [notice] A new release of pip is available: 23.2.1 -> 24.0
+  [31m   [0m [notice] To update, run: pip install --upgrade pip
+  [31m   [0m [31m[end of output][0m
+  
+  [1;35mnote[0m: This error originates from a subprocess, and is likely not a problem with pip.
+[1;31merror[0m: [1msubprocess-exited-with-error[0m
+
+[31m×[0m [32mpip subprocess to install build dependencies[0m did not run successfully.
+[31m│[0m exit code: [1;36m1[0m
+[31m╰─>[0m See above for output.
+
+[1;35mnote[0m: This error originates from a subprocess, and is likely not a problem with pip.
+
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip is available: [0m[31;49m23.2.1[0m[39;49m -> [0m[32;49m24.0[0m
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49mpip install --upgrade pip[0m
+[?25h[?2004h]0;luan@aorus-elite: ~/Projects/facelocus/face_recognition_service[01;32mluan@aorus-elite[00m:[01;34m~/Projects/facelocus/face_recognition_service[00m$ pythio[K[Kon -v
+[?2004limport _frozen_importlib # frozen
+import _imp # builtin
+import '_thread' # <class '_frozen_importlib.BuiltinImporter'>
+import '_warnings' # <class '_frozen_importlib.BuiltinImporter'>
+import '_weakref' # <class '_frozen_importlib.BuiltinImporter'>
+import '_io' # <class '_frozen_importlib.BuiltinImporter'>
+import 'marshal' # <class '_frozen_importlib.BuiltinImporter'>
+import 'posix' # <class '_frozen_importlib.BuiltinImporter'>
+import '_frozen_importlib_external' # <class '_frozen_importlib.FrozenImporter'>
+# installing zipimport hook
+import 'time' # <class '_frozen_importlib.BuiltinImporter'>
+import 'zipimport' # <class '_frozen_importlib.FrozenImporter'>
+# installed zipimport hook
+# /usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc matches /usr/lib/python3.12/encodings/__init__.py
+# code object from '/usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc'
+import '_codecs' # <class '_frozen_importlib.BuiltinImporter'>
+import 'codecs' # <class '_frozen_importlib.FrozenImporter'>
+# /usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc matches /usr/lib/python3.12/encodings/aliases.py
+# code object from '/usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc'
+import 'encodings.aliases' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77e1130>
+import 'encodings' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77e0770>
+# /usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc matches /usr/lib/python3.12/encodings/utf_8.py
+# code object from '/usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc'
+import 'encodings.utf_8' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77e36b0>
+import '_signal' # <class '_frozen_importlib.BuiltinImporter'>
+import '_abc' # <class '_frozen_importlib.BuiltinImporter'>
+import 'abc' # <class '_frozen_importlib.FrozenImporter'>
+import 'io' # <class '_frozen_importlib.FrozenImporter'>
+import '_stat' # <class '_frozen_importlib.BuiltinImporter'>
+import 'stat' # <class '_frozen_importlib.FrozenImporter'>
+import '_collections_abc' # <class '_frozen_importlib.FrozenImporter'>
+import 'genericpath' # <class '_frozen_importlib.FrozenImporter'>
+import 'posixpath' # <class '_frozen_importlib.FrozenImporter'>
+import 'os' # <class '_frozen_importlib.FrozenImporter'>
+import '_sitebuiltins' # <class '_frozen_importlib.FrozenImporter'>
+Processing global site-packages
+Adding directory: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages'
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_virtualenv.pth'
+# /home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/__pycache__/_virtualenv.cpython-312.pyc matches /home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_virtualenv.py
+# code object from '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/__pycache__/_virtualenv.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/__future__.cpython-312.pyc matches /usr/lib/python3.12/__future__.py
+# code object from '/usr/lib/python3.12/__pycache__/__future__.cpython-312.pyc'
+import '__future__' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77fed80>
+# /usr/lib/python3.12/__pycache__/contextlib.cpython-312.pyc matches /usr/lib/python3.12/contextlib.py
+# code object from '/usr/lib/python3.12/__pycache__/contextlib.cpython-312.pyc'
+# /usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc matches /usr/lib/python3.12/collections/__init__.py
+# code object from '/usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc'
+import 'itertools' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc matches /usr/lib/python3.12/keyword.py
+# code object from '/usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc'
+import 'keyword' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e734d580>
+# /usr/lib/python3.12/__pycache__/operator.cpython-312.pyc matches /usr/lib/python3.12/operator.py
+# code object from '/usr/lib/python3.12/__pycache__/operator.cpython-312.pyc'
+import '_operator' # <class '_frozen_importlib.BuiltinImporter'>
+import 'operator' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e734dc10>
+# /usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc matches /usr/lib/python3.12/reprlib.py
+# code object from '/usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc'
+import 'reprlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e734e5a0>
+import '_collections' # <class '_frozen_importlib.BuiltinImporter'>
+import 'collections' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e7334ec0>
+# /usr/lib/python3.12/__pycache__/functools.cpython-312.pyc matches /usr/lib/python3.12/functools.py
+# code object from '/usr/lib/python3.12/__pycache__/functools.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/types.cpython-312.pyc matches /usr/lib/python3.12/types.py
+# code object from '/usr/lib/python3.12/__pycache__/types.cpython-312.pyc'
+import 'types' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73650d0>
+import '_functools' # <class '_frozen_importlib.BuiltinImporter'>
+import 'functools' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e7335490>
+import 'contextlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77ff2c0>
+import '_virtualenv' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77fe930>
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/coloredlogs.pth'
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/distutils-precedence.pth'
+# /home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_distutils_hack/__pycache__/__init__.cpython-312.pyc matches /home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_distutils_hack/__init__.py
+# code object from '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_distutils_hack/__pycache__/__init__.cpython-312.pyc'
+import '_distutils_hack' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e7365e20>
+Processing user site-packages
+Processing global site-packages
+Adding directory: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages'
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/_virtualenv.pth'
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/coloredlogs.pth'
+Processing .pth file: '/home/luan/Projects/facelocus/face_recognition_service/venv/lib/python3.12/site-packages/distutils-precedence.pth'
+# /usr/lib/python3.12/__pycache__/sitecustomize.cpython-312.pyc matches /usr/lib/python3.12/sitecustomize.py
+# code object from '/usr/lib/python3.12/__pycache__/sitecustomize.cpython-312.pyc'
+import 'sitecustomize' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77fffe0>
+import 'site' # <class '_frozen_importlib.FrozenImporter'>
+# extension module 'readline' loaded from '/usr/lib/python3.12/lib-dynload/readline.cpython-312-x86_64-linux-gnu.so'
+# extension module 'readline' executed from '/usr/lib/python3.12/lib-dynload/readline.cpython-312-x86_64-linux-gnu.so'
+import 'readline' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7365e7334050>
+# /usr/lib/python3.12/__pycache__/rlcompleter.cpython-312.pyc matches /usr/lib/python3.12/rlcompleter.py
+# code object from '/usr/lib/python3.12/__pycache__/rlcompleter.cpython-312.pyc'
+import 'atexit' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.12/__pycache__/inspect.cpython-312.pyc matches /usr/lib/python3.12/inspect.py
+# code object from '/usr/lib/python3.12/__pycache__/inspect.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/ast.cpython-312.pyc matches /usr/lib/python3.12/ast.py
+# code object from '/usr/lib/python3.12/__pycache__/ast.cpython-312.pyc'
+# /usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc matches /usr/lib/python3.12/re/__init__.py
+# code object from '/usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/enum.cpython-312.pyc matches /usr/lib/python3.12/enum.py
+# code object from '/usr/lib/python3.12/__pycache__/enum.cpython-312.pyc'
+import 'enum' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73d9460>
+# /usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc matches /usr/lib/python3.12/re/_compiler.py
+# code object from '/usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc'
+import '_sre' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc matches /usr/lib/python3.12/re/_parser.py
+# code object from '/usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc'
+# /usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc matches /usr/lib/python3.12/re/_constants.py
+# code object from '/usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc'
+import 're._constants' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73f72c0>
+import 're._parser' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73f5f10>
+# /usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc matches /usr/lib/python3.12/re/_casefix.py
+# code object from '/usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc'
+import 're._casefix' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73f7410>
+import 're._compiler' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73f4680>
+# /usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc matches /usr/lib/python3.12/copyreg.py
+# code object from '/usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc'
+import 'copyreg' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71a0620>
+import 're' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73d87a0>
+import '_ast' # <class '_frozen_importlib.BuiltinImporter'>
+import 'ast' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e77e36e0>
+# /usr/lib/python3.12/__pycache__/dis.cpython-312.pyc matches /usr/lib/python3.12/dis.py
+# code object from '/usr/lib/python3.12/__pycache__/dis.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/opcode.cpython-312.pyc matches /usr/lib/python3.12/opcode.py
+# code object from '/usr/lib/python3.12/__pycache__/opcode.cpython-312.pyc'
+import '_opcode' # <class '_frozen_importlib.BuiltinImporter'>
+import 'opcode' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71ba570>
+import 'dis' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e73b4410>
+# /usr/lib/python3.12/collections/__pycache__/abc.cpython-312.pyc matches /usr/lib/python3.12/collections/abc.py
+# code object from '/usr/lib/python3.12/collections/__pycache__/abc.cpython-312.pyc'
+import 'collections.abc' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d6210>
+# /usr/lib/python3.12/importlib/__pycache__/__init__.cpython-312.pyc matches /usr/lib/python3.12/importlib/__init__.py
+# code object from '/usr/lib/python3.12/importlib/__pycache__/__init__.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/warnings.cpython-312.pyc matches /usr/lib/python3.12/warnings.py
+# code object from '/usr/lib/python3.12/__pycache__/warnings.cpython-312.pyc'
+import 'warnings' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d5010>
+import 'importlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d5f40>
+import 'importlib.machinery' # <class '_frozen_importlib.FrozenImporter'>
+# /usr/lib/python3.12/__pycache__/linecache.cpython-312.pyc matches /usr/lib/python3.12/linecache.py
+# code object from '/usr/lib/python3.12/__pycache__/linecache.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/tokenize.cpython-312.pyc matches /usr/lib/python3.12/tokenize.py
+# code object from '/usr/lib/python3.12/__pycache__/tokenize.cpython-312.pyc'
+# /usr/lib/python3.12/__pycache__/token.cpython-312.pyc matches /usr/lib/python3.12/token.py
+# code object from '/usr/lib/python3.12/__pycache__/token.cpython-312.pyc'
+import 'token' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d79e0>
+import '_tokenize' # <class '_frozen_importlib.BuiltinImporter'>
+import 'tokenize' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d6570>
+import 'linecache' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e71d40e0>
+import 'inspect' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e7366a20>
+import 'rlcompleter' # <_frozen_importlib_external.SourceFileLoader object at 0x7365e7365c10>
+Python 3.12.3 (main, Apr 10 2024, 05:33:47) [GCC 13.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+# clear sys.path_importer_cache
+# clear sys.path_hooks
+# clear builtins._
+# clear sys.path
+# clear sys.argv
+# clear sys.ps1
+# clear sys.ps2
+# clear sys.last_exc
+# clear sys.last_type
+# clear sys.last_value
+# clear sys.last_traceback
+# clear sys.__interactivehook__
+# clear sys.meta_path
+# restore sys.stdin
+# restore sys.stdout
+# restore sys.stderr
+# cleanup[2] removing sys
+# cleanup[2] removing builtins
+# cleanup[2] removing _frozen_importlib
+# cleanup[2] removing _imp
+# cleanup[2] removing _thread
+# cleanup[2] removing _warnings
+# cleanup[2] removing _weakref
+# cleanup[2] removing _io
+# cleanup[2] removing marshal
+# cleanup[2] removing posix
+# cleanup[2] removing _frozen_importlib_external
+# cleanup[2] removing time
+# cleanup[2] removing zipimport
+# destroy zipimport
+# cleanup[2] removing _codecs
+# cleanup[2] removing codecs
+# cleanup[2] removing encodings.aliases
+# cleanup[2] removing encodings
+# destroy encodings
+# cleanup[2] removing encodings.utf_8
+# cleanup[2] removing _signal
+# cleanup[2] removing _abc
+# cleanup[2] removing abc
+# cleanup[2] removing io
+# cleanup[2] removing __main__
+# cleanup[2] removing _stat
+# cleanup[2] removing stat
+# cleanup[2] removing _collections_abc
+# cleanup[2] removing genericpath
+# cleanup[2] removing posixpath
+# cleanup[2] removing os.path
+# cleanup[2] removing os
+# cleanup[2] removing _sitebuiltins
+# cleanup[2] removing __future__
+# destroy __f

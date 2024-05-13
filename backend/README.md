@@ -25,6 +25,12 @@ caminho:
 
 .env
 
+Rodar postgres de desenvolvimento no docker
+
+```shell
+docker run --name facelocus-dbdev -e POSTGRES_PASSWORD=root -e POSTGRES_DB=facelocus-dev -p 5432:5432 -d postgres
+```
+
 Rodar postgres de testes no docker
 
 ```shell

@@ -13,8 +13,8 @@ def check_face(photo_face_key, profile_photo_face_key) -> FaceDetectionResult:
 
     face_detected: FaceDetectionResult = execute_recognition(photo_face_path, profile_photo_face_path)
 
-    # delete_local_file(photo_face_path)
-    # delete_local_file(profile_photo_face_path)
+    delete_local_file(photo_face_path)
+    delete_local_file(profile_photo_face_path)
 
     return face_detected
 

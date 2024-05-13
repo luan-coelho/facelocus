@@ -1,98 +1,146 @@
 @startuml
-class Usuario {
+abstract class DefaultEntity {
     - id: Long
-    - nome: String
-    - email: String
+    - updatedAt: LocalDateTime
+    - createdAt: LocalDateTime
+    - active: boolean
+}
+
+class User {
+    - id: Long
+    - name: String
+    - surname: String
     - cpf: String
-    - senha: String
+    - email: String
+    - password: String
 }
 
-class Dispositivo {
+abstract class FacePhoto {
     - id: Long
-    - identificadorBluetooth: UUID
-    - imei: String
-    - descricao: String
+    - fileName: File
 }
 
-class FotoRostoUsuario {
+class FacePhotoS3 {
+    - objectkey: String
+    - size: Long
+    - bucket: String
+}
+
+class FacePhotoLocalDisk {
+    - filePath: String
+}
+
+class Event {
     - id: Long
-    - arquivo: File
-    - dataUpload: Date
-    - caminhoArquivo: String
+    - description: String
+    - allowTicketRequests: boolean
+    - code: String
 }
 
-class Evento {
+class Location {
     - id: Long
-    - descricao: String
-    - permitirSolicitacoesIngresso: boolean
+    - description: String
+    - latitude: String
+    - longitude: String
 }
 
-class SolicitacaoIngresso {
+class EventRequest {
     - id: Long
-    - codigo: String
-    - dataHoraLimite: LocalDateTime
+    - code: String
 }
 
-enum SituacaoSolicitacao {
-    + PENDENTE: int
-    + APROVADA: int
-    + REJEITADA: int
+enum EventRequestStatus << enumeration >> {
+    + PENDING
+    + ACCEPTED
+    + REJECTED
 }
 
-class Localizacao {
+enum EventRequestType << enumeration >> {
+    + TICKET_REQUEST
+    + INVITATION
+}
+
+class PointRecord {
     - id: Long
-    - descricao: String
-    - latitude: Double
-    - longitude: Double
+    - date: LocalDate
+    - allowableRadiusInMeters: Double
 }
 
-class RegistroPonto {
+class Point {
     - id: Long
-    - data: LocalDate
-    - emAndamento: boolean
-    - raioPermitidoEmMetros: int
+    - initialDate: LocalDateTime
+    - finalDate: LocalDateTime
 }
 
-class Ponto {
+enum Factor << enumeration >> {
+    + FACE_RECOGNITION
+    + LOCATION
+}
+
+class UserAttendance {
     - id: Long
-    - horaInicio: LocalTime
-    - minutosParaValidar: int
-    - validado: boolean
 }
 
-class RegistroPresenca {
+class FaceRecognitionValidationAttempt {
     - id: Long
-    - dataHora: LocalDateTime
+    - dateTime: LocalDateTime
+    - validated: boolean
 }
 
-enum Fator {
-    + RECONHECIMENTO_FACIAL: int
-    + LOCALIZACAO_INDOOR: int
+class LocationValidationAttempt {
+    - id: Long
+    - distanceInMeters: Double
+    - allowableRadiusInMeters: Double
+    - latitude: String
+    - longitude: String
+    - dateTime: LocalDateTime
+    - validated: boolean
 }
 
-RegistroPonto "*" --> "1" Evento
-RegistroPonto "1" *-> "*" Ponto
-RegistroPonto "*" o-left-> "*" Fator
-RegistroPonto "*" o-left-> "1" Localizacao
+class AttendanceRecord {
+    - id: Long
+    - frValidatedSuccessfully: boolean
+    - locationValidatedSuccessfully: boolean
+    - validatedByAdministrator: boolean
+}
 
-Evento "*" --> "*" Usuario : usuarios
-Evento "*" --> "1" Usuario : usuarioAdministrador
-Evento "1" --> "*" Localizacao
+enum AttendanceRecordStatus << enumeration >> {
+    + PENDING
+    + ACCEPTED
+    + REJECTED
+}
 
-SolicitacaoIngresso "*" --> "1" Evento
-SolicitacaoIngresso "*" --> "1" Usuario
-SolicitacaoIngresso "*" o-> "1" SituacaoSolicitacao
+User --|> DefaultEntity
+Event --|> DefaultEntity
+EventRequest --|> DefaultEntity
+PointRecord --|> DefaultEntity
+FacePhotoS3 -up-|> FacePhoto
+FacePhotoLocalDisk -up-|> FacePhoto
+FacePhoto -up-|> DefaultEntity
 
-RegistroPresenca "*" o-left-> "1" Usuario
-RegistroPresenca "*" o-> "1" Ponto
-RegistroPresenca "1" o-> "1" FotoRostoUsuario
+User "1" o-> "1" FacePhoto
 
-Usuario "1" o-down-> "*" Dispositivo
-Usuario "1" *-down-> "1" FotoRostoUsuario
+Event "1" o-up-> "*" PointRecord
+Event "1" o-up-> "*" Location
+Event "*" -down-> "*" User : users
+Event "*" --> "1" User : administrator
+Event "1" *-> "1" EventRequest
 
-'FotoRostoUsuario <|-- FotoRostoUsuarioLocal
-'FotoRostoUsuario <|-- FotoRostoUsuarioS3
-'FotoRostoUsuario <|-- FotoRostoUsuarioAzure
-'FotoRostoUsuario <|-- FotoRostoUsuarioGCloud
+PointRecord "1" *-> "*" Point
+PointRecord "*" o-> "*" Factor
+PointRecord "*" --> "1" Location
+PointRecord "1" *-> "*" UserAttendance
+
+UserAttendance "1" *-> "*" AttendanceRecord
+UserAttendance "*" o-> "1" User
+
+AttendanceRecord "1" *-down-> "*" FaceRecognitionValidationAttempt
+AttendanceRecord "1" *-up-> "*" LocationValidationAttempt
+AttendanceRecord "*" *-up-> "1" AttendanceRecordStatus
+
+EventRequest "*" --> "1" User : initial user
+EventRequest "*" --> "1" User : target user
+EventRequest "*" *-up-> "1" EventRequestStatus
+EventRequest "*" *-down-> "1" EventRequestType
 
 @enduml
