@@ -3,9 +3,9 @@ package br.unitins.facelocus.service;
 import br.unitins.facelocus.profiles.ProductionProfile;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @QuarkusTest
@@ -19,7 +19,7 @@ public class AwsS3Test {
     public void deveGerarLinksUrlsParaOServicoDeReconhecimentoFacial() {
         List<String> keys = s3Service.listAllKeys();
         System.out.println("==== KEYS ====");
-        keys.forEach(System.out::println);
+        s3Service.generateCurlCommandsToFile(keys);
         System.out.println("==============");
     }
 }

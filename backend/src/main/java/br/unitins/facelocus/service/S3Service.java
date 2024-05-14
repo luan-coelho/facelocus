@@ -12,7 +12,9 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -25,6 +27,8 @@ public class S3Service {
 
     @ConfigProperty(name = "bucket.name")
     String bucketName;
+
+    final String AWS_BASE_URL = "http://ec2-18-230-249-227.sa-east-1.compute.amazonaws.com:5000";
 
     public List<String> listAllKeys() {
         software.amazon.awssdk.services.s3.S3Client client = s3Client.s3Client();
@@ -81,4 +85,52 @@ public class S3Service {
             }
         }
     }
+
+    public void generateCurlCommandsToFile(List<String> keys) {
+        // Obtém o diretório do usuário
+        String userHome = System.getProperty("user.home");
+        String directoryPath = userHome + "/Facelocus";
+
+        // Cria o diretório se não existir
+        try {
+            Files.createDirectories(Paths.get(directoryPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Define o caminho do arquivo
+        String filePath = directoryPath + "/curl_commands.txt";
+
+        // Agrupa as chaves por prefixo
+        Map<String, List<String>> groupedKeys = groupKeysByPrefix(keys);
+
+        // Escreve os comandos curl no arquivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String prefix : groupedKeys.keySet()) {
+                List<String> prefixedKeys = groupedKeys.get(prefix);
+                for (String facePhotoKey : prefixedKeys) {
+                    for (String profileFacePhotoKey : prefixedKeys) {
+                        String url = String.format(
+                                "/facerecognition/check-faces?face_photo=%s&profile_face_photo=%s",
+                                facePhotoKey,
+                                profileFacePhotoKey
+                        );
+                        String curlCommand = String.format("curl -X GET '%s%s'", AWS_BASE_URL, url);
+                        writer.write(curlCommand);
+                        writer.newLine();
+                        writer.newLine();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Map<String, List<String>> groupKeysByPrefix(List<String> keys) {
+        return keys.stream()
+                .collect(Collectors.groupingBy(key -> key.split("/")[0]));
+    }
+
 }
