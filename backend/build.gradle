@@ -10,8 +10,8 @@ repositories {
 
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
-    implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation 'io.quarkus:quarkus-rest-jackson'
+    implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
@@ -24,6 +24,8 @@ dependencies {
     implementation 'commons-io:commons-io:2.16.1'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     implementation 'com.github.junrar:junrar:7.5.5'
+    implementation 'io.quarkus:quarkus-webjars-locator'
+    implementation 'io.quarkiverse.renarde:quarkus-renarde:3.0.12'
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
@@ -38,8 +40,8 @@ group 'br.unitins.facelocus'
 version '1.0'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 test {
