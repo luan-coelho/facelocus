@@ -195,6 +195,7 @@ class _FacialFactorValidateScreenState
             autoCapture: false,
             defaultCameraLens: CameraLens.front,
             orientation: CameraOrientation.portraitUp,
+            imageResolution: ImageResolution.max,
             onCapture: (File? image) {
               setState(() => croppedFile(image!.path));
             },

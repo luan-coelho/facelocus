@@ -1,6 +1,7 @@
 package br.unitins.facelocus.resource;
 
 import br.unitins.facelocus.service.S3Service;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Path("/s3")
+@PermitAll
 public class S3Resource {
 
     @Inject

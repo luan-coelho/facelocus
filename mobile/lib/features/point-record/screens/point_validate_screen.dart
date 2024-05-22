@@ -93,6 +93,7 @@ class PointValidateScreenState extends State<PointValidateScreen> {
             autoDisableCaptureControl: true,
             autoCapture: false,
             defaultCameraLens: CameraLens.front,
+            imageResolution: ImageResolution.max,
             onCapture: (File? image) {
               setState(() => _capturedImage = image);
             },

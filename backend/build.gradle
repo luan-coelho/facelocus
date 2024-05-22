@@ -24,8 +24,6 @@ dependencies {
     implementation 'commons-io:commons-io:2.16.1'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     implementation 'com.github.junrar:junrar:7.5.5'
-    implementation 'io.quarkus:quarkus-webjars-locator'
-    implementation 'io.quarkiverse.renarde:quarkus-renarde:3.0.12'
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

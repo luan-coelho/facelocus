@@ -109,41 +109,32 @@ class _PointRecordAdminShowScreenState
           },
           builder: (context, state) {
             if (state is PointRecordAdminShowLoaded) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  EventHeader(
-                    description: state.pointRecord.event!.description ?? '...',
-                    date: state.pointRecord.date,
-                  ),
-                  const SizedBox(height: 10),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Builder(
-                          builder: (context) {
-                            return ListView.separated(
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const SizedBox(height: 10);
-                              },
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: state.userAttendances.length,
-                              itemBuilder: (context, index) {
-                                return UserAttendanceValidateCard(
-                                  userAttendance: state.userAttendances[index],
-                                  pointRecordId: widget.pointRecordId,
-                                );
-                              },
-                            );
-                          },
-                        )
-                      ],
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    EventHeader(
+                      description: state.pointRecord.event!.description ?? '...',
+                      date: state.pointRecord.date,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: 10);
+                      },
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: state.userAttendances.length,
+                      itemBuilder: (context, index) {
+                        return UserAttendanceValidateCard(
+                          userAttendance: state.userAttendances[index],
+                          pointRecordId: widget.pointRecordId,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               );
             }
 

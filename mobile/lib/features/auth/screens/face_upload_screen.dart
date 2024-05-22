@@ -109,6 +109,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                 autoCapture: false,
                 defaultCameraLens: CameraLens.front,
                 orientation: CameraOrientation.portraitUp,
+                imageResolution: ImageResolution.max,
                 onCapture: (File? image) {
                   _capturedImage = image;
                   context.read<FaceUploudBloc>().add(

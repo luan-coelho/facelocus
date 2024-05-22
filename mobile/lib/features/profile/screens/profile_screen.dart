@@ -87,8 +87,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: const Icon(Icons.logout, color: Colors.red),
               onPressed: () async => context.read<ProfileBloc>().add(Logout()),
               textColor: Colors.red,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.red.withOpacity(0.2),
             ),
+            const SizedBox(height: 10),
+            const Divider(),
             const SizedBox(height: 10),
             AppButton(
               text: 'Sobre o Facelocus',

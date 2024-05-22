@@ -39,10 +39,10 @@ public class UserRepository extends BaseRepository<User> {
 
     public Optional<User> findByEmailOrCpf(String identifier) {
         String query = """
-                FROM User
+                FROM User u
                 WHERE
-                    FUNCTION('unaccent',LOWER(email)) LIKE '%'||?1||'%'
-                    OR LOWER(cpf) LIKE '%'||?1||'%'
+                    FUNCTION('unaccent',LOWER(u.email)) = ?1
+                    OR LOWER(u.cpf) = ?1
                 """;
          return find(query, identifier).singleResultOptional();
     }

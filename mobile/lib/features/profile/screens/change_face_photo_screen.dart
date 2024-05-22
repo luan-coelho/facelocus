@@ -109,6 +109,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                 autoCapture: false,
                 defaultCameraLens: CameraLens.front,
                 orientation: CameraOrientation.portraitUp,
+                imageResolution: ImageResolution.max,
                 onCapture: (File? image) {
                   _capturedImage = image;
                   context.read<ChangeFacePhotoBloc>().add(
@@ -160,8 +161,9 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                             onPressed: () => context
                                 .read<ChangeFacePhotoBloc>()
                                 .add(RequestCaptureByCamera()),
-                            textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            textColor: Colors.black,
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.black.withOpacity(0.5),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
@@ -170,7 +172,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                                 .read<ChangeFacePhotoBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            backgroundColor: Colors.red.withOpacity(0.2),
                           )
                         ],
                       ),
@@ -249,12 +251,13 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                   ),
                   const SizedBox(height: 15),
                   AppButton(
-                      text: 'Tirar uma foto',
-                      onPressed: () {
-                        context
-                            .read<ChangeFacePhotoBloc>()
-                            .add(RequestCaptureByCamera());
-                      }),
+                    text: 'Tirar uma foto',
+                    onPressed: () {
+                      context
+                          .read<ChangeFacePhotoBloc>()
+                          .add(RequestCaptureByCamera());
+                    },
+                  ),
                   const SizedBox(height: 10),
                   AppButton(
                     text: 'Galeria',

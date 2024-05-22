@@ -103,16 +103,19 @@ class _EventRequestCardState extends State<EventRequestCard> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      widget.eventRequest.initiatorUser.id ==
-                              widget.authenticatedUser.id
-                          ? 'Para:'
-                          : 'De:',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                    Flexible(
+                      child: Text(
+                        widget.eventRequest.initiatorUser.id ==
+                                widget.authenticatedUser.id
+                            ? 'Para:'
+                            : 'De:',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(width: 3),
                     Text(
