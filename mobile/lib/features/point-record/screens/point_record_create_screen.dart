@@ -254,8 +254,8 @@ class _PointRecordCreateScreenState extends State<PointRecordCreateScreen> {
                 Slider(
                   value: _allowableRadiusInMeters,
                   min: 0.0,
-                  max: 60.0,
-                  divisions: 20,
+                  max: 100.0,
+                  divisions: 10,
                   label: _allowableRadiusInMeters.round().toString(),
                   onChanged: (double value) {
                     setState(() {

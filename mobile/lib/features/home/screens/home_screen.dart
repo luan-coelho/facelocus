@@ -4,7 +4,6 @@ import 'package:facelocus/features/home/widgets/user_card.dart';
 import 'package:facelocus/models/point_record_model.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
-import 'package:facelocus/shared/widgets/app_bottom_navigation_bar.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
@@ -165,14 +164,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
           onPressed: () => context.push(AppRoutes.pointRecordCreate),
           elevation: 13,
           backgroundColor: AppColorsConst.blue,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
-          child: const Icon(Icons.add, color: Colors.white),
+          icon: const Icon(Icons.add, color: Colors.white),
+          label: const Text(
+            'Registro de ponto',
+            style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
         ),
       ),
     );
