@@ -38,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
               const UserCardHome(),
               const SizedBox(height: 15),
               AppButton(
-                text: 'Solicitações',
                 onPressed: () => context.push(AppRoutes.eventRequest),
+                text: 'Solicitações',
                 icon: SvgPicture.asset(
                   'images/event-request-icon.svg',
                   colorFilter: const ColorFilter.mode(
@@ -47,6 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     BlendMode.srcIn,
                   ),
                 ),
+              ),
+              const SizedBox(height: 10),
+              AppButton(
+                onPressed: () => context.push(AppRoutes.event),
+                text: 'Eventos',
+                icon: SvgPicture.asset(
+                  'images/event-icon.svg',
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                textColor: Colors.black,
+                backgroundColor: Colors.white,
+                borderColor: Colors.black.withOpacity(0.5),
               ),
               const SizedBox(height: 15),
               BlocBuilder<HomeBloc, HomeState>(
@@ -159,8 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: const Icon(Icons.add, color: Colors.white),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: const AppBottomNavigationBar(),
       ),
     );
   }

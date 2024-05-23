@@ -74,11 +74,6 @@ class _AppLayoutState extends State<AppLayout> {
                 child: const Icon(Icons.add, color: Colors.white),
               )
             : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: widget.showBottomNavigationBar != null &&
-                widget.showBottomNavigationBar == true
-            ? const AppBottomNavigationBar()
-            : null,
       ),
     );
   }
