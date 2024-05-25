@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/features/auth/blocs/face-uploud/face_uploud_bloc.dart';
 import 'package:facelocus/router.dart';
 import 'package:facelocus/shared/constants.dart';
@@ -25,59 +24,71 @@ class FaceUploadScreen extends StatefulWidget {
 }
 
 class FaceUploadScreenState extends State<FaceUploadScreen> {
-  late final ImagePicker picker;
+  late final ImagePicker _picker;
   File? _capturedImage;
+
+  Future<void> _takePhoto() async {
+    final pickedFile = await _picker.pickImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+      imageQuality: 100,
+    );
+
+    setState(() {
+      if (pickedFile != null) {
+        croppedFile(pickedFile.path);
+      }
+    });
+  }
+
+  void croppedFile(String path) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Selecionar',
+            toolbarColor: AppColorsConst.dark,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+    setState(() {
+      _capturedImage = File(croppedFile!.path);
+      context.read<FaceUploudBloc>().add(CameraPhotoCaptured(
+            file: _capturedImage!,
+          ));
+    });
+  }
+
+  void getPhotoFromGalery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _capturedImage = File(image.path);
+        // context.read<FaceUploudBloc>().add(PhotoCaptured(image.path));
+      });
+      croppedFile(image.path);
+    }
+  }
 
   @override
   void initState() {
-    picker = ImagePicker();
+    _picker = ImagePicker();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    void croppedFile(String path) async {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Selecionar',
-              toolbarColor: AppColorsConst.dark,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          IOSUiSettings(
-            title: 'Cropper',
-          ),
-          WebUiSettings(
-            context: context,
-          ),
-        ],
-      );
-      _capturedImage = File(croppedFile!.path);
-      if (context.mounted) {
-        context.read<FaceUploudBloc>().add(
-              GaleryPhotoCaptured(
-                path: croppedFile.path,
-              ),
-            );
-      }
-    }
-
-    void getPhotoFromGalery() async {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        setState(() {
-          _capturedImage = File(image.path);
-          // context.read<FaceUploudBloc>().add(PhotoCaptured(image.path));
-        });
-        croppedFile(image.path);
-      }
-    }
-
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -99,33 +110,6 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
             if (state is Uploading) {
               return const Center(
                 child: Spinner(),
-              );
-            }
-
-            if (state is CapturePhotoByCamera) {
-              return SmartFaceCamera(
-                message: 'Camera não detectada',
-                autoDisableCaptureControl: true,
-                autoCapture: false,
-                defaultCameraLens: CameraLens.front,
-                orientation: CameraOrientation.portraitUp,
-                imageResolution: ImageResolution.max,
-                onCapture: (File? image) {
-                  _capturedImage = image;
-                  context.read<FaceUploudBloc>().add(
-                        CameraPhotoCaptured(path: image!.path),
-                      );
-                },
-                onFaceDetected: (Face? face) {},
-                messageBuilder: (context, face) {
-                  if (face == null) {
-                    return _message('Coloque seu rosto na câmera');
-                  }
-                  if (!face.wellPositioned) {
-                    return _message('Centralize seu rosto');
-                  }
-                  return const SizedBox.shrink();
-                },
               );
             }
 
@@ -151,17 +135,16 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                             isLoading: state is Uploading,
                             text: 'Enviar',
                             onPressed: () => context.read<FaceUploudBloc>().add(
-                                  UploudPhoto(_capturedImage!.path),
+                                  UploudPhoto(file: _capturedImage!),
                                 ),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
                             text: 'Tirar nova foto',
-                            onPressed: () => context
-                                .read<FaceUploudBloc>()
-                                .add(RequestCaptureByCamera()),
-                            textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            onPressed: _takePhoto,
+                            textColor: Colors.black,
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.black.withOpacity(0.5),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
@@ -170,7 +153,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                                 .read<FaceUploudBloc>()
                                 .add(CancelCapture()),
                             textColor: Colors.red,
-                            backgroundColor: AppColorsConst.white,
+                            backgroundColor: Colors.red.withOpacity(0.2),
                           )
                         ],
                       ),
@@ -198,7 +181,7 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                             isLoading: state is Uploading,
                             text: 'Enviar',
                             onPressed: () => context.read<FaceUploudBloc>().add(
-                                  UploudPhoto(_capturedImage!.path),
+                                  UploudPhoto(file: _capturedImage!),
                                 ),
                           ),
                           const SizedBox(height: 10),
@@ -248,12 +231,9 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
                   ),
                   const SizedBox(height: 15),
                   AppButton(
-                      text: 'Tirar uma foto',
-                      onPressed: () {
-                        context
-                            .read<FaceUploudBloc>()
-                            .add(RequestCaptureByCamera());
-                      }),
+                    text: 'Tirar uma foto',
+                    onPressed: _takePhoto,
+                  ),
                   const SizedBox(height: 10),
                   AppButton(
                     text: 'Galeria',
@@ -277,19 +257,4 @@ class FaceUploadScreenState extends State<FaceUploadScreen> {
       ),
     );
   }
-
-  Widget _message(String msg) => SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            msg,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-      );
 }

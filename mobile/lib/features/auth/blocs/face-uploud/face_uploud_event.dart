@@ -8,9 +8,9 @@ class RequestCaptureByGallery extends FaceUploudEvent {}
 class RequestCaptureByCamera extends FaceUploudEvent {}
 
 class CameraPhotoCaptured extends FaceUploudEvent {
-  final String path;
+  final File file;
 
-  CameraPhotoCaptured({required this.path});
+  CameraPhotoCaptured({required this.file});
 }
 
 class GaleryPhotoCaptured extends FaceUploudEvent {
@@ -22,9 +22,9 @@ class GaleryPhotoCaptured extends FaceUploudEvent {
 class CancelCapture extends FaceUploudEvent {}
 
 class UploudPhoto extends FaceUploudEvent {
-  final String path;
+  final File file;
 
-  UploudPhoto(this.path);
+  UploudPhoto({required this.file});
 }
 
 class RequestLogout extends FaceUploudEvent {}

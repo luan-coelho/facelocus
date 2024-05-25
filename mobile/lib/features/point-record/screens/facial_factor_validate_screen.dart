@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 
 class FacialFactorValidateScreen extends StatefulWidget {
   const FacialFactorValidateScreen({
@@ -78,7 +79,6 @@ class _FacialFactorValidateScreenState
   void initState() {
     _picker = ImagePicker();
     _capturedImage = null;
-    _takePhoto();
     super.initState();
   }
 
@@ -202,9 +202,18 @@ class _FacialFactorValidateScreenState
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Builder(
+                      builder: (context) {
+                        double width = MediaQuery.of(context).size.width * 0.50;
+                        return Lottie.asset(
+                          'assets/face_recognition.json',
+                          width: width,
+                        );
+                      },
+                    ),
                     const InforCard(
-                      'Mantenha o rosto centralizado e olhe diretamente '
-                      'para a câmera.',
+                      'Centralize seu rosto na câmera, mantenha o rosto visível '
+                      'e sem obstruções.',
                     ),
                     const SizedBox(height: 15),
                     AppButton(
