@@ -1,4 +1,5 @@
 import 'package:facelocus/features/point-record/blocs/location-factor-validate/location_factor_validate_bloc.dart';
+import 'package:facelocus/features/point-record/blocs/point-record-show/point_record_show_bloc.dart';
 import 'package:facelocus/shared/toast.dart';
 import 'package:facelocus/shared/widgets/app_button.dart';
 import 'package:facelocus/utils/spinner.dart';
@@ -24,9 +25,17 @@ class _LocationFactorValidateScreenState
     extends State<LocationFactorValidateScreen> {
   @override
   void initState() {
-    context.read<LocationFactorValidateBloc>().add(LoadUserAttendace(
-          userAttendanceId: widget.attendanceRecordId,
-        ));
+    final pointRecordShowState = context.read<PointRecordShowBloc>().state;
+
+    if (pointRecordShowState is PointRecordShowLoaded) {
+      final int? userAttendanceId = pointRecordShowState.userAttendance!.id;
+
+      context.read<LocationFactorValidateBloc>().add(
+            LoadUserAttendace(
+              userAttendanceId: userAttendanceId!,
+            ),
+          );
+    }
     super.initState();
   }
 
@@ -140,12 +149,13 @@ class _LocationFactorValidateScreenState
                         )),
                     const SizedBox(height: 25),
                     AppButton(
-                        onPressed: () => context
-                            .read<LocationFactorValidateBloc>()
-                            .add(ValidateLocation(
-                                userAttendance: state.userAttendance,
-                                attendanceRecordId: widget.attendanceRecordId)),
-                        text: 'Tentar novamente'),
+                      onPressed: () => context
+                          .read<LocationFactorValidateBloc>()
+                          .add(ValidateLocation(
+                              userAttendance: state.userAttendance,
+                              attendanceRecordId: widget.attendanceRecordId)),
+                      text: 'Tentar novamente',
+                    ),
                   ],
                 );
               }

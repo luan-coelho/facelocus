@@ -389,39 +389,37 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Transactional
     public void validateFacialRecognitionFactorForAttendanceRecord(Long attendanceRecordId,
                                                                    MultipartData multipartData) {
-        taskQueueManager.submitTask(() -> {
-            AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
-            checkFacialRecognitionValidity(attendanceRecord);
+        AttendanceRecord attendanceRecord = attendanceRecordService.findById(attendanceRecordId);
+        checkFacialRecognitionValidity(attendanceRecord);
 
-            User user = attendanceRecord.getUserAttendance().getUser();
-            user = userService.findById(user.getId());
+        User user = attendanceRecord.getUserAttendance().getUser();
+        user = userService.findById(user.getId());
 
-            UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(
-                    user,
-                    multipartData
-            );
+        UserFacePhotoValidation validation = faceRecognitionService.generateFacePhotoValidation(
+                user,
+                multipartData
+        );
 
-            FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
-            attempt.setFacePhoto(validation.getFacePhoto());
-            attempt.setAttendanceRecord(attendanceRecord);
+        FaceRecognitionValidationAttempt attempt = new FaceRecognitionValidationAttempt();
+        attempt.setFacePhoto(validation.getFacePhoto());
+        attempt.setAttendanceRecord(attendanceRecord);
 
-            boolean faceDetected = validation.isFaceDetected();
+        boolean faceDetected = validation.isFaceDetected();
 
-            attendanceRecord.setStatus(faceDetected ?
-                    AttendanceRecordStatus.VALIDATED :
-                    AttendanceRecordStatus.NOT_VALIDATED);
-            attendanceRecord.getFrValidationAttempts().add(attempt);
+        attendanceRecord.setStatus(faceDetected ?
+                AttendanceRecordStatus.VALIDATED :
+                AttendanceRecordStatus.NOT_VALIDATED);
+        attendanceRecord.getFrValidationAttempts().add(attempt);
 
-            attempt.setValidated(faceDetected);
-            attempt.setDateTime(LocalDateTime.now());
+        attempt.setValidated(faceDetected);
+        attempt.setDateTime(LocalDateTime.now());
             /*FaceRecognitionAllServices recognitionResult = buildFaceRecognitionResult(validation.getRecognitionResult());
             recognitionResult.setFaceRecognitionValidationAttempt(attempt);*/
-            attendanceRecordService.update(attendanceRecord);
+        attendanceRecordService.update(attendanceRecord);
 
-            if (!faceDetected) {
-                throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
-            }
-        });
+        if (!faceDetected) {
+            throw new IllegalArgumentException("Face não reconhecida. Tente novamente");
+        }
     }
 
     @SuppressWarnings("unused")

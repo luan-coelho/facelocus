@@ -57,7 +57,7 @@ class LocationFactorValidateBloc
         );
         if (distance < allowableRadiusInMeters) {
           await pointRecordRepository.validateLocationFactor(
-            event.userAttendance.id!,
+            event.attendanceRecordId,
             LocationValidationAttempt(
               latitude: position.latitude,
               longitude: position.longitude,

@@ -15,13 +15,16 @@ class _PointRecordListScreenState extends State<PointRecordListScreen> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-        body: Padding(
-      padding: const EdgeInsets.all(29.0),
-      child: Center(
-        child: AppButton(
-            text: 'Validar',
-            onPressed: () => context.push(AppRoutes.pointRecordPointValidate)),
+      body: Padding(
+        padding: const EdgeInsets.all(29.0),
+        child: Center(
+          child: AppButton(
+              text: 'Validar',
+              onPressed: () => context.push(
+                    AppRoutes.pointRecordPointValidate,
+                  )),
+        ),
       ),
-    ));
+    );
   }
 }

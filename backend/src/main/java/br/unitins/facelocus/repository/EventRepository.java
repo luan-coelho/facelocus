@@ -56,7 +56,7 @@ public class EventRepository extends BaseRepository<Event> {
                 SELECT DISTINCT e
                 FROM Event e
                 WHERE e.administrator.id = ?1
-                    AND FUNCTION('unaccent', LOWER(description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
+                    AND FUNCTION('unaccent', LOWER(e.description)) LIKE FUNCTION('unaccent', LOWER('%'||?2||'%'))
                 """;
         PanacheQuery<Event> panacheQuery = find(query, userId, description);
         return buildDataPagination(pageable, panacheQuery);

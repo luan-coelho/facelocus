@@ -116,7 +116,7 @@ public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoReposito
         String[] subdirectories = {user.getId().toString(), UUID.randomUUID().toString()};
         FacePhotoS3 facePhoto = saveFileAndBuildFacePhoto(multipartData.file, subdirectories);
         facePhoto.setUser(user);
-        this.repository.getEntityManager().merge(facePhoto);
+        this.repository.persist(facePhoto);
 
         ServiceResult result = faceRecognitionService.getResult(
                 facePhoto.getObjectKey(),
