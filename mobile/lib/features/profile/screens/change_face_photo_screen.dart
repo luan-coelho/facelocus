@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:face_camera/face_camera.dart';
 import 'package:facelocus/features/profile/blocs/change-face-photo/change_face_photo_bloc.dart';
 import 'package:facelocus/shared/constants.dart';
 import 'package:facelocus/shared/toast.dart';
@@ -24,50 +23,62 @@ class ChangeFacePhotoScreen extends StatefulWidget {
 }
 
 class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
-  late final ImagePicker picker;
+  late final ImagePicker _picker;
   File? _capturedImage;
+
+  Future<void> _takePhoto() async {
+    final pickedFile = await _picker.pickImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+      imageQuality: 100,
+    );
+
+    setState(() {
+      if (pickedFile != null) {
+        croppedFile(pickedFile.path);
+      }
+    });
+  }
+
+  void croppedFile(String path) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Selecionar',
+            toolbarColor: AppColorsConst.dark,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+    setState(() {
+      _capturedImage = File(croppedFile!.path);
+      context.read<ChangeFacePhotoBloc>().add(CameraPhotoCaptured(
+            file: _capturedImage!,
+          ));
+    });
+  }
 
   @override
   void initState() {
-    picker = ImagePicker();
+    _picker = ImagePicker();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    void croppedFile(String path) async {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Selecionar',
-              toolbarColor: AppColorsConst.dark,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          IOSUiSettings(
-            title: 'Cropper',
-          ),
-          WebUiSettings(
-            context: context,
-          ),
-        ],
-      );
-      _capturedImage = File(croppedFile!.path);
-      if (context.mounted) {
-        context.read<ChangeFacePhotoBloc>().add(
-              GaleryPhotoCaptured(
-                path: croppedFile.path,
-              ),
-            );
-      }
-    }
-
     void getPhotoFromGalery() async {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         setState(() {
           _capturedImage = File(image.path);
@@ -102,33 +113,6 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
               );
             }
 
-            if (state is CapturePhotoByCamera) {
-              return SmartFaceCamera(
-                message: 'Camera não detectada',
-                autoDisableCaptureControl: true,
-                autoCapture: false,
-                defaultCameraLens: CameraLens.front,
-                orientation: CameraOrientation.portraitUp,
-                imageResolution: ImageResolution.max,
-                onCapture: (File? image) {
-                  _capturedImage = image;
-                  context.read<ChangeFacePhotoBloc>().add(
-                        CameraPhotoCaptured(path: image!.path),
-                      );
-                },
-                onFaceDetected: (Face? face) {},
-                messageBuilder: (context, face) {
-                  if (face == null) {
-                    return _message('Coloque seu rosto na câmera');
-                  }
-                  if (!face.wellPositioned) {
-                    return _message('Centralize seu rosto');
-                  }
-                  return const SizedBox.shrink();
-                },
-              );
-            }
-
             if (state is CapturePhotoByGallery) {
               getPhotoFromGalery();
             }
@@ -152,15 +136,13 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                             text: 'Enviar',
                             onPressed: () =>
                                 context.read<ChangeFacePhotoBloc>().add(
-                                      UploudPhoto(_capturedImage!.path),
+                                      UploudPhoto(file: _capturedImage!),
                                     ),
                           ),
                           const SizedBox(height: 10),
                           AppButton(
                             text: 'Tirar nova foto',
-                            onPressed: () => context
-                                .read<ChangeFacePhotoBloc>()
-                                .add(RequestCaptureByCamera()),
+                            onPressed: _takePhoto,
                             textColor: Colors.black,
                             backgroundColor: Colors.white,
                             borderColor: Colors.black.withOpacity(0.5),
@@ -201,7 +183,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                             text: 'Enviar',
                             onPressed: () =>
                                 context.read<ChangeFacePhotoBloc>().add(
-                                      UploudPhoto(_capturedImage!.path),
+                                      UploudPhoto(file: _capturedImage!),
                                     ),
                           ),
                           const SizedBox(height: 10),
@@ -252,11 +234,7 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
                   const SizedBox(height: 15),
                   AppButton(
                     text: 'Tirar uma foto',
-                    onPressed: () {
-                      context
-                          .read<ChangeFacePhotoBloc>()
-                          .add(RequestCaptureByCamera());
-                    },
+                    onPressed: _takePhoto,
                   ),
                   const SizedBox(height: 10),
                   AppButton(
@@ -283,19 +261,4 @@ class ChangeFacePhotoScreenState extends State<ChangeFacePhotoScreen> {
       ),
     );
   }
-
-  Widget _message(String msg) => SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            msg,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-      );
 }

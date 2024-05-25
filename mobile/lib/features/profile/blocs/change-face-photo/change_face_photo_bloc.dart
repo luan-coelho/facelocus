@@ -9,6 +9,7 @@ import 'package:facelocus/utils/response_api_message.dart';
 import 'package:flutter/material.dart';
 
 part 'change_face_photo_event.dart';
+
 part 'change_face_photo_state.dart';
 
 class ChangeFacePhotoBloc
@@ -25,10 +26,12 @@ class ChangeFacePhotoBloc
     on<UploudPhoto>((event, emit) async {
       try {
         emit(Uploading());
-        File file = File(event.path);
         var user = await sessionRepository.getUser();
-        await userRepository.facePhotoProfileUploud(file, user!.id!);
-        userFacePhotoBloc.add(UptatedUserFacePhoto(image: file, user: user));
+        await userRepository.facePhotoProfileUploud(event.file, user!.id!);
+        userFacePhotoBloc.add(UptatedUserFacePhoto(
+          image: event.file,
+          user: user,
+        ));
         emit(UploadedSucessfully());
       } on DioException catch (e) {
         emit(UploadedFailed(ResponseApiMessage.buildMessage(e)));
