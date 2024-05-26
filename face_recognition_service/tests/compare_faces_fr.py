@@ -2,6 +2,7 @@ import os
 import time
 
 import face_recognition
+import psutil
 
 
 def carregar_imagem(caminho_arquivo):
@@ -34,6 +35,8 @@ def obter_tamanho_imagem(caminho_arquivo):
 def processar_diretorio(diretorio_base):
     tempos_comparacao = []  # Lista para armazenar os tempos de comparação
     tamanhos_imagens = []  # Lista para armazenar os tamanhos das imagens
+    uso_cpu = []  # Lista para armazenar o uso de CPU
+    uso_nucleos = []  # Lista para armazenar o uso de núcleos da CPU
     quantidade_fotos = 0
 
     for id_dir in os.listdir(diretorio_base):
@@ -60,9 +63,20 @@ def processar_diretorio(diretorio_base):
                             tamanhos_imagens.append(tamanho_imagem_em_kb)
                             print(f"Tamanho da imagem: {tamanho_imagem_em_kb} KB")
 
+                            process = psutil.Process(os.getpid())
+                            cpu_usage_start = process.cpu_percent(interval=None)
+                            cpu_cores_start = psutil.cpu_percent(interval=None, percpu=True)
+
                             tempo_inicio = time.time()  # Início da contagem do tempo
                             correspondencia = comparar_faces(imagem_raiz, imagem_comparar)
                             tempo_fim = time.time()  # Fim da contagem do tempo
+
+                            cpu_usage_end = process.cpu_percent(interval=None)
+                            cpu_cores_end = psutil.cpu_percent(interval=None, percpu=True)
+
+                            uso_cpu.append(cpu_usage_end - cpu_usage_start)
+                            uso_nucleos.append([end - start for start, end in zip(cpu_cores_start, cpu_cores_end)])
+
                             tempo_decorrido = tempo_fim - tempo_inicio  # Tempo decorrido
 
                             print("Tempo decorrido:" + str(tempo_decorrido))
@@ -85,6 +99,14 @@ def processar_diretorio(diretorio_base):
         print(f"Tamanho médio das imagens: {tamanho_medio:.2f} KB")
         print("===============================================")
         print(f"Array das imagens: \n{tamanhos_imagens}")
+        print("===============================================")
+    if uso_cpu:  # Se houver uso de CPU armazenado
+        uso_cpu_medio = sum(uso_cpu) / len(uso_cpu) / psutil.cpu_count()
+        print(f"Uso médio de CPU durante as comparações: {uso_cpu_medio:.2f} %")
+        print("===============================================")
+    if uso_nucleos:  # Se houver uso de núcleos armazenado
+        uso_nucleos_medio = [sum(core) / len(core) for core in zip(*uso_nucleos)]
+        print(f"Uso médio de cada núcleo da CPU durante as comparações: {uso_nucleos_medio}")
         print("===============================================")
 
 
