@@ -90,6 +90,6 @@ def processar_diretorio(diretorio_base):
 
 # Caminho do diretório base
 diretorio_casa = os.path.expanduser('~')
-diretorio_base = os.path.join(diretorio_casa, 'Facelocus/s3-images-low')
+diretorio_base = os.path.join(diretorio_casa, 'Facelocus/s3-images-high')
 
 processar_diretorio(diretorio_base)
