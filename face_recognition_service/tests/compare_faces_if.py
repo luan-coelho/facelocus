@@ -1,7 +1,9 @@
+import argparse
+
 import numpy as np
 from insightface.app import FaceAnalysis
 
-from tests.processamento import processar_biblioteca
+from processamento import processar_biblioteca
 
 app_face = FaceAnalysis()
 app_face.prepare(ctx_id=0, det_size=(640, 640))
@@ -21,4 +23,12 @@ def comparar_faces(imagem_raiz, imagem_comparar):
         return False
 
 
-processar_biblioteca(comparar_faces)
+def main():
+    parser = argparse.ArgumentParser(description="Testes de reconhecimento para biblioteca Deepface")
+    parser.add_argument("--qualidade", type=str, help="Qualidade - low | high", default='low')
+    args = parser.parse_args()
+    processar_biblioteca(comparar_faces, args.qualidade)
+
+
+if __name__ == "__main__":
+    main()

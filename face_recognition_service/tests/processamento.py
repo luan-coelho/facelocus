@@ -21,12 +21,12 @@ def obter_tamanho_imagem(caminho_arquivo):
         return 0
 
 
-def processar_biblioteca(comparar_faces):
+def processar_biblioteca(comparar_faces, qualidade='low'):
     """Este código deve fornecer uma visão clara e precisa do desempenho do sistema ao realizar comparações de
     reconhecimento facial, incluindo o tempo de processamento, o uso médio de CPU e o uso médio de cada núcleo da CPU"""
 
     diretorio_casa = os.path.expanduser('~')
-    diretorio_base = os.path.join(diretorio_casa, 'Facelocus/s3-images-low')
+    diretorio_base = os.path.join(diretorio_casa, f"Facelocus/s3-images-{qualidade}")
 
     tempos_comparacao = []  # Lista para armazenar os tempos de comparação
     tamanhos_imagens = []  # Lista para armazenar os tamanhos das imagens
@@ -91,7 +91,7 @@ def processar_biblioteca(comparar_faces):
     if tamanhos_imagens:  # Se houver tamanhos armazenados
         tamanho_medio = (sum(tamanhos_imagens) / len(tamanhos_imagens))
         print(f"Tamanho médio das imagens: {tamanho_medio:.2f} KB")
-        print(f"Array dos tamanhos das imagens: \n{tamanhos_imagens}")
+        # print(f"Array dos tamanhos das imagens: \n{tamanhos_imagens}")
     if uso_cpu:  # Se houver uso de CPU armazenado
         uso_cpu_medio = sum(uso_cpu) / len(uso_cpu) / psutil.cpu_count()
         print(f"Uso médio de CPU durante as comparações: {uso_cpu_medio:.2f} %")
