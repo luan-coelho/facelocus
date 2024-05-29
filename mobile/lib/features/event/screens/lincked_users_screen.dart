@@ -10,6 +10,7 @@ import 'package:facelocus/shared/widgets/unexpected_error.dart';
 import 'package:facelocus/utils/spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LinckedUsersScreen extends StatefulWidget {
   const LinckedUsersScreen({super.key, required this.eventId});
@@ -66,7 +67,6 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
               textEditingController: _searchController,
               labelText: 'Pesquisar por nome',
             ),
-            const SizedBox(height: 20),
             Expanded(
               child: BlocBuilder<LinckedUsersBloc, LinckedUsersState>(
                 builder: (context, state) {
@@ -75,7 +75,6 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                       child: EmptyData(
                         'Sem usuários vinculados',
                         child: AppButton(
-                          text: 'Enviar solicitação',
                           onPressed: () async {
                             await showSearch(
                               context: context,
@@ -83,6 +82,14 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                                   LinckedUsersDelegate(eventId: widget.eventId),
                             );
                           },
+                          text: 'Enviar solicitação',
+                          icon: SvgPicture.asset(
+                            'images/event-request-icon.svg',
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
                       ),
                     );
@@ -113,6 +120,24 @@ class _LinckedUsersScreenState extends State<LinckedUsersScreen> {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
+                          AppButton(
+                            onPressed: () async {
+                              await showSearch(
+                                context: context,
+                                delegate: LinckedUsersDelegate(
+                                    eventId: widget.eventId),
+                              );
+                            },
+                            text: 'Enviar solicitação',
+                            icon: SvgPicture.asset(
+                              'images/event-request-icon.svg',
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
                           ListView.separated(
                             separatorBuilder:
                                 (BuildContext context, int index) {

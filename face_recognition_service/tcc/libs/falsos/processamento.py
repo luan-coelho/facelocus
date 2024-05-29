@@ -37,7 +37,8 @@ def processar_biblioteca(comparar_faces, qualidade='low'):
     for id_dir in os.listdir(diretorio_base):
         caminho_id = os.path.join(diretorio_base, id_dir)
         if os.path.isdir(caminho_id):
-            caminho_imagem_raiz = os.path.join(caminho_id, "facephoto.jpg")
+            # caminho_imagem_raiz = os.path.join(caminho_id, "facephoto.jpg")
+            caminho_imagem_raiz = os.path.join(diretorio_casa, f"Facelocus/foto3.jpg")
             if os.path.exists(caminho_imagem_raiz):
                 imagem_raiz = carregar_imagem(caminho_imagem_raiz)
                 if imagem_raiz is None:

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+/*
 @Path("/time")
 public class TimeResource {
 
@@ -17,4 +18,4 @@ public class TimeResource {
         String formattedDateTime = LocalDateTime.now().format(formatter);
         return formattedDateTime + " TimeZone: " + zone.toString();
     }
-}
+}*/
