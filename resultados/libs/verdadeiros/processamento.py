@@ -21,7 +21,7 @@ def obter_tamanho_imagem(caminho_arquivo):
         return 0
 
 
-def processar_biblioteca(comparar_faces, qualidade='low'):
+def processar_biblioteca(comparar_faces, qualidade='high'):
     """Este código deve fornecer uma visão clara e precisa do desempenho do sistema ao realizar comparações de
     reconhecimento facial, incluindo o tempo de processamento, o uso médio de CPU e o uso médio de cada núcleo da CPU"""
 
@@ -37,8 +37,8 @@ def processar_biblioteca(comparar_faces, qualidade='low'):
     for id_dir in os.listdir(diretorio_base):
         caminho_id = os.path.join(diretorio_base, id_dir)
         if os.path.isdir(caminho_id):
-            # caminho_imagem_raiz = os.path.join(caminho_id, "facephoto.jpg")
-            caminho_imagem_raiz = os.path.join(diretorio_casa, f"Facelocus/foto1.jpg")
+            caminho_imagem_raiz = os.path.join(caminho_id, "facephoto.jpg")
+            # caminho_imagem_raiz = os.path.join(diretorio_casa, f"Facelocus/foto1.jpg")
             if os.path.exists(caminho_imagem_raiz):
                 imagem_raiz = carregar_imagem(caminho_imagem_raiz)
                 if imagem_raiz is None:

@@ -24,12 +24,14 @@ rects3 = ax.bar(x + width, wrongly_recognized[:, 2], width, label='Foto 3')
 # Adicionando texto às labels, título e configurando a legenda
 ax.set_xlabel('Bibliotecas')
 ax.set_ylabel('Quantidade de Imagens Reconhecidas Erradas')
-ax.set_title('Imagens Reconhecidas Erradas')
+ax.set_title('Falsos positivos por biblioteca')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 ax.legend()
 
 # Adicionando os valores acima das barras
+
+
 def autolabel(rects):
     for rect in rects:
         height = rect.get_height()
@@ -38,6 +40,7 @@ def autolabel(rects):
                     xytext=(0, 3),  # 3 points vertical offset
                     textcoords="offset points",
                     ha='center', va='bottom')
+
 
 autolabel(rects1)
 autolabel(rects2)

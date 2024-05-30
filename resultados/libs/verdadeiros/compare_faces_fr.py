@@ -18,7 +18,7 @@ def comparar_faces(imagem_raiz, imagem_comparar):
 
 def main():
     parser = argparse.ArgumentParser(description="Testes de reconhecimento para biblioteca Deepface")
-    parser.add_argument("--qualidade", type=str, help="Qualidade - low | high", default='low')
+    parser.add_argument("--qualidade", type=str, help="Qualidade - low | high", default='high')
     args = parser.parse_args()
     processar_biblioteca(comparar_faces, args.qualidade)
 
