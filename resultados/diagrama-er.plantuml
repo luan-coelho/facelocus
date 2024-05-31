@@ -1,0 +1,110 @@
+@startuml
+entity usuario {
+    id: BIGINT <<PK>>
+    nome: VARCHAR
+    sobrenome: VARCHAR
+    cpf: VARCHAR
+    email: VARCHAR
+    senha: VARCHAR
+}
+
+entity foto_rosto {
+    id: BIGINT <<PK>>
+    nome_arquivo: VARCHAR
+    tipo: VARCHAR
+    chave_objeto: VARCHAR
+    tamanho: BIGINT
+    balde: VARCHAR
+    caminho_arquivo: VARCHAR
+}
+
+entity evento {
+    id: BIGINT <<PK>>
+    descricao: VARCHAR
+    permite_solicitacao_ingresso: BOOLEAN
+    codigo: VARCHAR
+    administrador_id: BIGINT <<FK>>
+}
+
+entity localizacao {
+    id: BIGINT <<PK>>
+    descricao: VARCHAR
+    latitude: VARCHAR
+    longitude: VARCHAR
+    evento_id: BIGINT <<FK>>
+}
+
+entity solicitacao_evento {
+    id: BIGINT <<PK>>
+    codigo: VARCHAR
+    status: SMALLINT
+    tipo: SMALLINT
+    usuario_inicial_id: BIGINT <<FK>>
+    usuario_alvo_id: BIGINT <<FK>>
+}
+
+entity registro_ponto {
+    id: BIGINT <<PK>>
+    data: DATE
+    raio_permitido_em_metros: DOUBLE PRECISION
+    evento_id: BIGINT <<FK>>
+}
+
+entity ponto {
+    id: BIGINT <<PK>>
+    data_inicial: TIMESTAMP
+    data_final: TIMESTAMP
+    registro_ponto_id: BIGINT <<FK>>
+}
+
+entity presenca_usuario {
+    id: BIGINT <<PK>>
+    usuario_id: BIGINT <<FK>>
+    registro_ponto_id: BIGINT <<FK>>
+}
+
+entity tentativa_validacao_reconhecimento_facial {
+    id: BIGINT <<PK>>
+    data_hora: TIMESTAMP
+    validado: BOOLEAN
+    registro_presenca_id: BIGINT <<FK>>
+}
+
+entity tentativa_validacao_localizacao {
+    id: BIGINT <<PK>>
+    distancia_em_metros: DOUBLE PRECISION
+    raio_permitido_em_metros: DOUBLE PRECISION
+    latitude: VARCHAR
+    longitude: VARCHAR
+    data_hora: TIMESTAMP
+    validado: BOOLEAN
+    registro_presenca_id: BIGINT <<FK>>
+}
+
+entity registro_presenca {
+    id: BIGINT <<PK>>
+    rf_validado_com_sucesso: BOOLEAN
+    localizacao_validada_com_sucesso: BOOLEAN
+    validado_por_administrador: BOOLEAN
+    presenca_usuario_id: BIGINT <<FK>>
+    status: SMALLINT
+}
+
+usuario ||--o{ foto_rosto : possui
+evento ||--o{ registro_ponto : possui
+evento ||--o{ localizacao : possui
+evento ||--o{ solicitacao_evento : possui
+evento ||--o{ usuario : usuarios
+evento }o--|| usuario : administrador
+registro_ponto ||--o{ ponto : possui
+registro_ponto }o--|| localizacao : possui
+registro_ponto }o--|| evento : pertence
+registro_ponto ||--o{ presenca_usuario : possui
+presenca_usuario }o--|| usuario : pertence
+presenca_usuario ||--o{ registro_presenca : possui
+registro_presenca ||--o{ tentativa_validacao_reconhecimento_facial : possui
+registro_presenca ||--o{ tentativa_validacao_localizacao : possui
+solicitacao_evento }o--|| usuario : usuario_inicial
+solicitacao_evento }o--|| usuario : usuario_alvo
+
+@enduml
