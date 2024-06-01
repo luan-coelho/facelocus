@@ -14,7 +14,7 @@ entity foto_rosto {
     tipo: VARCHAR
     chave_objeto: VARCHAR
     tamanho: BIGINT
-    balde: VARCHAR
+    budget: VARCHAR
     caminho_arquivo: VARCHAR
 }
 
@@ -48,6 +48,12 @@ entity registro_ponto {
     data: DATE
     raio_permitido_em_metros: DOUBLE PRECISION
     evento_id: BIGINT <<FK>>
+}
+
+entity registro_ponto_fator {
+    id: BIGINT <<PK>>
+    fator: SMALLINT
+    registro_ponto_id: BIGINT <<FK>>
 }
 
 entity ponto {
@@ -91,15 +97,15 @@ entity registro_presenca {
 }
 
 usuario ||--o{ foto_rosto : possui
-evento ||--o{ registro_ponto : possui
 evento ||--o{ localizacao : possui
 evento ||--o{ solicitacao_evento : possui
 evento ||--o{ usuario : usuarios
 evento }o--|| usuario : administrador
-registro_ponto ||--o{ ponto : possui
+registro_ponto ||-left-o{ ponto : possui
 registro_ponto }o--|| localizacao : possui
 registro_ponto }o--|| evento : pertence
 registro_ponto ||--o{ presenca_usuario : possui
+registro_ponto ||-right-o{ registro_ponto_fator : possui
 presenca_usuario }o--|| usuario : pertence
 presenca_usuario ||--o{ registro_presenca : possui
 registro_presenca ||--o{ tentativa_validacao_reconhecimento_facial : possui
