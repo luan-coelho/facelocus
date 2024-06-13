@@ -1,146 +1,146 @@
 @startuml
-abstract class DefaultEntity {
+abstract class EntidadePadrao {
     - id: Long
-    - updatedAt: LocalDateTime
-    - createdAt: LocalDateTime
-    - active: boolean
+    - atualizadoEm: LocalDateTime
+    - criadoEm: LocalDateTime
+    - ativo: boolean
 }
 
-class User {
+class Usuario {
     - id: Long
-    - name: String
-    - surname: String
+    - nome: String
+    - sobrenome: String
     - cpf: String
     - email: String
-    - password: String
+    - senha: String
 }
 
-abstract class FacePhoto {
+abstract class FotoRosto {
     - id: Long
-    - fileName: File
+    - nomeArquivo: File
 }
 
-class FacePhotoS3 {
-    - objectkey: String
-    - size: Long
+class FotoRostoS3 {
+    - chaveObjeto: String
+    - tamanho: Long
     - bucket: String
 }
 
-class FacePhotoLocalDisk {
-    - filePath: String
+class FotoRostoDiscoLocal {
+    - caminhoArquivo: String
 }
 
-class Event {
+class Evento {
     - id: Long
-    - description: String
-    - allowTicketRequests: boolean
-    - code: String
+    - descricao: String
+    - permiteSolicitacoesIngresso: boolean
+    - codigo: String
 }
 
-class Location {
+class Localizacao {
     - id: Long
-    - description: String
+    - descricao: String
     - latitude: String
     - longitude: String
 }
 
-class EventRequest {
+class SolicitacaoEvento {
     - id: Long
-    - code: String
+    - codigo: String
 }
 
-enum EventRequestStatus << enumeration >> {
-    + PENDING
-    + ACCEPTED
-    + REJECTED
+enum StatusSolicitacaoEvento << enumeration >> {
+    + PENDENTE: int
+    + ACEITO: int
+    + REJEITADO: int
 }
 
-enum EventRequestType << enumeration >> {
-    + TICKET_REQUEST
-    + INVITATION
+enum TipoSolicitacaoEvento << enumeration >> {
+    + SOLICITACAO_INGRESSO: int
+    + CONVITE: int
 }
 
-class PointRecord {
+class RegistroPonto {
     - id: Long
-    - date: LocalDate
-    - allowableRadiusInMeters: Double
+    - data: LocalDate
+    - raioPermitidoEmMetros: Double
 }
 
-class Point {
+class Ponto {
     - id: Long
-    - initialDate: LocalDateTime
-    - finalDate: LocalDateTime
+    - dataInicial: LocalDateTime
+    - dataFinal: LocalDateTime
 }
 
-enum Factor << enumeration >> {
-    + FACE_RECOGNITION
-    + LOCATION
+enum Fator << enumeration >> {
+    + RECONHECIMENTO_FACIAL: int
+    + LOCALIZACAO: int
 }
 
-class UserAttendance {
+class PresencaUsuario {
     - id: Long
 }
 
-class FaceRecognitionValidationAttempt {
+class TentativaValidacaoReconhecimentoFacial {
     - id: Long
-    - dateTime: LocalDateTime
-    - validated: boolean
+    - dataHora: LocalDateTime
+    - validado: boolean
 }
 
-class LocationValidationAttempt {
+class TentativaValidacaoLocalizacao {
     - id: Long
-    - distanceInMeters: Double
-    - allowableRadiusInMeters: Double
+    - distanciaEmMetros: Double
+    - raioPermitidoEmMetros: Double
     - latitude: String
     - longitude: String
-    - dateTime: LocalDateTime
-    - validated: boolean
+    - dataHora: LocalDateTime
+    - validado: boolean
 }
 
-class AttendanceRecord {
+class RegistroPresenca {
     - id: Long
-    - frValidatedSuccessfully: boolean
-    - locationValidatedSuccessfully: boolean
-    - validatedByAdministrator: boolean
+    - frValidadoComSucesso: boolean
+    - localizacaoValidadaComSucesso: boolean
+    - validadoPeloAdministrador: boolean
 }
 
-enum AttendanceRecordStatus << enumeration >> {
-    + PENDING
-    + ACCEPTED
-    + REJECTED
+enum StatusRegistroPresenca << enumeration >> {
+    + PENDENTE: int
+    + ACEITO: int
+    + REJEITADO: int
 }
 
-User --|> DefaultEntity
-Event --|> DefaultEntity
-EventRequest --|> DefaultEntity
-PointRecord --|> DefaultEntity
-FacePhotoS3 -up-|> FacePhoto
-FacePhotoLocalDisk -up-|> FacePhoto
-FacePhoto -up-|> DefaultEntity
+Usuario --|> EntidadePadrao
+Evento --|> EntidadePadrao
+SolicitacaoEvento --|> EntidadePadrao
+RegistroPonto --|> EntidadePadrao
+FotoRostoS3 -up-|> FotoRosto
+FotoRostoDiscoLocal -up-|> FotoRosto
+FotoRosto -up-|> EntidadePadrao
 
-User "1" o-> "1" FacePhoto
+Usuario "1" o-> "1" FotoRosto
 
-Event "1" o-up-> "*" PointRecord
-Event "1" o-up-> "*" Location
-Event "*" -down-> "*" User : users
-Event "*" --> "1" User : administrator
-Event "1" *-> "1" EventRequest
+Evento "1" o-up-> "*" RegistroPonto
+Evento "1" o-up-> "*" Localizacao
+Evento "*" -down-> "*" Usuario : usuarios
+Evento "*" --> "1" Usuario : administrador
+Evento "1" *-> "1" SolicitacaoEvento
 
-PointRecord "1" *-> "*" Point
-PointRecord "*" o-> "*" Factor
-PointRecord "*" --> "1" Location
-PointRecord "1" *-> "*" UserAttendance
+RegistroPonto "1" *-> "*" Ponto
+RegistroPonto "*" o-> "*" Fator
+RegistroPonto "*" --> "1" Localizacao
+RegistroPonto "1" *-> "*" PresencaUsuario
 
-UserAttendance "1" *-> "*" AttendanceRecord
-UserAttendance "*" o-> "1" User
+PresencaUsuario "1" *-> "*" RegistroPresenca
+PresencaUsuario "*" o-> "1" Usuario
 
-AttendanceRecord "1" *-down-> "*" FaceRecognitionValidationAttempt
-AttendanceRecord "1" *-up-> "*" LocationValidationAttempt
-AttendanceRecord "*" *-up-> "1" AttendanceRecordStatus
+RegistroPresenca "1" *-down-> "*" TentativaValidacaoReconhecimentoFacial
+RegistroPresenca "1" *-up-> "*" TentativaValidacaoLocalizacao
+RegistroPresenca "*" *-up-> "1" StatusRegistroPresenca
 
-EventRequest "*" --> "1" User : initial user
-EventRequest "*" --> "1" User : target user
-EventRequest "*" *-up-> "1" EventRequestStatus
-EventRequest "*" *-down-> "1" EventRequestType
+SolicitacaoEvento "*" --> "1" Usuario : usuario inicial
+SolicitacaoEvento "*" --> "1" Usuario : usuario alvo
+SolicitacaoEvento "*" *-up-> "1" StatusSolicitacaoEvento
+SolicitacaoEvento "*" *-down-> "1" TipoSolicitacaoEvento
 
 @enduml

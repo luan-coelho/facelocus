@@ -9,6 +9,7 @@ import java.nio.file.Path;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MockFileUpload implements FileUpload {
+
     public byte[] data;
     public String fileName;
     public String contentType;
@@ -50,4 +51,5 @@ public class MockFileUpload implements FileUpload {
     public Path uploadedFile() {
         return path;
     }
+
 }

@@ -1,7 +1,6 @@
 package br.unitins.facelocus.service;
 
 import br.unitins.facelocus.commons.MultipartData;
-import br.unitins.facelocus.commons.TaskQueueManager;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.pointrecord.LocationValidationAttemptDTO;

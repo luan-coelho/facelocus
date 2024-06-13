@@ -9,4 +9,5 @@ public class MultipartData {
     @NotNull(message = "Informe o arquivo")
     @FormParam("file")
     public FileUpload file;
+
 }

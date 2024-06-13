@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Sort {
+
     private String order = "ASC";
     private String field = "id";
+
 }

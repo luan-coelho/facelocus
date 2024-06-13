@@ -12,4 +12,5 @@ public class FaceRecognitionConfig {
     public FaceRecognitionServiceType getFaceRecognitionServiceType() {
         return FaceRecognitionServiceType.fromString(mainService);
     }
+
 }

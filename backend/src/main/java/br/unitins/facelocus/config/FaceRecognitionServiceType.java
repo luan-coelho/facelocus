@@ -1,6 +1,7 @@
 package br.unitins.facelocus.config;
 
 public enum FaceRecognitionServiceType {
+
     ALL_SERVICES,
     SPECIFIC_SERVICE,
     DEEP_FACE,
@@ -17,4 +18,5 @@ public enum FaceRecognitionServiceType {
         }
         return UNKNOWN;
     }
+
 }
