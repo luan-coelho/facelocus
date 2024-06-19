@@ -8,8 +8,10 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(config = QuarkusMappingConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = {EventMapper.class, UserMapper.class})
+@Mapper(config = QuarkusMappingConfig.class,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        uses = {EventMapper.class, UserMapper.class})
 public interface EventRequestMapper {
 
     @Mapping(target = "id", ignore = true)

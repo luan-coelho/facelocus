@@ -3,11 +3,13 @@ package br.unitins.facelocus.resource;
 import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.EventDTO;
+import br.unitins.facelocus.dto.eventrequest.ExportEventDTO;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
@@ -19,6 +21,8 @@ import org.jboss.resteasy.reactive.RestQuery;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Authenticated
@@ -109,8 +113,12 @@ public class EventResource {
         ObjectMapper objectMapper = new ObjectMapper();
 
         File jsonFile = new File("event.json");
+        JavaTimeModule module = new JavaTimeModule();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
+        objectMapper.registerModule(module);
+
         try {
-            objectMapper.registerModule(new JavaTimeModule());
             objectMapper.writeValue(jsonFile, dto);
         } catch (IOException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
