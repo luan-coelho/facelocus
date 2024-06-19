@@ -30,7 +30,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class FacePhotoS3Service extends BaseService<FacePhoto, FacePhotoRepository> {
 
-    @ConfigProperty(name = "bucket.name")
+    @ConfigProperty(name = "aws.bucket.name")
     String bucketName;
 
     @Inject

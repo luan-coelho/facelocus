@@ -25,7 +25,7 @@ public class S3Service {
     @Inject
     S3Client s3Client;
 
-    @ConfigProperty(name = "bucket.name")
+    @ConfigProperty(name = "aws.bucket.name")
     String bucketName;
 
     final String AWS_BASE_URL = "http://ec2-18-230-249-227.sa-east-1.compute.amazonaws.com:5000";

@@ -6,12 +6,19 @@ import br.unitins.facelocus.dto.eventrequest.EventDTO;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestQuery;
+
+import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("QsUndeclaredPathMimeTypesInspection")
 @Authenticated
@@ -91,4 +98,26 @@ public class EventResource {
         eventService.removeUser(eventId, userId);
         return Response.noContent().build();
     }
+
+    @PermitAll
+    @Path("/export-data")
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportData(@RestQuery("event") Long eventId) {
+        Event event = eventService.findById(eventId);
+        EventDTO dto = eventMapper.toResource(event);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File jsonFile = new File("event.json");
+        try {
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.writeValue(jsonFile, dto);
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response.ok(jsonFile)
+                .header("Content-Disposition", "attachment; filename=event.json")
+                .build();
+    }
+
 }

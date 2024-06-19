@@ -44,9 +44,6 @@ public class PointRecordService extends BaseService<PointRecord, PointRecordRepo
     @Inject
     FacePhotoS3Service faceRecognitionService;
 
-    @Inject
-    TaskQueueManager taskQueueManager;
-
     /**
      * Responsável por buscar todos os registros de ponto vinculados a um usuário
      *

@@ -229,4 +229,9 @@ public class EventService extends BaseService<Event, EventRepository> {
             }
         }
     }
+
+    public void exportData(Long eventId) {
+
+    }
+
 }

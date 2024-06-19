@@ -1,11 +1,4 @@
 @startuml
-abstract class EntidadePadrao {
-    - id: Long
-    - atualizadoEm: LocalDateTime
-    - criadoEm: LocalDateTime
-    - ativo: boolean
-}
-
 class Usuario {
     - id: Long
     - nome: String
@@ -110,13 +103,8 @@ enum StatusRegistroPresenca << enumeration >> {
     + REJEITADO: int
 }
 
-Usuario --|> EntidadePadrao
-Evento --|> EntidadePadrao
-SolicitacaoEvento --|> EntidadePadrao
-RegistroPonto --|> EntidadePadrao
 FotoRostoS3 -up-|> FotoRosto
 FotoRostoDiscoLocal -up-|> FotoRosto
-FotoRosto -up-|> EntidadePadrao
 
 Usuario "1" o-> "1" FotoRosto
 
