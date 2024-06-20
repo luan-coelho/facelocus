@@ -4,6 +4,7 @@ import br.unitins.facelocus.commons.pagination.DataPagination;
 import br.unitins.facelocus.commons.pagination.Pageable;
 import br.unitins.facelocus.dto.eventrequest.EventDTO;
 import br.unitins.facelocus.dto.eventrequest.ExportEventDTO;
+import br.unitins.facelocus.mapper.EventExportMapper;
 import br.unitins.facelocus.mapper.EventMapper;
 import br.unitins.facelocus.model.Event;
 import br.unitins.facelocus.service.EventService;
@@ -34,6 +35,9 @@ public class EventResource {
 
     @Inject
     EventMapper eventMapper;
+
+    @Inject
+    EventExportMapper eventExportMapper;
 
     @GET
     public Response findAll(Pageable pageable, @RestQuery("user") Long userId) {
@@ -109,7 +113,7 @@ public class EventResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportData(@RestQuery("event") Long eventId) {
         Event event = eventService.findById(eventId);
-        EventDTO dto = eventMapper.toResource(event);
+        ExportEventDTO dto = eventExportMapper.toResource(event);
         ObjectMapper objectMapper = new ObjectMapper();
 
         File jsonFile = new File("event.json");
