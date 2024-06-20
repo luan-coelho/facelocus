@@ -14,3 +14,9 @@ class ChangeTicketRequestPermission extends EventShowEvent {
 
   ChangeTicketRequestPermission(this.eventId);
 }
+
+class ExportEvent extends EventShowEvent {
+  final EventModel event;
+
+  ExportEvent({required this.event});
+}

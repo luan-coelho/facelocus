@@ -24,3 +24,17 @@ class ChangeTicketRequestPermissionError extends EventShowState {
 
   ChangeTicketRequestPermissionError(this.message);
 }
+
+class ExportLoading extends EventShowState {}
+
+class EventExportedSuccessfully extends EventShowState {
+  final String message;
+
+  EventExportedSuccessfully({required this.message});
+}
+
+class ExportEventError extends EventShowState {
+  final String message;
+
+  ExportEventError({required this.message});
+}

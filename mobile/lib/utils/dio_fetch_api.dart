@@ -39,6 +39,31 @@ class DioFetchApi implements FetchApi {
     }
   }
 
+  Future<Response> download(
+    String url,
+    String savePath, {
+    bool authHeaders = true,
+    ResponseType? responseType = ResponseType.json,
+  }) async {
+    try {
+      final String? token = await getToken();
+      Options options = getAuthenticationHeaders(
+        token,
+        responseType: responseType,
+      );
+      options.responseType = ResponseType.bytes;
+      options.followRedirects = false;
+      return await _dio.download(
+        '$_baseUrl$url',
+        savePath,
+        options: authHeaders ? options : null,
+      );
+    } on DioException catch (e) {
+      _checkAuthorization(e);
+      rethrow;
+    }
+  }
+
   @override
   Future<Response> post(
     String url, {
@@ -101,10 +126,13 @@ class DioFetchApi implements FetchApi {
     String? token, {
     ResponseType? responseType = ResponseType.json,
   }) {
-    return Options(headers: {
-      HttpHeaders.contentTypeHeader: "application/json",
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    }, responseType: responseType);
+    return Options(
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: "Bearer $token"
+      },
+      responseType: responseType,
+    );
   }
 
   void _checkAuthorization(DioException e) async {

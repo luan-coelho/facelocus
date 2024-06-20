@@ -50,4 +50,9 @@ class EventRepository {
     var response = await _fetchApi.delete(url);
     return response.statusCode == 204;
   }
+
+  Future<void> exportEvent(int eventId, String savePath) async {
+    String url = '${AppRoutes.event}/export-data?event=$eventId';
+    await _fetchApi.download(url, savePath);
+  }
 }

@@ -35,6 +35,14 @@ class _EventShowScreenState extends State<EventShowScreen> {
         if (state is ChangeTicketRequestPermissionError) {
           return Toast.showError(state.message, context);
         }
+
+        if (state is EventExportedSuccessfully) {
+          return Toast.showSuccess(state.message, context);
+        }
+
+        if (state is ExportEventError) {
+          return Toast.showError(state.message, context);
+        }
       },
       builder: (context, state) {
         return AppLayout(
@@ -132,7 +140,15 @@ class _EventShowScreenState extends State<EventShowScreen> {
                       if (state.event.allowTicketRequests!) ...[
                         EventCodeCard(event: state.event),
                         const SizedBox()
-                      ]
+                      ],
+                      const SizedBox(height: 10),
+                      AppButton(
+                        isLoading: state is ExportLoading,
+                        text: 'Exportar dados',
+                        onPressed: () => context.read<EventShowBloc>().add(
+                              ExportEvent(event: state.event),
+                            ),
+                      )
                     ],
                   );
                 }
